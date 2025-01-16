@@ -1,0 +1,340 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font Configuration */
+/* @font-face {
+    font-family: 'Zin Display Font';
+    src: url('/assets/fonts/CarnokyType-Zin Display Condensed Demo.otf') format('opentype'),
+         url('/assets/fonts/CarnokyType-Zin Display Demo.otf') format('opentype'),
+         url('/assets/fonts/CarnokyType-Zin Display Extended Demo.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+  font-family: 'Zin Display Font';
+} */
+
+:root {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+/*Adding custom scrollbar */
+/* For Firefox */
+* {
+  scrollbar-width: thin;             /* Makes the scrollbar thinner */
+  scrollbar-color: #B9B7BF #f4f4f4;  /* thumb color track color */
+}
+/* For Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  width: 12px;              /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f4;      /* Background of the track */
+  border-radius: 10px;      /* Optional: Rounded corners */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B9B7BF;      /* Scrollbar color */
+  border-radius: 40px;      /* Rounded corners for thumb */
+  border: 2px solid #f4f4f4; /* Creates padding around thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #000;      /* Darker color on hover */
+}
+
+
+
+
+body{
+  width: 100%;
+  height: 100%;
+}
+
+.container{
+  padding: 1rem 0.5rem;
+}
+
+/* Styles for Navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50; /* Ensure it appears above other content */
+    background-color: #fff; 
+}
+
+/* Styles for FiltersSection */
+.filters-section {
+    position: sticky;
+    top: 4rem; /* Adjust to ensure it sits below the Navbar */
+    z-index: 40;
+    background-color: white;
+    padding: 0.2rem; /* Optional padding */
+    box-shadow: 0 1px 4px rgba(132, 132, 132, 0.1); /* Optional shadow for better visibility */
+}
+
+
+.slider-container {
+  overflow: visible;
+}
+
+
+
+/* @keyframes anvil {
+  0% {
+    transform: scale(1) translateY(0px);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+  }
+  1% {
+    transform: scale(0.96) translateY(10px);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+  }
+  100% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+    box-shadow: 0 0 500px rgba(241, 241, 241, 0);
+  }
+}
+.popup-content {
+  -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+} */
+
+
+/* Optional additional styles */
+.gallery-item {
+  border-radius: 8px; /* Rounded corners for images */
+}
+
+.gallery-item img {
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* .resize-image{
+  height: 260px;
+  width: 300px;
+  object-fit: cover;
+  background-position: center center;
+  border-radius: 10px;
+} */
+
+.aspect-ratio-box {
+    position: relative;
+    width: 100%;
+    padding-top: 90%; /* Aspect ratio: height / width * 100 (for 3:2 ratio) */
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.aspect-ratio-box img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures full visibility of the image */
+}
+
+/**/
+
+
+/* Animations */
+/* @keyframes slideUp {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-slide-up-delay {
+    animation: slideUp 0.5s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+.animate-slide-up-delay-2 {
+    animation: slideUp 0.5s ease-out forwards;
+    animation-delay: 1s;
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease-in-out forwards;
+} */
+
+.gradient-bg {
+            background: radial-gradient(
+              70% 70% at var(--mouse-x) var(--mouse-y),
+              #FFF5F3 0%,
+              #FFF9F8 45%,
+              #FFFFFF 100%
+            );
+             /* background: radial-gradient(
+              40% 40% at var(--mouse-x) var(--mouse-y),
+              #ffc5b9 0%,
+              #ffbeb3 45%,
+              #ffc4c4 100%
+            ); */
+            min-height: 100vh;
+            transition: background 0.2s ease-out;
+            cursor: pointer;
+          }
+
+          @media (hover: none) {
+            .gradient-bg {
+              background: radial-gradient(
+                70% 70% at 50% 50%,
+                #FFF5F3 0%,
+                #FFF9F8 45%,
+                #FFFFFF 100%
+              );
+            }
+}
+
+
+/* PropertiesByLocationCarousel */
+.see-all-button {
+            background: linear-gradient(90deg, #1a365d 0%, #2d3748 100%);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            /* transform: translateY(50%); */
+          }
+          
+          /* .see-all-button:hover {
+            background: linear-gradient(90deg, #2d3748 0%, #1a365d 100%);
+          } */
+
+          @media (max-width: 640px) {
+            .property-grid {
+              grid-template-columns: 1fr;
+            }
+          }
+
+          @media (min-width: 641px) and (max-width: 1024px) {
+            .property-grid {
+              grid-template-columns: repeat(2, 1fr);
+            }
+          }
+
+          @media (min-width: 1025px) {
+            .property-grid {
+              grid-template-columns: repeat(3, 1fr);
+            }
+          }
+
+
+
+
+          /* appdownload */
+
+
+.appdownload {
+  background: linear-gradient(135deg, #FF416C, #FF4B2B);
+  /* background: linear-gradient(135deg, #fc0a2a, #feacb5); */
+  /* Optional: Add padding, height, or other styling */
+  padding: 20px;
+  color: #ffffff;
+  text-align: center;
+}
+
+
+/* ********************** */
+
+@keyframes gentlePulse {
+  0% { background-color: transparent; }
+  50% { background-color: rgb(254, 219, 219); } 
+  100% { background-color: transparent; }
+}
+
+.section-highlight {
+  animation: gentlePulse 5s ease-in-out;
+}
+
+.hide-scrollbar {
+  overflow: auto;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+.categories-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+}
+
+.category-card {
+  width: 200px;
+  text-align: center;
+}
+
+.image-preview {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.category-name {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
