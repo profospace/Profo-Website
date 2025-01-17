@@ -1,9 +1,16 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import ProjectCard from '../components/ProjectCard'
+import { getAllProjects } from '../redux/features/Projects/projectsSlice'
 
 function ProjectPage() {
-   const {projects} = useSelector(state => state.projects)
+    const {projects} = useSelector(state => state.projects)
+    const dispatch = useDispatch()
+    useEffect(
+        ()=>{
+            dispatch(getAllProjects())
+    },[]
+   )
 
   return (
     <div>

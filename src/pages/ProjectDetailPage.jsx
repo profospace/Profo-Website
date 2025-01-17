@@ -9,6 +9,10 @@ import BuildingManager from '../components/BuildingManager'
 import { Heart, MapPin, Building2, TreePine, LayoutPanelTop } from 'lucide-react';
 import ProjectFloorPlansCard from '../components/ProjectFloorPlansCard'
 import ProjectSpecificationCard from '../components/ProjectSpecificationCard'
+import LocationLatLngMap from '../components/LocationLatLngMap'
+import AmenitiesDisplay from '../components/AmenitiesDisplay'
+import PropertyCard from '../components/PropertyCard'
+import AskDeveloper from '../components/AskDeveloper'
 
 
 function ProjectDetailPage() {
@@ -24,11 +28,15 @@ useEffect(() => {
 }, [post_id, dispatch]);
 
   return (
-    <div className=''>
+    <div className='container'>
       <div>ProjectDetailPage</div>
+      <div>
+        <LocationLatLngMap latitude={projectDetail?.location?.coordinates?.coordinates?.[0]} longitude={projectDetail?.location?.coordinates?.coordinates?.[1]} />
+      </div>
 
       {/* Floor Plans */}
       <div>
+      <h1>Floor Plans</h1>
         {
           projectDetail?.floorPlans?.length > 0 && <ProjectFloorPlansCard floorPlans={projectDetail?.floorPlans}  />
         }
@@ -37,6 +45,11 @@ useEffect(() => {
       {/* Specifications */}
       <div>
         <ProjectSpecificationCard specifications={projectDetail?.specification} />
+      </div>
+
+      {/* Amenities */}
+      <div>
+        <AmenitiesDisplay amenities={projectDetail?.amenities} />
       </div>
 
 
@@ -116,7 +129,24 @@ useEffect(() => {
           </div>
         </div>
       </div>
+
+
+        {/* Gallery */}
       <GalleryGrid gallery={projectDetail?.gallery} />
+
+        {/* Connected Properties */}
+        <div>
+        <h1 className='text-xl mb-2 font-semibold'>Connected Properties</h1>
+        <div className='grid grid-cols-3 gap-3'>
+          {
+            projectDetail?.connectedProperties?.length > 0 && projectDetail?.connectedProperties?.map((property, index) => <PropertyCard property={property} />)
+          }
+        </div>
+        </div>
+
+        {/* Call to develper */}
+        <AskDeveloper />
+
       <BuildingManager />
       <BuildingViewer config={buildingConfig} />
     </div>

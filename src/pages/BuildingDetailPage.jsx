@@ -14,6 +14,7 @@ import GalleryList from '../components/GalleryList';
 import AskDeveloper from '../components/AskDeveloper';
 import { QRCode } from 'antd';
 import { X, ChevronDown, Check } from 'lucide-react';
+import LocationLatLngMap from '../components/LocationLatLngMap';
 
 export const ContactButton = () => {
     const [step, setStep] = useState(1);
@@ -617,6 +618,9 @@ function BuildingDetailPage() {
                                 </div>
 
                                 <PropertyListing />
+
+                                    {/* Location - Map */}
+                                <LocationLatLngMap latitude={buildingDetail?.location?.coordinates?.[0]} longitude={buildingDetail?.location?.coordinates?.[1]} />
 
                                 <div className="px-4">
                                     <EMICalculator />

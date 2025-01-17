@@ -328,7 +328,6 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Button } from "@material-tailwind/react";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import "swiper/css";
 import { PiDotsNineBold, PiUploadSimpleLight } from "react-icons/pi";
 import { CarouselImages } from "../components/CarousalImages";
@@ -353,6 +352,7 @@ import { Dialog } from "@headlessui/react";
 import ShareableCard from "../components/ShareableCard";
 import ShareOptions from "../components/ShareOptions";
 import { base_url } from "../utils/base_url";
+import LocationLatLngMap from "../components/LocationLatLngMap";
 
 export const FacilitiesSection = ({ facilities }) => {
     // Icon mapping for facilities
@@ -419,54 +419,54 @@ const SinglePage = () => {
 
     console.log(propertyDetail)
     // Map configuration
-    const mapCenter = {
-        lat: parseFloat(propertyDetail?.latitude) || 0,
-        lng: parseFloat(propertyDetail?.longitude) || 0
-    };
+    // const mapCenter = {
+    //     lat: parseFloat(propertyDetail?.latitude) || 0,
+    //     lng: parseFloat(propertyDetail?.longitude) || 0
+    // };
 
-    const mapContainerStyle = {
-        width: '100%',
-        height: '480px',
-        borderRadius: '12px'
-    };
+    // const mapContainerStyle = {
+    //     width: '100%',
+    //     height: '480px',
+    //     borderRadius: '12px'
+    // };
 
-    const mapOptions = {
-        disableDefaultUI: true,
-        zoomControl: true,
-        scrollwheel: false,
-        styles: [
-            {
-                featureType: 'poi',
-                elementType: 'labels',
-                stylers: [{ visibility: 'off' }]
-            },
-            {
-                featureType: 'transit',
-                elementType: 'labels',
-                stylers: [{ visibility: 'off' }]
-            },
-            {
-                featureType: 'road',
-                elementType: 'labels.text',
-                stylers: [{ visibility: 'on' }]
-            },
-            {
-                featureType: 'landscape',
-                elementType: 'all',
-                stylers: [{ color: '#f5f5f5' }]
-            },
-            {
-                featureType: 'water',
-                elementType: 'all',
-                stylers: [{ color: '#e9e9e9' }]
-            }
-        ]
-    };
+    // const mapOptions = {
+    //     disableDefaultUI: true,
+    //     zoomControl: true,
+    //     scrollwheel: false,
+    //     styles: [
+    //         {
+    //             featureType: 'poi',
+    //             elementType: 'labels',
+    //             stylers: [{ visibility: 'off' }]
+    //         },
+    //         {
+    //             featureType: 'transit',
+    //             elementType: 'labels',
+    //             stylers: [{ visibility: 'off' }]
+    //         },
+    //         {
+    //             featureType: 'road',
+    //             elementType: 'labels.text',
+    //             stylers: [{ visibility: 'on' }]
+    //         },
+    //         {
+    //             featureType: 'landscape',
+    //             elementType: 'all',
+    //             stylers: [{ color: '#f5f5f5' }]
+    //         },
+    //         {
+    //             featureType: 'water',
+    //             elementType: 'all',
+    //             stylers: [{ color: '#e9e9e9' }]
+    //         }
+    //     ]
+    // };
 
-    const customMarker = {
-        url: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png", // Use default Google Maps marker or any accessible image URL
-        scaledSize: { width: 40, height: 40 }, // Adjust size for visibility
-    };
+    // const customMarker = {
+    //     url: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png", // Use default Google Maps marker or any accessible image URL
+    //     scaledSize: { width: 40, height: 40 }, // Adjust size for visibility
+    // };
 
     // Fetch property details
     useEffect(() => {
@@ -780,7 +780,7 @@ const SinglePage = () => {
 
                     <div className="container mx-auto">
                         {/* Map Section */}
-                        <div className="mt-8 p-4 border rounded-lg shadow-sm bg-white">
+                        {/* <div className="mt-8 p-4 border rounded-lg shadow-sm bg-white">
                             <h3 className="text-xl font-semibold text-gray-800 mb-4">Where you'll be</h3>
                             <div className="relative rounded-lg overflow-hidden">
                                 <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
@@ -803,7 +803,8 @@ const SinglePage = () => {
                                     </GoogleMap>
                                 </LoadScript>
                             </div>
-                        </div>
+                        </div> */}
+                        <LocationLatLngMap latitude={propertyDetail?.latitude} longitude={propertyDetail?.longitude} />
                     </div>
 
 

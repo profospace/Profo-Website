@@ -212,6 +212,7 @@ const ProjectSpecificationCard = ({ specifications }) => {
     };
 
     const visibleSpecs = showAll ? specifications : specifications?.slice(0, 4);
+    
 
     return (
         <div className="container mx-auto px-4 py-8">
