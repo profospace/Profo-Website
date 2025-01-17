@@ -34,26 +34,26 @@ const BuildingContactCard = () => {
         <div className="max-w-xl w-full bg-white rounded-lg  ">
             <div className="p-4">
                 {/* Header */}
-                <div className="flex justify-between items-start mb-2">
+                {/* <div className="flex justify-between items-start mb-2">
                     <h2 className="text-xl font-bold">{propertyData.title}</h2>
                     <div className="flex gap-2">
                         <Heart className="w-6 h-6 text-gray-400 cursor-pointer hover:text-gray-600" />
                         <MoreHorizontal className="w-6 h-6 text-gray-400 cursor-pointer hover:text-gray-600" />
                     </div>
-                </div>
+                </div> */}
 
                 {/* Price and Area */}
-                <div className="mb-2">
-                    <div className="text-2xl font-bold mb-1">
-                        {propertyData.priceRange.min} — {propertyData.priceRange.max} million ₽
-                    </div>
-                    <div className="text-gray-600">
-                        from {propertyData.areaRange.min} to {propertyData.areaRange.max} m²
-                    </div>
-                </div>
+                    {/* <div className="mb-2">
+                        <div className="text-2xl font-bold mb-1">
+                            {propertyData.priceRange.min} — {propertyData.priceRange.max} million ₽
+                        </div>
+                        <div className="text-gray-600">
+                            from {propertyData.areaRange.min} to {propertyData.areaRange.max} m²
+                        </div>
+                    </div> */}
 
                 {/* Tags */}
-                <div className="flex gap-2 mb-2">
+                {/* <div className="flex gap-2 mb-2">
                     {propertyData.tags.map((tag) => (
                         <span
                             key={tag}
@@ -62,7 +62,7 @@ const BuildingContactCard = () => {
                             {tag}
                         </span>
                     ))}
-                </div>
+                </div> */}
 
                 {/* Developer Info Card */}
                 <div className="bg-gray-50 rounded-lg px-6 py-4">
