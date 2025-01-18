@@ -273,6 +273,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const IconCompletion = () => (
     <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor">
@@ -299,6 +300,7 @@ const IconBuildings = () => (
 );
 
 export default function BuildingLCDParameters() {
+    console.log("hi")
     const [showMore, setShowMore] = useState(false);
     const { buildingDetail } = useSelector(state => state.buildings);
     const [buildingData, setBuildingData] = useState({});
@@ -390,11 +392,20 @@ export default function BuildingLCDParameters() {
                 </div>
             </div>
 
-            <button
+            {/* <button
                 onClick={() => setShowMore(!showMore)}
                 className="w-full bg-gray-100 rounded-lg p-4 text-left font-semibold hover:bg-gray-200 transition-colors"
             >
                 Additional options
+            </button> */}
+            <button
+                onClick={() => setShowMore(!showMore)}
+                className="w-full bg-gray-100 rounded-lg p-4 text-left font-semibold hover:bg-gray-200 transition-colors flex justify-between items-center"
+            >
+                <span>Additional options</span>
+                <div className={`transform transition-transform duration-300 ${showMore ? 'rotate-180' : ''}`}>
+                    <ChevronDown size={20} />
+                </div>
             </button>
 
             <div className={`mt-6 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-6 overflow-hidden transition-all duration-500 ease-in-out ${showMore ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
