@@ -467,13 +467,13 @@ function HeaderSection({ details }) {
               {/* Navigation Tabs */}
               <div
                   className={`${isTabsSticky
-                      ? 'fixed top-0 left-0 z-50 bg-white shadow-md'
+                      ? 'fixed top-16 left-0 z-50 bg-white shadow-sm'
                       : 'absolute bottom-0 left-0 backdrop-blur-lg'
                       } w-full transition-all duration-300`}
               >
                   <div className="max-w-7xl mx-auto">
                       <div
-                          className={`flex gap-6 text-md p-5 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'
+                          className={`flex gap-6 text-md px-8 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'
                               }`}
                       >
                           {navigationTabs.map((tab) => (

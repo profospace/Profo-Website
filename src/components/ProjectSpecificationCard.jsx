@@ -237,7 +237,7 @@ const ProjectSpecificationCard = ({ specifications }) => {
 
             {!showAll && specifications?.length > 4 && (
                 <button
-                    className="w-full mt-6 py-4 px-6 text-center text-gray-900 bg-gray-100 rounded-2xl hover:bg-gray-200 transition-colors text-lg font-semibold"
+                    className=" mt-6 py-2 px-6 text-center text-white bg-gray-800 rounded-lg hover:bg-gray-200 transition-colors text-md"
                     onClick={() => setShowAll(true)}
                 >
                     Show all specifications

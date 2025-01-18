@@ -109,7 +109,7 @@ const BuildingContactCard = () => {
                     </div>
 
                     {/* Custom Buttons */}
-                    <button className="w-full bg-gray-900 text-white rounded-lg py-4 mb-2 hover:bg-gray-800 transition-colors">
+                    <button className="w-full bg-[#FED42B] text-black rounded-lg py-4 mb-2 hover:bg-gray-900 hover:text-white transition-colors">
                         Show phone
                     </button>
                     <button className="w-full bg-white border border-gray-200 rounded-lg py-4 hover:bg-gray-50 transition-colors">

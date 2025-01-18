@@ -228,23 +228,7 @@ body{
             background: linear-gradient(90deg, #2d3748 0%, #1a365d 100%);
           } */
 
-          @media (max-width: 640px) {
-            .property-grid {
-              grid-template-columns: 1fr;
-            }
-          }
-
-          @media (min-width: 641px) and (max-width: 1024px) {
-            .property-grid {
-              grid-template-columns: repeat(2, 1fr);
-            }
-          }
-
-          @media (min-width: 1025px) {
-            .property-grid {
-              grid-template-columns: repeat(3, 1fr);
-            }
-          }
+         
 
 
 

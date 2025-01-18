@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Custom SVG icons as components
 const IconMap = {
@@ -94,38 +94,39 @@ const IconMap = {
 //     };
 
 //     return (
-//         <div className="w-full max-w-7xl mx-auto p-4 space-y-8">
-//             <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+//         <div className="w-full max-w-7xl mx-auto p-4 space-y-4">
+//             <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 //                 Property Amenities
 //             </h2>
 
-//             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-//                 {amenities?.map((category) => (
+//             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+//                 {amenities?.map((category, index) => (
 //                     <div
 //                         key={category._id}
-//                         className="bg-white rounded-xl hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100"
+//                         className={`rounded-xl hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 relative ${index === 0 ? 'bg-[#FFDE5A]' : 'bg-[#F5F5F5]'
+//                             }`}
 //                     >
-//                         <div className="p-6">
-//                             <div className="space-y-4">
+//                         <div className="p-5 relative z-10">
+//                             <div className="space-y-1">
 //                                 <div className="relative">
 //                                     <h3 className="text-xl font-semibold text-gray-800 pb-2">
 //                                         {category.category}
 //                                     </h3>
-//                                     <div className="absolute bottom-0 left-0 w-16 h-0.5 bg-blue-500"></div>
+//                                     {/* <div className="absolute bottom-0 left-0 w-16 h-0.5 bg-blue-500"></div> */}
 //                                 </div>
 
-//                                 <div className="space-y-4 mt-4">
+//                                 <div className="space-y-0 mt-4">
 //                                     {category.items.map((item) => (
 //                                         <div
 //                                             key={item}
-//                                             className="flex items-center space-x-3 group cursor-pointer transform transition-transform duration-200 hover:-translate-y-0.5"
+//                                             className="flex items-center space-x-1 group cursor-pointer transform transition-transform duration-200 "
 //                                         >
-//                                             <div className="p-2 rounded-lg transition-colors duration-200   ">
+//                                             <div className="p-2 rounded-lg transition-colors duration-200">
 //                                                 <div className="text-blue-600">
 //                                                     {getIcon(item)}
 //                                                 </div>
 //                                             </div>
-//                                             <span className="text-gray-600 group-hover:text-blue-600 transition-colors duration-200 font-medium">
+//                                             <span className="text-black  transition-colors duration-200 font-medium">
 //                                                 {item}
 //                                             </span>
 //                                         </div>
@@ -133,6 +134,12 @@ const IconMap = {
 //                                 </div>
 //                             </div>
 //                         </div>
+//                         <div
+//                             className="absolute -bottom-5 right-0 w-24 h-24 bg-contain bg-no-repeat bg-right-bottom z-0"
+//                             style={{
+//                                 backgroundImage: 'url(/assets/amenitiesbg.png)'
+//                             }}
+//                         />
 //                     </div>
 //                 ))}
 //             </div>
@@ -143,11 +150,20 @@ const IconMap = {
 // export default AmenitiesDisplay;
 
 
+
 const AmenitiesDisplay = ({ amenities }) => {
+    const [visibleItems, setVisibleItems] = useState(3);
+
     const getIcon = (itemName) => {
         const IconComponent = IconMap[itemName];
         return IconComponent ? <IconComponent /> : null;
     };
+
+    const showMore = () => {
+        setVisibleItems(prev => prev + 3);
+    };
+
+    const hasMoreItems = amenities?.length > visibleItems;
 
     return (
         <div className="w-full max-w-7xl mx-auto p-4 space-y-4">
@@ -155,8 +171,8 @@ const AmenitiesDisplay = ({ amenities }) => {
                 Property Amenities
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                {amenities?.map((category, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                {amenities?.slice(0, visibleItems).map((category, index) => (
                     <div
                         key={category._id}
                         className={`rounded-xl hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 relative ${index === 0 ? 'bg-[#FFDE5A]' : 'bg-[#F5F5F5]'
@@ -168,21 +184,20 @@ const AmenitiesDisplay = ({ amenities }) => {
                                     <h3 className="text-xl font-semibold text-gray-800 pb-2">
                                         {category.category}
                                     </h3>
-                                    {/* <div className="absolute bottom-0 left-0 w-16 h-0.5 bg-blue-500"></div> */}
                                 </div>
 
                                 <div className="space-y-0 mt-4">
                                     {category.items.map((item) => (
                                         <div
                                             key={item}
-                                            className="flex items-center space-x-1 group cursor-pointer transform transition-transform duration-200 "
+                                            className="flex items-center space-x-1 group cursor-pointer transform transition-transform duration-200"
                                         >
                                             <div className="p-2 rounded-lg transition-colors duration-200">
                                                 <div className="text-blue-600">
                                                     {getIcon(item)}
                                                 </div>
                                             </div>
-                                            <span className="text-black  transition-colors duration-200 font-medium">
+                                            <span className="text-black transition-colors duration-200 font-medium">
                                                 {item}
                                             </span>
                                         </div>
@@ -199,6 +214,17 @@ const AmenitiesDisplay = ({ amenities }) => {
                     </div>
                 ))}
             </div>
+
+            {hasMoreItems && (
+                <div className="flex justify-start mt-6">
+                    <button
+                        onClick={showMore}
+                        className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2"
+                    >
+                        Show More
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

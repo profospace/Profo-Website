@@ -14,7 +14,7 @@ function PropertiesPage() {
     // Determine which list to render
     const propertiesToDisplay = filteredProperties?.length > 0 ? filteredProperties : properties;
     const [show , setShow] = useState(true) // if map open properties will be hidden and vice-verse
-    console.log(propertiesToDisplay)
+    console.log(properties)
 
 
     const handleLoadMore = () => {
@@ -28,7 +28,7 @@ function PropertiesPage() {
             <div><FloatButtonShowMap setShow={setShow}/></div>
             {/* <LocationAccessPopup /> */}
             {/* <div className="grid gap-6 p-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4"> */}
-            {show &&  <div className="grid property-grid gap-6 px-4 py-4">
+            {show && <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 px-6">
                 {propertiesToDisplay?.length > 0 ? (
                     propertiesToDisplay?.map((property) => (
                         <PropertyCard key={property._id} property={property} />
