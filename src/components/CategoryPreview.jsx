@@ -252,24 +252,24 @@ const GalleryGrid = ({ gallery = [] }) => {
     return (
         <>
             {/* Categories Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-0 py-4 ">
                 {gallery.map((category) => (
                     <div
                         key={category._id}
                         onClick={() => handleCategoryClick(category)}
-                        className="group cursor-pointer overflow-hidden transition-all duration-300"
+                        className="group cursor-pointer overflow-hidden transition-all duration-300 "
                     >
-                        <div className="relative">
+                        <div className="relative ">
                             <img
                                 src={category.images[0]}
                                 alt={`${category.category} thumbnail`}
-                                className="w-full max-w-96 max-h-60 object-cover rounded-lg"
+                                className="w-full max-w-96 max-h-60 object-cover rounded-lg "
                             />
-                            <p className="absolute bottom-2 right-6 text-md text-gray-800 bg-white px-2 rounded-md">{category.images.length}+ photos</p>
+                            <p className="absolute bottom-2 right-10 text-md text-gray-800 bg-white px-2 rounded-md">{category.images.length}+ photos</p>
 
                             <div className="absolute inset-0 transition-colors duration-300" />
                         </div>
-                        <div className="py-2 bg-white">
+                        <div className="py-2 px-2 bg-white">
                             <h3 className="text-md">{category.category}</h3>
                             {/* <p className="text-xs text-gray-500">{category.images.length} photos</p> */}
                         </div>
@@ -279,7 +279,7 @@ const GalleryGrid = ({ gallery = [] }) => {
 
             {/* Full Screen Gallery Modal */}
             {isGalleryOpen && selectedCategory && (
-                <div className="fixed inset-0 bg-black z-50 overflow-hidden">
+                <div className="fixed inset-0 bg-black z-50 overflow-hidden ">
                     <div className="absolute top-4 right-4 z-10">
                         <button
                             onClick={handleCloseGallery}

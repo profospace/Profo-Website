@@ -16,6 +16,8 @@ import HeaderSection from '../components/HeaderSection'
 import BuildingContactCard from '../components/BuildingContactCard'
 import ProjectFloorPlan from '../components/ProjectFloorPlan'
 import { TrendingUp,  CircleDollarSign } from 'lucide-react';
+import ProjectHighlights from '../components/ProjectHighlights'
+import ProjectNearbyLocations from '../components/ProjectNearbyLocations'
 
 
 function ProjectDetailPage() {
@@ -169,8 +171,18 @@ function ProjectDetailPage() {
               <AmenitiesDisplay amenities={projectDetail?.amenities} />
             </div>
 
+            {/* highlights */}
+            <div className="mb-2">
+              <ProjectHighlights highlights={projectDetail?.highlights}/>
+            </div>
+            
+            {/* nearbyLocations */}
+            <div className="mb-2">
+              <ProjectNearbyLocations nearbyLocations={projectDetail?.nearbyLocations}/>
+            </div>
+
             {/* Gallery */}
-            <div className="mb-8">
+            <div className="mb-2">
               <GalleryGrid gallery={projectDetail?.gallery} />
             </div>
 
