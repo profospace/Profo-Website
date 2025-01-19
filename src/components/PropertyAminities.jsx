@@ -60,7 +60,7 @@ const PropertyAminities = ({ amenities = [] }) => {
 
     return (
         <div className="bg-white rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Amenities</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Amenities</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
                 {features.map((feature, index) => (

@@ -23,6 +23,7 @@ import ProjectPage from './pages/ProjectPage';
 import BuildingPage from './pages/BuildingPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import BuildingDetailPage from './pages/BuildingDetailPage';
+import BackToTop from './components/BackToTop';
 
 function App() {
   const dispatch = useDispatch()
@@ -46,6 +47,7 @@ function App() {
       {/* <div className=''>
         <FloatButtonShowMap />
       </div> */}
+      <BackToTop />
         <Routes>
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />

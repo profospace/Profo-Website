@@ -1,120 +1,356 @@
-import React from 'react';
-import { Heart, MoreHorizontal, BadgeCheck } from 'lucide-react';
+// import React from 'react';
+// import { BadgeCheck } from 'lucide-react';
 
-// Dummy data structure
-const propertyData = {
-    title: "Multi-quarter CITYZEN",
-    priceRange: {
-        min: "10.99",
-        max: "40.53"
-    },
-    areaRange: {
-        min: 20.8,
-        max: 109.5
-    },
-    tags: ["business", "delivery Q3 2027"],
-    developer: {
-        name: "Developer MR Group",
-        verified: true,
-        stats: {
-            constructionRank: "Top 4",
-            constructionVolume: "developers by construction volumes",
-            businessRank: "Top 3",
-            businessRating: "in the rating of business class developers",
-            submittedHouses: 184,
-            submittedComplexes: 32,
-            constructionHouses: 68,
-            constructionComplexes: 18
-        }
-    }
+// const BuildingContactCard = ({ info }) => {
+
+//     console.log("info", info)
+//     const calculateStats = () => {
+//         const buildingCount = info?.buildings?.length || 0;
+//         const propertyCount = info?.properties?.length || 0;
+//         const completedCount = info?.statistics?.completedProjects || 0;
+//         const ongoingCount = info?.statistics?.ongoingProjects || 0;
+
+//         return {
+//             buildingCount,
+//             propertyCount,
+//             completedCount,
+//             ongoingCount
+//         };
+//     };
+
+//     const stats = calculateStats();
+
+//     return (
+//         <div className="max-w-xl w-full bg-white rounded-lg">
+//             <div className="p-4">
+//                 <div className="bg-gray-50 rounded-lg px-6 py-4">
+//                     <div className="flex justify-between items-center mb-2">
+//                         <div className="flex items-center gap-2">
+//                             <span className="font-semibold text-2xl">
+//                                 {info?.name}
+//                             </span>
+//                             <BadgeCheck className="w-5 h-5 text-blue-600" />
+//                         </div>
+
+//                         {info?.logo ? (
+//                             <img
+//                                 src='https://avatars.mds.yandex.net/get-realty-content/8286862/46303758-a5d4-48da-9e81-9be761c16443/builder_logo_info'
+//                                 alt={`${info?.name} logo`}
+//                                 className="w-10 h-10 rounded-md object-contain"
+//                             />
+//                         ) : (
+//                             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold">
+//                                 {info?.name.slice(0, 2).toUpperCase()}
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     <div className="grid grid-cols-2 gap-6 mb-4">
+//                         <div>
+//                             <div className="font-semibold mb-1">{info?.experience}+ years</div>
+//                             <div className="text-gray-600 text-sm">of experience in construction</div>
+//                         </div>
+//                         <div>
+//                             <div className="font-semibold mb-1">{info?.operatingLocations?.length || 0}</div>
+//                             <div className="text-gray-600 text-sm">operating locations</div>
+//                         </div>
+//                     </div>
+
+//                     <div className="grid grid-cols-2 gap-6 mb-2">
+//                         <div>
+//                             <div className="font-semibold mb-1">
+//                                 {stats.completedCount} projects completed
+//                             </div>
+//                             <div className="text-gray-600 text-sm">Total completed</div>
+//                         </div>
+//                         <div>
+//                             <div className="font-semibold mb-1">
+//                                 {stats.ongoingCount} ongoing projects
+//                             </div>
+//                             <div className="text-gray-600 text-sm">Under construction</div>
+//                         </div>
+//                     </div>
+
+//                     <button className="w-full bg-[#FED42B] text-black rounded-lg py-4 mb-2 hover:bg-gray-900 hover:text-white transition-colors">
+//                         {info?.contacts?.[0] || "Show phone"}
+//                     </button>
+//                     <button className="w-full bg-white border border-gray-200 rounded-lg py-4 hover:bg-gray-50 transition-colors">
+//                         Call me
+//                     </button>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default BuildingContactCard;
+
+// import React, { useState } from 'react';
+// import { BadgeCheck, X } from 'lucide-react';
+// import { QRCode } from 'antd';
+
+// const PhonePopup = ({ phone, isOpen, onClose }) => {
+//     if (!isOpen) return null;
+
+//     return (
+//         <div className="absolute top-52 bg-white rounded-lg shadow-lg p-6">
+//             <div className="flex justify-between items-center mb-4">
+//                 <div className="text-2xl font-semibold">{phone}</div>
+//                 <button
+//                     onClick={onClose}
+//                     className="text-gray-500 hover:text-gray-700"
+//                 >
+//                     <X className="w-6 h-6" />
+//                 </button>
+//             </div>
+
+//             <div className='flex'>
+//                 <div className="text-gray-800">
+//                     Point your phone camera at the code to quickly dial the number
+//                 </div>
+
+//                 <div className="flex justify-center">
+//                     <QRCode
+//                         value={`tel:${phone.replace(/\D/g, '')}`}
+//                         size={56}
+//                         bordered={false}
+//                         color="#000000"
+//                     />
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// const BuildingContactCard = ({ info }) => {
+//     const [showPhonePopup, setShowPhonePopup] = useState(false);
+
+//     const calculateStats = () => {
+//         const buildingCount = info?.buildings?.length || 0;
+//         const propertyCount = info?.properties?.length || 0;
+//         const completedCount = info?.statistics?.completedProjects || 0;
+//         const ongoingCount = info?.statistics?.ongoingProjects || 0;
+
+//         return {
+//             buildingCount,
+//             propertyCount,
+//             completedCount,
+//             ongoingCount
+//         };
+//     };
+
+//     const stats = calculateStats();
+//     const phone = info?.contacts?.[0] || "+7 (980) 967-80-15";
+
+//     return (
+//         <div className="max-w-xl w-full bg-white rounded-lg relative">
+//             <div className="p-4">
+//                 <div className="bg-gray-50 rounded-lg px-6 py-4 relative">
+//                     <div className="flex justify-between items-center mb-2">
+//                         <div className="flex items-center gap-2">
+//                             <span className="font-semibold text-xl">
+//                                 {info?.name}
+//                             </span>
+//                             <BadgeCheck className="w-5 h-5 text-blue-600" />
+//                         </div>
+
+//                         {info?.logo ? (
+//                             <img
+//                                 // src={info.logo}
+//                                 src='https://avatars.mds.yandex.net/get-realty-content/8286862/46303758-a5d4-48da-9e81-9be761c16443/builder_logo_info'                                alt={`${info?.name} logo`}
+//                                 className="w-10 h-10 rounded-md object-contain"
+//                             />
+//                         ) : (
+//                             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold">
+//                                 {info?.name.slice(0, 2).toUpperCase()}
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     <div className="grid grid-cols-2 gap-6 mb-4">
+//                         <div>
+//                             <div className="font-semibold mb-1">{info?.experience}+ years</div>
+//                             <div className="text-gray-600 text-sm">of experience in construction</div>
+//                         </div>
+//                         <div>
+//                             <div className="font-semibold mb-1">{info?.operatingLocations?.length || 0}</div>
+//                             <div className="text-gray-600 text-sm">operating locations</div>
+//                         </div>
+//                     </div>
+
+//                     <div className="grid grid-cols-2 gap-6 mb-2">
+//                         <div>
+//                             <div className="font-semibold mb-1">
+//                                 {stats.completedCount} projects completed
+//                             </div>
+//                             <div className="text-gray-600 text-sm">Total completed</div>
+//                         </div>
+//                         <div>
+//                             <div className="font-semibold mb-1">
+//                                 {stats.ongoingCount} ongoing projects
+//                             </div>
+//                             <div className="text-gray-600 text-sm">Under construction</div>
+//                         </div>
+//                     </div>
+
+//                     <button
+//                         onClick={() => setShowPhonePopup(true)}
+//                         className="w-full bg-[#FED42B] text-black rounded-lg py-4 mb-2 hover:bg-gray-900 hover:text-white transition-colors"
+//                     >
+//                         Show phone
+//                     </button>
+//                     <button className="w-full bg-white border border-gray-200 rounded-lg py-4 hover:bg-gray-50 transition-colors">
+//                         Call me
+//                     </button>
+
+//                     <PhonePopup
+//                         phone={phone}
+//                         isOpen={showPhonePopup}
+//                         onClose={() => setShowPhonePopup(false)}
+//                     />
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default BuildingContactCard;
+
+import React, { useState } from 'react';
+import { BadgeCheck, X } from 'lucide-react';
+import { QRCode } from 'antd';
+
+const PhonePopup = ({ phone, isOpen, onClose }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="absolute top-60 left-0 right-0 mx-4 bg-white rounded-lg shadow-lg p-6">
+            <div className="flex justify-between items-center mb-4">
+                <div className="text-2xl font-semibold">{phone}</div>
+                <button
+                    onClick={onClose}
+                    className="text-gray-500 hover:text-gray-700"
+                >
+                    <X className="w-6 h-6" />
+                </button>
+            </div>
+
+            <div className="flex justify-between items-center">
+                <div className="text-gray-800 pr-4">
+                    Point your phone camera at the code to quickly dial the number
+                </div>
+
+                <div className="flex-shrink-0">
+                    <QRCode
+                        value={`tel:${phone.replace(/\D/g, '')}`}
+                        size={56}
+                        bordered={false}
+                        color="#000000"
+                    />
+                </div>
+            </div>
+        </div>
+    );
 };
 
-const BuildingContactCard = () => {
+const BuildingContactCard = ({ info }) => {
+    const [showPhonePopup, setShowPhonePopup] = useState(false);
+
+    const calculateStats = () => {
+        const buildingCount = info?.buildings?.length || 0;
+        const propertyCount = info?.properties?.length || 0;
+        const completedCount = info?.statistics?.completedProjects || 0;
+        const ongoingCount = info?.statistics?.ongoingProjects || 0;
+
+        return {
+            buildingCount,
+            propertyCount,
+            completedCount,
+            ongoingCount
+        };
+    };
+
+    const stats = calculateStats();
+    const phone = info?.contacts?.[0] || "+91 (000) 000-00-00";
+
+    const handleCallClick = () => {
+        window.location.href = `tel:${phone.replace(/\D/g, '')}`;
+    };
+
     return (
-        <div className="max-w-xl w-full bg-white rounded-lg  ">
+        <div className="max-w-xl w-full bg-white rounded-lg relative">
             <div className="p-4">
-                {/* Header */}
-                {/* <div className="flex justify-between items-start mb-2">
-                    <h2 className="text-xl font-bold">{propertyData.title}</h2>
-                    <div className="flex gap-2">
-                        <Heart className="w-6 h-6 text-gray-400 cursor-pointer hover:text-gray-600" />
-                        <MoreHorizontal className="w-6 h-6 text-gray-400 cursor-pointer hover:text-gray-600" />
-                    </div>
-                </div> */}
-
-                {/* Price and Area */}
-                    {/* <div className="mb-2">
-                        <div className="text-2xl font-bold mb-1">
-                            {propertyData.priceRange.min} — {propertyData.priceRange.max} million ₽
-                        </div>
-                        <div className="text-gray-600">
-                            from {propertyData.areaRange.min} to {propertyData.areaRange.max} m²
-                        </div>
-                    </div> */}
-
-                {/* Tags */}
-                {/* <div className="flex gap-2 mb-2">
-                    {propertyData.tags.map((tag) => (
-                        <span
-                            key={tag}
-                            className="px-4 py-1 bg-gray-100 rounded-full text-gray-600 text-sm"
-                        >
-                            {tag}
-                        </span>
-                    ))}
-                </div> */}
-
-                {/* Developer Info Card */}
                 <div className="bg-gray-50 rounded-lg px-6 py-4">
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="flex justify-between items-center mb-2">
                         <div className="flex items-center gap-2">
-                            <span className="font-semibold">
-                                {propertyData.developer.name}
-                            </span>
-                            {propertyData.developer.verified && (
+                            <div className=''>
+                                <span className="flex items-center gap-2 font-semibold text-xl">
+                                    {info?.name}
                                 <BadgeCheck className="w-5 h-5 text-blue-600" />
-                            )}
+                                </span>
+                                <div className="font-light text-sm text-blue-800 mb-1 cursor-pointer" onClick={() =>{ window.location.href = `mailto:${info?.contacts?.[1]}`}}>
+                                    {info?.contacts?.[1]}
+                                </div>
+                            </div>
                         </div>
-                        <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold">
-                            MR
-                        </div>
+
+                        {info?.logo ? (
+                            <img
+                                src={info?.logo}
+                                alt={`${info?.name} logo`}
+                                className="w-10 h-10 rounded-md object-contain"
+                            />
+                        ) : (
+                            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold">
+                                {info?.name.slice(0, 2).toUpperCase()}
+                            </div>
+                        )}
                     </div>
 
-                    {/* Stats Grid */}
                     <div className="grid grid-cols-2 gap-6 mb-4">
                         <div>
-                            <div className="font-semibold mb-1">{propertyData.developer.stats.constructionRank}</div>
-                            <div className="text-gray-600 text-sm">{propertyData.developer.stats.constructionVolume}</div>
+                            <div className="font-semibold mb-1">{info?.experience}+ years</div>
+                            <div className="text-gray-600 text-sm">of experience in construction</div>
                         </div>
                         <div>
-                            <div className="font-semibold mb-1">{propertyData.developer.stats.businessRank}</div>
-                            <div className="text-gray-600 text-sm">{propertyData.developer.stats.businessRating}</div>
+                            <div className="font-semibold mb-1">{info?.operatingLocations?.length || 0}</div>
+                            <div className="text-gray-600 text-sm">operating locations</div>
                         </div>
                     </div>
 
-                    {/* Houses Info */}
                     <div className="grid grid-cols-2 gap-6 mb-2">
                         <div>
                             <div className="font-semibold mb-1">
-                                {propertyData.developer.stats.submittedHouses} houses in {propertyData.developer.stats.submittedComplexes} residential complexes
+                                {stats.completedCount} projects completed
                             </div>
-                            <div className="text-gray-600 text-sm">Submitted</div>
+                            <div className="text-gray-600 text-sm">Total completed</div>
                         </div>
                         <div>
                             <div className="font-semibold mb-1">
-                                {propertyData.developer.stats.constructionHouses} houses in {propertyData.developer.stats.constructionComplexes} residential complexes
+                                {stats.ongoingCount} ongoing projects
                             </div>
                             <div className="text-gray-600 text-sm">Under construction</div>
                         </div>
                     </div>
-
-                    {/* Custom Buttons */}
-                    <button className="w-full bg-[#FED42B] text-black rounded-lg py-4 mb-2 hover:bg-gray-900 hover:text-white transition-colors">
+                    
+                    <button
+                        onClick={() => setShowPhonePopup(true)}
+                        className="w-full bg-[#FED42B] text-black rounded-lg py-4 mb-2 hover:bg-gray-900 hover:text-white transition-colors"
+                    >
                         Show phone
                     </button>
-                    <button className="w-full bg-white border border-gray-200 rounded-lg py-4 hover:bg-gray-50 transition-colors">
+                    <button
+                        onClick={handleCallClick}
+                        className="w-full bg-white border border-gray-200 rounded-lg py-4 hover:bg-gray-50 transition-colors"
+                    >
                         Call me
                     </button>
+
+                    <PhonePopup
+                        phone={phone}
+                        isOpen={showPhonePopup}
+                        onClose={() => setShowPhonePopup(false)}
+                    />
                 </div>
             </div>
         </div>

@@ -22,7 +22,7 @@ const AskDeveloper = () => {
                             </p>
                             {/* Custom Button */}
                             <button
-                                className="w-full md:w-auto bg-gray-900 px-8 py-6 rounded-md text-lg text-white font-medium
+                                className="w-full md:w-auto bg-gray-900 px-8 py-4 rounded-md text-lg text-white font-medium
                           hover:bg-gray-800 active:bg-gray-700 
                           transition-all duration-200
                           focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"

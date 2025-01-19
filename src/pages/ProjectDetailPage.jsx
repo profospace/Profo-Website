@@ -18,6 +18,7 @@ import ProjectFloorPlan from '../components/ProjectFloorPlan'
 import { TrendingUp,  CircleDollarSign } from 'lucide-react';
 import ProjectHighlights from '../components/ProjectHighlights'
 import ProjectNearbyLocations from '../components/ProjectNearbyLocations'
+import DownloadBrochures from '../components/DownloadBrochures'
 
 
 function ProjectDetailPage() {
@@ -207,10 +208,12 @@ function ProjectDetailPage() {
           </div>
 
           {/* Right sidebar with fixed contact card */}
-          <div className="hidden lg:block col-span-4">
+          <div className="col-span-4">
             <div className="sticky top-32">
-              <BuildingContactCard />
+              <BuildingContactCard info={projectDetail?.builder}/>
+              <DownloadBrochures />
             </div>
+            
           </div>
         </div>
             {/* <div className="mb-8">

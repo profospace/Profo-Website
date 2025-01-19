@@ -353,6 +353,8 @@ import ShareableCard from "../components/ShareableCard";
 import ShareOptions from "../components/ShareOptions";
 import { base_url } from "../utils/base_url";
 import LocationLatLngMap from "../components/LocationLatLngMap";
+import { Heart, TrendingUp, CircleDollarSign, IndianRupee } from 'lucide-react';
+
 
 export const FacilitiesSection = ({ facilities }) => {
     // Icon mapping for facilities
@@ -490,28 +492,42 @@ const SinglePage = () => {
         }
     }, [propertyDetail]);
 
+    // const formatPrice = (price) => {
+    //     if (typeof price !== "number" || isNaN(price)) return "N/A";
+
+    //     const indianFormat = new Intl.NumberFormat("en-IN", {
+    //         maximumFractionDigits: 0,
+    //     }).format(price);
+
+    //     let unit = "";
+    //     if (price >= 1_00_00_000) {
+    //         unit = "Cr";
+    //         price = (price / 1_00_00_000).toFixed(2);
+    //     } else if (price >= 1_00_000) {
+    //         unit = "Lakh";
+    //         price = (price / 1_00_000).toFixed(2);
+    //     } else if (price >= 1_000) {
+    //         unit = "Thousand";
+    //         price = (price / 1_000).toFixed(2);
+    //     } else {
+    //         price = price.toFixed(2);
+    //     }
+
+    //     return `₹${price} ${unit}`.trim();
+    // };
+
     const formatPrice = (price) => {
         if (typeof price !== "number" || isNaN(price)) return "N/A";
 
-        const indianFormat = new Intl.NumberFormat("en-IN", {
-            maximumFractionDigits: 0,
-        }).format(price);
-
-        let unit = "";
         if (price >= 1_00_00_000) {
-            unit = "Cr";
-            price = (price / 1_00_00_000).toFixed(2);
+            return `₹${(price / 1_00_00_000).toFixed(2)}Cr`;
         } else if (price >= 1_00_000) {
-            unit = "Lakh";
-            price = (price / 1_00_000).toFixed(2);
+            return `₹${(price / 1_00_000).toFixed(2)}L`;
         } else if (price >= 1_000) {
-            unit = "Thousand";
-            price = (price / 1_000).toFixed(2);
-        } else {
-            price = price.toFixed(2);
+            return `₹${(price / 1_000).toFixed(0)}K`;
         }
 
-        return `₹${price} ${unit}`.trim();
+        return `₹${price}`;
     };
 
     const handleButtonClick = () => {
@@ -536,7 +552,10 @@ const SinglePage = () => {
         link: `http://localhost:5173${pathname}`,
     };
 
-    
+    const pricePerSqft = propertyDetail?.price && propertyDetail?.superBuiltupArea
+        ? Math.round(propertyDetail?.price / propertyDetail?.superBuiltupArea)
+        : 0;
+
 
     return (
         <div className="mx-8">
@@ -583,6 +602,11 @@ const SinglePage = () => {
                     </div>
                 </div>
             </div>
+
+
+
+
+
 
             <div className="relative">
                 {/* Desktop Grid */}
@@ -650,7 +674,7 @@ const SinglePage = () => {
                 {/* left */}
                 <div className="col-span-8">
                     {/* Property Details Card */}
-                    <div className="bg-white shadow-sm rounded-lg p-6 w-full mx-auto border">
+                    {/* <div className="bg-white shadow-sm rounded-lg p-6 w-full mx-auto border">
                         <div className="flex flex-wrap justify-between items-center">
                             <div className="flex items-center space-x-2">
                                 <span className="bg-purple-600 text-white text-xs font-semibold px-2 py-1 rounded">
@@ -692,27 +716,117 @@ const SinglePage = () => {
                                 Registration No: <span className="font-medium">73 OF 2017</span>
                             </p>
                         </div>
-                    </div>
+                    </div> */}
 
-                    {/* Amenities Section */}
-                    {/* {propertyDetail?.amenities && propertyDetail.amenities.filter(Boolean).length > 0 && (
-                        <div className="mt-8 p-4 border rounded-lg shadow-sm bg-white">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-4">What this place offers</h3>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {Array.from(new Set(propertyDetail.amenities.filter(Boolean))).map((amenity, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex items-center gap-3 bg-gray-100 p-3 rounded-lg shadow-sm cursor-pointer hover:shadow-lg"
-                                    >
-                                        <div className="text-gray-600">
-                                            {amenityIconMap[amenity.toLowerCase()] || fallbackIcon}
+
+                    {/* Property Info Section */}
+                    <div className="max-w-4xl mx-auto p-4 py-6">
+                        <div className="flex gap-2 mb-2">
+                            <span className="inline-flex items-center px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded">
+                                ✓ Verified
+                            </span>
+                            <span className="inline-flex items-center px-2 py-1 text-xs font-semibold text-white bg-purple-600 rounded">
+                                Featured
+                            </span>
+                        </div>
+                        {/* Header Section */}
+                        <div className="">
+                            {/* New Launch Badge */}
+
+                            <h1 className="text-4xl font-bold text-gray-900 mb-1">{propertyDetail?.post_title}</h1>
+
+                            <p className="text-gray-500">{propertyDetail?.address}</p>
+                        </div>
+
+
+                        <div className="max-w-3xl py-1">
+                            <div className="flex flex-col space-y-2">
+                                {/* Top badges */}
+
+
+                                <div className="flex gap-8 items-center">
+                                    {/* Price section */}
+                                    <div>
+                                        <div className="flex items-baseline">
+                                            <div className="flex items-center">
+                                                {/* <IndianRupee className="w-4 h-4" /> */}
+                                                <span className="text-4xl font-semibold">
+                                                    {formatPrice(propertyDetail?.price)}
+                                                </span>
+                                            </div>
+                                            <span className="ml-2 text-gray-500 text-sm">
+                                                @ {pricePerSqft} per sq.ft.
+                                            </span>
                                         </div>
-                                        <span className="text-gray-800 capitalize">{amenity}</span>
+
+                                        {/* EMI section */}
+                                        <div className="text-blue-500">
+                                            Estimated EMI ₹{propertyDetail?.price ? Math.round(propertyDetail?.price * 0.008).toLocaleString() : '0'}
+                                        </div>
                                     </div>
-                                ))}
+
+                                    {/* Vertical Divider */}
+                                    <div className="w-px h-16 bg-gray-300"></div>
+
+                                    <div>
+                                        {/* Property details */}
+                                        <div className="flex flex-col justify-start items-start">
+                                            <div className="text-3xl text-gray-700">
+                                                {propertyDetail?.bedrooms}BHK {propertyDetail?.bathrooms}Baths
+                                            </div>
+                                            <div className="text-gray-500">
+                                                {propertyDetail?.type_name} for {propertyDetail?.purpose}
+                                            </div>
+                                            {/* Location */}
+                                            <div className="text-gray-500 text-sm">
+                                                in {propertyDetail?.locality}, {propertyDetail?.address}, {propertyDetail?.city}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    )} */}
+
+
+
+
+
+                        {/* Status Tags */}
+                        {/* <div className="flex flex-wrap gap-2 mb-1 py-2">
+                            <div className="flex items-center bg-black text-white px-3 py-1 rounded-md">
+                                {propertyDetail?.bedrooms} bedrooms
+                            </div>
+                            <div className="bg-black  text-white  px-3 py-1 rounded-md">
+                                {propertyDetail?.bathrooms} bathrooms
+                            </div>
+                            <div className="bg-black  text-white  px-3 py-1 rounded-md">
+                                {propertyDetail?.floor} Floors
+                            </div>
+                           
+                        </div> */}
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            <div className="flex items-center bg-gray-700 text-white px-3 py-1 rounded-md">
+                                <svg
+                                    className="w-4 h-4 mr-1"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                                </svg>
+                                {propertyDetail?.purpose}
+                            </div>
+                            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md">
+                                {propertyDetail?.area} {propertyDetail?.areaUnit}
+                            </div>
+                            <div className="bg-gray-100 text-gray-800 px-3 py-1 rounded-md">
+                                {propertyDetail?.facilities?.length} Top Facilities
+                            </div>
+                        </div>
+
+                    </div>
+
                     <PropertyAminities amenities={propertyDetail?.amenities} />
 
                     {/* facities section */}
@@ -721,7 +835,7 @@ const SinglePage = () => {
                     )}
 
                     {/* Property Info Cards */}
-                    <div className="mt-8 p-6 border rounded-lg shadow bg-white">
+                    {/* <div className="mt-8 p-6 border rounded-lg shadow bg-white">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
                             {[
                                 { label: "Transaction Type", value: "Resale" },
@@ -741,6 +855,35 @@ const SinglePage = () => {
                                     <span className="text-gray-600 text-sm">{label}:</span>
                                     <span className="text-gray-900 font-bold text-sm text-left">
                                         {value}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div> */}
+
+                    <div className="mt-8 p-6 border rounded-lg shadow bg-white">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+                            {[
+                                { label: "Price", value: propertyDetail?.priceOnRequest ? "Price on Request" : `${propertyDetail?.price?.toLocaleString()} ${propertyDetail?.priceUnit}` },
+                                { label: "Property Type", value: propertyDetail?.type_name },
+                                { label: "Super Built-up Area", value: `${propertyDetail?.superBuiltupArea} ${propertyDetail?.areaUnit}` },
+                                { label: "Carpet Area", value: `${propertyDetail?.carpetArea} ${propertyDetail?.areaUnit}` },
+                                { label: "Bedrooms", value: propertyDetail?.bedrooms },
+                                { label: "Bathrooms", value: propertyDetail?.bathrooms },
+                                { label: "Floor", value: `${propertyDetail?.floor}${propertyDetail?.floor ? 'th' : ''} Floor` },
+                                { label: "Furnishing", value: propertyDetail?.furnishing },
+                                { label: "Possession", value: propertyDetail?.possession },
+                                { label: "Ownership Type", value: propertyDetail?.ownershipTypes?.[0] },
+                                { label: "Property Status", value: propertyDetail?.status },
+                                { label: "View Type", value: propertyDetail?.viewTypes?.[0] },
+                                { label: "Property Condition", value: propertyDetail?.propertyConditions?.[0] },
+                                { label: "Legal Status", value: propertyDetail?.legalStatuses?.[0] },
+                                { label: "Security", value: propertyDetail?.facilities?.includes("24/7-security") ? "24/7 Available" : "Not Available" }
+                            ].map(({ label, value }, index) => (
+                                <div key={index} className="flex items-center flex-wrap gap-2">
+                                    <span className="text-gray-600 text-sm">{label}:</span>
+                                    <span className="text-gray-900 font-bold text-sm text-left">
+                                        {value || "Not Specified"}
                                     </span>
                                 </div>
                             ))}
@@ -780,30 +923,6 @@ const SinglePage = () => {
 
                     <div className="container mx-auto">
                         {/* Map Section */}
-                        {/* <div className="mt-8 p-4 border rounded-lg shadow-sm bg-white">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-4">Where you'll be</h3>
-                            <div className="relative rounded-lg overflow-hidden">
-                                <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
-                                    <GoogleMap
-                                        mapContainerStyle={mapContainerStyle}
-                                        center={mapCenter}
-                                        zoom={15}
-                                        options={mapOptions}
-                                    >
-                                        {mapCenter.lat !== 0 && mapCenter.lng !== 0 ? (
-                                            <Marker
-                                                position={mapCenter}
-                                                icon={customMarker} // Use the updated marker icon
-                                            />
-                                        ) : (
-                                            <p className="text-red-500">
-                                                Unable to display marker: Invalid coordinates
-                                            </p>
-                                        )}
-                                    </GoogleMap>
-                                </LoadScript>
-                            </div>
-                        </div> */}
                         <LocationLatLngMap latitude={propertyDetail?.latitude} longitude={propertyDetail?.longitude} />
                     </div>
 
@@ -820,29 +939,25 @@ const SinglePage = () => {
                 <div className="col-span-4">
                     <div className="sticky top-24">
                         <RealEstateListing
-                            
+
                             handleButtonClick={handleButtonClick}
-                            price={propertyDetail?.price}
-                            title={`${propertyDetail?.bathrooms} Baths ${propertyDetail?.bedrooms} Beds ${propertyDetail?.floor} Floors`}
-                            location={propertyDetail?.address}
-                            agentName="Mikhailova Ekaterina"
-                            agencyName="Agency Samolet Plus MSK Sever"
+                            details={propertyDetail?.builder}
                         />
                     </div>
-                </div>         
-             </div>
+                </div>
+            </div>
 
 
-             {
+            {
                 isPopupVisible && <div onClick={handleClose} className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div
                         className={` rounded-lg shadow-xl p-6 w-full  transform transition-transform duration-300 ${isAnimating ? "scale-100 opacity-100" : "scale-90 opacity-0"
                             }`}
                     >
-                    <BuilderContactCard propertyDetail={propertyDetail} />
+                        <BuilderContactCard propertyDetail={propertyDetail} />
+                    </div>
                 </div>
-                </div>
-             }
+            }
 
 
         </div>

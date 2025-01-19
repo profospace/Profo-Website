@@ -19,7 +19,7 @@ const ProjectHighlights = ({ highlights }) => {
                 {displayedHighlights?.map((highlight, index) => (
                     <div
                         key={index}
-                        className="group bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-100"
+                        className="cursor-pointer group bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-100"
                     >
                         <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors duration-300">
                             {/* Placeholder for icon - in production, you'd import actual icons */}

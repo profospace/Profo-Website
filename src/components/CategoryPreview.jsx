@@ -4,14 +4,14 @@
 //   // Function to organize images into categories
 //   const organizeGallery = (items) => {
 //     const categories = {};
-    
+
 //     items.forEach(item => {
 //       categories[item.category || 'Inneryard'] = {
 //         images: item.images || [],
 //         count: item.images?.length || 0
 //       };
 //     });
-    
+
 //     return categories;
 //   };
 
@@ -34,7 +34,7 @@
 //                 />
 //               </div>
 //             )}
-            
+
 //             {/* Overlay with gradient */}
 //             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 //           </div>
@@ -252,30 +252,60 @@ const GalleryGrid = ({ gallery = [] }) => {
     return (
         <>
             {/* Categories Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-0 py-4 ">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 py-4 ">
                 {gallery.map((category) => (
                     <div
                         key={category._id}
                         onClick={() => handleCategoryClick(category)}
-                        className="group cursor-pointer overflow-hidden transition-all duration-300 "
+                        className="group cursor-pointer overflow-hidden transition-all duration-300 shadow-md rounded-xl "
                     >
                         <div className="relative ">
                             <img
                                 src={category.images[0]}
                                 alt={`${category.category} thumbnail`}
-                                className="w-full max-w-96 max-h-60 object-cover rounded-lg "
+                                className="w-full min-w-[40vw] max-h-64 object-cover rounded-lg "
                             />
                             <p className="absolute bottom-2 right-10 text-md text-gray-800 bg-white px-2 rounded-md">{category.images.length}+ photos</p>
 
                             <div className="absolute inset-0 transition-colors duration-300" />
                         </div>
                         <div className="py-2 px-2 bg-white">
-                            <h3 className="text-md">{category.category}</h3>
-                            {/* <p className="text-xs text-gray-500">{category.images.length} photos</p> */}
+                            <h3 className="text-lg ">{category.category}</h3>
                         </div>
                     </div>
                 ))}
+
+            </div> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 py-4">
+                {gallery.map((category) => (
+                    <div
+                        key={category._id}
+                        onClick={() => handleCategoryClick(category)}
+                        className="group cursor-pointer overflow-hidden transition-all duration-300 "
+                    >
+                        <div className="relative">
+                            <img
+                                // src={category.images[0]}
+                                src={'/assets/testing.avif'}
+                                alt={`${category.category} thumbnail`}
+                                className="w-full min-w-[40vw] max-h-64 object-cover rounded-lg"  // Added rounded-lg here
+                            />
+                            {/* Black overlay that appears on hover */}
+                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-lg" /> {/* Added rounded-lg to overlay */}
+
+                            <p className="absolute bottom-2 right-4 text-md text-gray-800 bg-white px-2 rounded-sm">
+                                {category.images.length}+ photos
+                            </p>
+                            <h3 className="absolute bottom-2 left-4 text-md  bg-white px-2 rounded-sm">{category.category}</h3>
+                        </div>
+                        {/* <div className="py-1 px-0 bg-white">
+                            <h3 className="text-lg">{category.category}</h3>
+                        </div> */}
+                    </div>
+                ))}
             </div>
+
+            
 
             {/* Full Screen Gallery Modal */}
             {isGalleryOpen && selectedCategory && (
