@@ -24,6 +24,7 @@ import BuildingPage from './pages/BuildingPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import BuildingDetailPage from './pages/BuildingDetailPage';
 import BackToTop from './components/BackToTop';
+import { getAllBuildings } from './redux/features/Buildings/buildingsSlice';
 
 function App() {
   const dispatch = useDispatch()
@@ -32,6 +33,8 @@ function App() {
   useEffect(
     () => {
       dispatch(getAllProperties())
+      dispatch(getAllBuildings())
+
     }, []
   )
   
