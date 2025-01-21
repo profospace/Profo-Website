@@ -224,7 +224,7 @@ import HomePageCard from '../components/HomePageCard';
 import { MdNavigateNext } from 'react-icons/md';
 import FlexibleLayout from '../components/FlexibleLayout';
 import AppDownloadBanner from '../components/AppDownloadBanner';
-import { getAllBuildings, getAllProjects, getAllProperties, getFilterProperties } from '../redux/features/Map/mapSlice';
+import { getAllBuildings, getAllProjects, getAllProperties, getFilterProperties, getMapFeed } from '../redux/features/Map/mapSlice';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
@@ -322,6 +322,13 @@ function Home() {
                 else if (type_name === "properties"){
                     dispatch(getAllProperties())
                 }
+                else if (type_name === 'getMapFeed'){
+                    dispatch(getMapFeed({
+                        latitude,
+                        longitude ,
+                        radius : 1
+                    }))
+                }
                 else{
                     // Dispatch action with the location and type_name
                     dispatch(getFilterProperties({ latitude, longitude, type_name }));
@@ -396,7 +403,7 @@ function Home() {
                         </button>
 
                         {/* Map toggle */}
-                        <button className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-md border border-gray-300">
+                        <button className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-md border border-gray-300" onClick={() => handleFilter('getMapFeed')} >
                             On the map
                         </button>
 

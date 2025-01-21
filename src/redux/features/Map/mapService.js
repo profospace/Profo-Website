@@ -72,7 +72,7 @@ const getFilterProperties = async (filters) => {
 
 const getAllProperties = async () => {
   const response = await axios.get(`${properties_base_url_map}`);
-  // console.log(response)
+  console.log(response)
   return response.data;
 };
 

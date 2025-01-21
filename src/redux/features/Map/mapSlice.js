@@ -71,6 +71,7 @@ export const getAllBuildings = createAsyncThunk(
   }
 );
 
+
 const mapSlice = createSlice({
   name: "map",
   initialState,
@@ -85,9 +86,9 @@ const mapSlice = createSlice({
         state.isSuccess = true;
 
         const { results, searchParams } = action.payload || {}; // Safely extract results from action.payload
-        state.properties = results?.properties || []; // Default to an empty array if undefined
-        state.projects = results?.projects || [];
-        state.buildings = results?.buildings || [];
+        state.properties = results?.properties?.items || []; // Default to an empty array if undefined
+        state.projects = results?.projects?.items || [];
+        state.buildings = results?.buildings?.items || [];
         state.searchParams = searchParams || {};
 
 
