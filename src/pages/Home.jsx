@@ -224,7 +224,7 @@ import HomePageCard from '../components/HomePageCard';
 import { MdNavigateNext } from 'react-icons/md';
 import FlexibleLayout from '../components/FlexibleLayout';
 import AppDownloadBanner from '../components/AppDownloadBanner';
-import { getFilterProperties } from '../redux/features/Map/mapSlice';
+import { getAllProjects, getFilterProperties } from '../redux/features/Map/mapSlice';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
@@ -311,8 +311,13 @@ function Home() {
             (position) => {
                 const { latitude, longitude } = position.coords;
 
-                // Dispatch action with the location and type_name
-                dispatch(getFilterProperties({ latitude, longitude, type_name }));
+                if (type_name === "project"){
+                    dispatch(getAllProjects())
+
+                }else{
+                    // Dispatch action with the location and type_name
+                    dispatch(getFilterProperties({ latitude, longitude, type_name }));
+                }
                 navigate('/main')
                 
             },

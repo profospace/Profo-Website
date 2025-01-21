@@ -34,6 +34,19 @@ export const getFilterProperties = createAsyncThunk(
     }
   })
 
+
+// get all projects
+export const getAllProjects = createAsyncThunk(
+  "map/getAllProjects",
+  async (_, thunkAPI) => {
+    try {
+      return await mapService.getAllProjects();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const mapSlice = createSlice({
   name: "map",
   initialState,
@@ -83,6 +96,25 @@ const mapSlice = createSlice({
         state.isError = true;
         state.message = action.payload.message;
       })
+      .addCase(getAllProjects.pending, (state) => {
+              state.isLoading = true;
+            })
+            .addCase(getAllProjects.fulfilled, (state, action) => {
+              state.isLoading = false;
+              state.isSuccess = true;
+              state.projects = action.payload;
+              state.buildings = [];
+              state.properties = [];
+              // state.properties = [...state.properties, ...action.payload.properties];
+              // state.currentPage = action.payload.currentPage;
+              // state.totalCount = action.payload.totalCount;
+              // state.totalPages = action.payload.totalPages;
+            })
+            .addCase(getAllProjects.rejected, (state, action) => {
+              state.isLoading = false;
+              state.isError = true;
+              state.message = action.payload.message;
+            })
   },
 });
 
