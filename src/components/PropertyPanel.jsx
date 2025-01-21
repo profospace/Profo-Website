@@ -390,7 +390,7 @@ const PropertyPanel = ({ data, type, onClose }) => {
     );
 
     return (
-        <div className="fixed left-0 top-24 bottom-0 w-96 bg-white shadow-xl p-4 overflow-y-auto">
+        <div className="fixed left-0 top-24 bottom-0 w-96 bg-white p-4 overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
                     {type === 'property' ? (

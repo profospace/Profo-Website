@@ -233,9 +233,17 @@ function Home() {
     const filters = ['Studio', 'eleven', '2', '3', '4+'];
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const { buildings } = useSelector(state => state.buildings)
+    const {  properties , projects } = useSelector(state => state.map)
 
     // console.log("buildings", buildings)
+
+    const buildings = [
+        {
+
+        }, {
+
+        }
+    ]
 
 
     const services = [
@@ -248,58 +256,58 @@ function Home() {
         { id: 7, title: 'Services', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/e69cded9c33e3274c1f2576ebf1d06bd.png' },
     ];
 
-    const properties = [
-        {
-            image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
-            name: "Eco Bunino",
-            price: 6195246,
-            metro: "Alder",
-            metroLineColor: "bg-red-500",
-            walkTime: 21,
-            label: "самолет"
-        },
-        {
-            image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
-            name: "JOIS",
-            price: 15745064,
-            metro: "Khoroshevo",
-            metroLineColor: "bg-purple-500",
-            walkTime: 8
-        },
-        {
-            image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
-            name: "Lucky",
-            price: 103162496,
-            metro: "Street of 1905",
-            metroLineColor: "bg-purple-500",
-            walkTime: 7
-        },
-        {
-            image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
-            name: "Troparevo Park",
-            price: 6040224,
-            metro: "Rumyantsevo",
-            metroLineColor: "bg-red-500",
-            walkTime: 13,
-            label: "самолет"
-        },
-        {
-            image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
-            name: "Ever",
-            price: 17904912,
-            metro: "Vorontsovskaya",
-            metroLineColor: "bg-yellow-500",
-            walkTime: 9
-        },
-        {
-            image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
-            name: "Lavrushinsky",
-            price: 151450000,
-            metro: "Tretyakovskaya",
-            metroLineColor: "bg-yellow-500",
-            walkTime: 6
-        }
-    ];
+    // const properties = [
+    //     {
+    //         image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
+    //         name: "Eco Bunino",
+    //         price: 6195246,
+    //         metro: "Alder",
+    //         metroLineColor: "bg-red-500",
+    //         walkTime: 21,
+    //         label: "самолет"
+    //     },
+    //     {
+    //         image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
+    //         name: "JOIS",
+    //         price: 15745064,
+    //         metro: "Khoroshevo",
+    //         metroLineColor: "bg-purple-500",
+    //         walkTime: 8
+    //     },
+    //     {
+    //         image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
+    //         name: "Lucky",
+    //         price: 103162496,
+    //         metro: "Street of 1905",
+    //         metroLineColor: "bg-purple-500",
+    //         walkTime: 7
+    //     },
+    //     {
+    //         image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
+    //         name: "Troparevo Park",
+    //         price: 6040224,
+    //         metro: "Rumyantsevo",
+    //         metroLineColor: "bg-red-500",
+    //         walkTime: 13,
+    //         label: "самолет"
+    //     },
+    //     {
+    //         image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
+    //         name: "Ever",
+    //         price: 17904912,
+    //         metro: "Vorontsovskaya",
+    //         metroLineColor: "bg-yellow-500",
+    //         walkTime: 9
+    //     },
+    //     {
+    //         image: "https://avatars.mds.yandex.net/get-verba/787013/2a00000193780e1d1b80be02e6e0a6575dd9/realty_app_snippet_large",
+    //         name: "Lavrushinsky",
+    //         price: 151450000,
+    //         metro: "Tretyakovskaya",
+    //         metroLineColor: "bg-yellow-500",
+    //         walkTime: 6
+    //     }
+    // ];
 
     const handleFilter = (type_name) => {
         if (!navigator.geolocation) {
@@ -342,6 +350,32 @@ function Home() {
             }
         );
     };
+
+    useEffect(
+        ()=>{
+
+            if (!navigator.geolocation) {
+                alert("Geolocation is not supported by your browser");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+
+                    dispatch(getMapFeed({
+                        latitude, longitude  , radius : 10000000000
+                    }))
+                   
+
+                },
+                (error) => {
+                    console.error("Error retrieving location:", error);
+                    alert("Unable to retrieve your location. Please try again.");
+                }
+            )
+        },[]
+    )
     return (
         <div className='mt-12 px-8'>
             {/* Top Section */}
@@ -486,9 +520,34 @@ function Home() {
                 </div>
             </div> */}
 
-            <FlexibleLayout details={properties} />
-            <FlexibleLayout details={properties} salesAdsPosition="left" headingText="New Properties" />
-            <FlexibleLayout details={properties} />
+            {/* <FlexibleLayout details={properties} type="property" /> */}
+            {/* <FlexibleLayout details={properties} salesAdsPosition="left" headingText="New Properties" />
+            <FlexibleLayout details={properties} /> */}
+
+            
+            <FlexibleLayout
+                type="property"
+                headingText="New Properties"
+                details={properties}
+                salesAdsPosition="right"
+                type_name="properties" // where to navigate
+            />
+            <FlexibleLayout
+                type="project"
+                headingText="New Projects"
+                details={projects}
+                salesAdsPosition="left"
+                type_name="project"
+            />
+            <FlexibleLayout
+                type="building"
+                headingText="New Buildings"
+                details={buildings}
+                salesAdsPosition="right"
+                type_name="buildings"
+            />
+
+
 
             <AppDownloadBanner />
 
