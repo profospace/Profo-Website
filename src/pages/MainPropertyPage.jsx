@@ -81,6 +81,7 @@ import ListingPage from '../components/ListingPage';
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
     const { properties, projects, isLoading } = useSelector(state => state.map);
+    console.log("properties map", properties)
     const [view, setView] = useState('map'); // list / map view
     const [center, setCenter] = useState(null);
     const [radius, setRadius] = useState(1);
@@ -110,16 +111,16 @@ const MainPropertyPage = () => {
     }, []);
 
     // Fetch data when location or radius changes
-    useEffect(() => {
-        if (center) {
-            const coordinates = {
-                latitude: center.lat,
-                longitude: center.lng,
-                radius: radius * 1000
-            };
-            dispatch(getMapFeed(coordinates));
-        }
-    }, [dispatch, radius, center]);
+    // useEffect(() => {
+    //     if (center) {
+    //         const coordinates = {
+    //             latitude: center.lat,
+    //             longitude: center.lng,
+    //             radius: radius * 1000
+    //         };
+    //         dispatch(getMapFeed(coordinates));
+    //     }
+    // }, [dispatch, radius, center]);
 
     const handleViewChange = (newView) => {
         setView(newView);
@@ -133,8 +134,8 @@ const MainPropertyPage = () => {
             <div className="min-h-screen bg-gray-100">
                 {view === 'list' ? (
                     <ListingPage
-                        properties={properties?.items || []}
-                        projects={projects?.items || []}
+                        properties={properties || []}
+                        projects={projects || []}
                         isLoading={isLoading}
                         onViewChange={handleViewChange}
                     />
@@ -145,8 +146,8 @@ const MainPropertyPage = () => {
                             center={center}
                             radius={radius}
                             setRadius={setRadius}
-                            properties={properties?.items || []}
-                            projects={projects?.items || []}
+                            properties={properties || []}
+                            projects={projects || []}
                             isLoading={isLoading}
                         />
                     )

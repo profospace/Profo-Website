@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Home, Building, MapPin, Bath, Bed, Grid, CalendarClock, Users } from 'lucide-react';
 const PropertyPanel = ({ data, type, onClose }) => {
+    console.log("PropertyPanel Data prop" , data)
     if (!data) return null;
     const formatPrice = (price) => {
         return new Intl.NumberFormat('en-IN', {

@@ -1415,12 +1415,13 @@ const MapPage = ({
         markersRef.current.forEach(marker => marker.setMap(null));
         markersRef.current = [];
         const createMarker = (item, type) => {
+            console.log(item)
             const position = type === 'property'
-                ? { lat: item.location.coordinates[1], lng: item.location.coordinates[0] }
-                : { lat: item.location.coordinates.coordinates[1], lng: item.location.coordinates.coordinates[0] };
+                ? { lat: item?.location?.coordinates?.[1], lng: item?.location?.coordinates?.[0] }
+                : { lat: item?.location?.coordinates?.coordinates?.[1], lng: item?.location?.coordinates?.coordinates?.[0] };
             const markerColor = type === 'property'
-                ? item.type_name?.toLowerCase() === 'apartment' ? '#3B82F6'
-                    : item.type_name?.toLowerCase() === 'house' ? '#10B981'
+                ? item?.type_name?.toLowerCase() === 'apartment' ? '#3B82F6'
+                    : item?.type_name?.toLowerCase() === 'house' ? '#10B981'
                         : '#8B5CF6'
                 : '#EF4444';
             const marker = new google.maps.Marker({
