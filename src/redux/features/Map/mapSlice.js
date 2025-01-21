@@ -47,6 +47,18 @@ export const getAllProjects = createAsyncThunk(
   }
 );
 
+// get all buildings
+export const getAllBuildings = createAsyncThunk(
+  "map/getAllBuildings",
+  async (_, thunkAPI) => {
+    try {
+      return await mapService.getAllBuildings();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const mapSlice = createSlice({
   name: "map",
   initialState,
@@ -56,14 +68,6 @@ const mapSlice = createSlice({
       .addCase(getMapFeed.pending, (state) => {
         state.isLoading = true;
       })
-      // .addCase(getMapFeed.fulfilled, (state, action) => {
-      //   state.isLoading = false;
-      //   state.isSuccess = true;
-      //   // state.projects = action.payload;
-      //   state.properties = action.results.properties,
-      //   state.projects = action.results.projects,
-      //   state.buildings = action.results.buildings
-      // })
       .addCase(getMapFeed.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
@@ -74,7 +78,7 @@ const mapSlice = createSlice({
         state.buildings = results?.buildings || [];
         state.searchParams = searchParams || {};
 
-        
+
       })
       .addCase(getMapFeed.rejected, (state, action) => {
         state.isLoading = false;
@@ -97,24 +101,37 @@ const mapSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(getAllProjects.pending, (state) => {
-              state.isLoading = true;
-            })
-            .addCase(getAllProjects.fulfilled, (state, action) => {
-              state.isLoading = false;
-              state.isSuccess = true;
-              state.projects = action.payload;
-              state.buildings = [];
-              state.properties = [];
-              // state.properties = [...state.properties, ...action.payload.properties];
-              // state.currentPage = action.payload.currentPage;
-              // state.totalCount = action.payload.totalCount;
-              // state.totalPages = action.payload.totalPages;
-            })
-            .addCase(getAllProjects.rejected, (state, action) => {
-              state.isLoading = false;
-              state.isError = true;
-              state.message = action.payload.message;
-            })
+        state.isLoading = true;
+      })
+      .addCase(getAllProjects.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.projects = action.payload;
+        state.buildings = [];
+        state.properties = [];
+      })
+      .addCase(getAllProjects.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload.message;
+      })
+
+      .addCase(getAllBuildings.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllBuildings.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.buildings = action.payload;
+        state.projects = [];
+        state.properties = [];
+        
+      })
+      .addCase(getAllBuildings.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        // state.message = action.payload.message;
+      })
   },
 });
 

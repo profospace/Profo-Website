@@ -1335,6 +1335,337 @@
 // export default MapPage;
 
 
+// import React, { useEffect, useRef, useState } from 'react';
+// import {
+//     MapPin,
+//     Building,
+//     Home,
+//     Plus,
+//     Minus,
+//     Loader,
+//     List,
+//     Search,
+//     X,
+//     LocateFixed
+// } from 'lucide-react';
+// import PropertyPanel from '../components/PropertyPanel';
+// const MapPage = ({
+//     onViewChange,
+//     center,
+//     setCenter,
+//     radius,
+//     setRadius,
+//     properties = [],
+//     projects = [],
+//     buildings = [],
+//     isLoading
+// }) => {
+//     const mapRef = useRef(null);
+//     const mapInstanceRef = useRef(null);
+//     const markersRef = useRef([]);
+//     const circleRef = useRef(null);
+
+//     const [searchQuery, setSearchQuery] = useState('');
+//     const [isSearching, setIsSearching] = useState(false);
+//     const [selectedItem, setSelectedItem] = useState(null);
+//     const [selectedItemType, setSelectedItemType] = useState(null);
+//     // Initialize map
+//     useEffect(() => {
+//         if (!mapRef.current || mapInstanceRef.current) return;
+//         const mapOptions = {
+//             center: center,
+//             zoom: 14,
+//             styles: [
+//                 {
+//                     featureType: 'all',
+//                     elementType: 'geometry',
+//                     stylers: [{ saturation: -80 }]
+//                 },
+//                 {
+//                     featureType: 'poi.park',
+//                     elementType: 'geometry.fill',
+//                     stylers: [
+//                         { color: '#8aba6b' },
+//                         { saturation: 40 },
+//                         { lightness: 20 }
+//                     ]
+//                 },
+//                 {
+//                     featureType: 'water',
+//                     elementType: 'geometry.fill',
+//                     stylers: [{ color: '#a5d6f7' }]
+//                 },
+//                 {
+//                     featureType: 'road',
+//                     elementType: 'geometry.fill',
+//                     stylers: [{ color: '#ffffff' }]
+//                 }
+//             ],
+//             disableDefaultUI: true,
+//             zoomControl: false,
+//             streetViewControl: false,
+//             mapTypeControl: false
+//         };
+//         mapInstanceRef.current = new google.maps.Map(mapRef.current, mapOptions);
+//     }, [center]);
+
+//     // Update markers when properties or projects change
+//     useEffect(() => {
+//         if (!mapInstanceRef.current) return;
+//         // Clear existing markers
+//         markersRef.current.forEach(marker => marker.setMap(null));
+//         markersRef.current = [];
+//         const createMarker = (item, type) => {
+//             console.log(item)
+//             const position = type === 'property'
+//                 ? { lat: item?.location?.coordinates?.[1], lng: item?.location?.coordinates?.[0] }
+//                 : { lat: item?.location?.coordinates?.coordinates?.[1], lng: item?.location?.coordinates?.coordinates?.[0] };
+//             const markerColor = type === 'property'
+//                 ? item?.type_name?.toLowerCase() === 'apartment' ? '#3B82F6'
+//                     : item?.type_name?.toLowerCase() === 'house' ? '#10B981'
+//                         : '#8B5CF6'
+//                 : '#EF4444';
+//             const marker = new google.maps.Marker({
+//                 position,
+//                 map: mapInstanceRef.current,
+//                 icon: {
+//                     path: 'M12 0C7 0 3 4 3 9c0 5.2 8 13 8.8 13.7.1.1.2.2.4.2s.3-.1.4-.2C13.4 22 21 14.2 21 9c0-5-4-9-9-9z',
+//                     fillColor: markerColor,
+//                     fillOpacity: 1,
+//                     strokeWeight: 1,
+//                     strokeColor: '#FFFFFF',
+//                     scale: 1.5,
+//                     anchor: new google.maps.Point(12, 22)
+//                 }
+//             });
+//             marker.addListener('click', () => {
+//                 setSelectedItem(item);
+//                 setSelectedItemType(type);
+//             });
+//             return marker;
+//         };
+//         // Add property markers
+//         properties.forEach(property => {
+//             const marker = createMarker(property, 'property');
+//             markersRef.current.push(marker);
+//         });
+//         // Add project markers
+//         projects.forEach(project => {
+//             const marker = createMarker(project, 'project');
+//             markersRef.current.push(marker);
+//         });
+//     }, [properties, projects]);
+
+//     // Update radius circle
+//     useEffect(() => {
+//         if (!mapInstanceRef.current) return;
+//         if (circleRef.current) {
+//             circleRef.current.setMap(null);
+//         }
+//         circleRef.current = new google.maps.Circle({
+//             strokeColor: '#3B82F6',
+//             strokeOpacity: 0.8,
+//             strokeWeight: 2,
+//             fillColor: '#3B82F6',
+//             fillOpacity: 0.1,
+//             map: mapInstanceRef.current,
+//             center: center,
+//             radius: radius * 1000
+//         });
+//     }, [center, radius]);
+
+//     const handleSearch = async () => {
+//         if (!searchQuery.trim() || !mapInstanceRef.current) return;
+//         setIsSearching(true);
+//         const geocoder = new google.maps.Geocoder();
+//         try {
+//             const { results } = await new Promise((resolve, reject) => {
+//                 geocoder.geocode({
+//                     address: searchQuery,
+//                     bounds: mapInstanceRef.current.getBounds(),
+//                     componentRestrictions: { country: 'IN' }
+//                 }, (results, status) => {
+//                     if (status === 'OK') {
+//                         resolve({ results });
+//                     } else {
+//                         reject(new Error(`Geocoding failed: ${status}`));
+//                     }
+//                 });
+//             });
+//             if (results.length > 0) {
+//                 const location = results[0].geometry.location;
+//                 const newCenter = { lat: location.lat(), lng: location.lng() };
+//                 setCenter(newCenter);
+//                 mapInstanceRef.current.panTo(newCenter);
+//                 mapInstanceRef.current.setZoom(15);
+//             }
+//         } catch (error) {
+//             console.error('Search error:', error);
+//         } finally {
+//             setIsSearching(false);
+//         }
+//     };
+//     const handleLocateMe = () => {
+//         if (navigator.geolocation) {
+//             navigator.geolocation.getCurrentPosition(
+//                 (position) => {
+//                     const location = {
+//                         lat: position.coords.latitude,
+//                         lng: position.coords.longitude
+//                     };
+//                     setCenter(location);
+//                     mapInstanceRef.current?.panTo(location);
+//                     mapInstanceRef.current?.setZoom(15);
+//                 }
+//             );
+//         }
+//     };
+//     const handleZoomIn = () => {
+//         const currentZoom = mapInstanceRef.current?.getZoom() || 14;
+//         mapInstanceRef.current?.setZoom(currentZoom + 1);
+//     };
+//     const handleZoomOut = () => {
+//         const currentZoom = mapInstanceRef.current?.getZoom() || 14;
+//         mapInstanceRef.current?.setZoom(currentZoom - 1);
+//     };
+//     return (
+//         <div className="w-full h-screen bg-gray-100">
+//             {/* Header */}
+//             <div className="bg-white shadow-sm px-4 py-3 flex justify-between items-center">
+//                 <h1 className="text-xl font-semibold">Map View</h1>
+//                 <div className="flex items-center gap-4">
+//                     {/* Search Bar */}
+//                     <div className="relative">
+//                         <div className="flex items-center bg-gray-100 rounded-lg">
+//                             <input
+//                                 type="text"
+//                                 placeholder="Search location..."
+//                                 value={searchQuery}
+//                                 onChange={(e) => setSearchQuery(e.target.value)}
+//                                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+//                                 className="w-64 px-4 py-2 bg-transparent focus:outline-none"
+//                             />
+//                             {searchQuery && (
+//                                 <button
+//                                     onClick={() => setSearchQuery('')}
+//                                     className="p-2 hover:text-gray-700"
+//                                 >
+//                                     <X size={16} />
+//                                 </button>
+//                             )}
+//                             <button
+//                                 onClick={handleSearch}
+//                                 disabled={isSearching}
+//                                 className="p-2 hover:text-blue-600"
+//                             >
+//                                 <Search size={20} />
+//                             </button>
+//                         </div>
+//                     </div>
+//                     <button
+//                         onClick={handleLocateMe}
+//                         className="p-2 hover:bg-gray-100 rounded-lg"
+//                         title="Find my location"
+//                     >
+//                         <LocateFixed size={20} />
+//                     </button>
+//                     <button
+//                         onClick={() => onViewChange('list')}
+//                         className="p-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+//                     >
+//                         <List size={20} />
+//                         <span>List View</span>
+//                     </button>
+//                 </div>
+
+//             </div>
+
+
+//             <div className="relative h-[calc(100vh-64px)]">
+//                 {/* Loading Overlay */}
+//                 {isLoading && (
+//                     <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-50">
+//                         <div className="flex items-center gap-2 bg-white p-4 rounded-lg shadow-lg">
+//                             <Loader className="animate-spin" size={24} />
+//                             <span className="font-medium">Loading map data...</span>
+//                         </div>
+//                     </div>
+//                 )}
+//                 {/* Map Container */}
+//                 <div ref={mapRef} className="w-full h-full" />
+//                 {/* Map Controls */}
+//                 <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg">
+//                     <button
+//                         onClick={handleZoomIn}
+//                         className="p-2 hover:bg-gray-100 rounded-t-lg border-b"
+//                     >
+//                         <Plus size={20} />
+//                     </button>
+//                     <button
+//                         onClick={handleZoomOut}
+//                         className="p-2 hover:bg-gray-100 rounded-b-lg"
+//                     >
+//                         <Minus size={20} />
+//                     </button>
+//                 </div>
+//                 {/* Radius Controls */}
+//                 <div className="absolute top-24 right-4 bg-white rounded-lg shadow-lg">
+//                     <button
+//                         onClick={() => setRadius(Math.max(1, radius - 1))}
+//                         className="p-2 hover:bg-gray-100 border-b"
+//                         disabled={radius <= 1}
+//                     >
+//                         <Minus size={20} />
+//                     </button>
+//                     <div className="p-2 text-center font-medium">
+//                         {radius} km
+//                     </div>
+//                     <button
+//                         onClick={() => setRadius(radius + 1)}
+//                         className="p-2 hover:bg-gray-100"
+//                     >
+//                         <Plus size={20} />
+//                     </button>
+//                 </div>
+//                 {/* Property Details Panel - on right side */}
+//                 {selectedItem && (
+//                     <PropertyPanel
+//                         data={selectedItem}
+//                         type={selectedItemType}
+//                         onClose={() => {
+//                             setSelectedItem(null);
+//                             setSelectedItemType(null);
+//                         }}
+//                     />
+//                 )}
+//                 {/* Legend */}
+//                 <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg">
+//                     <div className="text-sm font-medium mb-2">Legend</div>
+//                     <div className="space-y-2">
+//                         <div className="flex items-center gap-2">
+//                             <Building className="text-blue-500" size={20} />
+//                             <span className="text-sm">Apartment</span>
+//                         </div>
+//                         <div className="flex items-center gap-2">
+//                             <Home className="text-green-500" size={20} />
+//                             <span className="text-sm">House</span>
+//                         </div>
+//                         <div className="flex items-center gap-2">
+//                             <Building className="text-purple-500" size={20} />
+//                             <span className="text-sm">Office</span>
+//                         </div>
+//                         <div className="flex items-center gap-2">
+//                             <MapPin className="text-red-500" size={20} />
+//                             <span className="text-sm">Project</span>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+// export default MapPage;
+
 import React, { useEffect, useRef, useState } from 'react';
 import {
     MapPin,
@@ -1346,9 +1677,11 @@ import {
     List,
     Search,
     X,
-    LocateFixed
+    LocateFixed,
+    Building2
 } from 'lucide-react';
 import PropertyPanel from '../components/PropertyPanel';
+
 const MapPage = ({
     onViewChange,
     center,
@@ -1357,6 +1690,7 @@ const MapPage = ({
     setRadius,
     properties = [],
     projects = [],
+    buildings = [],
     isLoading
 }) => {
     const mapRef = useRef(null);
@@ -1368,7 +1702,7 @@ const MapPage = ({
     const [isSearching, setIsSearching] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedItemType, setSelectedItemType] = useState(null);
-    // Initialize map
+
     useEffect(() => {
         if (!mapRef.current || mapInstanceRef.current) return;
         const mapOptions = {
@@ -1408,54 +1742,81 @@ const MapPage = ({
         mapInstanceRef.current = new google.maps.Map(mapRef.current, mapOptions);
     }, [center]);
 
-    // Update markers when properties or projects change
     useEffect(() => {
         if (!mapInstanceRef.current) return;
-        // Clear existing markers
         markersRef.current.forEach(marker => marker.setMap(null));
         markersRef.current = [];
+
         const createMarker = (item, type) => {
-            console.log(item)
-            const position = type === 'property'
-                ? { lat: item?.location?.coordinates?.[1], lng: item?.location?.coordinates?.[0] }
-                : { lat: item?.location?.coordinates?.coordinates?.[1], lng: item?.location?.coordinates?.coordinates?.[0] };
+            let position;
+            if (type === 'property') {
+                position = {
+                    lat: item?.location?.coordinates?.[1],
+                    lng: item?.location?.coordinates?.[0]
+                };
+            } else if (type === 'project') {
+                position = {
+                    lat: item?.location?.coordinates?.coordinates?.[1],
+                    lng: item?.location?.coordinates?.coordinates?.[0]
+                };
+            } else { // building
+                position = {
+                    lat: item?.location?.coordinates?.[1],
+                    lng: item?.location?.coordinates?.[0]
+                };
+            }
+
             const markerColor = type === 'property'
                 ? item?.type_name?.toLowerCase() === 'apartment' ? '#3B82F6'
                     : item?.type_name?.toLowerCase() === 'house' ? '#10B981'
                         : '#8B5CF6'
-                : '#EF4444';
+                : type === 'project' ? '#EF4444'
+                    : '#FB923C'; // color for buildings
+
             const marker = new google.maps.Marker({
                 position,
                 map: mapInstanceRef.current,
                 icon: {
-                    path: 'M12 0C7 0 3 4 3 9c0 5.2 8 13 8.8 13.7.1.1.2.2.4.2s.3-.1.4-.2C13.4 22 21 14.2 21 9c0-5-4-9-9-9z',
+                    path: type === 'building'
+                        ? 'M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z'
+                        : 'M12 0C7 0 3 4 3 9c0 5.2 8 13 8.8 13.7.1.1.2.2.4.2s.3-.1.4-.2C13.4 22 21 14.2 21 9c0-5-4-9-9-9z',
                     fillColor: markerColor,
                     fillOpacity: 1,
                     strokeWeight: 1,
                     strokeColor: '#FFFFFF',
-                    scale: 1.5,
-                    anchor: new google.maps.Point(12, 22)
+                    scale: type === 'building' ? 2 : 1.5,
+                    anchor: type === 'building'
+                        ? new google.maps.Point(8, 8)
+                        : new google.maps.Point(12, 22)
                 }
             });
+
             marker.addListener('click', () => {
                 setSelectedItem(item);
                 setSelectedItemType(type);
             });
             return marker;
         };
+
         // Add property markers
         properties.forEach(property => {
             const marker = createMarker(property, 'property');
             markersRef.current.push(marker);
         });
+
         // Add project markers
         projects.forEach(project => {
             const marker = createMarker(project, 'project');
             markersRef.current.push(marker);
         });
-    }, [properties, projects]);
 
-    // Update radius circle
+        // Add building markers
+        buildings.forEach(building => {
+            const marker = createMarker(building, 'building');
+            markersRef.current.push(marker);
+        });
+    }, [properties, projects, buildings]);
+
     useEffect(() => {
         if (!mapInstanceRef.current) return;
         if (circleRef.current) {
@@ -1504,6 +1865,7 @@ const MapPage = ({
             setIsSearching(false);
         }
     };
+
     const handleLocateMe = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -1519,14 +1881,17 @@ const MapPage = ({
             );
         }
     };
+
     const handleZoomIn = () => {
         const currentZoom = mapInstanceRef.current?.getZoom() || 14;
         mapInstanceRef.current?.setZoom(currentZoom + 1);
     };
+
     const handleZoomOut = () => {
         const currentZoom = mapInstanceRef.current?.getZoom() || 14;
         mapInstanceRef.current?.setZoom(currentZoom - 1);
     };
+
     return (
         <div className="w-full h-screen bg-gray-100">
             {/* Header */}
@@ -1576,9 +1941,7 @@ const MapPage = ({
                         <span>List View</span>
                     </button>
                 </div>
-
             </div>
-
 
             <div className="relative h-[calc(100vh-64px)]">
                 {/* Loading Overlay */}
@@ -1626,7 +1989,7 @@ const MapPage = ({
                         <Plus size={20} />
                     </button>
                 </div>
-                {/* Property Details Panel - on right side */}
+                {/* Property Details Panel */}
                 {selectedItem && (
                     <PropertyPanel
                         data={selectedItem}
@@ -1657,10 +2020,15 @@ const MapPage = ({
                             <MapPin className="text-red-500" size={20} />
                             <span className="text-sm">Project</span>
                         </div>
+                        <div className="flex items-center gap-2">
+                            <Building2 className="text-orange-500" size={20} />
+                            <span className="text-sm">Building</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     );
 };
+
 export default MapPage;

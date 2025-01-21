@@ -80,8 +80,8 @@ import ListingPage from '../components/ListingPage';
 
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
-    const { properties, projects, isLoading } = useSelector(state => state.map);
-    console.log("properties map", properties)
+    const { properties, projects, buildings, isLoading } = useSelector(state => state.map);
+    console.log("buildings map", buildings)
     const [view, setView] = useState('map'); // list / map view
     const [center, setCenter] = useState(null);
     const [radius, setRadius] = useState(1);
@@ -136,6 +136,7 @@ const MainPropertyPage = () => {
                     <ListingPage
                         properties={properties || []}
                         projects={projects || []}
+                        buildings={buildings || []}
                         isLoading={isLoading}
                         onViewChange={handleViewChange}
                     />
@@ -148,6 +149,7 @@ const MainPropertyPage = () => {
                             setRadius={setRadius}
                             properties={properties || []}
                             projects={projects || []}
+                            buildings={buildings || []}
                             isLoading={isLoading}
                         />
                     )
