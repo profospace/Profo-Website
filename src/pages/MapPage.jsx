@@ -1798,8 +1798,9 @@ const MapPage = ({
             return marker;
         };
 
+        console.log("PPP" , properties)
         // Add property markers
-        properties.forEach(property => {
+        properties?.forEach(property => {
             const marker = createMarker(property, 'property');
             markersRef.current.push(marker);
         });
@@ -2001,7 +2002,7 @@ const MapPage = ({
                     />
                 )}
                 {/* Legend */}
-                <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg">
+                <div className="absolute bottom-24 right-1 bg-white py-2 px-6 rounded-lg shadow-lg">
                     <div className="text-sm font-medium mb-2">Legend</div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">

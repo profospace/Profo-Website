@@ -224,7 +224,7 @@ import HomePageCard from '../components/HomePageCard';
 import { MdNavigateNext } from 'react-icons/md';
 import FlexibleLayout from '../components/FlexibleLayout';
 import AppDownloadBanner from '../components/AppDownloadBanner';
-import { getAllBuildings, getAllProjects, getFilterProperties } from '../redux/features/Map/mapSlice';
+import { getAllBuildings, getAllProjects, getAllProperties, getFilterProperties } from '../redux/features/Map/mapSlice';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
@@ -242,7 +242,7 @@ function Home() {
         { id: 1, title: 'Find Apartments', count: '782', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/4396ddc22fcd275632c522c910167b73.png'  , "type_name" : "apartment"},
         { id: 2, title: 'Find New buildings', count: '136 695', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1a94f43121fc8899c8a95327c26fc0ac.png', "type_name": "buildings" },
         { id: 3, title: 'Project', count: '16 309', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/634a00148bb1c6ed32c05713974b46b6.png' , "type_name" : "project" },
-        { id: 4, title: "Explore Properties Nearby", count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/7410e105dea0ba239fd7f8974a7c4c95.png' },
+        { id: 4, title: "Explore Properties Nearby", count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/7410e105dea0ba239fd7f8974a7c4c95.png', "type_name": "properties" },
         { id: 5, title: 'We will help to pass', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1d3ebf3ab1e13ceb46696a83f711461b.png' },
         { id: 6, title: 'EMI Calculator', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/228dd13e77a8223bb042b59546f36646.png' },
         { id: 7, title: 'Services', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/e69cded9c33e3274c1f2576ebf1d06bd.png' },
@@ -318,6 +318,9 @@ function Home() {
                 else if (type_name === "buildings"){
                     dispatch(getAllBuildings())
                     
+                }
+                else if (type_name === "properties"){
+                    dispatch(getAllProperties())
                 }
                 else{
                     // Dispatch action with the location and type_name

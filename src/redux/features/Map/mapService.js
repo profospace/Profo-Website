@@ -1,9 +1,9 @@
 import axios from "axios";
-import { buildings_base_url, map_base_url, projects_base_url, properties_filter_base_url } from "../../../utils/base_url";
+import { buildings_base_url, map_base_url, projects_base_url, properties_base_url_map, properties_filter_base_url } from "../../../utils/base_url";
 
 const getMapFeed = async ({ latitude, longitude, radius }) => {
   const response = await axios.get(`${map_base_url}?latitude=${latitude}&longitude=${longitude}&radius=${radius || 1}`);
-  // console.log(response)
+  console.log(response)
   return response.data;
 };
 
@@ -70,23 +70,29 @@ const getFilterProperties = async (filters) => {
   }
 };
 
+const getAllProperties = async () => {
+  const response = await axios.get(`${properties_base_url_map}`);
+  // console.log(response)
+  return response.data;
+};
+
 
 const getAllProjects = async () => {
   const response = await axios.get(`${projects_base_url}`);
-  console.log(response)
+  // console.log(response)
   return response.data;
 };
 
 const getAllBuildings = async () => {
   const response = await axios.get(`${buildings_base_url}`);
-  console.log(response)
+  // console.log(response)
   return response.data;
 };
 
 
 
 const mapService = {
-  getMapFeed, getFilterProperties, getAllProjects, getAllBuildings
+  getMapFeed, getFilterProperties, getAllProperties, getAllProjects, getAllBuildings
 };
 
 export default mapService;
