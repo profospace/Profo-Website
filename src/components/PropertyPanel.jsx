@@ -1,0 +1,163 @@
+import React from 'react';
+import { X, Home, Building, MapPin, Bath, Bed, Grid, CalendarClock, Users } from 'lucide-react';
+const PropertyPanel = ({ data, type, onClose }) => {
+    if (!data) return null;
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumSignificantDigits: 3,
+        }).format(price);
+    };
+    const renderPropertyContent = () => (
+        <div className="space-y-4">
+            {/* Property Image */}
+            <div className="aspect-video rounded-lg bg-gray-200 overflow-hidden">
+                {data?.galleryList?.[0] && (
+                    <img
+                        src={data?.galleryList[0]}
+                        alt={data?.post_title}
+                        className="w-full h-full object-cover"
+                    />
+                )}
+            </div>
+            {/* Property Header */}
+            <div className="space-y-2">
+                <h2 className="text-xl font-semibold">{data.post_title}</h2>
+                <p className="text-gray-600">{data.address}</p>
+                <div className="text-lg font-semibold text-blue-600">
+                    {formatPrice(data.price)}
+                </div>
+            </div>
+            {/* Property Details */}
+            <div className="flex gap-4">
+                <div className="flex items-center gap-2">
+                    <Bed className="text-gray-500" size={20} />
+                    <span>{data.bedrooms} Beds</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Bath className="text-gray-500" size={20} />
+                    <span>{data.bathrooms} Baths</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Grid className="text-gray-500" size={20} />
+                    <span>{data.carpetArea} sq.ft</span>
+                </div>
+            </div>
+            {/* Property Description */}
+            <div className="border-t pt-4">
+                <p className="text-gray-700">{data.post_description}</p>
+            </div>
+        </div>
+    );
+    const renderProjectContent = () => (
+        <div className="space-y-4">
+            {/* Project Header */}
+            <div className="space-y-2">
+                <h2 className="text-xl font-semibold">{data.name}</h2>
+                <div className="aspect-video rounded-lg bg-gray-200 overflow-hidden">
+                    {data.galleryList?.[0] && (
+                        <img
+                            src={data.galleryList[0]}
+                            alt={data.post_title}
+                            className="w-full h-full object-cover"
+                        />
+                    )}
+                </div>
+                <div className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                    {data.type}
+                </div>
+                <p className="text-gray-600">{data.location.address}</p>
+            </div>
+            {/* Project Price Range */}
+            <div className="grid grid-cols-2 gap-4">
+                <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="text-sm text-gray-600">Price Range</div>
+                    <div className="font-semibold">
+                        {formatPrice(data.overview.priceRange.min)} - {formatPrice(data.overview.priceRange.max)}
+                    </div>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="text-sm text-gray-600">₹/sq.ft</div>
+                    <div className="font-semibold">
+                        {data.overview.priceRange.pricePerSqFt}
+                    </div>
+                </div>
+            </div>
+            {/* Project Overview */}
+            <div className="flex gap-4">
+                <div className="flex items-center gap-2">
+                    <Building className="text-gray-500" size={20} />
+                    <span>{data.overview.totalTowers} Towers</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Users className="text-gray-500" size={20} />
+                    <span>{data.overview.totalUnits} Units</span>
+                </div>
+            </div>
+            {/* Floor Plans */}
+            <div className="space-y-2">
+                <h3 className="font-semibold">Floor Plans</h3>
+                <div className="space-y-2">
+                    {data.floorPlans.map((plan, index) => (
+                        <div key={index} className="p-3 rounded-lg flex justify-between items-center">
+                            <div>
+                                <div className="font-medium">{plan.name}</div>
+                                <div className="text-sm text-gray-600">{plan.superArea} sq.ft</div>
+                            </div>
+                            <div className="text-blue-600 font-semibold">
+                                {formatPrice(plan.price)}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {/* Amenities */}
+            <div className="space-y-2">
+                <h3 className="font-semibold">Amenities</h3>
+                <div className="space-y-2">
+                    {data.amenities.map((category) => (
+                        <div key={category._id} className="space-y-1">
+                            <div className="text-sm font-medium text-gray-600">{category.category}</div>
+                            <div className="flex flex-wrap gap-2">
+                                {category.items.map((item, index) => (
+                                    <span key={index} className="px-2 py-1 bg-gray-100 rounded-full text-sm">
+                                        {item}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {/* Project Description */}
+            <div className="border-t pt-4">
+                <p className="text-gray-700">{data.description}</p>
+            </div>
+        </div>
+    );
+    return (
+        <div className="fixed left-0 top-24 bottom-0 w-96 bg-white shadow-xl p-4 overflow-y-auto">
+            {/* Panel Header */}
+            <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-2">
+                    {type === 'property' ? (
+                        <Home className="text-blue-600" size={24} />
+                    ) : (
+                        <MapPin className="text-blue-600" size={24} />
+                    )}
+                    <span className="font-semibold">{type === 'property' ? 'Property Details' : 'Project Details'}</span>
+                </div>
+                <button
+                    onClick={onClose}
+                    className="p-1 hover:bg-gray-100 rounded-full"
+                >
+                    <X size={20} />
+                </button>
+            </div>
+            {/* Panel Content */}
+            {type === 'property' ? renderPropertyContent() : renderProjectContent()}
+        </div>
+    );
+};
+export default PropertyPanel;

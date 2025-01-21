@@ -224,20 +224,24 @@ import HomePageCard from '../components/HomePageCard';
 import { MdNavigateNext } from 'react-icons/md';
 import FlexibleLayout from '../components/FlexibleLayout';
 import AppDownloadBanner from '../components/AppDownloadBanner';
+import { getFilterProperties } from '../redux/features/Map/mapSlice';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const filters = ['Studio', 'eleven', '2', '3', '4+'];
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const { buildings } = useSelector(state => state.buildings)
 
-    console.log("buildings", buildings)
+    // console.log("buildings", buildings)
 
 
     const services = [
-        { id: 1, title: 'Find Apartments', count: '782', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/4396ddc22fcd275632c522c910167b73.png' },
+        { id: 1, title: 'Find Apartments', count: '782', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/4396ddc22fcd275632c522c910167b73.png'  , "type_name" : "apartment"},
         { id: 2, title: 'Find New buildings', count: '136 695', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1a94f43121fc8899c8a95327c26fc0ac.png' },
-        { id: 3, title: 'Project', count: '16 309', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/634a00148bb1c6ed32c05713974b46b6.png' },
+        { id: 3, title: 'Project', count: '16 309', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/634a00148bb1c6ed32c05713974b46b6.png' , "type_name" : "project" },
         { id: 4, title: "Explore Properties Nearby", count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/7410e105dea0ba239fd7f8974a7c4c95.png' },
         { id: 5, title: 'We will help to pass', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1d3ebf3ab1e13ceb46696a83f711461b.png' },
         { id: 6, title: 'EMI Calculator', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/228dd13e77a8223bb042b59546f36646.png' },
@@ -296,6 +300,28 @@ function Home() {
             walkTime: 6
         }
     ];
+
+    const handleFilter = (type_name) => {
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+
+                // Dispatch action with the location and type_name
+                dispatch(getFilterProperties({ latitude, longitude, type_name }));
+                navigate('/main')
+                
+            },
+            (error) => {
+                console.error("Error retrieving location:", error);
+                alert("Unable to retrieve your location. Please try again.");
+            }
+        );
+    };
     return (
         <div className='mt-12 px-8'>
             {/* Top Section */}
@@ -386,6 +412,7 @@ function Home() {
                                 <div
                                     key={service.id}
                                     className="bg-[#F3F3F6] rounded-xl shadow-sm cursor-pointer w-32 h-auto overflow-hidden "
+                                    onClick={()=>handleFilter(service?.type_name)}
                                 >
                                     <img
                                         src={service.icon}

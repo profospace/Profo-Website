@@ -264,7 +264,7 @@ const Footer = () => {
   ];
 
   return (
-    <div className="w-full mt-48">
+    <div className="w-full mt-[1000vh]">
       
 
 

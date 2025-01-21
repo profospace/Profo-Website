@@ -25,6 +25,8 @@ import ProjectDetailPage from './pages/ProjectDetailPage';
 import BuildingDetailPage from './pages/BuildingDetailPage';
 import BackToTop from './components/BackToTop';
 import { getAllBuildings } from './redux/features/Buildings/buildingsSlice';
+import MapPage from './pages/MapPage';
+import MainPropertyPage from './pages/MainPropertyPage';
 
 function App() {
   const dispatch = useDispatch()
@@ -44,12 +46,11 @@ function App() {
     },[pathname]
   )
 
+
+
   return (
     <div className=''>
         {/* Custom Floating Button */}
-      {/* <div className=''>
-        <FloatButtonShowMap />
-      </div> */}
       <BackToTop />
         <Routes>
             <Route path='/signup' element={<Signup />} />
@@ -61,6 +62,8 @@ function App() {
             <Route path='/properties' element={<PropertiesPage />} />
             <Route path='/projects' element={<ProjectPage />} />
             <Route path='/buildings' element={<BuildingPage />} />
+            <Route path='/main' element={<MainPropertyPage />} />
+
 
             <Route path='/api/details/project/:post_id' element={<ProjectDetailPage />} />{ /* projects detail page */}
           <Route path='/api/details/building/:buildingId' element={<BuildingDetailPage />} /> {/* buildings detail page */}

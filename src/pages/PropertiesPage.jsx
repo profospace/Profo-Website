@@ -6,6 +6,7 @@ import FloatButtonShowMap from '../components/FloatButtonShowMap'
 import FiltersSection from "../components/FiltersSection";
 import PropertyCard from "../components/PropertyCard";
 import { getAllProperties } from "../redux/features/Properties/propertiesSlice";
+import PropertyMap from "../components/FloatButtonShowMap";
 
 function PropertiesPage() {
     const dispatch = useDispatch()
@@ -25,7 +26,8 @@ function PropertiesPage() {
     return (
         <div className="w-full h-full bg-white">
             <FiltersSection />
-            <div><FloatButtonShowMap setShow={setShow}/></div>
+            {/* <div><FloatButtonShowMap setShow={setShow}/></div> */}
+            <div><PropertyMap setShow={setShow}/></div>
             {/* <LocationAccessPopup /> */}
             {/* <div className="grid gap-6 p-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4"> */}
             {show && <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 px-6">

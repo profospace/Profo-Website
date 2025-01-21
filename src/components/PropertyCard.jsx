@@ -121,7 +121,7 @@ const PropertyCard = ({ property }) => {
         const handleCardClick = () => {
             navigate(`/api/details/${property?.post_id}`); // Navigate to the route with the post ID
         };
-    console.log(property)
+    // console.log(property)
 
     return (
         <div className="relative bg-white rounded-xl overflow-hidden w-full max-w-96 mb-4" onClick={handleCardClick}>

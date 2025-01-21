@@ -661,7 +661,7 @@ const FiltersSections = () => {
   };
 
   return (
-    <div className="p-4 bg-white">
+    <div className="px-4 py-2 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center gap-4 flex-wrap">
           {/* Filter Cards Container */}
