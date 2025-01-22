@@ -4,8 +4,9 @@ import { properties_base_url, properties_filter_base_url, single_property_base_u
 // import { config } from "../../utils/config";
 
 const getAllProperties = async (page) => {
-  const response = await axios.get(`${properties_base_url}?page=${page || 1}`);
-  // console.log(response)
+  const response = await axios.get(`${properties_base_url}`);
+  // const response = await axios.get(`${properties_base_url}?page=${page || 1}`);
+  console.log(response)
   return response.data;
 };
 // const getAllFilteredProperties = async (filters) => {

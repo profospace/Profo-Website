@@ -63,11 +63,11 @@ const propertiesSlice = createSlice({
       .addCase(getAllProperties.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.properties = action.payload.properties;
-        state.properties = [...state.properties, ...action.payload.properties];
-        state.currentPage = action.payload.currentPage;
-        state.totalCount = action.payload.totalCount;
-        state.totalPages = action.payload.totalPages;
+        state.properties = action.payload;
+        // state.properties = [...state.properties, ...action.payload.properties];
+        // state.currentPage = action.payload.currentPage;
+        // state.totalCount = action.payload.totalCount;
+        // state.totalPages = action.payload.totalPages;
       })
       .addCase(getAllProperties.rejected, (state, action) => {
         state.isLoading = false;

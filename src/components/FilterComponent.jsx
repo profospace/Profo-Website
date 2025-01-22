@@ -554,3 +554,218 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
 };
 
 export default FilterComponent;
+
+
+// import React from 'react';
+// import { Search, Plus, Minus } from 'lucide-react';
+
+// const FilterComponent = ({
+//     modalOpen,
+//     setModalOpen,
+//     filters,
+//     setFilters,
+//     filterRanges,
+//     priceRange,
+//     handleSliderChange,
+//     handleMinPrice,
+//     handleMaxPrice,
+//     clearAllFilters,
+//     handleDispatchFilter,
+//     togglePropertyType,
+//     togglePurposeType
+// }) => {
+//     const incrementFilter = (key) => {
+//         setFilters((prev) => ({
+//             ...prev,
+//             [key]: (prev[key] || 0) + 1,
+//         }));
+//     };
+
+//     const decrementFilter = (key) => {
+//         setFilters((prev) => ({
+//             ...prev,
+//             [key]: Math.max(0, (prev[key] || 0) - 1),
+//         }));
+//     };
+
+//     // Custom range slider component
+//     const CustomRangeSlider = ({ value, min, max, onChange }) => (
+//         <input
+//             type="range"
+//             min={min}
+//             max={max}
+//             value={value}
+//             onChange={onChange}
+//             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+//         />
+//     );
+
+//     return (
+//         <div className="max-w-7xl mx-auto p-4 bg-white rounded-lg shadow-sm">
+//             {/* Top Search Bar */}
+//             <div className="flex flex-wrap gap-3 items-center mb-6">
+//                 <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
+//                     <Search className="h-5 w-5" />
+//                     Easy search
+//                 </button>
+
+//                 {/* Beds & Baths Filters */}
+//                 <div className="flex gap-4">
+//                     <div className="flex items-center gap-3">
+//                         <span className="text-gray-600">Beds</span>
+//                         <button
+//                             className={`rounded-full w-8 h-8 flex items-center justify-center border ${filters?.bedrooms < 1 ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-100'
+//                                 }`}
+//                             onClick={() => decrementFilter('bedrooms')}
+//                             disabled={filters?.bedrooms < 1}
+//                         >
+//                             <Minus className="h-4 w-4" />
+//                         </button>
+//                         <div className="text-xl text-center min-w-10">{filters?.bedrooms || "Any"}</div>
+//                         <button
+//                             className={`rounded-full w-8 h-8 flex items-center justify-center border ${filterRanges?.maxBedrooms === filters?.bedrooms ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-100'
+//                                 }`}
+//                             onClick={() => incrementFilter('bedrooms')}
+//                             disabled={filterRanges?.maxBedrooms === filters?.bedrooms}
+//                         >
+//                             <Plus className="h-4 w-4" />
+//                         </button>
+//                     </div>
+
+//                     <div className="flex items-center gap-3">
+//                         <span className="text-gray-600">Baths</span>
+//                         <button
+//                             className={`rounded-full w-8 h-8 flex items-center justify-center border ${filters?.bathrooms < 1 ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-100'
+//                                 }`}
+//                             onClick={() => decrementFilter('bathrooms')}
+//                             disabled={filters?.bathrooms < 1}
+//                         >
+//                             <Minus className="h-4 w-4" />
+//                         </button>
+//                         <div className="text-xl text-center min-w-10">{filters?.bathrooms || "Any"}</div>
+//                         <button
+//                             className={`rounded-full w-8 h-8 flex items-center justify-center border ${filterRanges?.maxBathrooms === filters?.bathrooms ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-100'
+//                                 }`}
+//                             onClick={() => incrementFilter('bathrooms')}
+//                             disabled={filterRanges?.maxBathrooms === filters?.bathrooms}
+//                         >
+//                             <Plus className="h-4 w-4" />
+//                         </button>
+//                     </div>
+//                 </div>
+
+//                 {/* Price Range */}
+//                 <div className="flex-grow max-w-md">
+//                     <div className="flex items-center gap-4 mb-2">
+//                         <input
+//                             type="number"
+//                             className="w-32 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                             value={filters?.priceMin || ''}
+//                             onChange={handleMinPrice}
+//                             placeholder="Min price"
+//                         />
+//                         <span>-</span>
+//                         <input
+//                             type="number"
+//                             className="w-32 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                             value={filters?.priceMax || ''}
+//                             onChange={handleMaxPrice}
+//                             placeholder="Max price"
+//                         />
+//                     </div>
+//                     <CustomRangeSlider
+//                         min={priceRange?.min}
+//                         max={priceRange?.max}
+//                         value={[filters?.priceMin || priceRange?.min, filters?.priceMax || priceRange?.max]}
+//                         onChange={(e) => handleSliderChange([parseInt(e.target.value)])}
+//                     />
+//                 </div>
+//             </div>
+
+//             {/* Filters Section */}
+//             <div className="border rounded-lg p-6 mb-6">
+//                 <h2 className="text-xl font-semibold mb-6">Filters</h2>
+
+//                 {/* Floor Filter */}
+//                 <div className="mb-6">
+//                     <h3 className="text-gray-600 mb-2">Floor</h3>
+//                     <div className="flex items-center gap-3">
+//                         <button
+//                             className={`rounded-full w-8 h-8 flex items-center justify-center border ${filters?.floor < 1 ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-100'
+//                                 }`}
+//                             onClick={() => decrementFilter('floor')}
+//                             disabled={filters?.floor < 1}
+//                         >
+//                             <Minus className="h-4 w-4" />
+//                         </button>
+//                         <div className="text-xl text-center min-w-10">{filters?.floor || "Any"}</div>
+//                         <button
+//                             className={`rounded-full w-8 h-8 flex items-center justify-center border ${filterRanges?.maxfloor === filters?.floor ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-100'
+//                                 }`}
+//                             onClick={() => incrementFilter('floor')}
+//                             disabled={filterRanges?.maxfloor === filters?.floor}
+//                         >
+//                             <Plus className="h-4 w-4" />
+//                         </button>
+//                     </div>
+//                 </div>
+
+//                 {/* Property Type Filter */}
+//                 <div className="mb-6">
+//                     <h3 className="text-gray-600 mb-2">Property Type</h3>
+//                     <div className="flex flex-wrap gap-2">
+//                         {filterRanges?.type_name?.map((type) => (
+//                             <button
+//                                 key={type}
+//                                 onClick={() => togglePropertyType(type)}
+//                                 className={`px-4 py-2 rounded-full transition-colors ${filters?.type_name.includes(type)
+//                                         ? 'bg-blue-500 text-white'
+//                                         : 'bg-gray-100 hover:bg-gray-200'
+//                                     }`}
+//                             >
+//                                 {type}
+//                             </button>
+//                         ))}
+//                     </div>
+//                 </div>
+
+//                 {/* Purpose Filter */}
+//                 <div className="mb-6">
+//                     <h3 className="text-gray-600 mb-2">Purpose</h3>
+//                     <div className="flex flex-wrap gap-2">
+//                         {filterRanges?.purpose?.map((purpose) => (
+//                             <button
+//                                 key={purpose}
+//                                 onClick={() => togglePurposeType(purpose)}
+//                                 className={`px-4 py-2 rounded-full transition-colors ${filters?.purpose === purpose
+//                                         ? 'bg-blue-500 text-white'
+//                                         : 'bg-gray-100 hover:bg-gray-200'
+//                                     }`}
+//                             >
+//                                 {purpose}
+//                             </button>
+//                         ))}
+//                     </div>
+//                 </div>
+//             </div>
+
+//             {/* Action Buttons */}
+//             <div className="flex justify-between gap-4">
+//                 <button
+//                     onClick={clearAllFilters}
+//                     className="px-6 py-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+//                 >
+//                     Clear all
+//                 </button>
+//                 <button
+//                     onClick={handleDispatchFilter}
+//                     className="px-6 py-2 bg-yellow-400 hover:bg-yellow-500 rounded-full font-medium transition-colors"
+//                 >
+//                     Apply Filters
+//                 </button>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default FilterComponent;
