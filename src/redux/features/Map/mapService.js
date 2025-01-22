@@ -38,7 +38,7 @@ const getMapFeed = async ({ latitude, longitude, radius }) => {
 const getFilterProperties = async (filters) => {
   console.log("Filters:", filters);
 
-  const { type_name, radius, latitude, longitude } = filters;
+  const { type_name , purpose, radius, latitude, longitude } = filters;
 
   // Helper function to build query parameters
   const buildQuery = (key, value) => {
@@ -52,6 +52,7 @@ const getFilterProperties = async (filters) => {
   // Build the query string dynamically
   const queryParts = [
     buildQuery('type_name', type_name),
+    buildQuery('purpose', purpose),
     buildQuery('radius', radius),
     buildQuery('latitude', latitude),
     buildQuery('longitude', longitude),

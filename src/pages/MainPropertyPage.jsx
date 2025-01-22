@@ -82,7 +82,7 @@ const MainPropertyPage = () => {
     const dispatch = useDispatch();
     const { properties, projects, buildings, isLoading } = useSelector(state => state.map);
     console.log("buildings map", buildings)
-    const [view, setView] = useState('map'); // list / map view
+    const [view, setView] = useState('list'); // list / map view
     const [center, setCenter] = useState(null);
     const [radius, setRadius] = useState(1);
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);

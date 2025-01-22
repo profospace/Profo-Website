@@ -712,156 +712,224 @@
 import React, { useState } from 'react';
 import { Menu, Heart, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getAllBuildings, getAllProjects, getAllProperties, getFilterProperties, getMapFeed } from '../redux/features/Map/mapSlice';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch()
     const isHomePage = location.pathname === '/';
+    const [selectedId, setSelectedId] = useState(null);
+    console.log(selectedId)
 
     const mainLinks = [
         {
+
+            id:1,
             text: 'Apartments',
-            href: '#',
-            active: true,
-            deepLinks: [
-                {
-                    column1: [
-                        { text: 'Residential complexes', href: '#' },
-                        { text: 'Apartments', href: '#' },
-                        { text: 'Cottage villages', href: '#' },
-                        { text: 'Houses and cottages', href: '#' },
-                    ],
-                    column2: [
-                        { text: 'Developers directory', href: '#' },
-                        { text: 'Catalog of residential complex reviews', href: '#' },
-                        { text: 'Catalog of layouts', href: '#' },
-                        { text: 'Catalog of discounts and promotions', href: '#' },
-                    ],
-                    column3: [
-                        { text: 'Selection of new buildings', href: '#' },
-                        { text: 'Selection of LCD with YaGPT', href: '#' },
-                        { text: 'Real Estate Magazine', href: '#' },
-                        { text: 'Sample documents', href: '#' },
-                    ],
-                    promo: {
-                        title: 'NEW BUILDINGS\nFOR YOUR BUDGET',
-                        description: 'You provide your wishes, we provide suitable options',
-                        cta: 'Leave a request',
-                        bgColor: 'bg-gray-100'
-                    }
-                }
-            ]
+            href: 'apartment',
+            // deepLinks: [
+            //     {
+            //         column1: [
+            //             { text: 'Residential complexes', href: '#' },
+            //             { text: 'Apartments', href: '#' },
+            //             { text: 'Cottage villages', href: '#' },
+            //             { text: 'Houses and cottages', href: '#' },
+            //         ],
+            //         column2: [
+            //             { text: 'Developers directory', href: '#' },
+            //             { text: 'Catalog of residential complex reviews', href: '#' },
+            //             { text: 'Catalog of layouts', href: '#' },
+            //             { text: 'Catalog of discounts and promotions', href: '#' },
+            //         ],
+            //         column3: [
+            //             { text: 'Selection of new buildings', href: '#' },
+            //             { text: 'Selection of LCD with YaGPT', href: '#' },
+            //             { text: 'Real Estate Magazine', href: '#' },
+            //             { text: 'Sample documents', href: '#' },
+            //         ],
+            //         promo: {
+            //             title: 'NEW BUILDINGS\nFOR YOUR BUDGET',
+            //             description: 'You provide your wishes, we provide suitable options',
+            //             cta: 'Leave a request',
+            //             bgColor: 'bg-gray-100'
+            //         }
+            //     }
+            // ]
         },
         {
+            id:2,
             text: 'Rent',
-            href: '#',
-            deepLinks: [{
-                column1: [
-                    { text: 'Apartments for sale', href: '#' },
-                    { text: 'Secondary housing', href: '#' },
-                ],
-                column2: [
-                    { text: 'Houses and cottages', href: '#' },
-                    { text: 'Land plots', href: '#' },
-                ],
-                promo: {
-                    title: 'FIND YOUR\nPERFECT HOME',
-                    description: 'Browse through our curated selection',
-                    cta: 'Start searching',
-                    bgColor: 'bg-blue-50'
-                }
-            }]
+            href: 'rent',
+            // deepLinks: [{
+            //     column1: [
+            //         { text: 'Apartments for sale', href: '#' },
+            //         { text: 'Secondary housing', href: '#' },
+            //     ],
+            //     column2: [
+            //         { text: 'Houses and cottages', href: '#' },
+            //         { text: 'Land plots', href: '#' },
+            //     ],
+            //     promo: {
+            //         title: 'FIND YOUR\nPERFECT HOME',
+            //         description: 'Browse through our curated selection',
+            //         cta: 'Start searching',
+            //         bgColor: 'bg-blue-50'
+            //     }
+            // }]
         },
         {
+            id:3,
             text: 'Buy',
-            href: '#',
-            deepLinks: [{
-                column1: [
-                    { text: 'Apartments for sale', href: '#' },
-                    { text: 'Secondary housing', href: '#' },
-                ],
-                column2: [
-                    { text: 'Houses and cottages', href: '#' },
-                    { text: 'Land plots', href: '#' },
-                ],
-                promo: {
-                    title: 'FIND YOUR\nPERFECT HOME',
-                    description: 'Browse through our curated selection',
-                    cta: 'Start searching',
-                    bgColor: 'bg-blue-50'
-                }
-            }]
+            href: 'buy',
+            // deepLinks: [{
+            //     column1: [
+            //         { text: 'Apartments for sale', href: '#' },
+            //         { text: 'Secondary housing', href: '#' },
+            //     ],
+            //     column2: [
+            //         { text: 'Houses and cottages', href: '#' },
+            //         { text: 'Land plots', href: '#' },
+            //     ],
+            //     promo: {
+            //         title: 'FIND YOUR\nPERFECT HOME',
+            //         description: 'Browse through our curated selection',
+            //         cta: 'Start searching',
+            //         bgColor: 'bg-blue-50'
+            //     }
+            // }]
         },
         {
+            id:4,
             text: 'Office',
-            href: '#',
-            deepLinks: [{
-                column1: [
-                    { text: 'Apartments for sale', href: '#' },
-                    { text: 'Secondary housing', href: '#' },
-                ],
-                column2: [
-                    { text: 'Houses and cottages', href: '#' },
-                    { text: 'Land plots', href: '#' },
-                ],
-                promo: {
-                    title: 'FIND YOUR\nPERFECT HOME',
-                    description: 'Browse through our curated selection',
-                    cta: 'Start searching',
-                    bgColor: 'bg-blue-50'
-                }
-            }]
+            href: 'office',
+            // deepLinks: [{
+            //     column1: [
+            //         { text: 'Apartments for sale', href: '#' },
+            //         { text: 'Secondary housing', href: '#' },
+            //     ],
+            //     column2: [
+            //         { text: 'Houses and cottages', href: '#' },
+            //         { text: 'Land plots', href: '#' },
+            //     ],
+            //     promo: {
+            //         title: 'FIND YOUR\nPERFECT HOME',
+            //         description: 'Browse through our curated selection',
+            //         cta: 'Start searching',
+            //         bgColor: 'bg-blue-50'
+            //     }
+            // }]
         },
         {
+            id:5,
             text: 'Flats',
             href: '#',
-            deepLinks: [{
-                column1: [
-                    { text: 'Apartments for sale', href: '#' },
-                    { text: 'Secondary housing', href: '#' },
-                ],
-                column2: [
-                    { text: 'Houses and cottages', href: '#' },
-                    { text: 'Land plots', href: '#' },
-                ],
-                promo: {
-                    title: 'FIND YOUR\nPERFECT HOME',
-                    description: 'Browse through our curated selection',
-                    cta: 'Start searching',
-                    bgColor: 'bg-blue-50'
-                }
-            }]
+            // deepLinks: [{
+            //     column1: [
+            //         { text: 'Apartments for sale', href: '#' },
+            //         { text: 'Secondary housing', href: '#' },
+            //     ],
+            //     column2: [
+            //         { text: 'Houses and cottages', href: '#' },
+            //         { text: 'Land plots', href: '#' },
+            //     ],
+            //     promo: {
+            //         title: 'FIND YOUR\nPERFECT HOME',
+            //         description: 'Browse through our curated selection',
+            //         cta: 'Start searching',
+            //         bgColor: 'bg-blue-50'
+            //     }
+            // }]
         },
         {
+            id:6,
             text: 'Warehouses',
             href: '#',
             
         },
         {
+            id:7,
             text: 'Lands',
             href: '#',
             
         },
         {
+            id:8,
             text: 'Kheti Jameen',
             href: '#',
             
         },
         {
+            id:9,
             text: 'Services',
             href: '#',
-            deepLinks: [{
-                column1: [
-                    { text: 'EMI Calculator', href: '#' },
-                    { text: 'Loan Offers', href: '#' },
-                ],
-                column2: [
-                    { text: 'Upload Property', href: '#' },
-                ]
-            }]
+            // deepLinks: [{
+            //     column1: [
+            //         { text: 'EMI Calculator', href: '#' },
+            //         { text: 'Loan Offers', href: '#' },
+            //     ],
+            //     column2: [
+            //         { text: 'Upload Property', href: '#' },
+            //     ]
+            // }]
         },
     ];
+
+
+     const handleFilter = (type_name , id) => {
+         setSelectedId(id)
+        console.log(type_name)
+            if (!navigator.geolocation) {
+                alert("Geolocation is not supported by your browser");
+                return;
+            }
+    
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+    
+                    if (type_name === "project"){
+                        dispatch(getAllProjects())
+                    }
+                    else if (type_name === "buildings"){
+                        dispatch(getAllBuildings())
+                        
+                    }
+                    else if (type_name === "properties"){
+                        dispatch(getAllProperties())
+                    }
+                    else if (type_name === 'getMapFeed'){
+                        dispatch(getMapFeed({
+                            latitude,
+                            longitude ,
+                            radius : 1
+                        }))
+                    }
+                    else if (type_name === 'rent'){
+                        dispatch(getFilterProperties({ latitude, longitude, purpose : type_name }));
+
+
+                    }
+                    else if (type_name === 'buy'){
+                        dispatch(getFilterProperties({ latitude, longitude, purpose : type_name }));
+
+
+                    }
+                    else{
+                        // Dispatch action with the location and type_name
+                        dispatch(getFilterProperties({ latitude, longitude, type_name }));
+                    }
+                    navigate('/main')
+                    
+                },
+                (error) => {
+                    console.error("Error retrieving location:", error);
+                    alert("Unable to retrieve your location. Please try again.");
+                }
+            );
+        };
 
     return (
         <header className="w-full border-b border-gray-200">
@@ -903,16 +971,16 @@ const Header = () => {
 
                 {/* Main Navigation with Dropdowns - Hidden on Homepage */}
                 {!isHomePage && (
-                    <nav className="hidden lg:block py-4">
+                    <nav className="hidden lg:block py-2">
                         <ul className="flex space-x-8">
                             {mainLinks.map((link, index) => (
                                 <li key={index} className="relative group">
-                                    <a
-                                        href={link.href}
-                                        className={`text-sm ${link.active ? 'text-red-500 border-b-2 border-red-500 pb-4' : 'text-gray-600'} hover:text-red-500`}
+                                    <p
+                                        onClick={() => handleFilter(link.href , link?.id)}
+                                        className={`text-sm ${link?.id == selectedId ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-600'} hover:text-red-500 pb-1 cursor-pointer`}
                                     >
                                         {link.text}
-                                    </a>
+                                    </p>
                                     {link.deepLinks?.length > 0 && (
                                         <div className="absolute left-0 top-full mt-1 w-[900px] bg-white shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                             <div className="flex p-6">
@@ -964,7 +1032,7 @@ const Header = () => {
                                 </li>
                             ))}
                             <li>
-                                <span className='text-blue-600 font-bold text-md'>New Projects</span>
+                                <span className='text-blue-600 font-bold text-md cursor-pointer' onClick={() => handleFilter('project')}>New Projects</span>
                             </li>
                         </ul>
                     </nav>
@@ -977,13 +1045,13 @@ const Header = () => {
                             {!isHomePage && (
                                 <ul className="space-y-4">
                                     {mainLinks.map((link, index) => (
-                                        <li key={index} className="space-y-2">
-                                            <a
-                                                href={link.href}
-                                                className={`text-lg ${link.active ? 'text-red-500 font-semibold' : 'text-gray-600'}`}
+                                        <li key={index} className="relative group">
+                                            <p
+                                                onClick={() => handleFilter(link.href, link?.id)}
+                                                className={`text-sm cursor-pointer ${link?.id === selectedId ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-600'} hover:text-red-500 pb-1`}
                                             >
                                                 {link.text}
-                                            </a>
+                                            </p>
                                             {link.deepLinks?.[0].column1 && (
                                                 <ul className="ml-4 space-y-2">
                                                     {[
