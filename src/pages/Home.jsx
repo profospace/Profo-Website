@@ -226,13 +226,15 @@ import FlexibleLayout from '../components/FlexibleLayout';
 import AppDownloadBanner from '../components/AppDownloadBanner';
 import { getAllBuildings, getAllProjects, getAllProperties, getFilterProperties, getMapFeed } from '../redux/features/Map/mapSlice';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Home() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const filters = ['Studio', 'eleven', '2', '3', '4+'];
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+    const [city , setCity] = useState('')
+    
     const {  properties , projects } = useSelector(state => state.map)
 
     // console.log("buildings", buildings)
@@ -351,36 +353,88 @@ function Home() {
         );
     };
 
-    useEffect(
-        ()=>{
+    // useEffect(
+    //     ()=>{
 
-            if (!navigator.geolocation) {
-                alert("Geolocation is not supported by your browser");
-                return;
-            }
+    //         if (!navigator.geolocation) {
+    //             alert("Geolocation is not supported by your browser");
+    //             return;
+    //         }
 
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
+    //         navigator.geolocation.getCurrentPosition(
+    //             (position) => {
+    //                 const { latitude, longitude } = position.coords;
 
-                    dispatch(getMapFeed({
-                        latitude, longitude  , radius : 10000000000
-                    }))
+    //                 dispatch(getMapFeed({
+    //                     latitude, longitude  , radius : 10000000000
+    //                 }))
                    
 
-                },
-                (error) => {
-                    console.error("Error retrieving location:", error);
-                    alert("Unable to retrieve your location. Please try again.");
+    //             },
+    //             (error) => {
+    //                 console.error("Error retrieving location:", error);
+    //                 alert("Unable to retrieve your location. Please try again.");
+    //             }
+    //         )
+    //     },[]
+    // )
+
+    useEffect(() => {
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+
+                // Dispatch map feed action
+                dispatch(getMapFeed({ latitude, longitude, radius: 10000000000 }));
+
+                try {
+                    // Use Google Maps Geocoding API to get city and state
+                    const apiKey = import.meta.env.VITE_GOOGLE_API_KEY; // Assuming the key is stored here
+                    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+                    const response = await axios.get(geocodeUrl);
+                    const results = response.data.results;
+
+                    if (results.length > 0) {
+                        const addressComponents = results[0].address_components;
+
+                        const city = addressComponents.find((component) =>
+                            component.types.includes('locality')
+                        )?.long_name;
+
+                        const state = addressComponents.find((component) =>
+                            component.types.includes('administrative_area_level_1')
+                        )?.long_name;
+
+                        console.log("City:", city);
+                        console.log("State:", state);
+                        setCity(city)
+
+                        // You can dispatch another action or update the state with city and state here
+                    } else {
+                        console.warn("No address components found");
+                    }
+                } catch (error) {
+                    console.error("Error fetching city and state:", error);
                 }
-            )
-        },[]
-    )
+            },
+            (error) => {
+                console.error("Error retrieving location:", error);
+                alert("Unable to retrieve your location. Please try again.");
+            }
+        );
+    }, [dispatch]);
     return (
         <div className='mt-12 px-8'>
             {/* Top Section */}
             <div className="max-w-7xl mx-auto py-4">
-                <h1 className="text-4xl font-bold mb-1 text-center">REAL ESTATE IN MOSCOW AND MOSCOW REGION</h1>
+                {/* <h1 className="text-4xl font-bold mb-1 text-center">REAL ESTATE IN MOSCOW AND MOSCOW REGION</h1> */}
+                <h1 className="text-4xl font-bold mb-1 text-center uppercase">REAL ESTATE IN {city && city} CITY</h1>
 
                 {/* Search Bar Section */}
                 <div className="w-full max-w-7xl mx-auto mb-12">

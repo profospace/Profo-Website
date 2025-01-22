@@ -9,6 +9,8 @@ const About = lazy(() => import('./pages/About'));
 const SinglePage = lazy(() => import('./pages/SinglePage'));
 // const Gallery = lazy(() => import('./pages/Gallery'));
 
+const MainPropertyPage = lazy(() => import('./pages/MainPropertyPage'));
+
 /* Layout Component */
 import Layout from './components/Layout';
 import FloatButtonShowMap from './components/FloatButtonShowMap'
@@ -26,7 +28,7 @@ import BuildingDetailPage from './pages/BuildingDetailPage';
 import BackToTop from './components/BackToTop';
 import { getAllBuildings } from './redux/features/Buildings/buildingsSlice';
 import MapPage from './pages/MapPage';
-import MainPropertyPage from './pages/MainPropertyPage';
+// import MainPropertyPage from './pages/MainPropertyPage';
 
 function App() {
   const dispatch = useDispatch()

@@ -300,7 +300,7 @@ import {
     Users,
     CalendarClock,
     ArrowUpDown,
-    Search,
+    Search, 
     SlidersHorizontal
 } from 'lucide-react';
 
@@ -538,12 +538,28 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
         }
     };
 
+
+    function getHeading(properties, projects) {
+        if (properties.length > 0) {
+            const typeNames = properties.map((property) => property.type_name);
+            const uniqueTypeNames = [...new Set(typeNames)];
+
+            // If all type_name are the same, return that type_name; otherwise, return "Properties".
+            return uniqueTypeNames.length === 1 ? uniqueTypeNames[0] : "Properties";
+        } else if (projects.length > 0) {
+            return "Projects";
+        } else {
+            return "Buildings";
+        }
+    }
+
     return (
-        <div className="min-h-screen bg-gray-100 p-4">
+        <div className="min-h-screen bg-white p-4">
             {/* Header with View Toggle */}
             <div className="max-w-7xl mx-auto mb-6">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-2xl font-semibold">Properties & Projects</h1>
+                    {/* <h1 className="text-2xl font-semibold">{properties.length > 0 ? "Properties" : projects.length > 0 ? "Projects" : "Buildings"}</h1> */}
+                    <h1 className="text-2xl font-semibold">{getHeading(properties, projects)}</h1>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => handleViewChange('list')}

@@ -1671,7 +1671,7 @@ import {
     MapPin,
     Building,
     Home,
-    Plus,
+    Plus, 
     Minus,
     Loader,
     List,
@@ -1835,38 +1835,67 @@ const MapPage = ({
         });
     }, [center, radius]);
 
-    const handleSearch = async () => {
+       const handleSearch = async () => {
         if (!searchQuery.trim() || !mapInstanceRef.current) return;
+
         setIsSearching(true);
         const geocoder = new google.maps.Geocoder();
+
         try {
             const { results } = await new Promise((resolve, reject) => {
-                geocoder.geocode({
-                    address: searchQuery,
-                    bounds: mapInstanceRef.current.getBounds(),
-                    componentRestrictions: { country: 'IN' }
-                }, (results, status) => {
-                    if (status === 'OK') {
-                        resolve({ results });
-                    } else {
-                        reject(new Error(`Geocoding failed: ${status}`));
+                geocoder.geocode(
+                    {
+                        address: searchQuery,
+                        region: 'IN' // Set region to India
+                    },
+                    (results, status) => {
+                        if (status === 'OK' && results && results.length > 0) {
+                            resolve({ results });
+                        } else {
+                            reject(new Error(`Geocoding failed: ${status}`));
+                        }
                     }
-                });
+                );
             });
-            if (results.length > 0) {
+            
+
+            if (results && results.length > 0) {
                 const location = results[0].geometry.location;
-                const newCenter = { lat: location.lat(), lng: location.lng() };
+                const newCenter = {
+                    lat: location.lat(),
+                    lng: location.lng()
+                };
+
+                // Update center state
                 setCenter(newCenter);
-                mapInstanceRef.current.panTo(newCenter);
-                mapInstanceRef.current.setZoom(15);
+
+                // Update map view
+                if (mapInstanceRef.current) {
+                    // Smooth pan to new location
+                    mapInstanceRef.current.panTo(newCenter);
+
+                    // Zoom in to show the area better
+                    mapInstanceRef.current.setZoom(15);
+
+                    // Update the search circle
+                    if (circleRef.current) {
+                        circleRef.current.setCenter(newCenter);
+                    }
+                }
+            } else {
+                console.warn('No results found for the search query');
+                // Optionally show a user-friendly message
+                alert('No location found. Please try a different search term.');
             }
         } catch (error) {
             console.error('Search error:', error);
+            // Optionally show a user-friendly error message
+            alert('Unable to find the location. Please try again.');
         } finally {
             setIsSearching(false);
         }
     };
-
+    
     const handleLocateMe = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -2033,5 +2062,430 @@ const MapPage = ({
 };
 
 export default MapPage;
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import {
+//     MapPin,
+//     Building,
+//     Home,
+//     Plus,
+//     Minus,
+//     Loader,
+//     List,
+//     Search,
+//     X,
+//     LocateFixed,
+//     Building2
+// } from 'lucide-react';
+// import PropertyPanel from '../components/PropertyPanel';
+
+// const MapPage = ({
+//     onViewChange,
+//     center,
+//     setCenter,
+//     radius,
+//     setRadius,
+//     properties = [],
+//     projects = [],
+//     buildings = [],
+//     isLoading
+// }) => {
+//     const mapRef = useRef(null);
+//     const mapInstanceRef = useRef(null);
+//     const markersRef = useRef([]);
+//     const circleRef = useRef(null);
+
+//     const [searchQuery, setSearchQuery] = useState('');
+//     const [isSearching, setIsSearching] = useState(false);
+//     const [selectedItem, setSelectedItem] = useState(null);
+//     const [selectedItemType, setSelectedItemType] = useState(null);
+//     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+//     const [lastScrollY, setLastScrollY] = useState(0);
+
+//     // Handle header visibility on scroll
+//     useEffect(() => {
+//         const handleScroll = () => {
+//             const currentScrollY = window.scrollY;
+//             setIsHeaderVisible(currentScrollY < lastScrollY || currentScrollY < 50);
+//             setLastScrollY(currentScrollY);
+//         };
+
+//         window.addEventListener('scroll', handleScroll, { passive: true });
+//         return () => window.removeEventListener('scroll', handleScroll);
+//     }, [lastScrollY]);
+
+//     useEffect(() => {
+//         if (!mapRef.current || mapInstanceRef.current) return;
+//         const mapOptions = {
+//             center: center,
+//             zoom: 14,
+//             styles: [
+//                 {
+//                     featureType: 'all',
+//                     elementType: 'geometry',
+//                     stylers: [{ saturation: -80 }]
+//                 },
+//                 {
+//                     featureType: 'poi.park',
+//                     elementType: 'geometry.fill',
+//                     stylers: [
+//                         { color: '#8aba6b' },
+//                         { saturation: 40 },
+//                         { lightness: 20 }
+//                     ]
+//                 },
+//                 {
+//                     featureType: 'water',
+//                     elementType: 'geometry.fill',
+//                     stylers: [{ color: '#a5d6f7' }]
+//                 },
+//                 {
+//                     featureType: 'road',
+//                     elementType: 'geometry.fill',
+//                     stylers: [{ color: '#ffffff' }]
+//                 }
+//             ],
+//             disableDefaultUI: true,
+//             zoomControl: false,
+//             streetViewControl: false,
+//             mapTypeControl: false
+//         };
+//         mapInstanceRef.current = new google.maps.Map(mapRef.current, mapOptions);
+//     }, [center]);
+
+//     useEffect(() => {
+//         if (!mapInstanceRef.current) return;
+//         markersRef.current.forEach(marker => marker.setMap(null));
+//         markersRef.current = [];
+
+//         const createMarker = (item, type) => {
+//             let position;
+//             if (type === 'property') {
+//                 position = {
+//                     lat: item?.location?.coordinates?.[1],
+//                     lng: item?.location?.coordinates?.[0]
+//                 };
+//             } else if (type === 'project') {
+//                 position = {
+//                     lat: item?.location?.coordinates?.coordinates?.[1],
+//                     lng: item?.location?.coordinates?.coordinates?.[0]
+//                 };
+//             } else { // building
+//                 position = {
+//                     lat: item?.location?.coordinates?.[1],
+//                     lng: item?.location?.coordinates?.[0]
+//                 };
+//             }
+
+//             const markerColor = type === 'property'
+//                 ? item?.type_name?.toLowerCase() === 'apartment' ? '#3B82F6'
+//                     : item?.type_name?.toLowerCase() === 'house' ? '#10B981'
+//                         : '#8B5CF6'
+//                 : type === 'project' ? '#EF4444'
+//                     : '#FB923C'; // color for buildings
+
+//             const marker = new google.maps.Marker({
+//                 position,
+//                 map: mapInstanceRef.current,
+//                 icon: {
+//                     path: type === 'building'
+//                         ? 'M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z'
+//                         : 'M12 0C7 0 3 4 3 9c0 5.2 8 13 8.8 13.7.1.1.2.2.4.2s.3-.1.4-.2C13.4 22 21 14.2 21 9c0-5-4-9-9-9z',
+//                     fillColor: markerColor,
+//                     fillOpacity: 1,
+//                     strokeWeight: 1,
+//                     strokeColor: '#FFFFFF',
+//                     scale: type === 'building' ? 2 : 1.5,
+//                     anchor: type === 'building'
+//                         ? new google.maps.Point(8, 8)
+//                         : new google.maps.Point(12, 22)
+//                 }
+//             });
+
+//             marker.addListener('click', () => {
+//                 setSelectedItem(item);
+//                 setSelectedItemType(type);
+//             });
+//             return marker;
+//         };
+
+//         console.log("PPP", properties)
+//         // Add property markers
+//         properties?.forEach(property => {
+//             const marker = createMarker(property, 'property');
+//             markersRef.current.push(marker);
+//         });
+
+//         // Add project markers
+//         projects.forEach(project => {
+//             const marker = createMarker(project, 'project');
+//             markersRef.current.push(marker);
+//         });
+
+//         // Add building markers
+//         buildings.forEach(building => {
+//             const marker = createMarker(building, 'building');
+//             markersRef.current.push(marker);
+//         });
+//     }, [properties, projects, buildings]);
+
+//     useEffect(() => {
+//         if (!mapInstanceRef.current) return;
+//         if (circleRef.current) {
+//             circleRef.current.setMap(null);
+//         }
+//         circleRef.current = new google.maps.Circle({
+//             strokeColor: '#3B82F6',
+//             strokeOpacity: 0.8,
+//             strokeWeight: 2,
+//             fillColor: '#3B82F6',
+//             fillOpacity: 0.1,
+//             map: mapInstanceRef.current,
+//             center: center,
+//             radius: radius * 1000
+//         });
+//     }, [center, radius]);
+
+//     const handleSearch = async () => {
+//         if (!searchQuery.trim() || !mapInstanceRef.current) return;
+
+//         setIsSearching(true);
+//         const geocoder = new google.maps.Geocoder();
+
+//         try {
+//             const { results } = await new Promise((resolve, reject) => {
+//                 geocoder.geocode(
+//                     {
+//                         address: searchQuery,
+//                         region: 'IN' // Set region to India
+//                     },
+//                     (results, status) => {
+//                         if (status === 'OK' && results && results.length > 0) {
+//                             resolve({ results });
+//                         } else {
+//                             reject(new Error(`Geocoding failed: ${status}`));
+//                         }
+//                     }
+//                 );
+//             });
+
+
+//             if (results && results.length > 0) {
+//                 const location = results[0].geometry.location;
+//                 const newCenter = {
+//                     lat: location.lat(),
+//                     lng: location.lng()
+//                 };
+
+//                 // Update center state
+//                 setCenter(newCenter);
+
+//                 // Update map view
+//                 if (mapInstanceRef.current) {
+//                     // Smooth pan to new location
+//                     mapInstanceRef.current.panTo(newCenter);
+
+//                     // Zoom in to show the area better
+//                     mapInstanceRef.current.setZoom(15);
+
+//                     // Update the search circle
+//                     if (circleRef.current) {
+//                         circleRef.current.setCenter(newCenter);
+//                     }
+//                 }
+//             } else {
+//                 console.warn('No results found for the search query');
+//                 // Optionally show a user-friendly message
+//                 alert('No location found. Please try a different search term.');
+//             }
+//         } catch (error) {
+//             console.error('Search error:', error);
+//             // Optionally show a user-friendly error message
+//             alert('Unable to find the location. Please try again.');
+//         } finally {
+//             setIsSearching(false);
+//         }
+//     };
+
+//     const handleLocateMe = () => {
+//         if (navigator.geolocation) {
+//             navigator.geolocation.getCurrentPosition(
+//                 (position) => {
+//                     const location = {
+//                         lat: position.coords.latitude,
+//                         lng: position.coords.longitude
+//                     };
+//                     setCenter(location);
+//                     mapInstanceRef.current?.panTo(location);
+//                     mapInstanceRef.current?.setZoom(15);
+//                 }
+//             );
+//         }
+//     };
+
+//     const handleZoomIn = () => {
+//         const currentZoom = mapInstanceRef.current?.getZoom() || 14;
+//         mapInstanceRef.current?.setZoom(currentZoom + 1);
+//     };
+
+//     const handleZoomOut = () => {
+//         const currentZoom = mapInstanceRef.current?.getZoom() || 14;
+//         mapInstanceRef.current?.setZoom(currentZoom - 1);
+//     };
+
+//     return (
+//         <div className="w-full h-screen bg-gray-50">
+//             {/* Enhanced Header with smooth transition */}
+//             <div className={`fixed w-full bg-white/95 backdrop-blur-md shadow-lg transition-all duration-300 z-50 ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
+//                 }`}>
+//                 <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+//                     <h1 className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+//                         Premium Estates
+//                     </h1>
+//                     <div className="flex items-center gap-6">
+//                         {/* Enhanced Search Bar */}
+//                         <div className="relative group">
+//                             <div className="flex items-center bg-gray-50 rounded-full border border-gray-200 transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-md">
+//                                 <input
+//                                     type="text"
+//                                     placeholder="Search location..."
+//                                     value={searchQuery}
+//                                     onChange={(e) => setSearchQuery(e.target.value)}
+//                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+//                                     className="w-72 px-6 py-2.5 bg-transparent focus:outline-none rounded-full"
+//                                 />
+//                                 {searchQuery && (
+//                                     <button
+//                                         onClick={() => setSearchQuery('')}
+//                                         className="p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+//                                     >
+//                                         <X size={16} />
+//                                     </button>
+//                                 )}
+//                                 <button
+//                                     onClick={handleSearch}
+//                                     disabled={isSearching}
+//                                     className="p-3 hover:text-blue-600 transition-colors duration-200"
+//                                 >
+//                                     <Search size={20} />
+//                                 </button>
+//                             </div>
+//                         </div>
+
+//                         {/* Enhanced Action Buttons */}
+//                         <div className="flex items-center gap-3">
+//                             <button
+//                                 onClick={handleLocateMe}
+//                                 className="p-2.5 hover:bg-blue-50 rounded-full transition-all duration-200 hover:shadow-md"
+//                                 title="Find my location"
+//                             >
+//                                 <LocateFixed size={20} className="text-blue-600" />
+//                             </button>
+//                             <button
+//                                 onClick={() => onViewChange('list')}
+//                                 className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
+//                             >
+//                                 <List size={18} />
+//                                 <span className="font-medium">List View</span>
+//                             </button>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+
+//             <div className="relative h-[calc(100vh-64px)]">
+//                 {/* Enhanced Loading Overlay */}
+//                 {isLoading && (
+//                     <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+//                         <div className="flex items-center gap-3 bg-white p-6 rounded-2xl shadow-xl">
+//                             <Loader className="animate-spin text-blue-600" size={24} />
+//                             <span className="font-medium text-gray-700">Loading premium locations...</span>
+//                         </div>
+//                     </div>
+//                 )}
+
+//                 {/* Map Container */}
+//                 <div ref={mapRef} className="w-full h-full" />
+
+//                 {/* Enhanced Map Controls */}
+//                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden transition-transform duration-200 hover:scale-105">
+//                     <button
+//                         onClick={handleZoomIn}
+//                         className="p-3 hover:bg-blue-50 transition-colors duration-200 border-b border-gray-100"
+//                     >
+//                         <Plus size={20} className="text-blue-600" />
+//                     </button>
+//                     <button
+//                         onClick={handleZoomOut}
+//                         className="p-3 hover:bg-blue-50 transition-colors duration-200"
+//                     >
+//                         <Minus size={20} className="text-blue-600" />
+//                     </button>
+//                 </div>
+
+//                 {/* Enhanced Radius Controls */}
+//                 <div className="absolute top-24 right-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden transition-transform duration-200 hover:scale-105">
+//                     <button
+//                         onClick={() => setRadius(Math.max(1, radius - 1))}
+//                         className="p-3 hover:bg-blue-50 transition-colors duration-200 border-b border-gray-100"
+//                         disabled={radius <= 1}
+//                     >
+//                         <Minus size={20} className="text-blue-600" />
+//                     </button>
+//                     <div className="py-2 px-4 text-center font-medium text-gray-700">
+//                         {radius} km
+//                     </div>
+//                     <button
+//                         onClick={() => setRadius(radius + 1)}
+//                         className="p-3 hover:bg-blue-50 transition-colors duration-200"
+//                     >
+//                         <Plus size={20} className="text-blue-600" />
+//                     </button>
+//                 </div>
+
+//                 {/* Property Panel remains unchanged as it's a separate component */}
+//                 {selectedItem && (
+//                     <PropertyPanel
+//                         data={selectedItem}
+//                         type={selectedItemType}
+//                         onClose={() => {
+//                             setSelectedItem(null);
+//                             setSelectedItemType(null);
+//                         }}
+//                     />
+//                 )}
+
+//                 {/* Enhanced Legend */}
+//                 <div className="absolute bottom-8 right-4 bg-white/90 backdrop-blur-sm py-4 px-8 rounded-2xl shadow-lg transition-transform duration-200 hover:scale-105">
+//                     <div className="text-sm font-semibold text-gray-700 mb-4">Property Types</div>
+//                     <div className="space-y-3">
+//                         <div className="flex items-center gap-3 group cursor-pointer">
+//                             <Building className="text-blue-500 transition-transform duration-200 group-hover:scale-110" size={20} />
+//                             <span className="text-sm text-gray-600 group-hover:text-blue-500 transition-colors duration-200">Apartment</span>
+//                         </div>
+//                         <div className="flex items-center gap-3 group cursor-pointer">
+//                             <Home className="text-green-500 transition-transform duration-200 group-hover:scale-110" size={20} />
+//                             <span className="text-sm text-gray-600 group-hover:text-green-500 transition-colors duration-200">House</span>
+//                         </div>
+//                         <div className="flex items-center gap-3 group cursor-pointer">
+//                             <Building className="text-purple-500 transition-transform duration-200 group-hover:scale-110" size={20} />
+//                             <span className="text-sm text-gray-600 group-hover:text-purple-500 transition-colors duration-200">Office</span>
+//                         </div>
+//                         <div className="flex items-center gap-3 group cursor-pointer">
+//                             <MapPin className="text-red-500 transition-transform duration-200 group-hover:scale-110" size={20} />
+//                             <span className="text-sm text-gray-600 group-hover:text-red-500 transition-colors duration-200">Project</span>
+//                         </div>
+//                         <div className="flex items-center gap-3 group cursor-pointer">
+//                             <Building2 className="text-orange-500 transition-transform duration-200 group-hover:scale-110" size={20} />
+//                             <span className="text-sm text-gray-600 group-hover:text-orange-500 transition-colors duration-200">Building</span>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default MapPage;
 
 

@@ -145,6 +145,7 @@ const MainPropertyPage = () => {
                         <MapPage
                             onViewChange={handleViewChange}
                             center={center}
+                                setCenter={setCenter}
                             radius={radius}
                             setRadius={setRadius}
                             properties={properties || []}
