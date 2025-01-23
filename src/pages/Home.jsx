@@ -234,6 +234,7 @@ function Home() {
     const filters = ['Studio', 'eleven', '2', '3', '4+'];
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [city , setCity] = useState('')
+    const [isCityLoading, setIsCityLoading] = useState(true)
     
     const {  properties , projects } = useSelector(state => state.map)
 
@@ -388,7 +389,7 @@ function Home() {
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const { latitude, longitude } = position.coords;
-
+                setIsCityLoading(true);
                 // Dispatch map feed action
                 dispatch(getMapFeed({ latitude, longitude, radius: 10000000000 }));
 
@@ -421,6 +422,8 @@ function Home() {
                     }
                 } catch (error) {
                     console.error("Error fetching city and state:", error);
+                } finally {
+                    setIsCityLoading(false);
                 }
             },
             (error) => {
@@ -434,7 +437,7 @@ function Home() {
             {/* Top Section */}
             <div className="max-w-7xl mx-auto py-4">
                 {/* <h1 className="text-4xl font-bold mb-1 text-center">REAL ESTATE IN MOSCOW AND MOSCOW REGION</h1> */}
-                <h1 className="text-4xl font-bold mb-1 text-center uppercase">REAL ESTATE IN {city && city} CITY</h1>
+                <h1 className="text-4xl font-bold mb-1 text-center uppercase">REAL ESTATE IN {!isCityLoading ? city + ' CITY' : "loading..."} </h1>
 
                 {/* Search Bar Section */}
                 <div className="w-full max-w-7xl mx-auto mb-12">

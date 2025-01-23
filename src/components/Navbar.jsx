@@ -932,7 +932,7 @@ const Header = () => {
         };
 
     return (
-        <header className="w-full border-b border-gray-200">
+        <header className="w-full border-b border-gray-200 navbar">
             <div className="max-w-7xl mx-auto px-4">
                 {/* Top Navigation Bar */}
                 <div className="flex items-center justify-between h-16">
