@@ -221,6 +221,7 @@ import { BadgeCheck, X } from 'lucide-react';
 import { QRCode } from 'antd';
 
 const PhonePopup = ({ phone, isOpen, onClose }) => {
+    console.log(phone)
     if (!isOpen) return null;
 
     return (
@@ -242,7 +243,7 @@ const PhonePopup = ({ phone, isOpen, onClose }) => {
 
                 <div className="flex-shrink-0">
                     <QRCode
-                        value={`tel:${phone.replace(/\D/g, '')}`}
+                        value={`tel:${phone}`}
                         size={56}
                         bordered={false}
                         color="#000000"
@@ -255,6 +256,7 @@ const PhonePopup = ({ phone, isOpen, onClose }) => {
 
 const BuildingContactCard = ({ info }) => {
     const [showPhonePopup, setShowPhonePopup] = useState(false);
+    console.log(info)
 
     const calculateStats = () => {
         const buildingCount = info?.buildings?.length || 0;
@@ -277,81 +279,101 @@ const BuildingContactCard = ({ info }) => {
         window.location.href = `tel:${phone.replace(/\D/g, '')}`;
     };
 
+    const hasValidData = () => {
+        return (
+            info?.name ||
+            info?.contacts?.[1] ||
+            info?.logo ||
+            info?.experience ||
+            (info?.operatingLocations && info.operatingLocations.length > 0) ||
+            (stats?.completedCount > 0) ||
+            (stats?.ongoingCount > 0) ||
+            info?.contactNumber
+        );
+    };
+
+
+
+
     return (
         <div className="max-w-xl w-full bg-white rounded-lg relative">
             <div className="p-4">
-                <div className="bg-gray-50 rounded-lg px-6 py-4">
+                {hasValidData() && (<div className="bg-gray-50 rounded-lg px-6 py-4">
                     <div className="flex justify-between items-center mb-2">
                         <div className="flex items-center gap-2">
                             <div className=''>
-                                <span className="flex items-center gap-2 font-semibold text-xl">
-                                    {info?.name}
-                                <BadgeCheck className="w-5 h-5 text-blue-600" />
-                                </span>
-                                <div className="font-light text-sm text-blue-800 mb-1 cursor-pointer" onClick={() =>{ window.location.href = `mailto:${info?.contacts?.[1]}`}}>
+                                {
+                                    info?.name && <span className="flex items-center gap-2 font-semibold text-xl">
+                                        {info?.name && info?.name}
+                                        <BadgeCheck className="w-5 h-5 text-blue-600" />
+                                    </span>
+                                }
+                                <div className="font-light text-sm text-blue-800 mb-1 cursor-pointer" onClick={() => { window.location.href = `mailto:${info?.contacts?.[1]}` }}>
                                     {info?.contacts?.[1]}
                                 </div>
                             </div>
                         </div>
 
-                        {info?.logo ? (
+                        {info?.logo &&
                             <img
                                 src={info?.logo}
                                 alt={`${info?.name} logo`}
                                 className="w-10 h-10 rounded-md object-contain"
                             />
-                        ) : (
-                            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold">
-                                {info?.name.slice(0, 2).toUpperCase()}
-                            </div>
-                        )}
+                        }
                     </div>
 
                     <div className="grid grid-cols-2 gap-6 mb-4">
-                        <div>
+                        {info?.experience && <div>
                             <div className="font-semibold mb-1">{info?.experience}+ years</div>
                             <div className="text-gray-600 text-sm">of experience in construction</div>
-                        </div>
-                        <div>
+                        </div>}
+                        {info?.operatingLocations?.length && <div>
                             <div className="font-semibold mb-1">{info?.operatingLocations?.length || 0}</div>
                             <div className="text-gray-600 text-sm">operating locations</div>
-                        </div>
+                        </div>}
                     </div>
 
                     <div className="grid grid-cols-2 gap-6 mb-2">
-                        <div>
+                        {stats?.completedCount?.length && <div>
                             <div className="font-semibold mb-1">
-                                {stats.completedCount} projects completed
+                                {stats?.completedCount} projects completed
                             </div>
                             <div className="text-gray-600 text-sm">Total completed</div>
                         </div>
-                        <div>
+                        }
+                        {stats.ongoingCount?.lenght && <div>
                             <div className="font-semibold mb-1">
                                 {stats.ongoingCount} ongoing projects
                             </div>
                             <div className="text-gray-600 text-sm">Under construction</div>
-                        </div>
+                        </div>}
                     </div>
-                    
-                    <button
-                        onClick={() => setShowPhonePopup(true)}
-                        className="w-full bg-[#FED42B] text-black rounded-lg py-4 mb-2 hover:bg-gray-900 hover:text-white transition-colors"
-                    >
-                        Show phone
-                    </button>
-                    <button
-                        onClick={handleCallClick}
-                        className="w-full bg-white border border-gray-200 rounded-lg py-4 hover:bg-gray-50 transition-colors"
-                    >
-                        Call me
-                    </button>
+
+                    {
+                        info?.contactNumber && <div>
+                            <button
+                                onClick={() => setShowPhonePopup(true)}
+                                className="w-full bg-[#FED42B] text-black rounded-lg py-4 mb-2 hover:bg-gray-900 hover:text-white transition-colors"
+                            >
+                                Show phone
+                            </button>
+                            <button
+                                onClick={handleCallClick}
+                                className="w-full bg-white border border-gray-200 rounded-lg py-4 hover:bg-gray-50 transition-colors"
+                            >
+                                Call me
+                            </button>
+                        </div>
+                    }
 
                     <PhonePopup
-                        phone={phone}
+                        phone={info?.contactNumber}
                         isOpen={showPhonePopup}
                         onClose={() => setShowPhonePopup(false)}
                     />
-                </div>
+                </div>)
+                }
             </div>
         </div>
     );

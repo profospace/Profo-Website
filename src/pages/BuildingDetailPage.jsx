@@ -191,7 +191,7 @@ function BuildingDetailPage() {
                         {/* Sidebar with Contact Card */}
                         <aside className="lg:col-span-4">
                             <div className="sticky top-24">
-                                <BuildingContactCard />
+                                <BuildingContactCard info={buildingDetail} />
                             </div>
                         </aside>
                     </div>
