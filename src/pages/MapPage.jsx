@@ -1923,21 +1923,157 @@ const MapPage = ({
     };
 
     return (
-        <div className="w-full bg-gray-100">
+        // <div className="w-full min-h-screen relative">
+        //     {/* Header */}
+        //     <div className="bg-[rgba(0,0,0,0)] backdrop-blur-xs  shadow-sm px-4 flex justify-between items-center top-0 left-0 right-0 z-10">
+        //         <h1 className="text-xl font-semibold">Map View</h1>
+        //         <div className="flex items-center gap-4">
+        //             {/* Search Bar */}
+        //             <div className="relative">
+        //                 <div className="flex items-center bg-gray-100 rounded-lg">
+        //                     <input
+        //                         type="text"
+        //                         placeholder="Search location..."
+        //                         value={searchQuery}
+        //                         onChange={(e) => setSearchQuery(e.target.value)}
+        //                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+        //                         className="w-64 px-4 py-2 bg-transparent focus:outline-none"
+        //                     />
+        //                     {searchQuery && (
+        //                         <button
+        //                             onClick={() => setSearchQuery('')}
+        //                             className="p-2 hover:text-gray-700"
+        //                         >
+        //                             <X size={16} />
+        //                         </button>
+        //                     )}
+        //                     <button
+        //                         onClick={handleSearch}
+        //                         disabled={isSearching}
+        //                         className="p-2 hover:text-blue-600"
+        //                     >
+        //                         <Search size={20} />
+        //                     </button>
+        //                 </div>
+        //             </div>
+        //             <button
+        //                 onClick={handleLocateMe}
+        //                 className="p-2 hover:bg-gray-100 rounded-lg"
+        //                 title="Find my location"
+        //             >
+        //                 <LocateFixed size={20} />
+        //             </button>
+        //             <button
+        //                 onClick={() => onViewChange('list')}
+        //                 className="p-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+        //             >
+        //                 <List size={20} />
+        //                 <span>List View</span>
+        //             </button>
+        //         </div>
+        //     </div>
+
+        //     <div className="relative h-[calc(100vh-64px)]">
+        //         {/* Loading Overlay */}
+        //         {isLoading && (
+        //             <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-50">
+        //                 <div className="flex items-center gap-2 bg-white p-4 rounded-lg shadow-lg">
+        //                     <Loader className="animate-spin" size={24} />
+        //                     <span className="font-medium">Loading map data...</span>
+        //                 </div>
+        //             </div>
+        //         )}
+        //         {/* Map Container */}
+        //         <div ref={mapRef} className="w-full h-full" />
+        //         {/* Map Controls */}
+        //         <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg">
+        //             <button
+        //                 onClick={handleZoomIn}
+        //                 className="p-2 hover:bg-gray-100 rounded-t-lg border-b"
+        //             >
+        //                 <Plus size={20} />
+        //             </button>
+        //             <button
+        //                 onClick={handleZoomOut}
+        //                 className="p-2 hover:bg-gray-100 rounded-b-lg"
+        //             >
+        //                 <Minus size={20} />
+        //             </button>
+        //         </div>
+        //         {/* Radius Controls */}
+        //         <div className="absolute top-24 right-4 bg-white rounded-lg shadow-lg">
+        //             <button
+        //                 onClick={() => setRadius(Math.max(1, radius - 1))}
+        //                 className="p-2 hover:bg-gray-100 border-b"
+        //                 disabled={radius <= 1}
+        //             >
+        //                 <Minus size={20} />
+        //             </button>
+        //             <div className="p-2 text-center font-medium">
+        //                 {radius} km
+        //             </div>
+        //             <button
+        //                 onClick={() => setRadius(radius + 1)}
+        //                 className="p-2 hover:bg-gray-100"
+        //             >
+        //                 <Plus size={20} />
+        //             </button>
+        //         </div>
+        //         {/* Property Details Panel */}
+        //         {selectedItem && (
+        //             <PropertyPanel
+        //                 data={selectedItem}
+        //                 type={selectedItemType}
+        //                 onClose={() => {
+        //                     setSelectedItem(null);
+        //                     setSelectedItemType(null);
+        //                 }}
+        //             />
+        //         )}
+        //         {/* Legend */}
+        //         <div className="absolute bottom-24 right-1 bg-white py-2 px-6 rounded-lg shadow-lg">
+        //             <div className="text-sm font-medium mb-2">Legend</div>
+        //             <div className="space-y-2">
+        //                 <div className="flex items-center gap-2">
+        //                     <Building className="text-blue-500" size={20} />
+        //                     <span className="text-sm">Apartment</span>
+        //                 </div>
+        //                 <div className="flex items-center gap-2">
+        //                     <Home className="text-green-500" size={20} />
+        //                     <span className="text-sm">House</span>
+        //                 </div>
+        //                 <div className="flex items-center gap-2">
+        //                     <Building className="text-purple-500" size={20} />
+        //                     <span className="text-sm">Office</span>
+        //                 </div>
+        //                 <div className="flex items-center gap-2">
+        //                     <MapPin className="text-red-500" size={20} />
+        //                     <span className="text-sm">Project</span>
+        //                 </div>
+        //                 <div className="flex items-center gap-2">
+        //                     <Building2 className="text-orange-500" size={20} />
+        //                     <span className="text-sm">Building</span>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </div>
+
+        <div className="w-full min-h-screen relative mt-1">
             {/* Header */}
-            <div className="bg-white shadow-sm px-4 py-2 flex justify-between items-center">
-                <h1 className="text-xl font-semibold">Map View</h1>
+            <div className="absolute top-0 left-0 right-0 z-10 bg-transparent px-4 flex justify-between items-center py-2">
+                <h1 className="text-xl font-semibold bg-white px-4 py-1 rounded-sm shadow-md">Map View</h1>
                 <div className="flex items-center gap-4">
                     {/* Search Bar */}
                     <div className="relative">
-                        <div className="flex items-center bg-gray-100 rounded-lg">
+                        <div className="flex items-center bg-white rounded-lg  shadow-lg">
                             <input
                                 type="text"
                                 placeholder="Search location..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                className="w-64 px-4 py-2 bg-transparent focus:outline-none"
+                                className="w-64 px-4 py-2 bg-transparent focus:outline-none" 
                             />
                             {searchQuery && (
                                 <button
@@ -1963,98 +2099,102 @@ const MapPage = ({
                     >
                         <LocateFixed size={20} />
                     </button>
-                    <button
+                    {/* <button
                         onClick={() => onViewChange('list')}
                         className="p-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
                     >
                         <List size={20} />
                         <span>List View</span>
-                    </button>
+                    </button> */}
                 </div>
             </div>
 
-            <div className="relative h-[calc(100vh-64px)]">
-                {/* Loading Overlay */}
-                {isLoading && (
-                    <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-50">
-                        <div className="flex items-center gap-2 bg-white p-4 rounded-lg shadow-lg">
-                            <Loader className="animate-spin" size={24} />
-                            <span className="font-medium">Loading map data...</span>
+            <div className="relative h-full">
+                {/* Rest of the component remains the same */}
+                <div className="relative h-[calc(100vh-64px)]">
+                    {/* Loading Overlay */}
+                    {isLoading && (
+                        <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-50">
+                            <div className="flex items-center gap-2 bg-white p-4 rounded-lg shadow-lg">
+                                <Loader className="animate-spin" size={24} />
+                                <span className="font-medium">Loading map data...</span>
+                            </div>
                         </div>
-                    </div>
-                )}
-                {/* Map Container */}
-                <div ref={mapRef} className="w-full h-full" />
-                {/* Map Controls */}
-                <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg">
-                    <button
-                        onClick={handleZoomIn}
-                        className="p-2 hover:bg-gray-100 rounded-t-lg border-b"
-                    >
-                        <Plus size={20} />
-                    </button>
-                    <button
-                        onClick={handleZoomOut}
-                        className="p-2 hover:bg-gray-100 rounded-b-lg"
-                    >
-                        <Minus size={20} />
-                    </button>
-                </div>
-                {/* Radius Controls */}
-                <div className="absolute top-24 right-4 bg-white rounded-lg shadow-lg">
-                    <button
-                        onClick={() => setRadius(Math.max(1, radius - 1))}
-                        className="p-2 hover:bg-gray-100 border-b"
-                        disabled={radius <= 1}
-                    >
-                        <Minus size={20} />
-                    </button>
-                    <div className="p-2 text-center font-medium">
-                        {radius} km
-                    </div>
-                    <button
-                        onClick={() => setRadius(radius + 1)}
-                        className="p-2 hover:bg-gray-100"
-                    >
-                        <Plus size={20} />
-                    </button>
-                </div>
-                {/* Property Details Panel */}
-                {selectedItem && (
-                    <PropertyPanel
-                        data={selectedItem}
-                        type={selectedItemType}
-                        onClose={() => {
-                            setSelectedItem(null);
-                            setSelectedItemType(null);
-                        }}
-                    />
-                )}
-                {/* Legend */}
-                <div className="absolute bottom-24 right-1 bg-white py-2 px-6 rounded-lg shadow-lg">
-                    <div className="text-sm font-medium mb-2">Legend</div>
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <Building className="text-blue-500" size={20} />
-                            <span className="text-sm">Apartment</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Home className="text-green-500" size={20} />
-                            <span className="text-sm">House</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Building className="text-purple-500" size={20} />
-                            <span className="text-sm">Office</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <MapPin className="text-red-500" size={20} />
-                            <span className="text-sm">Project</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Building2 className="text-orange-500" size={20} />
-                            <span className="text-sm">Building</span>
-                        </div>
-                    </div>
+                    )}
+                    {/* Map Container */}
+                    <div ref={mapRef} className="w-full h-full " />
+                    {/* Remaining components stay the same */}
+                    {/* Map Controls */}
+         <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg">
+             <button
+                 onClick={handleZoomIn}
+                 className="p-2 hover:bg-gray-100 rounded-t-lg border-b"
+             >
+                 <Plus size={20} />
+             </button>
+             <button
+                 onClick={handleZoomOut}
+                 className="p-2 hover:bg-gray-100 rounded-b-lg"
+             >
+                 <Minus size={20} />
+             </button>
+         </div>
+         {/* Radius Controls */}
+         <div className="absolute top-24 right-4 bg-white rounded-lg shadow-lg">
+             <button
+                 onClick={() => setRadius(Math.max(1, radius - 1))}
+                 className="p-2 hover:bg-gray-100 border-b"
+                 disabled={radius <= 1}
+             >
+                 <Minus size={20} />
+             </button>
+             <div className="p-2 text-center font-medium">
+                 {radius} km
+             </div>
+             <button
+                 onClick={() => setRadius(radius + 1)}
+                 className="p-2 hover:bg-gray-100"
+             >
+                 <Plus size={20} />
+             </button>
+         </div>
+         {/* Property Details Panel */}
+         {selectedItem && (
+             <PropertyPanel
+                 data={selectedItem}
+                 type={selectedItemType}
+                 onClose={() => {
+                     setSelectedItem(null);
+                     setSelectedItemType(null);
+                 }}
+             />
+         )}
+         {/* Legend */}
+         <div className="absolute bottom-24 right-1 bg-white py-2 px-6 rounded-lg shadow-lg">
+             <div className="text-sm font-medium mb-2">Legend</div>
+             <div className="space-y-2">
+                 <div className="flex items-center gap-2">
+                     <Building className="text-blue-500" size={20} />
+                     <span className="text-sm">Apartment</span>
+                 </div>
+                 <div className="flex items-center gap-2">
+                     <Home className="text-green-500" size={20} />
+                     <span className="text-sm">House</span>
+                 </div>
+                 <div className="flex items-center gap-2">
+                     <Building className="text-purple-500" size={20} />
+                     <span className="text-sm">Office</span>
+                 </div>
+                 <div className="flex items-center gap-2">
+                     <MapPin className="text-red-500" size={20} />
+                     <span className="text-sm">Project</span>
+                 </div>
+                 <div className="flex items-center gap-2">
+                     <Building2 className="text-orange-500" size={20} />
+                     <span className="text-sm">Building</span>
+                 </div>
+             </div>
+         </div>
                 </div>
             </div>
         </div>
