@@ -221,7 +221,6 @@ import { BadgeCheck, X } from 'lucide-react';
 import { QRCode } from 'antd';
 
 const PhonePopup = ({ phone, isOpen, onClose }) => {
-    console.log(phone)
     if (!isOpen) return null;
 
     return (
@@ -256,7 +255,6 @@ const PhonePopup = ({ phone, isOpen, onClose }) => {
 
 const BuildingContactCard = ({ info }) => {
     const [showPhonePopup, setShowPhonePopup] = useState(false);
-    console.log(info)
 
     const calculateStats = () => {
         const buildingCount = info?.buildings?.length || 0;

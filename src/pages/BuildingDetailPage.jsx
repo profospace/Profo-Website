@@ -13,6 +13,7 @@ import GalleryList from '../components/GalleryList';
 import AskDeveloper from '../components/AskDeveloper';
 import LocationLatLngMap from '../components/LocationLatLngMap';
 import HeaderSection from '../components/HeaderSection';
+import HeadingCommon from '../components/HeadingCommon';
 
 function BuildingDetailPage() {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
@@ -120,7 +121,7 @@ function BuildingDetailPage() {
 
                 {/* Content Grid Layout */}
                 <div className="max-w-7xl mx-auto px-4 py-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 mb-12">
                         {/* Main Content Area */}
                         <main className="lg:col-span-8">
                             <div className="space-y-8">
@@ -185,7 +186,10 @@ function BuildingDetailPage() {
                                 <div>
                                     <AskDeveloper />
                                 </div>
+
+                                
                             </div>
+                            
                         </main>
 
                         {/* Sidebar with Contact Card */}
@@ -194,6 +198,18 @@ function BuildingDetailPage() {
                                 <BuildingContactCard info={buildingDetail} />
                             </div>
                         </aside>
+                    </div>
+                    {/* Display Connected Properties */}
+                    <div className="">
+                        {/* <h1 className="text-xl font-semibold mb-4">Connected Properties</h1> */}
+                        <HeadingCommon title='Connected Properties' dual="true" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {buildingDetail?.connectedProperties?.length > 0 &&
+                                buildingDetail?.connectedProperties?.map((property, index) => (
+                                    <PropertyCard key={index} property={property} />
+                                ))
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
