@@ -2092,6 +2092,21 @@ const MapPage = ({
                             </button>
                         </div>
                     </div>
+
+                    {/* Locate Me Button , Zoom in , Zoom out Button */}
+                    <div className="flex flex-col absolute top-24 right-4 bg-white rounded-lg shadow-lg">
+                        <button
+                            onClick={handleZoomIn}
+                            className="p-2 hover:bg-gray-100 rounded-t-lg border-b"
+                        >
+                            <Plus size={20} />
+                        </button>
+                        <button
+                            onClick={handleZoomOut}
+                            className="p-2 hover:bg-gray-100 rounded-b-lg border-b"
+                        >
+                            <Minus size={20} />
+                        </button>
                     <button
                         onClick={handleLocateMe}
                         className="p-2 hover:bg-gray-100 rounded-lg"
@@ -2099,6 +2114,7 @@ const MapPage = ({
                     >
                         <LocateFixed size={20} />
                     </button>
+                    </div>
                     {/* <button
                         onClick={() => onViewChange('list')}
                         className="p-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
@@ -2125,22 +2141,9 @@ const MapPage = ({
                     <div ref={mapRef} className="w-full h-full " />
                     {/* Remaining components stay the same */}
                     {/* Map Controls */}
-         <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg">
-             <button
-                 onClick={handleZoomIn}
-                 className="p-2 hover:bg-gray-100 rounded-t-lg border-b"
-             >
-                 <Plus size={20} />
-             </button>
-             <button
-                 onClick={handleZoomOut}
-                 className="p-2 hover:bg-gray-100 rounded-b-lg"
-             >
-                 <Minus size={20} />
-             </button>
-         </div>
-         {/* Radius Controls */}
-         <div className="absolute top-24 right-4 bg-white rounded-lg shadow-lg">
+        
+         {/* Radius Controls -- Commented temparary*/}
+         {/* <div className="absolute top-24 right-4 bg-white rounded-lg shadow-lg">
              <button
                  onClick={() => setRadius(Math.max(1, radius - 1))}
                  className="p-2 hover:bg-gray-100 border-b"
@@ -2157,7 +2160,7 @@ const MapPage = ({
              >
                  <Plus size={20} />
              </button>
-         </div>
+         </div> */}
          {/* Property Details Panel */}
          {selectedItem && (
              <PropertyPanel

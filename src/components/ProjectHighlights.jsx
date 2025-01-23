@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import HeadingCommon from './HeadingCommon';
 
 const ProjectHighlights = ({ highlights }) => {
     const [showAll, setShowAll] = useState(false);
@@ -11,9 +12,11 @@ const ProjectHighlights = ({ highlights }) => {
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4 py-12 bg-white">
-            <h2 className="text-3xl font-bold mb-6 text-gray-800">
+            {/* <h2 className="text-3xl font-bold mb-6 text-gray-800">
                 Project Highlights
-            </h2>
+            </h2> */}
+            <HeadingCommon dual="true" title='Project Highlights' />
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {displayedHighlights?.map((highlight, index) => (

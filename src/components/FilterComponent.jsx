@@ -328,6 +328,8 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
             onCancel={() => setModalOpen(false)} // Closing modal on Cancel
             footer={null} 
             styles={{ padding: '0px', maxHeight: '500px' }} 
+            width="90vw"
+            
         >
             <div className='w-full text-center'>
                 <h1 className='font-bold text-xl py-2'>Filters</h1>
@@ -335,24 +337,40 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
             <hr />
 
             {/* Scrollable Content Section */}
-            <div className="hide-scrollbar max-h-[450px] px-4">
+            <div className=" hide-scrollbar max-h-[450px] px-4">
                 {/* Beds, Floors, and Bathrooms */}
                 {/* <div className='py-4'> */}
-                <div className={`filter-section py-4 transition-all duration-300 ${activeSection === 'Beds, Floors, and Bathrooms' ? 'section-highlight rounded-lg p-4 mt-2' : ''
+                <div className={` filter-section py-4 transition-all duration-300 ${activeSection === 'Beds, Floors, and Bathrooms' ? 'section-highlight rounded-lg p-4 mt-2' : ''
                     }`}>
                     <h1 className='text-xl font-semibold'>Beds and Bathrooms</h1>
 
-                    {/* Beds */}
-                    <div className='flex justify-between items-center py-2 mb-1'>
-                        <div className='text-xl'>Beds</div>
-                        <div className='flex items-center gap-3'>
-                            <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => decrementFilter('bedrooms')} disabled={filters?.bedrooms < 1}>
-                                <FaMinus />
-                            </IconButton>
-                            <div className='text-xl text-center min-w-10'>{filters.bedrooms ? filters.bedrooms + '+ ' : "Any"}</div>
-                            <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => incrementFilter('bedrooms')} disabled={filterRanges?.maxBedrooms == filters.bedrooms}>
-                                <FaPlus />
-                            </IconButton>
+                    <div className='flex gap-24'>
+                        {/* Beds */}
+                        <div className='flex justify-between items-center py-2 mb-1 max-w-96'>
+                            <div className='text-xl'>Beds</div>
+                            <div className='flex items-center gap-3'>
+                                <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => decrementFilter('bedrooms')} disabled={filters?.bedrooms < 1}>
+                                    <FaMinus />
+                                </IconButton>
+                                <div className='text-xl text-center min-w-10'>{filters.bedrooms ? filters.bedrooms + '+ ' : "Any"}</div>
+                                <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => incrementFilter('bedrooms')} disabled={filterRanges?.maxBedrooms == filters.bedrooms}>
+                                    <FaPlus />
+                                </IconButton>
+                            </div>
+                        </div>
+
+                        {/* Bathrooms */}
+                        <div className='flex justify-between items-center py-2 mb-1 max-w-96'>
+                            <div className='text-xl'>Bathrooms</div>
+                            <div className='flex items-center gap-3'>
+                                <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => decrementFilter('bathrooms')} disabled={filters.bathrooms < 1}>
+                                    <FaMinus />
+                                </IconButton>
+                                <div className='text-xl text-center min-w-10'>{filters.bathrooms ? filters.bathrooms + '+ ' : "Any"}</div>
+                                <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => incrementFilter('bathrooms')} disabled={filterRanges?.maxBathrooms == filters.bathrooms}>
+                                    <FaPlus />
+                                </IconButton>
+                            </div>
                         </div>
                     </div>
 
@@ -370,19 +388,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                         </div>
                     </div> */}
 
-                    {/* Bathrooms */}
-                    <div className='flex justify-between items-center py-2 mb-1'>
-                        <div className='text-xl'>Bathrooms</div>
-                        <div className='flex items-center gap-3'>
-                            <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => decrementFilter('bathrooms')} disabled={filters.bathrooms < 1}>
-                                <FaMinus />
-                            </IconButton>
-                            <div className='text-xl text-center min-w-10'>{filters.bathrooms ? filters.bathrooms + '+ ' : "Any"}</div>
-                            <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => incrementFilter('bathrooms')} disabled={filterRanges?.maxBathrooms == filters.bathrooms}>
-                                <FaPlus />
-                            </IconButton>
-                        </div>
-                    </div>
+                    
 
                     <hr />
                 </div>
@@ -391,7 +397,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                 <div className={`filter-section py-4 transition-all duration-300 ${activeSection === 'Floor' ? 'section-highlight rounded-lg p-4 mt-2' : ''
                     }`}>
 
-                    <div className='flex justify-between items-center py-2 mb-1'>
+                    <div className='flex justify-between items-center py-2 mb-1 max-w-96'>
                         <div className='text-xl font-semibold'>Floors</div>
                         <div className='flex items-center gap-3'>
                             <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => decrementFilter('floor')} disabled={filters?.floor < 1}>

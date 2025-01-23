@@ -168,6 +168,7 @@ function BuildingDetailPage() {
                                     </div>
                                 </div>
 
+                                {/* Accordian Section  */}
                                 <PropertyListing />
 
                                     {/* Location - Map */}

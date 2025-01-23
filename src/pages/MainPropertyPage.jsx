@@ -177,6 +177,8 @@ import {
     SlidersHorizontal,
 } from 'lucide-react';
 import { FaFilterCircleDollar } from 'react-icons/fa6';
+import { FiSettings } from 'react-icons/fi';
+import FilterComponent from '../components/FilterComponent';
 
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
@@ -193,6 +195,11 @@ const MainPropertyPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const [isFilterVisible, setIsFilterVisible] = useState(false);
+
+
+    // filter button popup
+    const [modalOpen, setModalOpen] = useState(false);
+      const [activeSection, setActiveSection] = useState('');
 
     // Get initial location
     useEffect(() => {
@@ -299,9 +306,9 @@ const MainPropertyPage = () => {
 
                     {/* Filters and Search Section - Conditionally Rendered */}
                     {isFilterVisible && (
-                        <div className="bg-white space-y-4">
-                            <div className="w-full">
-                                <div className="relative w-full">
+                        <div className="bg-white space-y-4 ">
+                            <div className="w-full  ">
+                                <div className="relative w-full ">
                                     <div className="flex items-center gap-3 transition-all duration-300 ease-in-out">
                                         <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-1/3' : 'w-auto'}`}>
                                             {!isSearchExpanded ? (
@@ -332,10 +339,27 @@ const MainPropertyPage = () => {
                                             )}
                                         </div>
 
-                                        <button className="flex items-center gap-2 px-2 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50">
+                                        {/* <button className="flex items-center gap-2 px-2 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50">
                                             <FaFilterCircleDollar />
                                             <span>Filters</span>
+                                        </button> */}
+                                        <button
+                                            onClick={() => setModalOpen(true)}
+                                            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                                        >
+                                            <FiSettings className="text-gray-600" size={20} />
+                                            <span className="text-sm font-medium text-gray-700">Filters</span>
                                         </button>
+
+                                        {/* Filter Component Modal */}
+                                        <FilterComponent
+                                            modalOpen={modalOpen}
+                                            setModalOpen={setModalOpen}
+                                            activeSection={activeSection}
+                                            setActiveSection={setActiveSection}
+                                        />
+
+
 
                                         <div className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded-xl">
                                             <button className="px-2">Beds</button>
@@ -414,161 +438,161 @@ const MainPropertyPage = () => {
             </div>
         </LoadScript>
 
-//         <div className="min-h-screen bg-white p-2 relative">
-//     <LoadScript
-//         googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
-//         onLoad={() => setIsScriptLoaded(true)}
-//     >
-//         {/* Absolute positioned header and filter section */}
-//         <div className="absolute top-0 left-0 right-0 z-10 p-2">
-//             <div className='max-w-7xl mx-auto px-2'>
-//                 {/* Header with View Toggle - Now with glassmorphism effect */}
-//                 <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-sm mb-2">
-//                     <div className="flex justify-between items-center p-3">
-//                         <h1 className="text-2xl font-semibold">
-//                             {getHeading(properties, projects)}
-//                         </h1>
+        //         <div className="min-h-screen bg-white p-2 relative">
+        //     <LoadScript
+        //         googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
+        //         onLoad={() => setIsScriptLoaded(true)}
+        //     >
+        //         {/* Absolute positioned header and filter section */}
+        //         <div className="absolute top-0 left-0 right-0 z-10 p-2">
+        //             <div className='max-w-7xl mx-auto px-2'>
+        //                 {/* Header with View Toggle - Now with glassmorphism effect */}
+        //                 <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-sm mb-2">
+        //                     <div className="flex justify-between items-center p-3">
+        //                         <h1 className="text-2xl font-semibold">
+        //                             {getHeading(properties, projects)}
+        //                         </h1>
 
-//                         <div className='flex gap-2 items-center'>
-//                             <select
-//                                 value={sortBy}
-//                                 onChange={(e) => setSortBy(e.target.value)}
-//                                 className="px-4 py-2 bg-white/80 border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap"
-//                             >
-//                                 <option value="price-low">Price/Units: Low to High</option>
-//                                 <option value="price-high">Price/Units: High to Low</option>
-//                             </select>
-//                             <div className="flex items-center gap-2">
-//                                 <button
-//                                     onClick={() => handleViewChange('list')}
-//                                     className={`p-2 rounded-lg ${view === 'list' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
-//                                 >
-//                                     <List size={20} />
-//                                 </button>
-//                                 <button
-//                                     onClick={() => handleViewChange('map')}
-//                                     className={`p-2 rounded-lg ${view === 'map' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
-//                                 >
-//                                     <Map size={20} />
-//                                 </button>
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>
+        //                         <div className='flex gap-2 items-center'>
+        //                             <select
+        //                                 value={sortBy}
+        //                                 onChange={(e) => setSortBy(e.target.value)}
+        //                                 className="px-4 py-2 bg-white/80 border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap"
+        //                             >
+        //                                 <option value="price-low">Price/Units: Low to High</option>
+        //                                 <option value="price-high">Price/Units: High to Low</option>
+        //                             </select>
+        //                             <div className="flex items-center gap-2">
+        //                                 <button
+        //                                     onClick={() => handleViewChange('list')}
+        //                                     className={`p-2 rounded-lg ${view === 'list' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
+        //                                 >
+        //                                     <List size={20} />
+        //                                 </button>
+        //                                 <button
+        //                                     onClick={() => handleViewChange('map')}
+        //                                     className={`p-2 rounded-lg ${view === 'map' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
+        //                                 >
+        //                                     <Map size={20} />
+        //                                 </button>
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 </div>
 
-//                 {/* Filters Section - Also with glassmorphism */}
-//                 <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-sm">
-//                     <div className="p-3 space-y-4">
-//                         <div className="w-full">
-//                             <div className="relative w-full">
-//                                     {/* Rest of the filter UI remains the same as in the original code */}
-//                                     {/* ... (previous filter code) ... */}
-//                                     <div className="flex items-center gap-3 transition-all duration-300 ease-in-out">
-//                                                              <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-1/3' : 'w-auto'}`}>
-//                                                                  {!isSearchExpanded ? (
-//                                                                      <button
-//                                                                          onClick={() => setIsSearchExpanded(true)}
-//                                                                          className="flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300"
-//                                                                      >
-//                                                                          <Search size={16} />
-//                                                                          <span>Easy search</span>
-//                                                                      </button>
-//                                                                  ) : (
-//                                                                      <div className="relative w-full">
-//                                                                          <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-//                                                                          <input
-//                                                                              type="text"
-//                                                                              placeholder="Search by name or address..."
-//                                                                              value={searchQuery}
-//                                                                              onChange={(e) => setSearchQuery(e.target.value)}
-//                                                                              onBlur={() => {
-//                                                                                  if (!searchQuery) {
-//                                                                                      setIsSearchExpanded(false);
-//                                                                                  }
-//                                                                              }}
-//                                                                              className="w-full pl-10 pr-4 py-2 bg-white rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-700"
-//                                                                              autoFocus
-//                                                                          />
-//                                                                      </div>
-//                                                                  )}
-//                                                              </div>
+        //                 {/* Filters Section - Also with glassmorphism */}
+        //                 <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-sm">
+        //                     <div className="p-3 space-y-4">
+        //                         <div className="w-full">
+        //                             <div className="relative w-full">
+        //                                     {/* Rest of the filter UI remains the same as in the original code */}
+        //                                     {/* ... (previous filter code) ... */}
+        //                                     <div className="flex items-center gap-3 transition-all duration-300 ease-in-out">
+        //                                                              <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-1/3' : 'w-auto'}`}>
+        //                                                                  {!isSearchExpanded ? (
+        //                                                                      <button
+        //                                                                          onClick={() => setIsSearchExpanded(true)}
+        //                                                                          className="flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300"
+        //                                                                      >
+        //                                                                          <Search size={16} />
+        //                                                                          <span>Easy search</span>
+        //                                                                      </button>
+        //                                                                  ) : (
+        //                                                                      <div className="relative w-full">
+        //                                                                          <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        //                                                                          <input
+        //                                                                              type="text"
+        //                                                                              placeholder="Search by name or address..."
+        //                                                                              value={searchQuery}
+        //                                                                              onChange={(e) => setSearchQuery(e.target.value)}
+        //                                                                              onBlur={() => {
+        //                                                                                  if (!searchQuery) {
+        //                                                                                      setIsSearchExpanded(false);
+        //                                                                                  }
+        //                                                                              }}
+        //                                                                              className="w-full pl-10 pr-4 py-2 bg-white rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-700"
+        //                                                                              autoFocus
+        //                                                                          />
+        //                                                                      </div>
+        //                                                                  )}
+        //                                                              </div>
 
-//                                                              <button className="flex items-center gap-2 px-2 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50">
-//                                                                  <FaFilterCircleDollar />
-//                                                                  <span>Filters</span>
-//                                                              </button>
+        //                                                              <button className="flex items-center gap-2 px-2 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50">
+        //                                                                  <FaFilterCircleDollar />
+        //                                                                  <span>Filters</span>
+        //                                                              </button>
 
-//                                                              <div className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded-xl">
-//                                                                  <button className="px-2">Beds</button>
-//                                                                  <button className="px-2 bg-white border border-none hover:text-red-400">1</button>
-//                                                                  <button className="px-2 bg-white border border-none hover:text-red-400">2</button>
-//                                                                  <button className="px-2 bg-white border border-none hover:text-red-400">3</button>
-//                                                                  <button className="px-2 bg-white border border-none hover:text-red-400">4+</button>
-//                                                              </div>
+        //                                                              <div className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded-xl">
+        //                                                                  <button className="px-2">Beds</button>
+        //                                                                  <button className="px-2 bg-white border border-none hover:text-red-400">1</button>
+        //                                                                  <button className="px-2 bg-white border border-none hover:text-red-400">2</button>
+        //                                                                  <button className="px-2 bg-white border border-none hover:text-red-400">3</button>
+        //                                                                  <button className="px-2 bg-white border border-none hover:text-red-400">4+</button>
+        //                                                              </div>
 
-//                                                              <div className={`flex items-center gap-3 transition-all duration-300 ease-in-out overflow-hidden ${isSearchExpanded
-//                                                                  ? 'w-0 opacity-0 invisible'
-//                                                                  : 'w-auto opacity-100 visible'
-//                                                                  }`}>
-//                                                                  <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-//                                                                      Price Range
-//                                                                  </button>
-//                                                                  <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-//                                                                      Bathroom
-//                                                                  </button>
-//                                                                  <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-//                                                                      Floor
-//                                                                  </button>
-//                                                              </div>
+        //                                                              <div className={`flex items-center gap-3 transition-all duration-300 ease-in-out overflow-hidden ${isSearchExpanded
+        //                                                                  ? 'w-0 opacity-0 invisible'
+        //                                                                  : 'w-auto opacity-100 visible'
+        //                                                                  }`}>
+        //                                                                  <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
+        //                                                                      Price Range
+        //                                                                  </button>
+        //                                                                  <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
+        //                                                                      Bathroom
+        //                                                                  </button>
+        //                                                                  <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
+        //                                                                      Floor
+        //                                                                  </button>
+        //                                                              </div>
 
-//                                                              <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-//                                                                  Purpose
-//                                                              </button>
-//                                                              <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-//                                                                  Amenities
-//                                                              </button>
-//                                                              <select
-//                                                                  value={filterType}
-//                                                                  onChange={(e) => setFilterType(e.target.value)}
-//                                                                  className="px-4 py-2 text-black bg-white border border-gray-300 rounded-xl hover:bg-gray-50"
-//                                                              >
-//                                                                  <option value="all">All Types</option>
-//                                                                  <option value="apartment">Apartments</option>
-//                                                                  <option value="house">Houses</option>
-//                                                                  <option value="office">Offices</option>
-//                                                                  <option value="residential">Buildings</option>
-//                                                              </select>
-                                                    
-//                                 </div>
-//                             </div>
-//                         </div>
-//                         <div className="flex items-center gap-2 text-sm">
-//                             <SlidersHorizontal size={16} className="text-gray-400" />
-//                             <span className="text-gray-600">Active filters:</span>
-//                             {/* Active filters display remains the same */}
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
+        //                                                              <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
+        //                                                                  Purpose
+        //                                                              </button>
+        //                                                              <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
+        //                                                                  Amenities
+        //                                                              </button>
+        //                                                              <select
+        //                                                                  value={filterType}
+        //                                                                  onChange={(e) => setFilterType(e.target.value)}
+        //                                                                  className="px-4 py-2 text-black bg-white border border-gray-300 rounded-xl hover:bg-gray-50"
+        //                                                              >
+        //                                                                  <option value="all">All Types</option>
+        //                                                                  <option value="apartment">Apartments</option>
+        //                                                                  <option value="house">Houses</option>
+        //                                                                  <option value="office">Offices</option>
+        //                                                                  <option value="residential">Buildings</option>
+        //                                                              </select>
 
-//         {/* MapPage content - now with top padding to accommodate the overlay */}
-//         {isScriptLoaded && (
-//             <MapPage
-//                 className="" // Adjust this value based on your header and filter heights
-//                 onViewChange={handleViewChange}
-//                 center={center}
-//                 setCenter={setCenter}
-//                 radius={radius}
-//                 setRadius={setRadius}
-//                 properties={properties || []}
-//                 projects={projects || []}
-//                 buildings={buildings || []}
-//                 isLoading={isLoading}
-//             />
-//         )}
-//     </LoadScript>
-// </div>
+        //                                 </div>
+        //                             </div>
+        //                         </div>
+        //                         <div className="flex items-center gap-2 text-sm">
+        //                             <SlidersHorizontal size={16} className="text-gray-400" />
+        //                             <span className="text-gray-600">Active filters:</span>
+        //                             {/* Active filters display remains the same */}
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+
+        //         {/* MapPage content - now with top padding to accommodate the overlay */}
+        //         {isScriptLoaded && (
+        //             <MapPage
+        //                 className="" // Adjust this value based on your header and filter heights
+        //                 onViewChange={handleViewChange}
+        //                 center={center}
+        //                 setCenter={setCenter}
+        //                 radius={radius}
+        //                 setRadius={setRadius}
+        //                 properties={properties || []}
+        //                 projects={projects || []}
+        //                 buildings={buildings || []}
+        //                 isLoading={isLoading}
+        //             />
+        //         )}
+        //     </LoadScript>
+        // </div>
     );
 };
 

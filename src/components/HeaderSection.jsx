@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { X, ChevronDown, Check } from 'lucide-react';
 import { QRCode } from 'antd';
 import { Heart, Camera } from 'lucide-react';
+import GalleryGrid from './CategoryPreview';
+import ImagePreview from './ImagesPreview';
 
 export const ContactButton = () => {
     const [step, setStep] = useState(1);
@@ -23,7 +25,7 @@ export const ContactButton = () => {
     };
 
     return (
-        <div className="flex flex-col items-start">
+        <div className="">
             {step === 1 && (
                 <button
                     onClick={handleClick}
@@ -36,14 +38,15 @@ export const ContactButton = () => {
             {step === 2 && (
                 <button
                     onClick={handleClick}
-                    className="flex items-center gap-4 pl-4 pr-7 py-0 bg-black/75 text-white rounded-lg hover:bg-black/80 transition-colors"
+                    // className="flex items-center gap-4 px-6 py-3 bg-black/75 text-white rounded-lg hover:bg-black/80 transition-colors"
+                    className='flex gap-4 items-center px-6 py-3  bg-black/75 text-white font-medium rounded-lg hover:bg-black transition-colors'
                 >
                     <QRCode
                         value={phoneNumber}
-                        size={56}
+                        size={28}
                         color="white"
                         backgroundColor="transparent"
-                        bordered="false"
+                        bordered={false}
                     />
                     <span className="font-medium">{phoneNumber}</span>
                 </button>
@@ -58,41 +61,7 @@ export const ConsultationModal = () => {
     const [selectedTime, setSelectedTime] = useState('As soon as possible');
     const [phoneNumber, setPhoneNumber] = useState('');
 
-    // // Generate time slots for today and tomorrow
-    // const generateTimeSlots = () => {
-    //     const slots = ['As soon as possible'];
-    //     const intervals = [];
-
-    //     // Today's slots
-    //     for (let hour = 0; hour < 24; hour++) {
-    //         for (let minute = 0; minute < 60; minute += 30) {
-    //             const startTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-    //             const endHour = minute === 30 ? hour : hour + 1;
-    //             const endMinute = minute === 30 ? '00' : '30';
-    //             const endTime = `${String(endHour % 24).padStart(2, '0')}:${endMinute}`;
-    //             intervals.push(`${startTime} – ${endTime}`);
-    //         }
-    //     }
-
-    //     // Add today's slots
-    //     const todaySlots = intervals.slice(0, 24); // First 12 hours
-    //     todaySlots.forEach(slot => slots.push(slot));
-
-    //     // Add tomorrow's slots
-    //     const tomorrowSlots = intervals.slice(0, 24); // First 12 hours
-    //     tomorrowSlots.forEach(slot => slots.push(`Tomorrow ${slot}`));
-
-    //     // Add day after tomorrow slots
-    //     const dayAfterSlots = intervals.slice(0, 24); // Remaining slots up to 48 hours
-    //     const dayAfter = new Date();
-    //     dayAfter.setDate(dayAfter.getDate() + 2);
-    //     const dayAfterStr = dayAfter.toLocaleDateString('en-US', { weekday: 'long' });
-    //     dayAfterSlots.forEach(slot => slots.push(`${dayAfterStr} ${slot}`));
-
-    //     return slots;
-    // };
-
-    const generateTimeSlots = () => {
+        const generateTimeSlots = () => {
         const slots = ['As soon as possible'];
         const intervals = [];
 
@@ -145,11 +114,11 @@ export const ConsultationModal = () => {
     };
 
     return (
-        <div className="font-sans">
+        <div className="">
             {/* Trigger Button */}
             <button
                 onClick={toggleModal}
-                className="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-lg transition-colors"
+                className="px-6 py-3 bg-yellow-400 text-black font-medium rounded-lg hover:bg-yellow-500 transition-colors"
             >
                 Callback
             </button>
@@ -261,6 +230,7 @@ export const ConsultationModal = () => {
         </div>
     );
 };
+
 function HeaderSection({ details }) {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
     const [hasBackground, setHasBackground] = useState(false);
@@ -284,19 +254,22 @@ function HeaderSection({ details }) {
 
     
     // Calculate min and max prices from connected properties
-    const prices = details?.connectedProperties?.map(property => property.price) || [];
-    const minPrice = Math.min(...prices.filter(price => price > 0));
-    const maxPrice = Math.max(...prices);
+    const prices = details?.connectedProperties
+        ?.map(property => property.price)
+        ?.filter(price => price > 0) || [];
+
+    const minPrice = prices.length ? Math.min(...prices) : null;
+    const maxPrice = prices.length ? Math.max(...prices) : null;
 
     // Format price in Indian currency format (lakhs and crores)
     const formatIndianPrice = (price) => {
-        if (!price) return "0";
+        if (price == null || price <= 0) return null; // Handle invalid or zero prices
 
         // Convert to string and handle decimals
         const priceStr = Math.floor(price).toString();
 
         // Handle numbers less than 1000
-        if (priceStr.length <= 3) return priceStr;
+        if (priceStr.length <= 3) return `₹${priceStr}`;
 
         // Handle numbers >= 1000
         const lastThree = priceStr.substring(priceStr.length - 3);
@@ -317,22 +290,26 @@ function HeaderSection({ details }) {
 
     // Calculate price per square foot
     const calculatePricePerSqFt = () => {
-        const pricesPerSqFt = details?.connectedProperties?.map(property => {
-            if (property.price && property.area) {
-                return Math.round(property.price / property.area);
-            }
-            return 0;
-        }).filter(price => price > 0) || [];
+        const pricesPerSqFt = details?.connectedProperties
+            ?.map(property => {
+                if (property.price > 0 && property.area > 0) {
+                    return Math.round(property.price / property.area);
+                }
+                return null;
+            })
+            ?.filter(price => price != null) || [];
 
-        return {
-            min: Math.min(...pricesPerSqFt),
-            max: Math.max(...pricesPerSqFt)
-        };
+        return pricesPerSqFt.length
+            ? {
+                min: Math.min(...pricesPerSqFt),
+                max: Math.max(...pricesPerSqFt),
+            }
+            : { min: null, max: null };
     };
 
     // Format price per square foot
     const formatPricePerSqFt = (price) => {
-        if (!price) return "0";
+        if (price == null || price <= 0) return null; // Handle invalid or zero prices
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
@@ -396,9 +373,9 @@ function HeaderSection({ details }) {
 
               {/* Status Tags */}
               <div className="flex gap-2 mb-4 flex-wrap">
-                  <span className="capitalize px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
+                 { details?.developmentStatus &&  <span className="capitalize px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
                       {details?.developmentStatus}
-                  </span>
+                  </span>}
                   {/* <span className="px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
                                 comfort
                             </span> */}
@@ -406,22 +383,25 @@ function HeaderSection({ details }) {
 
               {/* Building Title */}
               <div className="flex items-center gap-2 mb-3 flex-wrap">
-                  <h1 className="capitalize text-7xl  font-bold">{details?.type} "{details?.name}"</h1>
-                  <div className="flex items-center">
+                  <h1 className="capitalize text-7xl  font-bold">{details?.type && `${details?.type}`} {details?.name && `'${details?.name}'`}</h1>
+                  {/* <div className="flex items-center">
                       <span className="text-yellow-400 text-2xl">⭐</span>
                       <span className="text-2xl ml-1">{building.rating}</span>
-                  </div>
+                  </div> */}
               </div>
 
               {/* Price Range */}
               <div className="mb-10">
-                  <div className="text-4xl font-bold">
-                      {formatIndianPrice(minPrice)} — {formatIndianPrice(maxPrice)}
-                  </div>
-                  <div className="text-sm opacity-80">
-                      ₹{formatPricePerSqFt(pricePerSqFt.min)} - ₹{formatPricePerSqFt(pricePerSqFt.max)} per sq.ft
-                  </div>
-
+                  {minPrice != null && maxPrice != null && (
+                      <div className="text-4xl font-bold">
+                          {formatIndianPrice(minPrice)} — {formatIndianPrice(maxPrice)}
+                      </div>
+                  )}
+                  {pricePerSqFt.min != null && pricePerSqFt.max != null && (
+                      <div className="text-sm opacity-80">
+                          ₹{formatPricePerSqFt(pricePerSqFt.min)} - ₹{formatPricePerSqFt(pricePerSqFt.max)} per sq.ft
+                      </div>
+                  )}
               </div>
 
               {/* Location */}
@@ -433,25 +413,17 @@ function HeaderSection({ details }) {
                         </div> */}
 
               {/* Action Buttons */}
-              <div className="flex gap-4 mb-6 flex-wrap">
-                  {/* <button className="px-6 py-3 bg-yellow-400 text-black font-medium rounded-lg hover:bg-yellow-500 transition-colors">
-                                Developer contacts
-                            </button> */}
-                  <ContactButton />
-                  {/* <button className="px-12 py-2 bg-white text-black font-medium rounded-lg hover:bg-gray-100 transition-colors">
-                                Callback
-                            </button> */}
+              <div className="flex gap-4 mb-6 flex-wrap items-center">
+                 { details?.contactNumber && <ContactButton />}
+                  
                   <ConsultationModal />
-                  <button className="p-3 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors">
+                  {/* <button className="px-3 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors">
                       <Heart className="w-6 h-6" />
-                  </button>
+                  </button> */}
               </div>
 
               {/* Photo Count */}
-              <button className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit">
-                  <Camera className="w-5 h-5" />
-                  <span>{building.photos} photos</span>
-              </button>
+              {details?.galleryList?.length > 0 && <ImagePreview images={details?.galleryList} />}
 
               {/* Developer Info */}
               <div className="flex items-center gap-4 my-8 pb-4 flex-wrap">

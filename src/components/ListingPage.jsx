@@ -430,13 +430,27 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                 {/* Content Section */}
                 <div className="py-2 px-1">
                     {/* Price */}
-                    <div className="flex items-baseline gap-2">
-                        <span className="text-xl font-bold text-gray-900">
-                            {item?.price}
-                        </span>
-                        <span className="text-sm text-gray-600 font-medium">
-                            {item?.priceUnit}
-                        </span>
+                    <div className="flex items-baseline justify-between gap-2">
+                        <div>
+                            <span className="text-xl font-bold text-gray-900">
+                                {item?.price} {" "}
+                            </span>
+
+                            <span className="text-md text-gray-600 font-medium">
+                                {item?.priceUnit}
+                            </span>
+                        </div>
+
+                        {/* Area */}
+                        <div className="flex items-center space-x-1">
+                            <span className="text-sm font-medium text-gray-800">
+                                {item?.area}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                                {item?.areaUnit || "sqft"}
+                            </span>
+                        </div>
+
                     </div>
 
                     {/* Property Title */}
@@ -464,16 +478,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
                     {/* Property Details */}
                     <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-                        {/* Area */}
-                        <div className="flex items-center space-x-1">
-                            <span className="text-sm font-medium text-gray-800">
-                                {item?.area}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                                {item?.areaUnit || "sqft"}
-                            </span>
-                        </div>
-
+                        
                         {/* Amenities */}
                         <div className="flex items-center space-x-2">
                             <span className="text-sm text-gray-700">Amenities</span>

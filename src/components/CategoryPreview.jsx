@@ -294,7 +294,7 @@ const GalleryGrid = ({ gallery = [] }) => {
                             <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-lg" /> {/* Added rounded-lg to overlay */}
 
                             <p className="absolute bottom-2 right-4 text-md text-gray-800 bg-white px-2 rounded-sm">
-                                {category.images.length}+ photos
+                                {category?.images?.length}+ photos
                             </p>
                             <h3 className="absolute bottom-2 left-4 text-md  bg-white px-2 rounded-sm">{category.category}</h3>
                         </div>

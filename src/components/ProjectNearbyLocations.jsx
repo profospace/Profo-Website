@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Map, Building2, GraduationCap, ShoppingBag, Train, Film, Building } from 'lucide-react';
+import HeadingCommon from './HeadingCommon';
 
 const ProjectNearbyLocations = ({ nearbyLocations }) => {
     const [selectedType, setSelectedType] = useState('ALL');
@@ -25,9 +26,11 @@ const ProjectNearbyLocations = ({ nearbyLocations }) => {
     return (
         <div className="w-full max-w-7xl mx-auto px-4 py-6 bg-white">
             <div className="mb-4">
-                <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                {/* <h2 className="text-3xl font-bold text-gray-800 mb-4">
                     Nearby Locations
-                </h2>
+                </h2> */}
+                <HeadingCommon dual="true" title='Nearby Locations' />
+
                 <p className="text-gray-600 max-w-2xl">
                     Discover what's around your future home
                 </p>
