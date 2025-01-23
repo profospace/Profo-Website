@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState , useRef} from 'react'
 import { useSelector } from 'react-redux';
 import { X, ChevronDown, Check } from 'lucide-react';
 import { QRCode } from 'antd';
@@ -234,6 +234,7 @@ export const ConsultationModal = () => {
 function HeaderSection({ details }) {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
     const [hasBackground, setHasBackground] = useState(false);
+    const imagePreviewRef = useRef(null);
     // Mock data - in real app would come from props
     const building = {
         name: "Residential complex \"Eco Bunino\"",
@@ -423,7 +424,12 @@ function HeaderSection({ details }) {
               </div>
 
               {/* Photo Count */}
-              {details?.galleryList?.length > 0 && <ImagePreview images={details?.galleryList} />}
+              <button className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit" onClick={() => imagePreviewRef.current.openGallery()}>
+                  <Camera className="w-5 h-5" />
+                  <span>{details?.galleryList?.length} photos</span>
+                  <ImagePreview ref={imagePreviewRef} images={details?.galleryList} />
+                  
+              </button>
 
               {/* Developer Info */}
               <div className="flex items-center gap-4 my-8 pb-4 flex-wrap">

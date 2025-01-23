@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import EMICalculator from '../components/EMIcalculator';
 import { IoIosArrowRoundForward } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { getSingleBuilding } from '../redux/features/Buildings/buildingsSlice';
 import PropertyCard from '../components/PropertyCard';
 import PropertyListing from '../components/PropertyListingAccordion';
-import RealEstateListing from '../components/RealEstateListing';
+import RealEstateListing from '../components/PropertyContactCard';
 import BuildingContactCard from '../components/BuildingContactCard';
 import BuildingLCDParameters from '../components/BuildingLCDParameters';
 import GalleryList from '../components/GalleryList';
@@ -17,7 +17,7 @@ import HeadingCommon from '../components/HeadingCommon';
 
 function BuildingDetailPage() {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
-    
+
     const { buildingId } = useParams();
     const dispatch = useDispatch();
     const { buildingDetail } = useSelector(state => state.buildings)
@@ -79,9 +79,9 @@ function BuildingDetailPage() {
 
     const pricePerSqFt = calculatePricePerSqFt();
 
-     useEffect(() => {
-            dispatch(getSingleBuilding(buildingId));
-        }, [buildingId, dispatch]);
+    useEffect(() => {
+        dispatch(getSingleBuilding(buildingId));
+    }, [buildingId, dispatch]);
     useEffect(() => {
         dispatch(getSingleBuilding(buildingId));
     }, [buildingId, dispatch]);
@@ -108,13 +108,13 @@ function BuildingDetailPage() {
     ];
 
     return (
-       
+
 
         <div className="min-h-screen">
             {/* Main Layout Container */}
             <div className="relative">
                 {/* Header Section */}
-                <HeaderSection details={buildingDetail}/>
+                <HeaderSection details={buildingDetail} />
 
                 {/* Add spacer div to prevent content jump */}
                 {isTabsSticky && <div className="h-[64px]" />}
@@ -172,7 +172,7 @@ function BuildingDetailPage() {
                                 {/* Accordian Section  */}
                                 <PropertyListing />
 
-                                    {/* Location - Map */}
+                                {/* Location - Map */}
                                 <LocationLatLngMap latitude={buildingDetail?.location?.coordinates?.[0]} longitude={buildingDetail?.location?.coordinates?.[1]} />
 
                                 <div className="px-4">
@@ -187,9 +187,9 @@ function BuildingDetailPage() {
                                     <AskDeveloper />
                                 </div>
 
-                                
+
                             </div>
-                            
+
                         </main>
 
                         {/* Sidebar with Contact Card */}

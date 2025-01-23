@@ -6,7 +6,7 @@ import Home from './pages/Home';
 // const Home = lazy(() => import('./pages/Home'));
 const PropertiesPage = lazy(() => import('./pages/PropertiesPage'));
 const About = lazy(() => import('./pages/About'));
-const SinglePage = lazy(() => import('./pages/SinglePage'));
+const SinglePage = lazy(() => import('./pages/PropertyDetailPage'));
 // const Gallery = lazy(() => import('./pages/Gallery'));
 
 const MainPropertyPage = lazy(() => import('./pages/MainPropertyPage'));
