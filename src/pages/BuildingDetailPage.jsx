@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import EMICalculator from '../components/EMIcalculator';
-import { IoIosArrowRoundForward } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getSingleBuilding } from '../redux/features/Buildings/buildingsSlice';
 import PropertyCard from '../components/PropertyCard';
 import PropertyListing from '../components/PropertyListingAccordion';
-import RealEstateListing from '../components/PropertyContactCard';
 import BuildingContactCard from '../components/BuildingContactCard';
 import BuildingLCDParameters from '../components/BuildingLCDParameters';
 import GalleryList from '../components/GalleryList';
@@ -17,6 +15,7 @@ import HeadingCommon from '../components/HeadingCommon';
 
 function BuildingDetailPage() {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
+    const [activeSection, setActiveSection] = useState(null);
 
     const { buildingId } = useParams();
     const dispatch = useDispatch();
@@ -79,6 +78,40 @@ function BuildingDetailPage() {
 
     const pricePerSqFt = calculatePricePerSqFt();
 
+
+    // Create refs for each section
+    const sectionRefs = {
+        'Description': useRef(null),
+        'LeaveARequest': useRef(null),
+        'PropertyListing': useRef(null),
+        'Map': useRef(null),
+        'EmiCalculator': useRef(null),
+        'Gallery': useRef(null),
+        'AskTheDeveloper': useRef(null),
+        'ConnectedProperties': useRef(null)
+    };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY;
+            const offset = 200; // Adjust based on your header height
+
+            // Find the section currently in view
+            const currentSection = Object.entries(sectionRefs).find(([_, ref]) => {
+                if (!ref.current) return false;
+                const { top, bottom } = ref.current.getBoundingClientRect();
+                return top <= offset && bottom > offset;
+            });
+
+            if (currentSection) {
+                setActiveSection(currentSection[0]);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     useEffect(() => {
         dispatch(getSingleBuilding(buildingId));
     }, [buildingId, dispatch]);
@@ -98,15 +131,6 @@ function BuildingDetailPage() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const navigationTabs = [
-        'Mortgage',
-        'Apartments',
-        'Discounts and promotions',
-        'Description',
-        'Infrastructure',
-        'Construction progress',
-    ];
-
     return (
 
 
@@ -114,7 +138,7 @@ function BuildingDetailPage() {
             {/* Main Layout Container */}
             <div className="relative">
                 {/* Header Section */}
-                <HeaderSection details={buildingDetail} />
+                <HeaderSection details={buildingDetail} sectionRefs={sectionRefs} activeSection={activeSection} />
 
                 {/* Add spacer div to prevent content jump */}
                 {isTabsSticky && <div className="h-[64px]" />}
@@ -125,65 +149,73 @@ function BuildingDetailPage() {
                         {/* Main Content Area */}
                         <main className="lg:col-span-8">
                             <div className="space-y-8">
-                                <BuildingLCDParameters />
+                                <div ref={sectionRefs['Description']}>
+                                    <BuildingLCDParameters />
+                                </div>
 
                                 {/* Request Section */}
-                                <div className="bg-gray-100 rounded-3xl overflow-hidden">
-                                    <div className="flex flex-col md:flex-row">
-                                        <div className="p-8 md:w-1/2 flex flex-col justify-center space-y-6">
-                                            <div className="flex items-center space-x-2">
-                                                <div className="bg-black rounded-full p-2">
-                                                    <span className="text-white text-xl">Я</span>
+                                <div ref={sectionRefs['LeaveARequest']}>
+                                    <div className="bg-gray-100 rounded-3xl overflow-hidden">
+                                        <div className="flex flex-col md:flex-row">
+                                            <div className="p-8 md:w-1/2 flex flex-col justify-center space-y-6">
+                                                <div className="flex items-center space-x-2">
+                                                    <div className="bg-black rounded-full p-2">
+                                                        <span className="text-white text-xl">Я</span>
+                                                    </div>
+                                                    <span className="font-medium text-lg">Недвижимость</span>
                                                 </div>
-                                                <span className="font-medium text-lg">Недвижимость</span>
+
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <span className="bg-yellow-400 text-black px-4 py-2 rounded-full text-2xl font-bold inline-block">
+                                                            NEW BUILDINGS
+                                                        </span>
+                                                    </div>
+                                                    <h2 className="text-4xl font-bold leading-tight text-gray-800">
+                                                        TO SUIT YOUR BUDGET
+                                                    </h2>
+                                                    <p className="text-gray-600 text-lg">
+                                                        You provide your wishes, we provide suitable options
+                                                    </p>
+                                                    <button className="bg-white text-gray-800 px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 hover:text-white transition-colors">
+                                                        Leave a request
+                                                    </button>
+                                                </div>
                                             </div>
 
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <span className="bg-yellow-400 text-black px-4 py-2 rounded-full text-2xl font-bold inline-block">
-                                                        NEW BUILDINGS
-                                                    </span>
+                                            <div className="md:w-1/2">
+                                                <div className="h-full relative">
+                                                    <img
+                                                        src="https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/2ecf084f93f58492379e90f0f65258f1.png"
+                                                        alt="Cozy living room"
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-brown-300/20 to-transparent" />
                                                 </div>
-                                                <h2 className="text-4xl font-bold leading-tight text-gray-800">
-                                                    TO SUIT YOUR BUDGET
-                                                </h2>
-                                                <p className="text-gray-600 text-lg">
-                                                    You provide your wishes, we provide suitable options
-                                                </p>
-                                                <button className="bg-white text-gray-800 px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 hover:text-white transition-colors">
-                                                    Leave a request
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <div className="md:w-1/2">
-                                            <div className="h-full relative">
-                                                <img
-                                                    src="https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/2ecf084f93f58492379e90f0f65258f1.png"
-                                                    alt="Cozy living room"
-                                                    className="w-full h-full object-cover"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-brown-300/20 to-transparent" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Accordian Section  */}
-                                <PropertyListing />
+                                <div ref={sectionRefs['PropertyListing']}>
+                                    <PropertyListing />
+                                </div>
 
-                                {/* Location - Map */}
-                                <LocationLatLngMap latitude={buildingDetail?.location?.coordinates?.[0]} longitude={buildingDetail?.location?.coordinates?.[1]} />
+                                <div ref={sectionRefs['Map']}>
+                                    {/* Location - Map */}
+                                    <LocationLatLngMap latitude={buildingDetail?.location?.coordinates?.[0]} longitude={buildingDetail?.location?.coordinates?.[1]} />
+                                </div>
 
-                                <div className="px-4">
+                                <div className="px-4" ref={sectionRefs['EmiCalculator']}>
                                     <EMICalculator />
                                 </div>
 
-                                <div>
+                                <div ref={sectionRefs['Gallery']}>
                                     <GalleryList images={buildingDetail?.galleryList} />
                                 </div>
 
-                                <div>
+                                <div ref={sectionRefs['AskTheDeveloper']}>
                                     <AskDeveloper />
                                 </div>
 
@@ -200,7 +232,7 @@ function BuildingDetailPage() {
                         </aside>
                     </div>
                     {/* Display Connected Properties */}
-                    <div className="">
+                    <div className="" ref={sectionRefs['ConnectedProperties']}>
                         {/* <h1 className="text-xl font-semibold mb-4">Connected Properties</h1> */}
                         <HeadingCommon title='Connected Properties' dual="true" />
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
