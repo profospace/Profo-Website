@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSingleProject } from '../redux/features/Projects/projectsSlice'
 import { useParams } from 'react-router-dom'
@@ -23,7 +23,8 @@ import DownloadBrochures from '../components/DownloadBrochures'
 
 function ProjectDetailPage() {
   const { projectDetail } = useSelector(state => state.projects)
-  const dispatch = useDispatch()
+      const [activeSection, setActiveSection] = useState(null);
+    const dispatch = useDispatch()
   const { post_id } = useParams();
 
   // console.log(post_id)
@@ -49,13 +50,51 @@ function ProjectDetailPage() {
     return `₹${value}`; // Less than 1000, show full amount
   }
 
+  //1.a Create refs for each section
+      const sectionRefs = {
+          'Description': useRef(null),
+          'FloorPlans': useRef(null),
+          'ProjectOverview': useRef(null),
+          'Map': useRef(null),
+          'Specifications': useRef(null),
+          'Amenities': useRef(null),
+          'highlights': useRef(null),
+          'NearBy': useRef(null),
+          'Gallery': useRef(null),
+          'ConnectedProperties': useRef(null),
+          'AskTheDeveloper': useRef(null),
+          
+      };
+  
+      // 1.b
+      useEffect(() => {
+          const handleScroll = () => {
+              const scrollPosition = window.scrollY;
+              const offset = 200; // Adjust based on your header height
+  
+              // Find the section currently in view
+              const currentSection = Object.entries(sectionRefs).find(([_, ref]) => {
+                  if (!ref.current) return false;
+                  const { top, bottom } = ref.current.getBoundingClientRect();
+                  return top <= offset && bottom > offset;
+              });
+  
+              if (currentSection) {
+                  setActiveSection(currentSection[0]);
+              }
+          };
+  
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
 
 
   return (
     <div className="min-h-screen">
       {/* Header Section */}
       <div className="relative">
-        <HeaderSection details={projectDetail} />
+        <HeaderSection details={projectDetail} sectionRefs={sectionRefs} activeSection={activeSection} />
       </div>
 
       {/* Main content area with grid layout */}
@@ -64,7 +103,7 @@ function ProjectDetailPage() {
           {/* Left content area */}
           <div className="col-span-12 lg:col-span-8">
             {/* Project Info Section */}
-            <div className="max-w-4xl mx-auto p-4 py-12">
+            <div className="max-w-4xl mx-auto p-4 py-12" ref={sectionRefs['Description']}>
               {/* Header Section */}
               <div className="mb-6">
                 {/* New Launch Badge */}
@@ -141,19 +180,19 @@ function ProjectDetailPage() {
             </div>
 
             {/* Floor Plans */}
-            <div className="mb-8">
+            <div className="mb-8" ref={sectionRefs['FloorPlans']}>
               <h1 className="text-3xl font-semibold px-4">Floor Plans</h1>
               {projectDetail?.floorPlans?.length > 0 && (
                 <ProjectFloorPlan floorPlans={projectDetail?.floorPlans} />
               )}
             </div>
 
-            <div className="w-full mb-8">
+            <div className="w-full mb-8" ref={sectionRefs['ProjectOverview']}>
               <BuildingViewer config={buildingConfig} />
             </div>
 
             {/* Location Map */}
-            <div className="mb-8">
+            <div className="mb-8" ref={sectionRefs['Map']}>
               <LocationLatLngMap
                 latitude={projectDetail?.location?.coordinates?.coordinates?.[0]}
                 longitude={projectDetail?.location?.coordinates?.coordinates?.[1]}
@@ -163,32 +202,32 @@ function ProjectDetailPage() {
             
 
             {/* Specifications */}
-            <div className="mb-8">
+            <div className="mb-8" ref={sectionRefs['Specifications']}>
               <ProjectSpecificationCard specifications={projectDetail?.specification} />
             </div>
 
             {/* Amenities */}
-            <div className="mb-2">
+            <div className="mb-2" ref={sectionRefs['Amenities']}>
               <AmenitiesDisplay amenities={projectDetail?.amenities} />
             </div>
 
             {/* highlights */}
-            <div className="mb-2">
+            <div className="mb-2" ref={sectionRefs['highlights']}>
               <ProjectHighlights highlights={projectDetail?.highlights}/>
             </div>
             
             {/* nearbyLocations */}
-            <div className="mb-2">
+            <div className="mb-2" ref={sectionRefs['NearBy']}>
               <ProjectNearbyLocations nearbyLocations={projectDetail?.nearbyLocations}/>
             </div>
 
             {/* Gallery */}
-            <div className="mb-2">
+            <div className="mb-2" ref={sectionRefs['Gallery']}>
               <GalleryGrid gallery={projectDetail?.gallery} />
             </div>
 
             {/* Connected Properties */}
-            <div className="">
+            <div className="" ref={sectionRefs['ConnectedProperties']}>
               <h1 className="text-xl font-semibold mb-4">Connected Properties</h1>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                 {projectDetail?.connectedProperties?.length > 0 &&
@@ -200,7 +239,7 @@ function ProjectDetailPage() {
             </div>
 
             {/* Ask Developer Section */}
-            <div className="mb-8">
+            <div className="mb-8" ref={sectionRefs['AskTheDeveloper']}>
               <AskDeveloper />
             </div>
 

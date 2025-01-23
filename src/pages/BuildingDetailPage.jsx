@@ -79,7 +79,7 @@ function BuildingDetailPage() {
     const pricePerSqFt = calculatePricePerSqFt();
 
 
-    // Create refs for each section
+    //1.a Create refs for each section
     const sectionRefs = {
         'Description': useRef(null),
         'LeaveARequest': useRef(null),
@@ -91,6 +91,7 @@ function BuildingDetailPage() {
         'ConnectedProperties': useRef(null)
     };
 
+    // 1.b
     useEffect(() => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
