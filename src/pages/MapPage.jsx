@@ -1923,9 +1923,9 @@ const MapPage = ({
     };
 
     return (
-        <div className="w-full h-screen bg-gray-100">
+        <div className="w-full bg-gray-100">
             {/* Header */}
-            <div className="bg-white shadow-sm px-4 py-3 flex justify-between items-center">
+            <div className="bg-white shadow-sm px-4 py-2 flex justify-between items-center">
                 <h1 className="text-xl font-semibold">Map View</h1>
                 <div className="flex items-center gap-4">
                     {/* Search Bar */}

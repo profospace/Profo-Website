@@ -301,17 +301,15 @@ import {
     CalendarClock,
     ArrowUpDown,
     Search, 
-    SlidersHorizontal
+    SlidersHorizontal,
+    Heart
 } from 'lucide-react';
 import { FaFilter } from 'react-icons/fa';
 
-const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading = false, onViewChange }) => {
+const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading = false, onViewChange, sortBy, filterType, searchQuery }) => {
     const [viewType, setViewType] = useState('list');
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
-    const [sortBy, setSortBy] = useState('price-low');
-    const [filterType, setFilterType] = useState('all');
-    const [searchQuery, setSearchQuery] = useState('');
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     
 
@@ -363,172 +361,127 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
     const PropertyCard = ({ item }) => {
         const isProject = 'overview' in item;
-        const isBuilding = 'buildingId' in item;
 
         const getPropertyIcon = (type) => {
             switch (type?.toLowerCase()) {
                 case 'apartment':
-                    return <Building size={14} className="text-blue-500" />;
+                    return <Building size={16} className="text-blue-500" />;
                 case 'house':
-                    return <Home size={14} className="text-green-500" />;
+                    return <Home size={16} className="text-green-500" />;
                 case 'office':
-                    return <Building size={14} className="text-purple-500" />;
+                    return <Building size={16} className="text-purple-500" />;
                 case 'residential':
-                    return <Building size={14} className="text-orange-500" />;
+                    return <Building size={16} className="text-orange-500" />;
                 default:
-                    return <MapPin size={14} className="text-red-500" />;
+                    return <MapPin size={16} className="text-red-500" />;
             }
         };
 
-        if (isBuilding) {
-            return (
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div className="aspect-video bg-gray-200 relative">
-                        {item?.galleryList?.[0] ? (
-                            <img
-                                src={item.galleryList[0]}
-                                alt={item.name}
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                                <Building size={40} className="text-gray-400" />
-                            </div>
-                        )}
-                        <div className="absolute top-2 left-2">
-                            <div className="px-2 py-1 bg-white/90 rounded-full text-sm font-medium flex items-center gap-1">
-                                {getPropertyIcon(item.type)}
-                                <span>Building</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="p-4 space-y-4">
-                        <div>
-                            <h3 className="font-semibold text-lg">{item.name}</h3>
-                            <p className="text-gray-600 text-sm mt-1">{item.frontRoad}</p>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <div className="space-y-1">
-                                <div className="text-sm text-gray-600">Available Flats</div>
-                                <div className="font-semibold">{item.numberOfFlatsAvailable} units</div>
-                            </div>
-                            <div className="flex items-center gap-2 text-gray-600">
-                                <Building size={18} />
-                                <span>{item.totalFloors} Floors</span>
-                            </div>
-                        </div>
-                        <div className="pt-2 border-t">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Users size={18} className="text-gray-500" />
-                                    <span>{item.totalProperties} Total Units</span>
-                                </div>
-                                <span className={`px-2 py-1 rounded-full text-sm ${item.developmentStatus === 'running'
-                                        ? 'bg-blue-100 text-blue-600'
-                                        : 'bg-green-100 text-green-600'
-                                    }`}>
-                                    {item.developmentStatus}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
         return (
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="aspect-video bg-gray-200 relative">
+            <div className="bg-white overflow-hidden transition-all duration-300  transform hover:-translate-y-2 max-w-sm w-full mx-auto">
+                {/* Image Container */}
+                <div className="relative aspect-[4/3] overflow-hidden">
+                    {/* Property Image */}
                     {item?.galleryList?.[0] || (isProject && item?.floorPlans?.[0]?.image) ? (
                         <img
                             src={item?.galleryList?.[0] || item?.floorPlans[0].image}
                             alt={item?.post_title || item?.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-110"
                         />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                            <Building size={40} className="text-gray-400" />
+                            <Building size={48} className="text-gray-400" />
                         </div>
                     )}
-                    <div className="absolute top-2 left-2">
-                        <div className="px-2 py-1 bg-white/90 rounded-full text-sm font-medium flex items-center gap-1">
+
+                    {/* Top Left Badge */}
+                    <div className="absolute top-3 left-4">
+                        <div className="flex items-center bg-white/90 rounded-full px-3 py-1 shadow-md">
                             {isProject ? (
                                 <>
-                                    <MapPin size={14} className="text-red-500" />
-                                    <span>Project</span>
+                                    <MapPin size={16} className="text-red-500 mr-2" />
+                                    <span className="text-sm font-medium text-gray-800">Project</span>
                                 </>
                             ) : (
                                 <>
                                     {getPropertyIcon(item?.type_name)}
-                                    <span>{item?.type_name}</span>
+                                    <span className="text-sm font-medium text-gray-800 ml-2">{item?.type_name}</span>
                                 </>
                             )}
                         </div>
                     </div>
-                </div>
-                <div className="p-4 space-y-4">
-                    <div>
-                        <h3 className="font-semibold text-lg">
-                            {item?.post_title || item?.name}
-                        </h3>
-                        <p className="text-gray-600 text-sm mt-1">
-                            {item?.address || item?.location?.address}
-                        </p>
+
+                    {/* Bottom Left BHK Badge */}
+                    <div className="absolute bottom-2 left-4">
+                        <div className=" bg-white/90 rounded-full px-3 py-1 shadow-md text-xs font-semibold">
+                            {item?.bedrooms} BHK
+                        </div>
                     </div>
-                    {isProject ? (
-                        <>
-                            <div className="flex justify-between items-center">
-                                <div className="space-y-1">
-                                    <div className="text-sm text-gray-600">Price Range</div>
-                                    <div className="font-semibold flex items-center gap-1">
-                                        <IndianRupee size={14} />
-                                        {formatPrice(item.overview.priceRange.min)} - {formatPrice(item.overview.priceRange.max)}
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2 text-gray-600">
-                                    <Users size={18} />
-                                    <span>{item?.overview.totalUnits} Units</span>
-                                </div>
-                            </div>
-                            <div className="pt-2 border-t">
-                                <div className="flex gap-2 flex-wrap">
-                                    {item?.floorPlans.slice(0, 3).map((plan, idx) => (
-                                        <span key={idx} className="px-2 py-1 bg-gray-100 rounded-full text-sm">
-                                            {plan.name}
-                                        </span>
-                                    ))}
-                                    {item?.floorPlans.length > 3 && (
-                                        <span className="px-2 py-1 bg-gray-100 rounded-full text-sm">
-                                            +{item?.floorPlans.length - 3} more
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                            <div className="flex justify-between items-center">
-                                <div className="font-semibold text-lg flex items-center gap-1 text-blue-600">
-                                    <IndianRupee size={16} />
-                                    {formatPrice(item.price)}
-                                </div>
-                                <div className="flex items-center gap-4 text-gray-600">
-                                    <div className="flex items-center gap-1">
-                                        <Bed size={18} />
-                                        <span>{item?.bedrooms}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <Bath size={18} />
-                                        <span>{item?.bathrooms}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-2 pt-2 border-t">
-                                <Grid size={18} className="text-gray-500" />
-                                <span>{item?.carpetArea} sq.ft</span>
-                            </div>
-                        </>
-                    )}
+
+                    {/* Favorite Button */}
+                    <button className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md hover:bg-white hover:shadow-lg transition-all">
+                        <Heart
+                            size={20}
+                            className="text-gray-500 hover:text-red-500 transition-colors"
+                        />
+                    </button>
+                </div>
+
+                {/* Content Section */}
+                <div className="py-2 px-1">
+                    {/* Price */}
+                    <div className="flex items-baseline gap-2">
+                        <span className="text-xl font-bold text-gray-900">
+                            {item?.price}
+                        </span>
+                        <span className="text-sm text-gray-600 font-medium">
+                            {item?.priceUnit}
+                        </span>
+                    </div>
+
+                    {/* Property Title */}
+                    <h3 className="text-md font-semibold text-gray-800 truncate">
+                        {item?.post_title}
+                    </h3>
+
+                    {/* Location */}
+                    <div className="flex items-center text-gray-600 space-x-2 mb-2">
+                        <MapPin size={16} />
+                        <span className="text-sm truncate max-w-[200px]">
+                            {(() => {
+                                const address = item?.address || item?.location?.address;
+                                const maxWords = 4;
+                                if (address) {
+                                    const words = address.split(' ');
+                                    return words.length > maxWords
+                                        ? `${words.slice(0, maxWords).join(' ')}...`
+                                        : address;
+                                }
+                                return "No Address Available";
+                            })()}
+                        </span>
+                    </div>
+
+                    {/* Property Details */}
+                    <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                        {/* Area */}
+                        <div className="flex items-center space-x-1">
+                            <span className="text-sm font-medium text-gray-800">
+                                {item?.area}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                                {item?.areaUnit || "sqft"}
+                            </span>
+                        </div>
+
+                        {/* Amenities */}
+                        <div className="flex items-center space-x-2">
+                            <span className="text-sm text-gray-700">Amenities</span>
+                            <span className="bg-gray-800 text-white text-xs px-2 py-1 rounded-full">
+                                {item?.amenities?.length}+
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -558,145 +511,11 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
     return (
         <div className="min-h-screen bg-white p-4">
-            {/* Header with View Toggle */}
-            <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center">
-                    {/* <h1 className="text-2xl font-semibold">{properties.length > 0 ? "Properties" : projects.length > 0 ? "Projects" : "Buildings"}</h1> */}
-                    <h1 className="text-2xl font-semibold">{getHeading(properties, projects)}</h1>
-
-                    <div className='flex gap-2 items-center'>
-                        <select
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value)}
-                            className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap"
-                        >
-                            <option value="price-low">Price/Units: Low to High</option>
-                            <option value="price-high">Price/Units: High to Low</option>
-                        </select>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => handleViewChange('list')}
-                                className={`p-2 rounded-lg ${viewType === 'list' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
-                            >
-                                <List size={20} />
-                            </button>
-                            <button
-                                onClick={() => handleViewChange('map')}
-                                className={`p-2 rounded-lg ${viewType === 'map' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
-                            >
-                                <Map size={20} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Filters and Search */}
-            <div className="max-w-7xl mx-auto mb-6">
-                <div className="bg-white p-4 rounded-lg shadow-sm space-y-4">
-                    <div className="w-full">
-                        <div className="relative w-full">
-                            {/* Essential buttons that stay visible */}
-                            <div className="flex items-center gap-3 transition-all duration-300 ease-in-out">
-                                <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-1/3' : 'w-auto'
-                                    }`}>
-                                    {!isSearchExpanded ? (
-                                        <button
-                                            onClick={() => setIsSearchExpanded(true)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300"
-                                        >
-                                            <Search size={16} />
-                                            <span>Easy search</span>
-                                        </button>
-                                    ) : (
-                                        <div className="relative w-full">
-                                            <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                                            <input
-                                                type="text"
-                                                placeholder="Search by name or address..."
-                                                value={searchQuery}
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                onBlur={() => {
-                                                    if (!searchQuery) {
-                                                        setIsSearchExpanded(false);
-                                                    }
-                                                }}
-                                                className="w-full pl-10 pr-4 py-2 bg-white rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-700"
-                                                autoFocus
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <button className="flex items-center gap-2 px-2 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50">
-                                    <FaFilter />
-                                    <span>Filters</span>
-                                </button>
-
-                                <div className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded-xl">
-                                    <button className="px-2">Beds</button>
-                                    <button className="px-2 bg-white border border-none hover:text-red-400">1</button>
-                                    <button className="px-2 bg-white border border-none hover:text-red-400">2</button>
-                                    <button className="px-2 bg-white border border-none hover:text-red-400">3</button>
-                                    <button className="px-2 bg-white border border-none hover:text-red-400">4+</button>
-                                </div>
-
-                                {/* Additional buttons that slide out */}
-                                <div className={`flex items-center gap-3 transition-all duration-300 ease-in-out overflow-hidden ${isSearchExpanded
-                                        ? 'w-0 opacity-0 invisible'
-                                        : 'w-auto opacity-100 visible'
-                                    }`}>
-                                    <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                        Price Range
-                                    </button>
-                                    <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                        Bathroom
-                                    </button>
-                                    <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                        Floor
-                                    </button>
-                                </div>
-
-                                {/* Always visible buttons */}
-                                <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                    Purpose
-                                </button>
-                                <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                    Amenities
-                                </button>
-                                <select
-                                    value={filterType}
-                                    onChange={(e) => setFilterType(e.target.value)}
-                                    className="px-4 py-2 text-black bg-white border border-gray-300 rounded-xl hover:bg-gray-50"
-                                >
-                                    <option value="all">All Types</option>
-                                    <option value="apartment">Apartments</option>
-                                    <option value="house">Houses</option>
-                                    <option value="office">Offices</option>
-                                    <option value="residential">Buildings</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                        <SlidersHorizontal size={16} className="text-gray-400" />
-                        <span className="text-gray-600">Active filters:</span>
-                        {filterType !== 'all' && (
-                            <span className="px-2 py-1 bg-blue-100 text-blue-600 rounded-xl">
-                                {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
-                            </span>
-                        )}
-                        {searchQuery && (
-                            <span className="px-2 py-1 bg-blue-100 text-blue-600 rounded-xl">
-                                Search: "{searchQuery}"
-                            </span>
-                        )}
-                    </div>
-                </div>
-            </div>
+            
             {/* Grid View */}
             {viewType === 'list' && (
                 <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {filteredItems.map((item) => (
                             <PropertyCard
                                 key={item?._id}
