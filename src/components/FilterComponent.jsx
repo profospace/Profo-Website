@@ -65,14 +65,14 @@ const fallbackTypeIcon = <FaHome size={25} />;
 
 const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSection }) => {
     const dispatch = useDispatch()
-    const [filterRanges , setFilterRanges] = useState({})
+    const [filterRanges, setFilterRanges] = useState({})
     const [priceRange, setPriceRange] = useState({
         min: 0,
         max: 0,
     });
     const { properties } = useSelector(state => state.properties)
 
-    
+
 
     console.log(filterRanges)
     /* calculating properties Keys to show dynAMIC range filter */
@@ -112,7 +112,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                 // Purpose
                 const uniquePurposes = properties?.map(property => property.purpose).filter(purpose => purpose).map(purpose => purpose.toLowerCase());
                 acc.purpose = [...new Set(uniquePurposes)];
-                
+
 
                 // Property type ? - Aprt ,house,villa , office ???
                 const uniquePropertyType = properties?.map(property => property.type_name).filter(type => type).map(propertyType => propertyType.toLowerCase())
@@ -127,7 +127,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                 maxPrice: 0,
                 minPrice: Infinity,
                 amenities: [],
-                purpose : []
+                purpose: []
             }
         );
 
@@ -141,9 +141,9 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
 
 
     useEffect(
-        ()=>{
+        () => {
             calculatingFiltersValues()
-        },[properties]
+        }, [properties]
     )
 
     //update the filters whenever priceRange changes
@@ -160,16 +160,16 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
     const [filters, setFilters] = useState({
         bedrooms: null,
         bathrooms: null,
-        floors : null,
+        floors: null,
         priceMin: null, // useEffect is applied -Note
         priceMax: null,
         floor: null,
         amenities: [],
-        purpose : null ,
-        type_name : [],
+        purpose: null,
+        type_name: [],
         propertyType: null,
     });
-    console.log("Filter-pur" , filters)
+    console.log("Filter-pur", filters)
 
     /* handle property type (type_name) selection */
     const togglePropertyType = (selectedProperty) => {
@@ -192,7 +192,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
     };
 
     // purpose type - rent ,buy
-    const togglePurposeType = (purpose) =>{
+    const togglePurposeType = (purpose) => {
         setFilters((prev) => ({
             ...prev,
             purpose: prev.purpose === purpose ? null : purpose, // Toggle selection
@@ -217,9 +217,9 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
             min: filterRanges.minPrice || 0,
             max: filterRanges.maxPrice || 0,
         });
-        
+
         // filter ki redux state ko null krdo , to automatic vo properties show karede sab
-        
+
         setModalOpen(false) // close the filter modal
 
 
@@ -275,10 +275,10 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
         }));
     };
 
-    function handleDispatchFilter(e){
+    function handleDispatchFilter(e) {
         e.preventDefault()
         setModalOpen(false)
-        
+
         // dispatching filter 
         console.log(filters)
         dispatch(getAllFilteredProperties(filters))
@@ -326,10 +326,10 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
             open={modalOpen}
             onOk={() => setModalOpen(false)} // Closing modal on Ok
             onCancel={() => setModalOpen(false)} // Closing modal on Cancel
-            footer={null} 
-            styles={{ padding: '0px', maxHeight: '500px' }} 
+            footer={null}
+            styles={{ padding: '0px', maxHeight: '500px' }}
             width="90vw"
-            
+
         >
             <div className='w-full text-center'>
                 <h1 className='font-bold text-xl py-2'>Filters</h1>
@@ -346,31 +346,50 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
 
                     <div className='flex gap-24'>
                         {/* Beds */}
-                        <div className='flex justify-between items-center py-2 mb-1 max-w-96'>
+                        <div className='flex gap-6 justify-between items-center py-2 mb-1 max-w-96'>
                             <div className='text-xl'>Beds</div>
-                            <div className='flex items-center gap-3'>
-                                <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => decrementFilter('bedrooms')} disabled={filters?.bedrooms < 1}>
+                            <div className='flex items-center gap-1'>
+                                <IconButton variant="outlined" className="rounded-full w-6 h-6" onClick={() => decrementFilter('bedrooms')} disabled={filters?.bedrooms < 1}>
                                     <FaMinus />
                                 </IconButton>
-                                <div className='text-xl text-center min-w-10'>{filters.bedrooms ? filters.bedrooms + '+ ' : "Any"}</div>
-                                <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => incrementFilter('bedrooms')} disabled={filterRanges?.maxBedrooms == filters.bedrooms}>
+                                <div className='text-lg text-center min-w-10'>{filters.bedrooms ? filters.bedrooms + '+ ' : "Any"}</div>
+                                <IconButton variant="outlined" className="rounded-full w-6 h-6" onClick={() => incrementFilter('bedrooms')} disabled={filterRanges?.maxBedrooms == filters.bedrooms}>
                                     <FaPlus />
                                 </IconButton>
                             </div>
                         </div>
 
                         {/* Bathrooms */}
-                        <div className='flex justify-between items-center py-2 mb-1 max-w-96'>
+                        <div className='flex gap-6 justify-between items-center py-2 mb-1 max-w-96'>
                             <div className='text-xl'>Bathrooms</div>
-                            <div className='flex items-center gap-3'>
-                                <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => decrementFilter('bathrooms')} disabled={filters.bathrooms < 1}>
+                            <div className='flex items-center gap-1'>
+                                <IconButton variant="outlined" className="rounded-full w-6 h-6" onClick={() => decrementFilter('bathrooms')} disabled={filters.bathrooms < 1}>
                                     <FaMinus />
                                 </IconButton>
-                                <div className='text-xl text-center min-w-10'>{filters.bathrooms ? filters.bathrooms + '+ ' : "Any"}</div>
-                                <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => incrementFilter('bathrooms')} disabled={filterRanges?.maxBathrooms == filters.bathrooms}>
+                                <div className='text-lg text-center min-w-10'>{filters.bathrooms ? filters.bathrooms + '+ ' : "Any"}</div>
+                                <IconButton variant="outlined" className="rounded-full w-6 h-6" onClick={() => incrementFilter('bathrooms')} disabled={filterRanges?.maxBathrooms == filters.bathrooms}>
                                     <FaPlus />
                                 </IconButton>
                             </div>
+                        </div>
+
+                        {/* floor */}
+                        <div className={`filter-section py-4 transition-all duration-300 ${activeSection === 'Floor' ? 'section-highlight rounded-lg p-4 mt-2' : ''
+                            }`}>
+
+                            <div className='flex  gap-6 justify-between items-center py-2 mb-1 max-w-44'>
+                                <div className='text-xl'>Floors</div>
+                                <div className='flex items-center gap-1'>
+                                    <IconButton variant="outlined" className="rounded-full w-6 h-6" onClick={() => decrementFilter('floor')} disabled={filters?.floor < 1}>
+                                        <FaMinus />
+                                    </IconButton>
+                                    <div className='text-lg text-center min-w-10'>{filters.floor ? filters.floor + '+ ' : "Any"}</div>
+                                    <IconButton variant="outlined" className="rounded-full w-6 h-6" onClick={() => incrementFilter('floor')} disabled={filterRanges?.maxfloor == filters.floor} >
+                                        <FaPlus />
+                                    </IconButton>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -388,33 +407,15 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                         </div>
                     </div> */}
 
-                    
+
 
                     <hr />
                 </div>
 
-                    {/* floor */}
-                <div className={`filter-section py-4 transition-all duration-300 ${activeSection === 'Floor' ? 'section-highlight rounded-lg p-4 mt-2' : ''
-                    }`}>
+                
 
-                    <div className='flex justify-between items-center py-2 mb-1 max-w-96'>
-                        <div className='text-xl font-semibold'>Floors</div>
-                        <div className='flex items-center gap-3'>
-                            <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => decrementFilter('floor')} disabled={filters?.floor < 1}>
-                                <FaMinus />
-                            </IconButton>
-                            <div className='text-xl text-center min-w-10'>{filters.floor ? filters.floor + '+ ' : "Any"}</div>
-                            <IconButton variant="outlined" className="rounded-full w-8 h-8" onClick={() => incrementFilter('floor')} disabled={filterRanges?.maxfloor == filters.floor} >
-                                <FaPlus />
-                            </IconButton>
-                        </div>
-                    </div>
-                    <hr />
-
-                    </div>
-
-                        {/* Purpose - buy,rent ,sale */}
-                <div className={`py-4 transition-all duration-300 ${activeSection === 'Purpose' ? 'section-highlight rounded-lg p-4 mt-2' : ''}`}>
+                {/* Purpose - buy,rent ,sale */}
+                <div className={`py-2 transition-all duration-300 ${activeSection === 'Purpose' ? 'section-highlight rounded-lg p-4' : ''}`}>
                     <h1 className='text-xl font-semibold'>Purpose</h1>
                     <div className="flex gap-2 flex-wrap py-4">
                         {
@@ -426,7 +427,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                                     <Button
                                         key={index}
                                         variant={isSelected ? "filled" : "outlined"} // Highlight selected proepty type
-                                        className="flex items-center gap-3 rounded-full py-2 w-full sm:w-auto"
+                                        className={`flex items-center gap-3 rounded-full py-1 border-gray-400  hover:bg-red-50 text-black w-full sm:w-auto ${isSelected ? 'bg-red-50 hover:bg-red-100' : 'bg-gray-100'} `}
                                         onClick={() =>
                                             togglePurposeType(purpose)
                                         }
@@ -446,7 +447,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                 {/* <div className='py-4'> */}
                 <div className={`py-4 transition-all duration-300 ${activeSection === 'Amenities' ? 'section-highlight rounded-lg p-4 mt-2' : ''}`}>
                     <h1 className='text-xl font-semibold'>Amenities</h1>
-                    <div className="flex gap-2 flex-wrap py-4">
+                    <div className="flex items-center gap-2 flex-wrap py-4">
                         {
                             filterRanges?.amenities?.map((amenity, index) => {
                                 // Normalize the amenity name to lowercase to handle variations like "Gym", "gym"
@@ -459,7 +460,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                                     <Button
                                         key={index}
                                         variant="outlined"
-                                        className="flex items-center gap-3 rounded-full py-2 w-full sm:w-auto"
+                                        className="flex items-center gap-3 rounded-full py-1 w-full sm:w-auto border-gray-400 "
                                     >
                                         {IconComponent}
                                         {amenity}
@@ -486,7 +487,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                                     <Button
                                         key={index}
                                         variant={isSelected ? "filled" : "outlined"} // Highlight selected proepty type
-                                        className="flex items-center gap-3 rounded-full py-2 w-full sm:w-auto"
+                                        className="flex items-center gap-3 rounded-full py-1 border-gray-400 w-full sm:w-auto"
                                         onClick={() => togglePropertyType(typeName)}
                                     >
                                         {IconComponent}
@@ -503,14 +504,16 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                 {/* <div className="py-4"> */}
                 <div className={`filter-section py-4 transition-all duration-300 ${activeSection === 'Price Range' ? 'section-highlight rounded-lg p-4 mt-2' : ''
                     }`}>
+                    <div className='max-w-[45%]'>
                     <h1 className="text-xl font-semibold">Price Range</h1>
-                    <RangeSlider
-                        minPrice={filters.priceMin}
-                        maxPrice={filters.priceMax}
-                        range={priceRange}
-                        onSliderChange={handleSliderChange}
-                    />
-                    <div className="flex justify-between items-center w-full max-w-md mx-auto p-4">
+                        <RangeSlider
+                            minPrice={filters.priceMin}
+                            maxPrice={filters.priceMax}
+                            range={priceRange}
+                            onSliderChange={handleSliderChange}
+                        />
+                    </div>
+                    <div className="flex  gap-4 items-center w-full max-w-md justify-center p-4">
                         <div className="flex flex-col items-center">
                             <span className="text-sm font-medium text-gray-500 mb-2">Minimum</span>
                             <input

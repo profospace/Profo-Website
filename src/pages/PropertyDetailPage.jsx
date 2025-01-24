@@ -28,6 +28,9 @@ import LocationLatLngMap from "../components/LocationLatLngMap";
 import { Heart, TrendingUp, CircleDollarSign, IndianRupee, Images } from 'lucide-react';
 import PropertyContactCard from "../components/PropertyContactCard";
 import ImagePreview from "../components/ImagesPreview";
+import PropertyDetailBuildingInfo from "../components/PropertyDetailBuildingInfo";
+import PropertyCard from "../components/PropertyCard";
+import HeadingCommon from "../components/HeadingCommon";
 
 
 export const FacilitiesSection = ({ facilities }) => {
@@ -345,52 +348,6 @@ const SinglePage = () => {
             <div className="grid grid-flow-col grid-cols-12 gap-2 my-4">
                 {/* left */}
                 <div className="col-span-8">
-                    {/* Property Details Card */}
-                    {/* <div className="bg-white shadow-sm rounded-lg p-6 w-full mx-auto border">
-                        <div className="flex flex-wrap justify-between items-center">
-                            <div className="flex items-center space-x-2">
-                                <span className="bg-purple-600 text-white text-xs font-semibold px-2 py-1 rounded">
-                                    Featured
-                                </span>
-                                <h1 className="text-3xl font-semibold text-gray-800">
-                                    {formatPrice(propertyDetail?.price)}
-                                </h1>
-                            </div>
-                            <div>
-                                <p className="text-sm text-blue-600 font-medium">
-                                    Estimated EMI {formatPrice(propertyDetail?.estimatedEMI)}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-wrap mt-4 justify-between items-center">
-                            <div>
-                                <h2 className="text-2xl font-medium text-gray-800">
-                                    {propertyDetail?.bathrooms}Baths {propertyDetail?.bedrooms}Beds {propertyDetail?.floor}Floors
-                                </h2>
-                                <p className="text-sm text-gray-500">
-                                    {propertyDetail?.type_name} for {propertyDetail?.purpose}
-                                </p>
-                                <p className="text-sm text-gray-500">
-                                    {propertyDetail?.address}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-wrap items-center mt-6 gap-2">
-                            <div className="flex items-center space-x-2">
-                                <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                                    RERA STATUS
-                                </span>
-                                <span className="text-sm font-medium text-gray-800">REGISTERED</span>
-                            </div>
-                            <p className="text-sm text-gray-500">
-                                Registration No: <span className="font-medium">73 OF 2017</span>
-                            </p>
-                        </div>
-                    </div> */}
-
-
                     {/* Property Info Section */}
                     <div className="max-w-4xl mx-auto p-4 py-6">
                         <div className="flex gap-2 mb-2">
@@ -562,37 +519,6 @@ const SinglePage = () => {
                         </div>
                     </div>
 
-                    {/* Map Section */}
-                    {/* <div className="mt-8 p-4 border rounded-lg shadow-sm bg-white">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Where you'll be</h3>
-
-                <div className="mb-4">
-                    <h4 className="text-base font-medium text-gray-800">{propertyDetail?.address}</h4>
-                </div>
-
-                <div className="relative rounded-lg overflow-hidden">
-                    <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
-                        <GoogleMap
-                            mapContainerStyle={mapContainerStyle}
-                            center={mapCenter}
-                            zoom={15}
-                            options={mapOptions}
-                        >
-                            <Marker
-                                position={mapCenter}
-                                icon={customMarker}
-                            />
-
-                            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-6 py-3 rounded-full shadow-lg z-10">
-                                <p className="text-sm font-medium text-gray-700">
-                                    Exact location provided after booking
-                                </p>
-                            </div>
-                        </GoogleMap>
-                    </LoadScript>
-                </div>
-            </div> */}
-
                     <div className="container mx-auto">
                         {/* Map Section */}
                         <LocationLatLngMap latitude={propertyDetail?.latitude} longitude={propertyDetail?.longitude} />
@@ -631,6 +557,17 @@ const SinglePage = () => {
                 </div>
             }
 
+            <PropertyDetailBuildingInfo data={propertyDetail?.building} />
+
+
+            <div className="py-12">
+                <HeadingCommon title="Similar Properties " dual="true" />
+                <div className="grid grid-cols-3">
+                    {
+                        propertyDetail?.building?.connectedProperties?.map((property, index) => <PropertyCard property={property} />)
+                    }
+                </div>
+            </div>
 
         </div>
     );

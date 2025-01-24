@@ -19,6 +19,7 @@ import { TrendingUp,  CircleDollarSign } from 'lucide-react';
 import ProjectHighlights from '../components/ProjectHighlights'
 import ProjectNearbyLocations from '../components/ProjectNearbyLocations'
 import DownloadBrochures from '../components/DownloadBrochures'
+import PropertyDetailBuildingInfo from '../components/PropertyDetailBuildingInfo'
 
 
 function ProjectDetailPage() {
@@ -255,6 +256,7 @@ function ProjectDetailPage() {
             
           </div>
         </div>
+
             {/* <div className="mb-8">
               <BuildingManager />
             </div>

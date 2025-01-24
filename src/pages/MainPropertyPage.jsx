@@ -179,6 +179,7 @@ import {
 import { FaFilterCircleDollar } from 'react-icons/fa6';
 import { FiSettings } from 'react-icons/fi';
 import FilterComponent from '../components/FilterComponent';
+import { AiOutlineSetting } from 'react-icons/ai';
 
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
@@ -199,7 +200,7 @@ const MainPropertyPage = () => {
 
     // filter button popup
     const [modalOpen, setModalOpen] = useState(false);
-      const [activeSection, setActiveSection] = useState('');
+    const [activeSection, setActiveSection] = useState('');
 
     // Get initial location
     useEffect(() => {
@@ -271,8 +272,9 @@ const MainPropertyPage = () => {
 
                                 <button
                                     onClick={() => setIsFilterVisible(!isFilterVisible)}
-                                    className="px-4 py-2 bg-blue-100 text-blue-600 rounded-xl"
+                                    className="flex items-center gap-2 px-3 py-1 bg-gray-300 text-black rounded-md"
                                 >
+                                    <AiOutlineSetting />
                                     Filter
                                 </button>
 
