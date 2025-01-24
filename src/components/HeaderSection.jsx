@@ -819,8 +819,17 @@ function HeaderSection({ details, sectionRefs, activeSection }) {
     return (
         <header className="relative w-full h-[600px] text-white">
             <div
-                className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/70' : ''
+                className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''
                     }`}
+                    // Working , just commented due to bad quality images
+                // style={{
+                //     backgroundImage: `url(${details?.galleryList?.[0] ||
+                //         details?.gallery?.[0]?.images?.[0] ||
+                //         'https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize'
+                //         })`, // Add a fallback for when the image is not available
+                //     backgroundSize: 'cover',
+                //     backgroundPosition: 'center',
+                // }}
                 style={{
                     backgroundImage: 'url(https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize)',
                     backgroundSize: 'cover',
@@ -894,11 +903,24 @@ function HeaderSection({ details, sectionRefs, activeSection }) {
                 </div>
 
                 {/* Photo Count */}
-                <button className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit" onClick={() => imagePreviewRef.current.openGallery()}>
+                {/* <button className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit" onClick={() => imagePreviewRef.current.openGallery()}>
                     <Camera className="w-5 h-5" />
                     <span>{details?.galleryList?.length} photos</span>
                     <ImagePreview ref={imagePreviewRef} images={details?.galleryList} />
 
+                </button> */}
+                <button
+                    className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
+                    onClick={() => imagePreviewRef.current.openGallery()}
+                >
+                    <Camera className="w-5 h-5" />
+                    <span>
+                        {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
+                    </span>
+                    <ImagePreview
+                        ref={imagePreviewRef}
+                        images={details?.galleryList || details?.gallery?.[0]?.images || []}
+                    />
                 </button>
 
                 {/* Developer Info */}

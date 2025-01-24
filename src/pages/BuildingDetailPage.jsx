@@ -145,7 +145,7 @@ function BuildingDetailPage() {
                 {isTabsSticky && <div className="h-[64px]" />}
 
                 {/* Content Grid Layout */}
-                <div className="max-w-7xl mx-auto px-4 py-8">
+                <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 mb-12">
                         {/* Main Content Area */}
                         <main className="lg:col-span-8">
@@ -227,7 +227,7 @@ function BuildingDetailPage() {
 
                         {/* Sidebar with Contact Card */}
                         <aside className="lg:col-span-4">
-                            <div className="sticky top-24">
+                            <div className="sticky top-28">
                                 <BuildingContactCard info={buildingDetail} />
                             </div>
                         </aside>

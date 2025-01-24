@@ -537,7 +537,7 @@ const PropertyListing = () => {
     return (
         <div className="max-w-4xl mx-auto p-4">
             <div className="mb-6">
-                <h2 className="text-2xl font-bold">{buildingData.name}</h2>
+                <h2 className="text-3xl font-bold">{buildingData.name}</h2>
                 <p className="text-gray-600">{buildingData.description}</p>
                 <div className="mt-2 flex flex-wrap gap-4 text-sm">
                     <div className="flex items-center gap-1">
@@ -564,23 +564,23 @@ const PropertyListing = () => {
                     return (
                         <div key={type} className="bg-white rounded-lg overflow-hidden">
                             <div
-                                className="p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+                                className="p-4 border-b border-gray-200 cursor-pointer bg-gray-900 text-white transition-colors duration-200"
                                 onClick={() => setSelectedType(isSelected ? null : type)}
                             >
-                                <div className="grid grid-cols-3 items-center">
+                                <div className="grid grid-cols-3 items-center text-white">
                                     <div className="flex items-center gap-2">
                                         <Icon className="w-5 h-5" />
                                         <h3 className="text-lg font-semibold">{displayType}</h3>
                                     </div>
                                     {startingPrice > 0 && (
-                                        <div className="flex items-center justify-start gap-0 text-gray-800">
-                                            <span className='text-gray-800 font-semibold'>from </span>
+                                        <div className="flex items-center text-white justify-start gap-0">
+                                            <span className='text-gray-800 font-semibold text-white'>from </span>
                                             <IndianRupee className="w-4 h-4 font-bold" />
                                             <span className="font-semibold">{formatPrice(startingPrice)}</span>
                                         </div>
                                     )}
                                     <div className="flex items-center justify-end gap-4">
-                                        <span className="text-black px-3 py-1 rounded-full text-md">
+                                        <span className="text-white px-3 py-1 rounded-full text-md">
                                             {properties.length} Available
                                         </span>
                                         <div className={`transform transition-transform duration-200 ${isSelected ? 'rotate-180' : ''}`}>

@@ -1825,10 +1825,10 @@ const MapPage = ({
         }
         circleRef.current = new google.maps.Circle({
             strokeColor: '#3B82F6',
-            strokeOpacity: 0.8,
+            strokeOpacity: 0.3,
             strokeWeight: 2,
             fillColor: '#3B82F6',
-            fillOpacity: 0.1,
+            fillOpacity: 0.05,
             map: mapInstanceRef.current,
             center: center,
             radius: radius * 1000

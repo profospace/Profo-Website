@@ -300,7 +300,6 @@ const IconBuildings = () => (
 );
 
 export default function BuildingLCDParameters() {
-    console.log("hi")
     const [showMore, setShowMore] = useState(false);
     const { buildingDetail } = useSelector(state => state.buildings);
     const [buildingData, setBuildingData] = useState({});
@@ -354,7 +353,7 @@ export default function BuildingLCDParameters() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6 font-sans">
+        <div className="max-w-4xl mx-auto px-6 py-5 font-sans">
             <h1 className="text-3xl font-bold mb-2">{initialData.title}</h1>
             <p className="text-gray-500 mb-8">{initialData.subtitle}</p>
 
@@ -400,7 +399,7 @@ export default function BuildingLCDParameters() {
             </button> */}
             <button
                 onClick={() => setShowMore(!showMore)}
-                className="w-full bg-gray-100 rounded-lg p-4 text-left font-semibold hover:bg-gray-200 transition-colors flex justify-between items-center"
+                className="w-full bg-black text-white rounded-lg p-4 text-left font-semibold transition-colors flex justify-between items-center"
             >
                 <span>Additional options</span>
                 <div className={`transform transition-transform duration-300 ${showMore ? 'rotate-180' : ''}`}>
