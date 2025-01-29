@@ -117,7 +117,7 @@
 //         {/* Description Section */}
 //         <div className="my-8 text-sm">
 //           <p className="text-gray-400">
-//             Yandex.Real Estate — rent and sell real estate in Moscow and the Moscow region: we will help you rent, lease, sell or buy an apartment or other housing.
+//             profo.Real Estate — rent and sell real estate in Moscow and the Moscow region: we will help you rent, lease, sell or buy an apartment or other housing.
 //           </p>
 //           <p className="text-gray-400">
 //             Project declarations at{' '}
@@ -292,8 +292,9 @@ const Footer = () => {
                 {/* Left Section */}
                 <div className="lg:col-span-6">
                   {/* Logo */}
-                  <div className="mb-6">
-                    <h1 className="text-5xl font-bold tracking-tighter">PROFO</h1>
+                  <div className="mb-6 flex items-center gap-2">
+                  <img src='/assets/logo.png' className='h-12 w-12'  />
+                    <h1 className="text-5xl font-bold tracking-tighter text-white">PROFO</h1>
                   </div>
 
                   {/* Description */}
@@ -353,7 +354,7 @@ const Footer = () => {
           {/* Description Section */}
           <div className="my-8 text-sm space-y-4">
             <p className="text-gray-400">
-              Yandex.Real Estate — rent and sell real estate in Moscow and the Moscow region: we will help you rent, lease, sell or buy an apartment or other housing.
+              Profo.Real Estate — rent and sell real estate in Moscow and the Moscow region: we will help you rent, lease, sell or buy an apartment or other housing.
             </p>
             <p className="text-gray-400">
               Project declarations at{' '}
@@ -363,8 +364,8 @@ const Footer = () => {
             </p>
             <p className="text-gray-400">
               Legal support on legal issues:{' '}
-              <a href="mailto:help@realty.yandex.ru" className="text-blue-400">
-                help@realty.yandex.ru
+              <a href="mailto:help@realty.profo.ru" className="text-blue-400">
+                help@realty.profo.ru
               </a>
             </p>
           </div>

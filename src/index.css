@@ -73,23 +73,22 @@ body{
     background-position: center;
     
 } */
- .navbar {
+ /* .navbar {
    position: relative;
    width: auto;
    background-repeat: no-repeat;
    background-size: cover;
    background-position: center;
- }
+   
+ } */
 
- .sticky-nav {
-   position: fixed;
-   top: 0;
-   left: 0;
-   right: 0;
-   z-index: 50;
-   background-color: white;
-   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-   transition: all 0.3s ease-in-out;
+ .navbar {
+   position: relative;
+   width: 100%;
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center;
+   transition: all 0.4s ease-in-out;
  }
 
 @keyframes slide-down {

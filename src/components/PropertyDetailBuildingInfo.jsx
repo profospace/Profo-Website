@@ -1,12 +1,13 @@
 import React from 'react';
 
 const PropertyDetailBuildingInfo = ({data}) => {
+    // const [showPhoneNo, ]
     return (
         <div className=" bg-white rounded-xl shadow-lg overflow-hidden flex ">
             <div className="relative">
                 <img
-                    src="https://avatars.mds.yandex.net/get-verba/1030388/2a00000193779235bef56c22477f7c18dd10/realty_app_large"
-                    // src={data?.galleryList?.[0]}
+                    // src="https://avatars.mds.yandex.net/get-verba/1030388/2a00000193779235bef56c22477f7c18dd10/realty_app_large"
+                    src={data?.galleryList?.[0]}
                     alt="Nova Residential Towers"
                     className="w-full object-cover"
                 />

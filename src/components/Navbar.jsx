@@ -709,7 +709,7 @@
 // export default Header;
 
 
-import React, { useEffect, useState , useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Menu, Heart, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -1028,17 +1028,21 @@ const Header = () => {
     }, []);
     return (
         <>
-            <header
-                className={`w-full border-b border-gray-200 navbar ${isHomePage
+            {/* <header
+                className={`w-full navbar ${isHomePage
                     ? "bg-[url('https://avatars.mds.yandex.net/get-verba/216201/2a00000193abde37fd3f35e4c7b04d9b6efe/realty_large_1242')]"
                     : "bg-white"
                     }`}
+            > */}
+            <header
+                ref={navbarRef}
+                className={`w-full navbar ${isHomePage ? "bg-[url('https://avatars.mds.yandex.net/get-verba/216201/2a00000193abde37fd3f35e4c7b04d9b6efe/realty_large_1242')]" : "bg-white"}`}
             >
-                    {/* Top Navigation Bar */}
+                {/* Top Navigation Bar */}
                 {/* <div className="max-w-7xl mx-auto px-4  "> */}
                 <div
                     ref={topNavRef}
-                    className={`max-w-7xl mx-auto px-4 ${isSticky ? 'fixed top-0 left-0 right-0 bg-white shadow-md transition-all duration-300 ease-in-out z-50' : ''}`}
+                    className={`max-w-7xl mx-auto px-4 ${isSticky ? 'fixed top-0 left-0 right-0 bg-white transition-all duration-300 ease-in-out z-50' : ''}`}
                 >
 
                     <div className="flex items-center justify-between h-16">
@@ -1200,11 +1204,11 @@ const Header = () => {
 
                 {/* Main Section */}
                 {
-                    isHomePage && <div className='max-w-7xl mx-auto px-6 py-12'>
-                        <h1 className="text-4xl font-bold mb-1 text-center uppercase">REAL ESTATE IN {!isCityLoading ? city + ' CITY' : "loading..."} </h1>
+                    isHomePage && <div className='max-w-7xl mx-auto px-6 mt-32 '>
+                        <h1 className="text-5xl font-bold my-1 text-center uppercase">REAL ESTATE IN {!isCityLoading ? city + ' CITY' : "loading..."} </h1>
 
                         {/* Search Bar Section */}
-                        <div className="w-full max-w-7xl mx-auto mb-12">
+                        <div className="w-full max-w-7xl mx-auto">
                             <div className="flex flex-wrap items-center gap-2 py-6">
                                 {/* New buildings dropdown */}
                                 <div className="relative">
@@ -1274,8 +1278,6 @@ const Header = () => {
             </header>
             {/* Top Section having direct filters  */}
             <div className={`max-w-7xl mx-auto ${isHomePage && 'p-6'}`}>
-
-
                 {/* Services Section */}
                 {
                     isHomePage && <div className="mb-8">

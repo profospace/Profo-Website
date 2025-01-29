@@ -21,7 +21,7 @@ const Button = ({ children, onClick, disabled, className = "" }) => (
     <button
         onClick={onClick}
         disabled={disabled}
-        className={`px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+        className={`px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
     >
         {children}
     </button>
@@ -37,36 +37,38 @@ const SliderInput = ({ label, value, setValue, min, max, step, format, leftLabel
 
     return (
         <div className="">
-            <div className="flex justify-between items-center">
-                <label className="text-sm font-medium">{label}</label>
-                <span className="text-sm font-medium">{format ? format(value) : value}</span>
-            </div>
-            <div className="relative w-full h-2">
-                <div className="absolute w-full h-2 bg-gray-200 rounded-full" />
-                <div
-                    className="absolute h-2 bg-blue-500 rounded-full"
-                    style={{ width: `${percentage}%` }}
-                />
-                <input
-                    type="range"
-                    min={min}
-                    max={max}
-                    step={step}
-                    value={value}
-                    onChange={handleChange}
-                    className="absolute w-full h-2 opacity-0 cursor-pointer"
-                    style={{
-                        WebkitAppearance: 'none',
-                        appearance: 'none',
-                        background: 'transparent',
-                        cursor: 'pointer',
-                        zIndex: 10
-                    }}
-                />
-                <div
-                    className="absolute w-4 h-4 bg-white border-2 border-blue-500 rounded-full shadow-md transform -translate-y-1"
-                    style={{ left: `calc(${percentage}% - 8px)`, top: '0' }}
-                />
+            <div className='flex gap-1 flex-col'>
+                <div className="flex justify-between items-center">
+                    <label className="text-sm font-medium">{label}</label>
+                    <span className="text-sm font-medium">{format ? format(value) : value}</span>
+                </div>
+                <div className="relative w-full h-2">
+                    <div className="absolute w-full h-[2px] bg-gray-200 rounded-full" />
+                    <div
+                        className="absolute h-[2px] bg-black rounded-full"
+                        style={{ width: `${percentage}%` }}
+                    />
+                    <input
+                        type="range"
+                        min={min}
+                        max={max}
+                        step={step}
+                        value={value}
+                        onChange={handleChange}
+                        className="absolute w-full h-2 opacity-0 cursor-pointer"
+                        style={{
+                            WebkitAppearance: 'none',
+                            appearance: 'none',
+                            background: 'transparent',
+                            cursor: 'pointer',
+                            zIndex: 10
+                        }}
+                    />
+                    <div
+                        className="absolute w-4 h-4 bg-white border-2 border-black rounded-full shadow-md transform -translate-y-[7px]"
+                        style={{ left: `calc(${percentage}% - 8px)`, top: '0' }}
+                    />
+                </div>
             </div>
             <div className="flex justify-between text-xs text-gray-500">
                 <span>{leftLabel}</span>

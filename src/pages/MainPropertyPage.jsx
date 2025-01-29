@@ -187,7 +187,6 @@ const MainPropertyPage = () => {
 
     const [view, setView] = useState('list'); // list / map view
     const [center, setCenter] = useState(null);
-    const [radius, setRadius] = useState(1);
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
     // State for filters and search
@@ -240,18 +239,45 @@ const MainPropertyPage = () => {
         }
     }
 
+    function getHeading(properties, projects) {
+        console.log("p",properties)
+        var purpose;
+        if (properties.length > 0) {
+            const typeNames = properties?.map((property) => property?.type_name);
+            purpose = properties?.map((item) => item?.purpose);
+            const uniqueTypeNames = [...new Set(typeNames)];
+            console.log('purpose',purpose)
+
+            // If all type_name are the same, return that type_name; otherwise, return "Properties".
+            return uniqueTypeNames.length === 1 ? uniqueTypeNames[0] : "Properties";
+
+
+        } 
+        else if(purpose?.[0] == 'Buy' || purpose?.[0] == 'buy') return "Buy Properties"
+        else if (purpose?.[0] == "Rent" || purpose?.[0] == "rent") return "Properties for rent"
+        
+        else if (projects.length > 0) {
+             return "Projects";
+        } else {
+            return "Buildings";
+        }
+    }
+
+   
+
+
     return (
         <LoadScript
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
             onLoad={() => setIsScriptLoaded(true)}
         >
             <div className="min-h-screen bg-white p-2">
-                <div className='max-w-7xl mx-auto px-2 flex flex-col gap-2'>
+                <div className='max-w-7xl mx-auto px-2 flex flex-col gap-2  shadow-2xl rounded-md'>
                     {/* Header with View Toggle */}
-                    <div className="">
+                    <div className=" flex flex-col justify-center py-2">
                         <div className="flex justify-between items-center">
-                            <h1 className="text-2xl font-semibold">
-                                Properties
+                            <h1 className="text-2xl font-semibold px-4 ">
+                                {getHeading(properties , projects)}
                             </h1>
 
                             <div className='flex items-center gap-4'>
@@ -428,12 +454,11 @@ const MainPropertyPage = () => {
                             onViewChange={handleViewChange}
                             center={center}
                             setCenter={setCenter}
-                            radius={radius}
-                            setRadius={setRadius}
                             properties={properties || []}
                             projects={projects || []}
                             buildings={buildings || []}
                             isLoading={isLoading}
+                                setIsFilterVisible={setIsFilterVisible}
                         />
                     )
                 )}
