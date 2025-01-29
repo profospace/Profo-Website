@@ -21,9 +21,9 @@ const AppDownloadBanner = () => {
                 </div>
 
                 <div className="flex flex-col md:flex-row items-center gap-6">
-                    <div className="bg-white p-2 rounded-lg">
+                    <div className="bg-white p-2 rounded-md">
                         <QRCode
-                            value="https://example.com/app"
+                            value="https://play.google.com/store/apps/details?id=com.yourapp.package"
                             size={100}
                             style={{ margin: 0 }}
                             bordered={false}

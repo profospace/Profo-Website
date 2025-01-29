@@ -91,15 +91,16 @@ const FlexibleLayout = ({
         <div className="lg:w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {details
-              ?.slice(-6) // Get the last 6 items
+              ?.slice(0,6) // Get the last 6 items
               .map((info, index) => (
                 <HomePageCard
                   key={index}
                   info={info}
-                  image={info?.galleryList?.[0]}
+                  image={info?.galleryList?.[0] || "https://wityysaver.s3.ap-south-1.amazonaws.com/gallery_images/b8639f5d-7225-415d-b83e-be0a5967a71b_674e8894ab43d8216f491623_674e81fb4c683aec86c96464_DSC09774-HDR.avif"}
                   price={info?.price}
                   label={info?.post_title}
                   type={info?.type_name}
+                  navigation={`/api/details/${info?.post_id}`}
                 />
               ))}
           </div>
@@ -114,10 +115,12 @@ const FlexibleLayout = ({
                 <HomePageCard
                   key={index}
                   // info={info}
-                image={info?.gallery?.[0]?.images?.[0]}
-                  // price={info?.price}
-                  // label={info?.post_title}
-                  // type={info?.type}
+                image={info?.gallery?.[0]?.images?.[0] || 'https://avatars.mds.yandex.net/get-realty-offers/14535939/1710ec57-6a73-4d64-8b64-56c5ae4a4994/large'}
+                  price={info?.price || 50000}
+                  label={info?.name}
+                  type={info?.type}
+                navigation={`/api/details/project/${info?.projectId}`}
+
                 />
               ))}
           </div>
@@ -128,14 +131,16 @@ const FlexibleLayout = ({
       return (
         <div className="lg:w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {details?.map((info, index) => (
+            {details?.slice(-6).map((info, index) => (
                 <HomePageCard
                   key={index}
-                  // info={info}
-                image="https://avatars.mds.yandex.net/get-verba/1540742/2a000001938ce76f87578a9a7f0caa9e70e6/realty_special_photo_3840"
-                  // price={info?.price}
-                  // label={info?.post_title}
-                  // type={info?.type}
+                  info={info}
+                image={info?.galleryList?.[0] || 'https://avatars.mds.yandex.net/get-realty-offers/14535939/1710ec57-6a73-4d64-8b64-56c5ae4a4994/large'}
+                  price={info?.price || 560000}
+                  label={info?.name || 'Not Available'}
+                  type={info?.type}
+                navigation={`/api/details/building/${info?.buildingId}`}
+
                 />
               ))}
           </div>
@@ -149,8 +154,8 @@ const FlexibleLayout = ({
 
   return (
     <div className="max-w-7xl mx-auto py-8">
-      <div className="flex items-center mb-6 gap-2">
-        <h2 className="text-2xl font-bold" onClick={() => handleFilter(type_name)}>{headingText}</h2>
+      <div className="flex items-center mb-6 gap-2 cursor-pointer " onClick={() => handleFilter(type_name)}>
+        <h2 className="text-2xl font-bold" >{headingText}</h2>
         <div><MdNavigateNext size={32} /></div>
       </div>
 

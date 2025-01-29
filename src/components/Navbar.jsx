@@ -928,7 +928,7 @@ const Header = () => {
                     dispatch(getMapFeed({
                         latitude,
                         longitude,
-                        radius: 1
+                        radius: 1000
                     }))
                 }
                 else if (type_name === 'rent') {
@@ -966,7 +966,7 @@ const Header = () => {
                 const { latitude, longitude } = position.coords;
                 setIsCityLoading(true);
                 // Dispatch map feed action
-                dispatch(getMapFeed({ latitude, longitude, radius: 10000000000 }));
+                dispatch(getMapFeed({ latitude, longitude, radius: 10000 }));
 
                 try {
                     // Use Google Maps Geocoding API to get city and state
@@ -1065,8 +1065,8 @@ const Header = () => {
                             <button className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm">
                                 About the house
                             </button>
-                            <button className="text-sm">
-                                Login
+                            <button className="text-sm" onClick={() => navigate('/signup')}>
+                                Register
                             </button>
                         </div>
 
@@ -1192,8 +1192,8 @@ const Header = () => {
                                     <button className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg">
                                         About the house
                                     </button>
-                                    <button className="w-full px-4 py-2 text-center">
-                                        Login
+                                    <button className="w-full px-4 py-2 text-center" onClick={()=>navigate('/signup')}>
+                                        Register
                                     </button>
                                 </div>
                             </div>

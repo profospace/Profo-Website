@@ -14,16 +14,18 @@ function Home() {
     
     
     const {  properties , projects } = useSelector(state => state.map)
+    const {  buildings } = useSelector(state => state.buildings)
+    // console.log(properties)
 
     // console.log("buildings", buildings)
 
-    const buildings = [
-        {
+    // const buildings = [
+    //     {
 
-        }, {
+    //     }, {
 
-        }
-    ]
+    //     }
+    // ]
 
 
     
@@ -111,7 +113,7 @@ function Home() {
 
    
     return (
-        <div className='mt-12 px-8'>
+        <div className=' px-8'>
             {/* Top Section */}
             {/* <div className="max-w-7xl mx-auto py-4">
                 <h1 className="text-4xl font-bold mb-1 text-center uppercase">REAL ESTATE IN {!isCityLoading ? city + ' CITY' : "loading..."} </h1>
@@ -242,7 +244,6 @@ function Home() {
             {/* <FlexibleLayout details={properties} salesAdsPosition="left" headingText="New Properties" />
             <FlexibleLayout details={properties} /> */}
 
-            
             <FlexibleLayout
                 type="property"
                 headingText="New Properties"
@@ -267,7 +268,9 @@ function Home() {
 
 
 
-            <AppDownloadBanner />
+            <div className='my-12'>
+                <AppDownloadBanner />
+            </div>
 
         </div>
     )

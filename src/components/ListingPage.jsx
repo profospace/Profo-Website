@@ -305,6 +305,7 @@ import {
     Heart
 } from 'lucide-react';
 import { FaFilter } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading = false, onViewChange, sortBy, filterType, searchQuery }) => {
     const [viewType, setViewType] = useState('list');
@@ -359,26 +360,169 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
             }
         });
 
+    // const PropertyCard = ({ item }) => {
+    //     const isProject = 'overview' in item;
+
+    //     const getPropertyIcon = (type) => {
+    //         switch (type?.toLowerCase()) {
+    //             case 'apartment':
+    //                 return <Building size={16} className="text-blue-500" />;
+    //             case 'house':
+    //                 return <Home size={16} className="text-green-500" />;
+    //             case 'office':
+    //                 return <Building size={16} className="text-purple-500" />;
+    //             case 'residential':
+    //                 return <Building size={16} className="text-orange-500" />;
+    //             default:
+    //                 return <MapPin size={16} className="text-red-500" />;
+    //         }
+    //     };
+
+    //     return (
+    //         <div className="bg-white overflow-hidden transition-all duration-300  transform hover:-translate-y-2 max-w-sm w-full mx-auto">
+    //             {/* Image Container */}
+    //             <div className="relative aspect-[4/3] overflow-hidden">
+    //                 {/* Property Image */}
+    //                 {item?.galleryList?.[0] || (isProject && item?.floorPlans?.[0]?.image) ? (
+    //                     <img
+    //                         src={item?.galleryList?.[0] || item?.floorPlans[0].image}
+    //                         alt={item?.post_title || item?.name}
+    //                         className="w-full h-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-110"
+    //                     />
+    //                 ) : (
+    //                     <div className="w-full h-full flex items-center justify-center bg-gray-100">
+    //                         <Building size={48} className="text-gray-400" />
+    //                     </div>
+    //                 )}
+
+    //                 {/* Top Left Badge */}
+    //                 <div className="absolute top-3 left-4">
+    //                     <div className="flex items-center bg-white/90 rounded-full px-3 py-1 shadow-md">
+    //                         {isProject ? (
+    //                             <>
+    //                                 <MapPin size={16} className="text-red-500 mr-2" />
+    //                                 <span className="text-sm font-medium text-gray-800">Project</span>
+    //                             </>
+    //                         ) : (
+    //                             <>
+    //                                 {getPropertyIcon(item?.type_name)}
+    //                                 <span className="text-sm font-medium text-gray-800 ml-2">{item?.type_name}</span>
+    //                             </>
+    //                         )}
+    //                     </div>
+    //                 </div>
+
+    //                 {/* Bottom Left BHK Badge */}
+    //                 <div className="absolute bottom-2 left-4">
+    //                     <div className=" bg-white/90 rounded-full px-3 py-1 shadow-md text-xs font-semibold">
+    //                         {item?.bedrooms} BHK
+    //                     </div>
+    //                 </div>
+
+    //                 {/* Favorite Button */}
+    //                 <button className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md hover:bg-white hover:shadow-lg transition-all">
+    //                     <Heart
+    //                         size={20}
+    //                         className="text-gray-500 hover:text-red-500 transition-colors"
+    //                     />
+    //                 </button>
+    //             </div>
+
+    //             {/* Content Section */}
+    //             <div className="py-2 px-1">
+    //                 {/* Price */}
+    //                 <div className="flex items-baseline justify-between gap-2">
+    //                     <div>
+    //                         <span className="text-xl font-bold text-gray-900">
+    //                             {item?.price} {" "}
+    //                         </span>
+
+    //                         <span className="text-md text-gray-600 font-medium">
+    //                             {item?.priceUnit}
+    //                         </span>
+    //                     </div>
+
+    //                     {/* Area */}
+    //                     <div className="flex items-center space-x-1">
+    //                         <span className="text-sm font-medium text-gray-800">
+    //                             {item?.area}
+    //                         </span>
+    //                         <span className="text-xs text-gray-500">
+    //                             {item?.areaUnit || "sqft"}
+    //                         </span>
+    //                     </div>
+
+    //                 </div>
+
+    //                 {/* Property Title */}
+    //                 <h3 className="text-md font-semibold text-gray-800 truncate">
+    //                     {item?.post_title}
+    //                 </h3>
+
+    //                 {/* Location */}
+    //                 <div className="flex items-center text-gray-600 space-x-2 mb-2">
+    //                     <MapPin size={16} />
+    //                     <span className="text-sm truncate max-w-[200px]">
+    //                         {(() => {
+    //                             const address = item?.address || item?.location?.address;
+    //                             const maxWords = 4;
+    //                             if (address) {
+    //                                 const words = address.split(' ');
+    //                                 return words.length > maxWords
+    //                                     ? `${words.slice(0, maxWords).join(' ')}...`
+    //                                     : address;
+    //                             }
+    //                             return "No Address Available";
+    //                         })()}
+    //                     </span>
+    //                 </div>
+
+    //                 {/* Property Details */}
+    //                 <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                        
+    //                     {/* Amenities */}
+    //                     <div className="flex items-center space-x-2">
+    //                         <span className="text-sm text-gray-700">Amenities</span>
+    //                         <span className="bg-gray-800 text-white text-xs px-2 py-1 rounded-full">
+    //                             {item?.amenities?.length}+
+    //                         </span>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     );
+    // };
+
+
     const PropertyCard = ({ item }) => {
+        const navigate = useNavigate();
         const isProject = 'overview' in item;
 
         const getPropertyIcon = (type) => {
             switch (type?.toLowerCase()) {
-                case 'apartment':
-                    return <Building size={16} className="text-blue-500" />;
-                case 'house':
-                    return <Home size={16} className="text-green-500" />;
-                case 'office':
-                    return <Building size={16} className="text-purple-500" />;
-                case 'residential':
-                    return <Building size={16} className="text-orange-500" />;
-                default:
-                    return <MapPin size={16} className="text-red-500" />;
+                case 'apartment': return <Building size={16} className="text-blue-500" />;
+                case 'house': return <Home size={16} className="text-green-500" />;
+                case 'office': return <Building size={16} className="text-purple-500" />;
+                case 'residential': return <Building size={16} className="text-orange-500" />;
+                default: return <MapPin size={16} className="text-red-500" />;
+            }
+        };
+
+        const handleNavigation = () => {
+            if (isProject) {
+                navigate(`/api/details/project/${item?.projectId}`);
+            } else if (item?.buildingId) {
+                navigate(`/api/details/building/${item?.buildingId}`);
+            } else {
+                navigate(`/api/details/${item?.post_id}`);
             }
         };
 
         return (
-            <div className="bg-white overflow-hidden transition-all duration-300  transform hover:-translate-y-2 max-w-sm w-full mx-auto">
+            <div
+                className="bg-white overflow-hidden transition-all duration-300 transform hover:-translate-y-2 max-w-sm w-full mx-auto cursor-pointer"
+                onClick={handleNavigation}
+            >
                 {/* Image Container */}
                 <div className="relative aspect-[4/3] overflow-hidden">
                     {/* Property Image */}
@@ -419,11 +563,8 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                     </div>
 
                     {/* Favorite Button */}
-                    <button className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md hover:bg-white hover:shadow-lg transition-all">
-                        <Heart
-                            size={20}
-                            className="text-gray-500 hover:text-red-500 transition-colors"
-                        />
+                    <button className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md hover:bg-white hover:shadow-lg transition-all" onClick={(e) => e.stopPropagation()}>
+                        <Heart size={20} className="text-gray-500 hover:text-red-500 transition-colors" />
                     </button>
                 </div>
 
@@ -450,7 +591,6 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                                 {item?.areaUnit || "sqft"}
                             </span>
                         </div>
-
                     </div>
 
                     {/* Property Title */}
@@ -478,7 +618,6 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
                     {/* Property Details */}
                     <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-                        
                         {/* Amenities */}
                         <div className="flex items-center space-x-2">
                             <span className="text-sm text-gray-700">Amenities</span>
@@ -492,6 +631,8 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
         );
     };
 
+
+    
     const handleViewChange = (newView) => {
         setViewType(newView);
         if (onViewChange) {

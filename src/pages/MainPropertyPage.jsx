@@ -271,7 +271,7 @@ const MainPropertyPage = () => {
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
             onLoad={() => setIsScriptLoaded(true)}
         >
-            <div className="min-h-screen bg-white p-2">
+            <div className="min-h-screen bg-white p-2 mt-28">
                 <div className='max-w-7xl mx-auto px-2 flex flex-col gap-2  shadow-2xl rounded-md'>
                     {/* Header with View Toggle */}
                     <div className=" flex flex-col justify-center py-2">

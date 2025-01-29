@@ -817,7 +817,7 @@ function HeaderSection({ details, sectionRefs, activeSection }) {
         }
     };
     return (
-        <header className="relative w-full h-[600px] text-white">
+        <header className="relative w-full h-[600px] text-white mt-24">
             <div
                 className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''
                     }`}
@@ -871,7 +871,7 @@ function HeaderSection({ details, sectionRefs, activeSection }) {
 
                 {/* Building Title */}
                 <div className="flex items-center gap-2 mb-3 flex-wrap">
-                    <h1 className="capitalize text-7xl  font-bold">{details?.type && `${details?.type}`} {details?.name && `'${details?.name}'`}</h1>
+                    <h1 className="capitalize text-6xl  font-bold">{details?.type && `${details?.type}`} {details?.name && `'${details?.name}'`}</h1>
                     {/* <div className="flex items-center">
                       <span className="text-yellow-400 text-2xl">⭐</span>
                       <span className="text-2xl ml-1">{building.rating}</span>

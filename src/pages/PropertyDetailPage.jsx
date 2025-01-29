@@ -237,7 +237,7 @@ const SinglePage = () => {
 
 
     return (
-        <div className="mx-8">
+        <div className="mx-8 mt-24">
             {/* Title */}
             <div className="py-4 flex justify-between">
                 <h1 className="text-2xl lg:text-3xl font-semibold text-gray-800 capitalize">
@@ -245,7 +245,7 @@ const SinglePage = () => {
                 </h1>
 
                 <div className="flex gap-4">
-                    <div>
+                    {/* <div>
                         <div
                             className="flex items-center font-semibold gap-1 cursor-pointer hover:bg-gray-300 px-3 text-md rounded-md"
                             onClick={() => setIsShareOpen(true)}
@@ -268,7 +268,7 @@ const SinglePage = () => {
                                 </div>
                             </Dialog>
                         )}
-                    </div>
+                    </div> */}
 
                     <div className="flex items-center font-semibold gap-1 cursor-pointer hover:bg-gray-300 px-3 text-md  rounded-md ">
                         <CiHeart size={25} />
@@ -464,32 +464,6 @@ const SinglePage = () => {
                     )}
 
                     {/* Property Info Cards */}
-                    {/* <div className="mt-8 p-6 border rounded-lg shadow bg-white">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-                            {[
-                                { label: "Transaction Type", value: "Resale" },
-                                { label: "Property Ownership", value: "Freehold" },
-                                { label: "Flooring", value: "Marble" },
-                                { label: "Width of facing road", value: "210.0 Feet" },
-                                { label: "Gated Community", value: "Yes" },
-                                { label: "Furnishing", value: "Semifurnished" },
-                                { label: "WheelChair Friendly", value: "Yes" },
-                                { label: "Pet Friendly", value: "Yes" },
-                                { label: "Parking", value: "2 Covered" },
-                                { label: "Property Code", value: "Z76171153" },
-                                { label: "Water Source", value: "Municipal corporation" },
-                                { label: "Power Backup", value: "Full" },
-                            ].map(({ label, value }, index) => (
-                                <div key={index} className="flex items-center flex-wrap gap-2">
-                                    <span className="text-gray-600 text-sm">{label}:</span>
-                                    <span className="text-gray-900 font-bold text-sm text-left">
-                                        {value}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div> */}
-
                     <div className="mt-8 p-6 border rounded-lg shadow bg-white">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
                             {[
@@ -557,17 +531,19 @@ const SinglePage = () => {
                 </div>
             }
 
-            <PropertyDetailBuildingInfo data={propertyDetail?.building} />
+           {
+                propertyDetail?.building && <PropertyDetailBuildingInfo data={propertyDetail?.building} />
+           }
 
 
-            <div className="py-12">
+            {propertyDetail?.building?.connectedProperties && <div className="py-12">
                 <HeadingCommon title="Similar Properties " dual="true" />
                 <div className="grid grid-cols-3">
                     {
                         propertyDetail?.building?.connectedProperties?.map((property, index) => <PropertyCard property={property} />)
                     }
                 </div>
-            </div>
+            </div>}
 
         </div>
     );

@@ -176,10 +176,10 @@ import axios from 'axios';
 import { Eye } from 'lucide-react';
 
 const Signup = () => {
-    const [phoneNo, setPhoneNo] = useState('8318706210');
+    const [phoneNo, setPhoneNo] = useState('');
     const [otp, setOtp] = useState('');
     const [showOtp, setShowOtp] = useState(false);
-    const [email, setEmail] = useState('anuragsonkar053@gmail.com');
+    const [email, setEmail] = useState('');
 
     const handleSignup = async (e) => {
         e.preventDefault();
