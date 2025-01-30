@@ -24,9 +24,11 @@
 
 /*Adding custom scrollbar */
 /* For Firefox */
-* {
+body {
   scrollbar-width: thin;             /* Makes the scrollbar thinner */
   scrollbar-color: #B9B7BF #f4f4f4;  /* thumb color track color */
+  width: 100%;
+  height: 100%;
 }
 /* For Chrome, Safari, and Edge */
 ::-webkit-scrollbar {
@@ -51,10 +53,6 @@
 
 
 
-body{
-  width: 100%;
-  height: 100%;
-}
 
 .container{
   padding: 1rem 0.5rem;
