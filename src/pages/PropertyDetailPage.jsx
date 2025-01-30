@@ -536,6 +536,7 @@ const SinglePage = () => {
            }
 
 
+           {/* similiar properties */}
             {propertyDetail?.building?.connectedProperties && <div className="py-12">
                 <HeadingCommon title="Similar Properties " dual="true" />
                 <div className="grid grid-cols-3">

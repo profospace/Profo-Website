@@ -731,10 +731,27 @@ const Header = () => {
     const topNavRef = useRef(null);
 
     /* Top SEction */
-    const filters = ['Studio', 'eleven', '2', '3', '4+'];
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const options = ["Plots", "Lands", "Apartments", "Flats", "Warehouses" ,"Office"];
+
     const [city, setCity] = useState('')
     const [isCityLoading, setIsCityLoading] = useState(true)
+
+    // Toggle selection of an option
+    const toggleOption = (option) => {
+        setSelectedOptions((prevSelected) =>
+            prevSelected.includes(option)
+                ? prevSelected.filter((item) => item !== option) // Remove if already selected
+                : [...prevSelected, option] // Add if not selected
+        );
+    };
+
+    // Format selected options for display
+    const displayText = selectedOptions.length > 0
+        ? selectedOptions.join(", ") // Show selected items
+        : "Explore Filters"; // Default text
+
 
     const services = [
         { id: 1, title: 'Find Apartments', count: '782', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/4396ddc22fcd275632c522c910167b73.png', "type_name": "apartment" },
@@ -1059,8 +1076,8 @@ const Header = () => {
                             <button className="p-2">
                                 <Heart className="w-5 h-5" />
                             </button>
-                            <button className="px-4 py-2 bg-gray-100 rounded-lg text-sm">
-                                Place an ad
+                            <button className="px-4 py-2 bg-gray-100 rounded-lg text-sm flex items-center gap-2" onClick={() => navigate('/post-property-for-free')}>
+                                Post property <span className='text-[10px] px-2 rounded-sm font-semibold bg-green-800 text-white'>FREE</span>
                             </button>
                             <button className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm">
                                 About the house
@@ -1211,7 +1228,7 @@ const Header = () => {
                         <div className="w-full max-w-7xl mx-auto">
                             <div className="flex flex-wrap items-center gap-2 py-6">
                                 {/* New buildings dropdown */}
-                                <div className="relative">
+                                {/* <div className="relative">
                                     <button
                                         className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300"
                                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -1226,25 +1243,64 @@ const Header = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                         </svg>
                                     </button>
+                                </div> */}
+                                <div className="relative inline-block w-64">
+                                    <button
+                                        className="flex items-center justify-between w-full px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300"
+                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    >
+                                        <span className="truncate w-[85%] overflow-hidden whitespace-nowrap text-ellipsis">
+                                            {displayText}
+                                        </span>
+                                        <svg
+                                            className={`w-4 h-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""
+                                                }`}
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M19 9l-7 7-7-7"
+                                            />
+                                        </svg>
+                                    </button>
+
+                                    {isDropdownOpen && (
+                                        <div className="z-50 absolute left-0 mt-2 w-full bg-white border border-gray-200 rounded-md shadow-lg">
+                                            {options.map((option) => (
+                                                <div
+                                                    key={option}
+                                                    className={`px-4 py-2 cursor-pointer flex items-center gap-2 hover:bg-gray-100 ${selectedOptions.includes(option)
+                                                            ? "bg-gray-200"
+                                                            : ""
+                                                        }`}
+                                                    onClick={() => toggleOption(option)}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedOptions.includes(option)}
+                                                        readOnly
+                                                        className="w-4 h-4"
+                                                    />
+                                                    <span>{option}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
 
-                                {/* Room filters */}
+                                {/* Buy / Rent Button filters */}
                                 <div className="flex flex-wrap gap-2">
                                     <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
-                                        Studio
+                                        Buy
                                     </button>
                                     <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
-                                        1
+                                        Rent
                                     </button>
-                                    <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
-                                        2
-                                    </button>
-                                    <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
-                                        3
-                                    </button>
-                                    <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-200 ">
-                                        4+
-                                    </button>
+                                    
                                 </div>
 
                                 {/* Price input */}
@@ -1257,18 +1313,18 @@ const Header = () => {
                                 </div>
 
                                 {/* Metro filter */}
-                                <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
+                                {/* <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
                                     Metro
-                                </button>
+                                </button> */}
 
-                                {/* Map toggle */}
-                                <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300" onClick={() => handleFilter('getMapFeed')} >
-                                    On the map
-                                </button>
 
                                 {/* Show results button */}
                                 <button className="px-6 py-2 bg-[#F5CA20] hover:bg-yellow-500 text-gray-900 font-medium rounded-md transition-colors">
-                                    Show 782 new buildings
+                                    Show 782 New Results
+                                </button>
+                                {/* Map toggle */}
+                                <button className="px-4 py-2 text-white bg-black rounded-md " onClick={() => handleFilter('getMapFeed')} >
+                                    On the map
                                 </button>
                             </div>
                         </div>

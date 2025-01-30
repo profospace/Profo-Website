@@ -28,6 +28,7 @@ import BuildingDetailPage from './pages/BuildingDetailPage';
 import BackToTop from './components/BackToTop';
 import { getAllBuildings } from './redux/features/Buildings/buildingsSlice';
 import MapPage from './pages/MapPage';
+import PostProperty from './pages/PostProperty';
 // import MainPropertyPage from './pages/MainPropertyPage';
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
             <Route path='/projects' element={<ProjectPage />} />
             <Route path='/buildings' element={<BuildingPage />} />
             <Route path='/main' element={<MainPropertyPage />} />
+            <Route path='/post-property-for-free' element={<PostProperty />} />
 
 
             <Route path='/api/details/project/:post_id' element={<ProjectDetailPage />} />{ /* projects detail page */}
