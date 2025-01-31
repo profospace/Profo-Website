@@ -936,7 +936,7 @@ const Header = () => {
                 }
                 else if (type_name === "buildings") {
                     dispatch(getAllBuildings())
-
+                    
                 }
                 else if (type_name === "properties") {
                     dispatch(getAllProperties())
@@ -972,6 +972,8 @@ const Header = () => {
         );
     };
 
+
+    // City location fetch
     useEffect(() => {
         if (!navigator.geolocation) {
             alert("Geolocation is not supported by your browser");

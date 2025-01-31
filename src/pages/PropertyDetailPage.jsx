@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Button } from "@material-tailwind/react";
 import "swiper/css";
@@ -95,8 +95,8 @@ const SinglePage = () => {
     const [images, setImages] = useState([]);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false); // Control animation state
-        const imagePreviewRef = useRef(null);
-    
+    const imagePreviewRef = useRef(null);
+
 
     console.log(propertyDetail)
     // Map configuration
@@ -531,12 +531,12 @@ const SinglePage = () => {
                 </div>
             }
 
-           {
+            {
                 propertyDetail?.building && <PropertyDetailBuildingInfo data={propertyDetail?.building} />
-           }
+            }
 
 
-           {/* similiar properties */}
+            {/* similiar properties */}
             {propertyDetail?.building?.connectedProperties && <div className="py-12">
                 <HeadingCommon title="Similar Properties " dual="true" />
                 <div className="grid grid-cols-3">
