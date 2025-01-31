@@ -5,6 +5,9 @@ const initialState = {
   properties: [],
   projects: [],
   buildings: [],
+  filters: {},
+  appliedFilters : {},
+  totalProperties: null ,
   searchParams: {},
   isSuccess: false,
   isError: false,
@@ -71,11 +74,28 @@ export const getAllBuildings = createAsyncThunk(
   }
 );
 
+// filter
+export const applyFilter = createAsyncThunk(
+  "map/applyFilter",
+  async (filters, thunkAPI) => {
+    try {
+      return await mapService.applyFilter(filters);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 
 const mapSlice = createSlice({
   name: "map",
   initialState,
-  reducers: {},
+  reducers: {
+    clearFilters: (state) => {
+      state.appliedFilters = {}; // Reset appliedFilters to an empty object
+    },    
+
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getMapFeed.pending, (state) => {
@@ -154,14 +174,33 @@ const mapSlice = createSlice({
         state.properties = action.payload;
         state.buildings = [];
         state.projects = [];
-        
+
       })
       .addCase(getAllProperties.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload.message;
       })
+      .addCase(applyFilter.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(applyFilter.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        console.log(action?.payload)
+        state.properties = action.payload.properties;
+        state.filters = action.payload.filters;
+        state.appliedFilters = action.payload.appliedFilters
+        state.totalProperties = action.payload.totalProperties
+        // state.totalProperties = action.payload.totalProperties;
+      })
+      .addCase(applyFilter.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        // state.message = action.payload.message;
+      })
   },
 });
 
+export const { clearFilters } = mapSlice.actions;
 export default mapSlice.reducer;
