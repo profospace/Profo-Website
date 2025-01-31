@@ -335,10 +335,14 @@ const SinglePage = () => {
                     </Swiper>
                 </div>
 
-                <button
+                {/* <button
                     variant="outlined"
                     className="rounded-md hover:bg-black hover:text-white flex items-center gap-3 absolute bottom-5 right-5 px-3 py-2 bg-white shadow-lg z-10"
-                    onClick={() => imagePreviewRef.current.openGallery()} >
+                    onClick={() => imagePreviewRef.current.openGallery()} > */}
+                <button
+                    className="flex items-center gap-2 px-4 py-2 bg-white text-black hover:bg-black rounded-lg hover:text-white transition-colors w-fit absolute bottom-5 right-5"
+                    onClick={() => imagePreviewRef.current.openGallery()}
+                >
                     <PiDotsNineBold size={25} />
                     Show all photos
                     <ImagePreview ref={imagePreviewRef} images={propertyDetail?.galleryList} />
