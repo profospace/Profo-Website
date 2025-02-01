@@ -1720,7 +1720,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
             }
             open={modalOpen}
             onCancel={() => setModalOpen(false)}
-            width={800}
+            width={1000}
             footer={[
                 <button
                     key="reset"
@@ -1738,7 +1738,7 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
                 </button>
             ]}
         >
-            <div className="max-h-[70vh] overflow-y-auto pr-2">
+            <div className="max-h-[60vh] overflow-y-auto pr-2">
                 {/* Basic Details */}
                 <CustomCard title="Basic Details">
                     <div className="grid grid-cols-2 gap-4">

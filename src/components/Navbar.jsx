@@ -713,7 +713,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Menu, Heart, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getAllBuildings, getAllProjects, getAllProperties, getFilterProperties, getMapFeed } from '../redux/features/Map/mapSlice';
+import { applyFilter, getAllBuildings, getAllProjects, getAllProperties, getFilterProperties, getMapFeed } from '../redux/features/Map/mapSlice';
 import axios from 'axios';
 
 const Header = () => {
@@ -733,10 +733,55 @@ const Header = () => {
     /* Top SEction */
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState([]);
-    const options = ["Plots", "Lands", "Apartments", "Flats", "Warehouses" ,"Office"];
+    const options = ["Plots", "Lands", "Apartment", "Flats", "Warehouses", "Office"];
 
     const [city, setCity] = useState('')
     const [isCityLoading, setIsCityLoading] = useState(true)
+
+    // New state for Buy/Rent toggle
+    const [selectedPurpose, setSelectedPurpose] = useState(null);
+    // New state for price input
+    const [maxPrice, setMaxPrice] = useState('');
+    // New state for Buy/Rent individual toggles
+    const [purposeFilters, setPurposeFilters] = useState({
+        buy: false,
+        rent: false
+    });
+
+
+    // Handle purpose selection (Buy/Rent)
+    const handlePurposeSelect = (purpose) => {
+        setSelectedPurpose(selectedPurpose === purpose ? null : purpose);
+    };
+
+    // Handle Show Results
+    const handleShowResults = async () => {
+        // Prepare filters object
+        const filters = {
+            selects: {
+                type_name: selectedOptions,
+                purpose: selectedPurpose
+            },
+            numeric: {},
+        };
+
+        // Add purpose filters
+        if (purposeFilters.buy) filters.purpose.purpose.push('Buy');
+        if (purposeFilters.rent) filters.purpose.purpose.push('Rent');
+
+        // Add price filter if specified
+        if (maxPrice) {
+            filters.numeric.price = [0, parseInt(maxPrice)];
+        }
+
+
+        console.log(filters)
+        dispatch(applyFilter(filters))
+        navigate('/main')
+       
+    };
+
+
 
     // Toggle selection of an option
     const toggleOption = (option) => {
@@ -746,6 +791,8 @@ const Header = () => {
                 : [...prevSelected, option] // Add if not selected
         );
     };
+
+    
 
     // Format selected options for display
     const displayText = selectedOptions.length > 0
@@ -936,7 +983,7 @@ const Header = () => {
                 }
                 else if (type_name === "buildings") {
                     dispatch(getAllBuildings())
-                    
+
                 }
                 else if (type_name === "properties") {
                     dispatch(getAllProperties())
@@ -1211,7 +1258,7 @@ const Header = () => {
                                     <button className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg">
                                         About the house
                                     </button>
-                                    <button className="w-full px-4 py-2 text-center" onClick={()=>navigate('/signup')}>
+                                    <button className="w-full px-4 py-2 text-center" onClick={() => navigate('/signup')}>
                                         Register
                                     </button>
                                 </div>
@@ -1229,23 +1276,7 @@ const Header = () => {
                         {/* Search Bar Section */}
                         <div className="w-full max-w-7xl mx-auto">
                             <div className="flex flex-wrap items-center gap-2 py-6">
-                                {/* New buildings dropdown */}
-                                {/* <div className="relative">
-                                    <button
-                                        className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300"
-                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                    >
-                                        <span>New buildings</span>
-                                        <svg
-                                            className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </button>
-                                </div> */}
+                                {/* dropdown */}
                                 <div className="relative inline-block w-64">
                                     <button
                                         className="flex items-center justify-between w-full px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300"
@@ -1276,8 +1307,8 @@ const Header = () => {
                                                 <div
                                                     key={option}
                                                     className={`px-4 py-2 cursor-pointer flex items-center gap-2 hover:bg-gray-100 ${selectedOptions.includes(option)
-                                                            ? "bg-gray-200"
-                                                            : ""
+                                                        ? "bg-gray-200"
+                                                        : ""
                                                         }`}
                                                     onClick={() => toggleOption(option)}
                                                 >
@@ -1295,21 +1326,44 @@ const Header = () => {
                                 </div>
 
                                 {/* Buy / Rent Button filters */}
-                                <div className="flex flex-wrap gap-2">
+                                {/* <div className="flex flex-wrap gap-2">
                                     <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
                                         Buy
                                     </button>
                                     <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
                                         Rent
                                     </button>
-                                    
+
+                                </div> */}
+                                <div className="flex flex-wrap gap-2">
+                                    <button
+                                        className={`px-4 py-2 rounded-md border border-gray-300 ${selectedPurpose === 'buy' ? 'bg-black text-white' : 'text-gray-700 bg-gray-50'}`}
+                                        onClick={() => handlePurposeSelect('buy')}
+                                    >
+                                        Buy
+                                    </button>
+                                    <button
+                                        className={`px-4 py-2 rounded-md border border-gray-300 ${selectedPurpose === 'rent' ? 'bg-black text-white' : 'text-gray-700 bg-gray-50'}`}
+                                        onClick={() => handlePurposeSelect('rent')}
+                                    >
+                                        Rent
+                                    </button>
                                 </div>
 
                                 {/* Price input */}
-                                <div className="flex-grow">
+                                {/* <div className="flex-grow">
                                     <input
                                         type="text"
                                         placeholder="Price up to, ₱"
+                                        className="w-full px-4 py-2 text-gray-700 placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div> */}
+                                <div className="flex-grow">
+                                    <input
+                                        type="number"
+                                        placeholder="Price up to, ₱"
+                                        value={maxPrice}
+                                        onChange={(e) => setMaxPrice(e.target.value)}
                                         className="w-full px-4 py-2 text-gray-700 placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
@@ -1321,8 +1375,8 @@ const Header = () => {
 
 
                                 {/* Show results button */}
-                                <button className="px-6 py-2 bg-[#F5CA20] hover:bg-yellow-500 text-gray-900 font-medium rounded-md transition-colors">
-                                    Show 782 New Results
+                                <button onClick={handleShowResults} className="px-6 py-2 bg-[#F5CA20] hover:bg-yellow-500 text-gray-900 font-medium rounded-md transition-colors">
+                                    Show Results
                                 </button>
                                 {/* Map toggle */}
                                 <button className="px-4 py-2 text-white bg-black rounded-md " onClick={() => handleFilter('getMapFeed')} >

@@ -387,7 +387,7 @@
 //                                             <FaFilterCircleDollar />
 //                                             <span>Filters</span>
 //                                         </button> */}
-                                        
+
 //                                         <button
 //                                             onClick={() => setModalOpen(true)}
 //                                             className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
@@ -648,6 +648,7 @@ import MapPage from './MapPage';
 import { applyFilter, clearFilters, getMapFeed } from '../redux/features/Map/mapSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import ListingPage from '../components/ListingPage';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Map,
     List,
@@ -682,29 +683,48 @@ const MainPropertyPage = () => {
     const [projectModalOpen, setProjectModalOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
 
-        function getHeading(properties, projects) {
-            console.log("p", properties)
-            var purpose;
-            if (properties.length > 0) {
-                const typeNames = properties?.map((property) => property?.type_name);
-                purpose = properties?.map((item) => item?.purpose);
-                const uniqueTypeNames = [...new Set(typeNames)];
-                console.log('purpose', purpose)
-
-                // If all type_name are the same, return that type_name; otherwise, return "Properties".
-                return uniqueTypeNames.length === 1 ? uniqueTypeNames[0] : "Properties";
-
-
+    // Framer Motion variants for filter animation
+    const filterVariants = {
+        hidden: {
+            opacity: 0,
+            y: -50,
+            transition: {
+                duration: 0.3
             }
-            else if (purpose?.[0] == 'Buy' || purpose?.[0] == 'buy') return "Buy Properties"
-            else if (purpose?.[0] == "Rent" || purpose?.[0] == "rent") return "Properties for rent"
-
-            else if (projects.length > 0) {
-                return "Projects";
-            } else {
-                return "Buildings";
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+                damping: 15
             }
         }
+    };
+    function getHeading(properties, projects) {
+        console.log("p", properties)
+        var purpose;
+        if (properties.length > 0) {
+            const typeNames = properties?.map((property) => property?.type_name);
+            purpose = properties?.map((item) => item?.purpose);
+            const uniqueTypeNames = [...new Set(typeNames)];
+            console.log('purpose', purpose)
+
+            // If all type_name are the same, return that type_name; otherwise, return "Properties".
+            return uniqueTypeNames.length === 1 ? uniqueTypeNames[0] : "Properties";
+
+
+        }
+        else if (purpose?.[0] == 'Buy' || purpose?.[0] == 'buy') return "Buy Properties"
+        else if (purpose?.[0] == "Rent" || purpose?.[0] == "rent") return "Properties for rent"
+
+        else if (projects.length > 0) {
+            return "Projects";
+        } else {
+            return "Buildings";
+        }
+    }
     // Get initial location
     useEffect(() => {
         if (navigator.geolocation) {
@@ -732,7 +752,7 @@ const MainPropertyPage = () => {
     };
 
     const handleRemoveFilter = (key, value) => {
-        console.log(key,value)
+        console.log(key, value)
 
         const updatedFilters = { ...appliedFilters };
 
@@ -771,19 +791,28 @@ const MainPropertyPage = () => {
                                     />
                                 </div>
 
-                                <button
+                                {/* <button
                                     onClick={() => dispatch(clearFilters())}
                                     className="flex items-center gap-2 px-3 py-1 bg-gray-300 text-black rounded-md text-xs"
                                 >
                                     Clear All
-                                </button>
-                                <button
+                                </button> */}
+                                {/* <button
                                     onClick={() => setIsFilterVisible(!isFilterVisible)}
                                     className="flex items-center gap-2 px-3 py-1 bg-gray-300 text-black rounded-md"
                                 >
                                     <AiOutlineSetting />
                                     Filter
-                                </button>
+                                </button> */}
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => setIsFilterVisible(!isFilterVisible)}
+                                    className="flex items-center gap-2 px-3 py-1 bg-gray-300 text-black rounded-md"
+                                >
+                                    <AiOutlineSetting />
+                                    Filter
+                                </motion.button>
 
                                 <div className='flex gap-2 items-center'>
                                     <select
@@ -814,57 +843,65 @@ const MainPropertyPage = () => {
                     </div>
 
                     {/* Filters and Search Section - Conditionally Rendered */}
-                    {isFilterVisible && (
-                        <div className="bg-white space-y-4 ">
-                            <div className="w-full  ">
-                                <div className="relative w-full ">
-                                    <div className="flex items-center gap-3 transition-all duration-300 ease-in-out">
-                                        <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-1/3' : 'w-auto'}`}>
-                                            {!isSearchExpanded ? (
-                                                <button
-                                                    onClick={() => setIsSearchExpanded(true)}
-                                                    className="flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300"
-                                                >
-                                                    <Search size={16} />
-                                                    <span>Easy search</span>
-                                                </button>
-                                            ) : (
-                                                <div className="relative w-full">
-                                                    <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Search by name or address..."
-                                                        value={searchQuery}
-                                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                                        onBlur={() => {
-                                                            if (!searchQuery) {
-                                                                setIsSearchExpanded(false);
-                                                            }
-                                                        }}
-                                                        className="w-full pl-10 pr-4 py-2 bg-white rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-700"
-                                                        autoFocus
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
+                    {/* Animated Filter Section */}
+                    <AnimatePresence>
+                        {isFilterVisible && (
+                            <motion.div
+                                initial="hidden"
+                                animate="visible"
+                                exit="hidden"
+                                variants={filterVariants}
+                                className="bg-white overflow-hidden"
+                            >
+                                <div className="w-full  ">
+                                    <div className="relative w-full ">
+                                        <div className="flex items-center gap-3 transition-all duration-300 ease-in-out">
+                                            <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-1/3' : 'w-auto'}`}>
+                                                {!isSearchExpanded ? (
+                                                    <button
+                                                        onClick={() => setIsSearchExpanded(true)}
+                                                        className="flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300"
+                                                    >
+                                                        <Search size={16} />
+                                                        <span>Easy search</span>
+                                                    </button>
+                                                ) : (
+                                                    <div className="relative w-full">
+                                                        <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Search by name or address..."
+                                                            value={searchQuery}
+                                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                                            onBlur={() => {
+                                                                if (!searchQuery) {
+                                                                    setIsSearchExpanded(false);
+                                                                }
+                                                            }}
+                                                            className="w-full pl-10 pr-4 py-2 bg-white rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-700"
+                                                            autoFocus
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        <button
-                                            onClick={() => setModalOpen(true)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
-                                        >
-                                            <FiSettings className="text-gray-600" size={20} />
-                                            <span className="text-sm font-medium text-gray-700">Filters</span>
-                                        </button>
+                                            <button
+                                                onClick={() => setModalOpen(true)}
+                                                className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                                            >
+                                                <FiSettings className="text-gray-600" size={20} />
+                                                <span className="text-sm font-medium text-gray-700">Filters</span>
+                                            </button>
 
-                                        {/* Filter Component Modal */}
-                                        <FilterComponent
-                                            modalOpen={modalOpen}
-                                            setModalOpen={setModalOpen}
-                                            activeSection={activeSection}
-                                            setActiveSection={setActiveSection}
-                                        />
+                                            {/* Filter Component Modal */}
+                                            <FilterComponent
+                                                modalOpen={modalOpen}
+                                                setModalOpen={setModalOpen}
+                                                activeSection={activeSection}
+                                                setActiveSection={setActiveSection}
+                                            />
 
-                                        {/* <div className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded-xl">
+                                            {/* <div className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded-xl">
                                             <button className="px-2">Beds</button>
                                             <button className="px-2 bg-white border border-none hover:text-red-400">1</button>
                                             <button className="px-2 bg-white border border-none hover:text-red-400">2</button>
@@ -872,60 +909,61 @@ const MainPropertyPage = () => {
                                             <button className="px-2 bg-white border border-none hover:text-red-400">4+</button>
                                         </div> */}
 
-                                        <button
-                                            onClick={() => setProjectModalOpen(true)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
-                                        >
-                                            <FiSettings className="text-gray-600" size={20} />
-                                            <span className="text-sm font-medium text-gray-700">Project Filters</span>
-                                        </button>
+                                            <button
+                                                onClick={() => setProjectModalOpen(true)}
+                                                className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                                            >
+                                                <FiSettings className="text-gray-600" size={20} />
+                                                <span className="text-sm font-medium text-gray-700">Project Filters</span>
+                                            </button>
 
-                                        {/* Filter Component Modal */}
-                                        <ProjectFilterComponent
-                                            modalOpen={projectModalOpen}
-                                            setModalOpen={setProjectModalOpen}
+                                            {/* Filter Component Modal */}
+                                            <ProjectFilterComponent
+                                                modalOpen={projectModalOpen}
+                                                setModalOpen={setProjectModalOpen}
                                             // activeSection={activeSection}
                                             // setActiveSection={setActiveSection}
-                                        />
+                                            />
 
 
-                                        <div className={`flex items-center gap-3 transition-all duration-300 ease-in-out overflow-hidden ${isSearchExpanded
-                                            ? 'w-0 opacity-0 invisible'
-                                            : 'w-auto opacity-100 visible'
-                                            }`}>
+                                            <div className={`flex items-center gap-3 transition-all duration-300 ease-in-out overflow-hidden ${isSearchExpanded
+                                                ? 'w-0 opacity-0 invisible'
+                                                : 'w-auto opacity-100 visible'
+                                                }`}>
+                                                <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
+                                                    Price Range
+                                                </button>
+                                                <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
+                                                    Bathroom
+                                                </button>
+                                                <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
+                                                    Floor
+                                                </button>
+                                            </div>
+
                                             <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                                Price Range
+                                                Purpose
                                             </button>
                                             <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                                Bathroom
+                                                Amenities
                                             </button>
-                                            <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                                Floor
-                                            </button>
+                                            <select
+                                                value={filterType}
+                                                onChange={(e) => setFilterType(e.target.value)}
+                                                className="px-4 py-2 text-black bg-white border border-gray-300 rounded-xl hover:bg-gray-50"
+                                            >
+                                                <option value="all">All Types</option>
+                                                <option value="apartment">Apartments</option>
+                                                <option value="house">Houses</option>
+                                                <option value="office">Offices</option>
+                                                <option value="residential">Buildings</option>
+                                            </select>
                                         </div>
-
-                                        <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                            Purpose
-                                        </button>
-                                        <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                            Amenities
-                                        </button>
-                                        <select
-                                            value={filterType}
-                                            onChange={(e) => setFilterType(e.target.value)}
-                                            className="px-4 py-2 text-black bg-white border border-gray-300 rounded-xl hover:bg-gray-50"
-                                        >
-                                            <option value="all">All Types</option>
-                                            <option value="apartment">Apartments</option>
-                                            <option value="house">Houses</option>
-                                            <option value="office">Offices</option>
-                                            <option value="residential">Buildings</option>
-                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
 
                 {view === 'list' ? (

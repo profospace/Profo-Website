@@ -363,7 +363,7 @@ function ProjectFilterComponent({ modalOpen, setModalOpen }) {
             }
             open={modalOpen}
             onCancel={() => setModalOpen(false)}
-            width={800}
+            width={1000}
             footer={[
                 <button
                     key="reset"
@@ -382,7 +382,7 @@ function ProjectFilterComponent({ modalOpen, setModalOpen }) {
             ]}
         >
             {/* Rest of the JSX remains the same */}
-            <div className="max-h-[60vh] overflow-y-auto">
+            <div className="max-h-[70vh] overflow-y-auto">
                 <Collapse defaultActiveKey={['1', '2', '3', '4']} className="bg-white">
                     <Panel header="Project Type & Status" key="1">
                         <Space direction="vertical" className="w-full">
