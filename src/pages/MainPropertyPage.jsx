@@ -683,7 +683,7 @@ const MainPropertyPage = () => {
     const [projectModalOpen, setProjectModalOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
 
-    // Framer Motion variants for filter animation
+    // Framer Motion variants for filter toggle animation
     const filterVariants = {
         hidden: {
             opacity: 0,
@@ -702,14 +702,15 @@ const MainPropertyPage = () => {
             }
         }
     };
+    
     function getHeading(properties, projects) {
-        console.log("p", properties)
+        // console.log("p", properties)
         var purpose;
         if (properties.length > 0) {
             const typeNames = properties?.map((property) => property?.type_name);
             purpose = properties?.map((item) => item?.purpose);
             const uniqueTypeNames = [...new Set(typeNames)];
-            console.log('purpose', purpose)
+            // console.log('purpose', purpose)
 
             // If all type_name are the same, return that type_name; otherwise, return "Properties".
             return uniqueTypeNames.length === 1 ? uniqueTypeNames[0] : "Properties";

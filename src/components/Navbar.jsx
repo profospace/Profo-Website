@@ -723,7 +723,7 @@ const Header = () => {
     const dispatch = useDispatch()
     const isHomePage = location.pathname === '/';
     const [selectedId, setSelectedId] = useState(null);
-    console.log(selectedId)
+    // console.log(selectedId)
 
 
     const [isSticky, setIsSticky] = useState(false);
@@ -778,7 +778,7 @@ const Header = () => {
         console.log(filters)
         dispatch(applyFilter(filters))
         navigate('/main')
-       
+
     };
 
 
@@ -792,7 +792,7 @@ const Header = () => {
         );
     };
 
-    
+
 
     // Format selected options for display
     const displayText = selectedOptions.length > 0
@@ -805,9 +805,9 @@ const Header = () => {
         { id: 2, title: 'Find New buildings', count: '136 695', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1a94f43121fc8899c8a95327c26fc0ac.png', "type_name": "buildings" },
         { id: 3, title: 'Project', count: '16 309', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/634a00148bb1c6ed32c05713974b46b6.png', "type_name": "project" },
         { id: 4, title: "Explore Properties Nearby", count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/7410e105dea0ba239fd7f8974a7c4c95.png', "type_name": "properties" },
-        { id: 5, title: 'We will help to pass', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1d3ebf3ab1e13ceb46696a83f711461b.png' },
+        { id: 5, title: 'We will help to pass', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1d3ebf3ab1e13ceb46696a83f711461b.png', "type_name":"post_property"},
         { id: 6, title: 'EMI Calculator', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/228dd13e77a8223bb042b59546f36646.png' },
-        { id: 7, title: 'Services', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/e69cded9c33e3274c1f2576ebf1d06bd.png' },
+        { id: 7, title: 'Services', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/e69cded9c33e3274c1f2576ebf1d06bd.png' , "type_name": "services" },
     ];
 
 
@@ -980,13 +980,16 @@ const Header = () => {
 
                 if (type_name === "project") {
                     dispatch(getAllProjects())
+                    navigate('/main')
                 }
                 else if (type_name === "buildings") {
                     dispatch(getAllBuildings())
+                    navigate('/main')
 
                 }
                 else if (type_name === "properties") {
                     dispatch(getAllProperties())
+                    navigate('/main')
                 }
                 else if (type_name === 'getMapFeed') {
                     dispatch(getMapFeed({
@@ -994,22 +997,32 @@ const Header = () => {
                         longitude,
                         radius: 1000
                     }))
+                    navigate('/main')
                 }
                 else if (type_name === 'rent') {
                     dispatch(getFilterProperties({ latitude, longitude, purpose: type_name }));
+                    navigate('/main')
 
 
                 }
                 else if (type_name === 'buy') {
                     dispatch(getFilterProperties({ latitude, longitude, purpose: type_name }));
+                    navigate('/main')
 
 
+                }
+                else if (type_name === 'services'){
+                    navigate('/services')
+                }
+                else if (type_name === 'post_property'){
+                    navigate('/post-property-for-free')
                 }
                 else {
                     // Dispatch action with the location and type_name
                     dispatch(getFilterProperties({ latitude, longitude, type_name }));
+                    navigate('/main')
                 }
-                navigate('/main')
+                
 
             },
             (error) => {
@@ -1053,8 +1066,8 @@ const Header = () => {
                             component.types.includes('administrative_area_level_1')
                         )?.long_name;
 
-                        console.log("City:", city);
-                        console.log("State:", state);
+                        // console.log("City:", city);
+                        // console.log("State:", state);
                         setCity(city)
 
                         // You can dispatch another action or update the state with city and state here
@@ -1404,10 +1417,10 @@ const Header = () => {
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
-                            {services.map((service) => (
-                                <div>
+                            {services?.map((service) => (
+                                <div key={service.id}>
                                     <div
-                                        key={service.id}
+                                       
                                         className="bg-[#F3F3F6] rounded-xl shadow-sm cursor-pointer w-32 h-auto overflow-hidden "
                                         onClick={() => handleFilter(service?.type_name)}
                                     >

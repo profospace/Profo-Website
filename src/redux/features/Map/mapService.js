@@ -326,12 +326,152 @@ const getAllBuildings = async () => {
 //   }
 // };
 
-const applyFilter = async (changedFilters) => {
-  console.log("Applying filters:", changedFilters);
+// const applyFilter = async (changedFilters) => {
+//   console.log("Applying filters:", changedFilters);
   
 
+//   // Initialize empty query parts array
+//   const propertyQueryParts = [];
+
+//   // Helper function to build query parameters
+//   const buildQuery = (key, values) => {
+//     if (values === null || values === undefined) return '';
+//     if (Array.isArray(values)) {
+//       return values.map(value => `${key}=${encodeURIComponent(value)}`).join('&');
+//     }
+//     return `${key}=${encodeURIComponent(values)}`;
+//   };
+
+//   // Handle numeric filters - prooperty
+//   if (changedFilters.numeric) {
+//     const numericFilters = changedFilters.numeric;
+
+//     // Handle individual numeric values (bedrooms, bathrooms)
+//     if (numericFilters.bedrooms) {
+//       propertyQueryParts.push(buildQuery('bedrooms', numericFilters.bedrooms));
+//     }
+//     if (numericFilters.bathrooms) {
+//       propertyQueryParts.push(buildQuery('bathrooms', numericFilters.bathrooms));
+//     }
+
+//     // Handle range values
+//     if (numericFilters.price) {
+//       propertyQueryParts.push(buildQuery('priceMin', numericFilters.price[0]));
+//       propertyQueryParts.push(buildQuery('priceMax', numericFilters.price[1]));
+//     }
+//     if (numericFilters.area) {
+//       propertyQueryParts.push(buildQuery('areaMin', numericFilters.area[0]));
+//       propertyQueryParts.push(buildQuery('areaMax', numericFilters.area[1]));
+//     }
+//     if (numericFilters.carpetArea) {
+//       propertyQueryParts.push(buildQuery('carpetAreaMin', numericFilters.carpetArea[0]));
+//       propertyQueryParts.push(buildQuery('carpetAreaMax', numericFilters.carpetArea[1]));
+//     }
+//     if (numericFilters.superBuiltupArea) {
+//       propertyQueryParts.push(buildQuery('superBuiltupAreaMin', numericFilters.superBuiltupArea[0]));
+//       propertyQueryParts.push(buildQuery('superBuiltupAreaMax', numericFilters.superBuiltupArea[1]));
+//     }
+//     if (numericFilters.floor) {
+//       propertyQueryParts.push(buildQuery('floorMin', numericFilters.floor[0]));
+//       propertyQueryParts.push(buildQuery('floorMax', numericFilters.floor[1]));
+//     }
+//   }
+
+//   // Handle select filters
+//   if (changedFilters.selects) {
+//     const selectFilters = changedFilters.selects;
+//     Object.entries(selectFilters).forEach(([key, value]) => {
+//       if (value && value.length > 0) {
+//         propertyQueryParts.push(buildQuery(key, value));
+//       }
+//     });
+//   }
+
+//   // Handle availability
+//   if (changedFilters.available !== null && changedFilters.available !== undefined) {
+//     propertyQueryParts.push(buildQuery('available', changedFilters.available));
+//   }
+
+//   // Handle amenities
+//   if (changedFilters.propertyAmenities && changedFilters.propertyAmenities.length > 0) {
+//     propertyQueryParts.push(buildQuery('propertyAmenities', changedFilters.propertyAmenities));
+//   }
+
+
+//   // project filter ***********************
+//   // Handle project-specific filters
+//   if (changedFilters.projectName) {
+//     propertyQueryParts.push(buildQuery('projectName', changedFilters.projectName));
+//   }
+//   if (changedFilters.projectType) {
+//     propertyQueryParts.push(buildQuery('projectType', changedFilters.projectType[0]));
+//   }
+//   if (changedFilters.projectStatus) {
+//     propertyQueryParts.push(buildQuery('projectStatus', changedFilters.projectStatus));
+//   }
+//   if (changedFilters.availabilityStatus) {
+//     propertyQueryParts.push(buildQuery('availabilityStatus', changedFilters.availabilityStatus));
+//   }
+
+//   // Handle project numeric filters
+//   if (changedFilters.totalUnits) {
+//     propertyQueryParts.push(buildQuery('totalUnits', changedFilters.totalUnits));
+//   }
+//   if (changedFilters.totalTowers) {
+//     propertyQueryParts.push(buildQuery('totalTowers', changedFilters.totalTowers));
+//   }
+//   if (changedFilters.projectTotalFloors) {
+//     propertyQueryParts.push(buildQuery('projectTotalFloors', changedFilters.projectTotalFloors));
+//   }
+
+//   // Handle price range
+//   if (changedFilters.priceMin || changedFilters.priceMax) {
+//     if (changedFilters.priceMin) {
+//       propertyQueryParts.push(buildQuery('priceMin', changedFilters.priceMin));
+//     }
+//     if (changedFilters.priceMax) {
+//       propertyQueryParts.push(buildQuery('priceMax', changedFilters.priceMax));
+//     }
+//   }
+
+//   // Handle location filters
+//   if (changedFilters.city) {
+//     propertyQueryParts.push(buildQuery('city', changedFilters.city));
+//   }
+//   if (changedFilters.state) {
+//     propertyQueryParts.push(buildQuery('state', changedFilters.state));
+//   }
+
+//   // Handle project amenities
+//   if (changedFilters.projectAmenities) {
+//     propertyQueryParts.push(buildQuery('projectAmenities', changedFilters.projectAmenities));
+//   }
+
+//   // Combine all query parts and filter out empty strings
+//   const queryString = propertyQueryParts.filter(Boolean).join('&');
+
+//   console.log("queryString", queryString);
+
+//   try {
+//     const response = await axios.get(`${filter_base_url}?${queryString}`);
+//     console.log("Filtered response:", response);
+//     return {
+//       properties: response.data.properties,
+//       totalProperties: response.data.totalProperties,
+//       filters: response.data.filters,
+//       appliedFilters: response?.data?.appliedFilters
+//     };
+//   } catch (error) {
+//     console.error("Error applying filters:", error);
+//     throw error;
+//   }
+// };
+
+const applyFilter = async (changedFilters) => {
+  console.log("Applying filters:", changedFilters);
+
   // Initialize empty query parts array
-  const propertyQueryParts = [];
+  const queryParts = [];
 
   // Helper function to build query parameters
   const buildQuery = (key, values) => {
@@ -342,115 +482,124 @@ const applyFilter = async (changedFilters) => {
     return `${key}=${encodeURIComponent(values)}`;
   };
 
-  // Handle numeric filters - prooperty
+  // Handle numeric filters - property
   if (changedFilters.numeric) {
     const numericFilters = changedFilters.numeric;
 
     // Handle individual numeric values (bedrooms, bathrooms)
     if (numericFilters.bedrooms) {
-      propertyQueryParts.push(buildQuery('bedrooms', numericFilters.bedrooms));
+      queryParts.push(buildQuery('bedrooms', numericFilters.bedrooms));
     }
     if (numericFilters.bathrooms) {
-      propertyQueryParts.push(buildQuery('bathrooms', numericFilters.bathrooms));
+      queryParts.push(buildQuery('bathrooms', numericFilters.bathrooms));
     }
 
     // Handle range values
     if (numericFilters.price) {
-      propertyQueryParts.push(buildQuery('priceMin', numericFilters.price[0]));
-      propertyQueryParts.push(buildQuery('priceMax', numericFilters.price[1]));
+      queryParts.push(buildQuery('priceMin', numericFilters.price[0]));
+      queryParts.push(buildQuery('priceMax', numericFilters.price[1]));
     }
     if (numericFilters.area) {
-      propertyQueryParts.push(buildQuery('areaMin', numericFilters.area[0]));
-      propertyQueryParts.push(buildQuery('areaMax', numericFilters.area[1]));
+      queryParts.push(buildQuery('area', numericFilters.area[1])); // Use max value
     }
     if (numericFilters.carpetArea) {
-      propertyQueryParts.push(buildQuery('carpetAreaMin', numericFilters.carpetArea[0]));
-      propertyQueryParts.push(buildQuery('carpetAreaMax', numericFilters.carpetArea[1]));
+      queryParts.push(buildQuery('carpetArea', numericFilters.carpetArea[1])); // Use max value
     }
     if (numericFilters.superBuiltupArea) {
-      propertyQueryParts.push(buildQuery('superBuiltupAreaMin', numericFilters.superBuiltupArea[0]));
-      propertyQueryParts.push(buildQuery('superBuiltupAreaMax', numericFilters.superBuiltupArea[1]));
+      queryParts.push(buildQuery('superBuiltupArea', numericFilters.superBuiltupArea[1])); // Use max value
     }
     if (numericFilters.floor) {
-      propertyQueryParts.push(buildQuery('floorMin', numericFilters.floor[0]));
-      propertyQueryParts.push(buildQuery('floorMax', numericFilters.floor[1]));
+      queryParts.push(buildQuery('floorMin', numericFilters.floor[0]));
+      queryParts.push(buildQuery('floorMax', numericFilters.floor[1]));
     }
   }
 
   // Handle select filters
   if (changedFilters.selects) {
-    const selectFilters = changedFilters.selects;
-    Object.entries(selectFilters).forEach(([key, value]) => {
-      if (value && value.length > 0) {
-        propertyQueryParts.push(buildQuery(key, value));
+    const filters = changedFilters.selects;
+
+    // Handle all types of filters
+    Object.entries(filters).forEach(([key, value]) => {
+      // Skip empty values
+      if (!value || (Array.isArray(value) && value.length === 0)) return;
+
+      // Handle special cases for ranges
+      if (key === 'priceMin' || key === 'priceMax') {
+        queryParts.push(buildQuery(key, value));
+      }
+      // Handle arrays
+      else if (Array.isArray(value)) {
+        // Check if it's a range array (has exactly 2 numbers)
+        if (value.length === 2 && typeof value[0] === 'number' && typeof value[1] === 'number') {
+          // Handle range values based on the key
+          switch (key) {
+            case 'totalUnits':
+              queryParts.push(buildQuery('totalUnits', value[1])); // Use max value
+              break;
+            case 'totalTowers':
+              queryParts.push(buildQuery('totalTowers', value[1])); // Use max value
+              break;
+            case 'totalFloors':
+              queryParts.push(buildQuery('projectTotalFloors', value[1])); // Use max value
+              break;
+            default:
+              // For other range values, use min/max pattern
+              queryParts.push(buildQuery(`${key}Min`, value[0]));
+              queryParts.push(buildQuery(`${key}Max`, value[1]));
+          }
+        } else {
+          // Handle regular arrays (like amenities, types, etc.)
+          queryParts.push(buildQuery(key, value));
+        }
+      }
+      // Handle single values
+      else {
+        queryParts.push(buildQuery(key, value));
       }
     });
   }
 
   // Handle availability
   if (changedFilters.available !== null && changedFilters.available !== undefined) {
-    propertyQueryParts.push(buildQuery('available', changedFilters.available));
+    queryParts.push(buildQuery('available', changedFilters.available));
   }
 
-  // Handle amenities
+  // Handle property amenities
   if (changedFilters.propertyAmenities && changedFilters.propertyAmenities.length > 0) {
-    propertyQueryParts.push(buildQuery('propertyAmenities', changedFilters.propertyAmenities));
-  }
-
-
-  // project filter ***********************
-  // Handle project-specific filters
-  if (changedFilters.projectName) {
-    propertyQueryParts.push(buildQuery('projectName', changedFilters.projectName));
-  }
-  if (changedFilters.projectType) {
-    propertyQueryParts.push(buildQuery('projectType', changedFilters.projectType));
-  }
-  if (changedFilters.projectStatus) {
-    propertyQueryParts.push(buildQuery('projectStatus', changedFilters.projectStatus));
-  }
-  if (changedFilters.availabilityStatus) {
-    propertyQueryParts.push(buildQuery('availabilityStatus', changedFilters.availabilityStatus));
-  }
-
-  // Handle project numeric filters
-  if (changedFilters.totalUnits) {
-    propertyQueryParts.push(buildQuery('totalUnits', changedFilters.totalUnits));
-  }
-  if (changedFilters.totalTowers) {
-    propertyQueryParts.push(buildQuery('totalTowers', changedFilters.totalTowers));
-  }
-  if (changedFilters.projectTotalFloors) {
-    propertyQueryParts.push(buildQuery('projectTotalFloors', changedFilters.projectTotalFloors));
-  }
-
-  // Handle price range
-  if (changedFilters.priceMin || changedFilters.priceMax) {
-    if (changedFilters.priceMin) {
-      propertyQueryParts.push(buildQuery('priceMin', changedFilters.priceMin));
-    }
-    if (changedFilters.priceMax) {
-      propertyQueryParts.push(buildQuery('priceMax', changedFilters.priceMax));
-    }
-  }
-
-  // Handle location filters
-  if (changedFilters.city) {
-    propertyQueryParts.push(buildQuery('city', changedFilters.city));
-  }
-  if (changedFilters.state) {
-    propertyQueryParts.push(buildQuery('state', changedFilters.state));
+    queryParts.push(buildQuery('propertyAmenities', changedFilters.propertyAmenities));
   }
 
   // Handle project amenities
-  if (changedFilters.projectAmenities) {
-    propertyQueryParts.push(buildQuery('projectAmenities', changedFilters.projectAmenities));
+  if (changedFilters.projectAmenities && changedFilters.projectAmenities.length > 0) {
+    queryParts.push(buildQuery('projectAmenities', changedFilters.projectAmenities));
+  }
+
+  // Additional project filters
+  if (changedFilters.projectName) {
+    queryParts.push(buildQuery('projectName', changedFilters.projectName));
+  }
+  if (changedFilters.projectType && changedFilters.projectType.length > 0) {
+    queryParts.push(buildQuery('projectType', changedFilters.projectType));
+  }
+  if (changedFilters.projectStatus && changedFilters.projectStatus.length > 0) {
+    queryParts.push(buildQuery('projectStatus', changedFilters.projectStatus));
+  }
+  if (changedFilters.availabilityStatus && changedFilters.availabilityStatus.length > 0) {
+    queryParts.push(buildQuery('availabilityStatus', changedFilters.availabilityStatus));
+  }
+
+  // Handle location filters
+  if (changedFilters.city && changedFilters.city.length > 0) {
+    queryParts.push(buildQuery('city', changedFilters.city));
+  }
+  if (changedFilters.state && changedFilters.state.length > 0) {
+    queryParts.push(buildQuery('state', changedFilters.state));
   }
 
   // Combine all query parts and filter out empty strings
-  const queryString = propertyQueryParts.filter(Boolean).join('&');
+  const queryString = queryParts.filter(Boolean).join('&');
 
-  console.log("queryString", queryString);
+  console.log("Final queryString:", queryString);
 
   try {
     const response = await axios.get(`${filter_base_url}?${queryString}`);
@@ -459,7 +608,7 @@ const applyFilter = async (changedFilters) => {
       properties: response.data.properties,
       totalProperties: response.data.totalProperties,
       filters: response.data.filters,
-      appliedFilters: response?.data?.appliedFilters
+      appliedFilters: response.data.appliedFilters
     };
   } catch (error) {
     console.error("Error applying filters:", error);

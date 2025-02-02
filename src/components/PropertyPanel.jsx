@@ -169,6 +169,7 @@ import { X, Home, Building, MapPin, Bath, Bed, Grid, Users, Building2 } from 'lu
 
 const PropertyPanel = ({ data, type, onClose }) => {
     if (!data) return null;
+    console.log("data", data)
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat('en-IN', {

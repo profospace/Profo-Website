@@ -1166,6 +1166,8 @@ const MapPage = ({
             mapTypeControl: false
         };
         mapInstanceRef.current = new google.maps.Map(mapRef.current, mapOptions);
+
+        
     }, [center]);
 
     

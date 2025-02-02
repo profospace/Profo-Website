@@ -328,9 +328,9 @@ const Footer = () => {
                     <div className="space-y-4">
                       <p className="font-medium">Porfo</p>
                       <nav className="flex flex-col space-y-3">
-                        <a href="#" className="text-gray-600 hover:text-gray-900">Homes</a>
-                        <a href="#" className="text-gray-600 hover:text-gray-900">Careers</a>
-                        <a href="#" className="text-gray-600 hover:text-gray-900">Contact Us</a>
+                        <a href="#" className="text-gray-600 hover:text-white">Homes</a>
+                        <a href="#" className="text-gray-600 hover:text-white">Careers</a>
+                        <a href="#" className="text-gray-600 hover:text-white">Contact Us</a>
                       </nav>
                     </div>
 
@@ -338,8 +338,8 @@ const Footer = () => {
                     <div className="space-y-4">
                       <p className="font-medium">About Us</p>
                       <nav className="flex flex-col space-y-3">
-                        <a href="#" className="text-gray-600 hover:text-gray-900">For Landlords</a>
-                        <a href="#" className="text-gray-600 hover:text-gray-900">Reserve</a>
+                        <a href="#" className="text-gray-600 hover:text-white">For Landlords</a>
+                        <a href="#" className="text-gray-600 hover:text-white">Reserve</a>
                       </nav>
                     </div>
                   </div>
@@ -374,7 +374,7 @@ const Footer = () => {
           <div className="mt-16 pt-8 border-t border-gray-200">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
               <div className="text-gray-500 text-sm">
-                ©2024 Profo All Rights Reserved
+                ©2025 Profo All Rights Reserved
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500">
                 <a href="#" className="hover:text-gray-700">Onboarding Guide</a>

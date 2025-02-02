@@ -1675,8 +1675,10 @@ const FilterComponent = ({ modalOpen, setModalOpen, activeSection, setActiveSect
 
     const handleApplyFilters = () => {
         const changedFilters = getChangedFilters();
+        console.log("Old" , appliedFilters)
         console.log('Applied filters:', changedFilters);
-        dispatch(applyFilter(changedFilters));
+        console.log("KLKL :", { selects: { ...changedFilters.selects, ...appliedFilters } })
+        dispatch(applyFilter({selects : {...changedFilters.selects , ...appliedFilters}}));
         setModalOpen(false);
     };
 

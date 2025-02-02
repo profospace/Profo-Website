@@ -29,11 +29,12 @@ import BackToTop from './components/BackToTop';
 import { getAllBuildings } from './redux/features/Buildings/buildingsSlice';
 import MapPage from './pages/MapPage';
 import PostProperty from './pages/PostProperty';
+import Services from './pages/Services';
 // import MainPropertyPage from './pages/MainPropertyPage';
 
 function App() {
   const dispatch = useDispatch()
-  const {pathname} = useLocation()
+  const { pathname } = useLocation()
 
   useEffect(
     () => {
@@ -42,39 +43,40 @@ function App() {
 
     }, []
   )
-  
+
   useEffect(
-    ()=>{
+    () => {
       window.scrollTo({ top: 0, behavior: 'auto' });
-    },[pathname]
+    }, [pathname]
   )
 
 
 
   return (
     <div className=''>
-        {/* Custom Floating Button */}
+      {/* Custom Floating Button */}
       <BackToTop />
-        <Routes>
-            <Route path='/signup' element={<Signup />} />
-            <Route path='/login' element={<Login />} />
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path='/about' element={<About />} />
-            <Route path='/all-in-one-page' element={<AllInOnePage />} />
-            <Route path='/properties' element={<PropertiesPage />} />
-            <Route path='/projects' element={<ProjectPage />} />
-            <Route path='/buildings' element={<BuildingPage />} />
-            <Route path='/main' element={<MainPropertyPage />} />
-            <Route path='/post-property-for-free' element={<PostProperty />} />
+      <Routes>
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/services' element={<Services />} />
+          <Route path='/all-in-one-page' element={<AllInOnePage />} />
+          <Route path='/properties' element={<PropertiesPage />} />
+          <Route path='/projects' element={<ProjectPage />} />
+          <Route path='/buildings' element={<BuildingPage />} />
+          <Route path='/main' element={<MainPropertyPage />} />
+          <Route path='/post-property-for-free' element={<PostProperty />} />
 
 
-            <Route path='/api/details/project/:post_id' element={<ProjectDetailPage />} />{ /* projects detail page */}
+          <Route path='/api/details/project/:post_id' element={<ProjectDetailPage />} />{ /* projects detail page */}
           <Route path='/api/details/building/:buildingId' element={<BuildingDetailPage />} /> {/* buildings detail page */}
-            <Route path='/api/details/:post_id' element={<SinglePage />} /> {/* properties */}
-            {/* <Route path='/gallery' element={<Gallery />} /> */}
-          </Route>
-        </Routes>
+          <Route path='/api/details/:post_id' element={<SinglePage />} /> {/* properties */}
+          {/* <Route path='/gallery' element={<Gallery />} /> */}
+        </Route>
+      </Routes>
     </div>
   );
 }

@@ -497,6 +497,11 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
     const PropertyCard = ({ item }) => {
         const navigate = useNavigate();
         const isProject = 'overview' in item;
+        
+        if (item?.post_title === "MongoDB Check" || item?.post_title === "Office Blink"){
+            console.log("item", item)
+
+        }
 
         const getPropertyIcon = (type) => {
             switch (type?.toLowerCase()) {
@@ -520,17 +525,17 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
         return (
             <div
-                className="bg-white overflow-hidden transition-all duration-300 transform hover:-translate-y-2 max-w-sm w-full mx-auto cursor-pointer"
+                className="bg-white border rounded-xl overflow-hidden transition-all duration-300 transform hover:-translate-y-2 max-w-sm w-full mx-auto cursor-pointer"
                 onClick={handleNavigation}
             >
                 {/* Image Container */}
-                <div className="relative aspect-[4/3] overflow-hidden">
+                <div className={`relative aspect-[5/3] overflow-hidden`}>
                     {/* Property Image */}
                     {item?.galleryList?.[0] || (isProject && item?.floorPlans?.[0]?.image) ? (
                         <img
                             src={item?.galleryList?.[0] || item?.floorPlans[0].image}
                             alt={item?.post_title || item?.name}
-                            className="w-full h-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-110"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gray-100">
@@ -569,63 +574,76 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                 </div>
 
                 {/* Content Section */}
-                <div className="py-2 px-1">
-                    {/* Price */}
-                    <div className="flex items-baseline justify-between gap-2">
-                        <div>
-                            <span className="text-xl font-bold text-gray-900">
-                                {item?.price} {" "}
-                            </span>
+                <div className="pt-2">
+                    <div className='px-2'>
+                        {/* Price */}
+                        <div className="flex items-baseline justify-between gap-2">
+                            <div>
+                                <span className="text-xl font-bold text-gray-900">
+                                    {item?.price} {" "}
+                                </span>
 
-                            <span className="text-md text-gray-600 font-medium">
-                                {item?.priceUnit}
-                            </span>
+                                <span className="text-xs text-gray-600 font-medium">
+                                    {item?.priceUnit}
+                                </span>
+                            </div>
+
+                            {/* Area */}
+                            <div className="flex items-center space-x-1">
+                                <span className="text-sm font-medium text-gray-800">
+                                    {item?.area}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                    {item?.areaUnit || "sqft"}
+                                </span>
+                            </div>
                         </div>
 
-                        {/* Area */}
-                        <div className="flex items-center space-x-1">
-                            <span className="text-sm font-medium text-gray-800">
-                                {item?.area}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                                {item?.areaUnit || "sqft"}
+                        {/* Property Title */}
+                        <h3 className="text-md font-semibold text-gray-800 truncate">
+                            {item?.post_title}
+                        </h3>
+
+                        {/* Location */}
+                        <div className="flex items-center text-gray-600 space-x-2 mb-2">
+                            <MapPin size={16} />
+                            <span className="text-sm truncate max-w-[200px]">
+                                {(() => {
+                                    const address = item?.address || item?.location?.address;
+                                    const maxWords = 4;
+                                    if (address) {
+                                        const words = address.split(' ');
+                                        return words.length > maxWords
+                                            ? `${words.slice(0, maxWords).join(' ')}...`
+                                            : address;
+                                    }
+                                    return "No Address Available";
+                                })()}
                             </span>
                         </div>
-                    </div>
-
-                    {/* Property Title */}
-                    <h3 className="text-md font-semibold text-gray-800 truncate">
-                        {item?.post_title}
-                    </h3>
-
-                    {/* Location */}
-                    <div className="flex items-center text-gray-600 space-x-2 mb-2">
-                        <MapPin size={16} />
-                        <span className="text-sm truncate max-w-[200px]">
-                            {(() => {
-                                const address = item?.address || item?.location?.address;
-                                const maxWords = 4;
-                                if (address) {
-                                    const words = address.split(' ');
-                                    return words.length > maxWords
-                                        ? `${words.slice(0, maxWords).join(' ')}...`
-                                        : address;
-                                }
-                                return "No Address Available";
-                            })()}
-                        </span>
                     </div>
 
                     {/* Property Details */}
-                    <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                    <div className="px-2 flex justify-between items-center pt-2 pb-1 border-t border-gray-200">
                         {/* Amenities */}
                         <div className="flex items-center space-x-2">
                             <span className="text-sm text-gray-700">Amenities</span>
-                            <span className="bg-gray-800 text-white text-xs px-2 py-1 rounded-full">
+                            <span className="bg-gray-800 text-white text-xs h-5 w-10 grid place-items-center rounded-full">
                                 {item?.amenities?.length}+
                             </span>
                         </div>
                     </div>
+                    {(item?.projectDetails?.name || item?.project?.name || item?.buildingDetails?.name) && (
+                        <div
+                            className={`text-sm rounded-b-xl text-center py-1 mt-1 ${item?.projectDetails?.name || item?.project?.name ? 'bg-yellow-400' : 'bg-pink-500'
+                                }`}
+                        >
+                            {item?.projectDetails?.name || item?.project?.name
+                                ? `Project: ${item?.projectDetails?.name || item?.project?.name}`
+                                : `Building: ${item?.buildingDetails?.name}`}
+                        </div>
+                    )}
+
                 </div>
             </div>
         );
@@ -633,28 +651,6 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
 
     
-    const handleViewChange = (newView) => {
-        setViewType(newView);
-        if (onViewChange) {
-            onViewChange(newView);
-        }
-    };
-
-
-    function getHeading(properties, projects) {
-        if (properties.length > 0) {
-            const typeNames = properties.map((property) => property.type_name);
-            const uniqueTypeNames = [...new Set(typeNames)];
-
-            // If all type_name are the same, return that type_name; otherwise, return "Properties".
-            return uniqueTypeNames.length === 1 ? uniqueTypeNames[0] : "Properties";
-        } else if (projects.length > 0) {
-            return "Projects";
-        } else {
-            return "Buildings";
-        }
-    }
-
     return (
         <div className="min-h-screen bg-white p-4">
             
