@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 /* @import 'leaflet/dist/leaflet.css'; */
 
 /* Font Configuration */
@@ -29,6 +30,9 @@ body {
   scrollbar-color: #B9B7BF #f4f4f4;  /* thumb color track color */
   width: 100%;
   height: 100%;
+  font-family: "Poppins", serif;
+    font-weight: 500;
+    font-style: normal;
 }
 /* For Chrome, Safari, and Edge */
 ::-webkit-scrollbar {
@@ -49,6 +53,12 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #000;      /* Darker color on hover */
 }
+
+.scrollbar-slim{
+  
+}
+
+
 
 
 
@@ -89,6 +99,17 @@ body {
    transition: all 0.4s ease-in-out;
  }
 
+ .navbar::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.34));
+   z-index: -1;
+ }
+
 @keyframes slide-down {
   0% {
     transform: translateY(-100%);
@@ -100,6 +121,12 @@ body {
     opacity: 1;
   }
 }
+
+.clip-path-bottom-semicircle {
+  clip-path: ellipse(60% 10% at 50% 100%);
+}
+
+
 
 .animate-slide-down {
   animation: slide-down 0.3s ease-out;

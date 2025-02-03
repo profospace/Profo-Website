@@ -656,12 +656,10 @@ import {
     Search,
     SlidersHorizontal,
 } from 'lucide-react';
-import { FaFilterCircleDollar } from 'react-icons/fa6';
 import { FiSettings } from 'react-icons/fi';
-import FilterComponent from '../components/FilterComponent';
 import { AiOutlineSetting } from 'react-icons/ai';
 import ActiveFiltersDisplay from '../components/ActiveFiltersDisplay';
-import ProjectFilterComponent from '../components/ProjectFilterComponent';
+import { BuildingFilter, ProjectFilter, PropertyFilter } from '../components/DynamicFilterComponent';
 
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
@@ -681,28 +679,10 @@ const MainPropertyPage = () => {
     // filter button popup
     const [modalOpen, setModalOpen] = useState(false);
     const [projectModalOpen, setProjectModalOpen] = useState(false);
+    const [buildingModalOpen, setBuildingModalOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
 
-    // Framer Motion variants for filter toggle animation
-    const filterVariants = {
-        hidden: {
-            opacity: 0,
-            y: -50,
-            transition: {
-                duration: 0.3
-            }
-        },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 15
-            }
-        }
-    };
-    
+
     function getHeading(properties, projects) {
         // console.log("p", properties)
         var purpose;
@@ -775,196 +755,137 @@ const MainPropertyPage = () => {
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
             onLoad={() => setIsScriptLoaded(true)}
         >
-            <div className="min-h-screen bg-white p-2 mt-28">
+            <div className="min-h-screen px-2">
                 <div className='max-w-7xl mx-auto px-2 flex flex-col gap-2  shadow-2xl rounded-md'>
-                    {/* Header with View Toggle */}
-                    <div className=" flex flex-col justify-center py-2">
-                        <div className="flex justify-between items-center">
-                            <h1 className="text-2xl font-semibold px-4 ">
-                                {getHeading(properties, projects)}
-                            </h1>
+                    <div className="flex items-center py-1 justify-between">
+                        <div className='flex gap-2 items-center'>
+                            {/* easy search */}
+                            <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-1/3' : 'w-auto'}`}>
+                                {!isSearchExpanded ? (
+                                    <button
+                                        onClick={() => setIsSearchExpanded(true)}
+                                        className="flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300"
+                                    >
+                                        <Search size={16} />
+                                        <span>Easy search</span>
+                                    </button>
+                                ) : (
+                                    <div className="relative w-full">
+                                        <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            placeholder="Search by name or address..."
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            onBlur={() => {
+                                                if (!searchQuery) {
+                                                    setIsSearchExpanded(false);
+                                                }
+                                            }}
+                                            className="w-full pl-10 pr-4 py-2 bg-white rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-700"
+                                            autoFocus
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            {/* property filter */}
+                            <button
+                                onClick={() => setModalOpen(true)}
+                                className="flex bg-yellow-200 border-[0.5px] border-yellow-800 items-center gap-2 px-3 py-[4px]  text-black rounded-md"
+                            >
+                                <FiSettings className="text-gray-600" size={20} />
+                                <span className="text-sm font-medium text-gray-700">Filters</span>
+                            </button>
 
-                            <div className='flex items-center gap-4'>
-                                <div className='max-w-[34rem]'>
+                            {/* Filter Component Modal */}
+                            {/* project filter */}
+                            <PropertyFilter modalOpen={modalOpen}
+                                setModalOpen={setModalOpen} activeSection={activeSection}
+                                setActiveSection={setActiveSection} />
+
+
+
+
+                            <button
+                                onClick={() => setProjectModalOpen(true)}
+                                className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                            >
+                                <FiSettings className="text-gray-600" size={20} />
+                                <span className="text-sm font-medium text-gray-700">Project Filters</span>
+                            </button>
+
+                            {/* Filter Component Modal */}
+
+                            <ProjectFilter modalOpen={projectModalOpen}
+                                setModalOpen={setProjectModalOpen}
+                                activeSection={activeSection}
+                                setActiveSection={setActiveSection} />
+
+                            {/* Building OCmponent mOdel */}
+                            <button
+                                onClick={() => setBuildingModalOpen(true)}
+                                className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                            >
+                                <FiSettings className="text-gray-600" size={20} />
+                                <span className="text-sm font-medium text-gray-700">Building Filters</span>
+                            </button>
+                            <BuildingFilter
+                                modalOpen={buildingModalOpen}
+                                setModalOpen={setBuildingModalOpen}
+                            />
+
+
+
+                        </div>
+                        <div className='flex gap-2 items-center'>
+                            {/* applied filters */}
+                            {Object.values(appliedFilters).length !== 0 && <div className=' flex items-center'>
+                                <h1 className='text-xs'>Active Filters</h1>
+                                <div className='max-w-[13.5rem]'>
                                     <ActiveFiltersDisplay
                                         appliedFilters={appliedFilters}
                                         onRemoveFilter={handleRemoveFilter}
                                     />
                                 </div>
+                            </div>}
+                            <select
+                                value={filterType}
+                                onChange={(e) => setFilterType(e.target.value)}
+                                className="px-4 py-2 text-black bg-white border border-gray-300 rounded-xl hover:bg-gray-50"
+                            >
+                                <option value="all">All Types</option>
+                                <option value="apartment">Apartments</option>
+                                <option value="house">Houses</option>
+                                <option value="office">Offices</option>
+                                <option value="residential">Buildings</option>
+                            </select>
 
-                                {/* <button
-                                    onClick={() => dispatch(clearFilters())}
-                                    className="flex items-center gap-2 px-3 py-1 bg-gray-300 text-black rounded-md text-xs"
+                            <div className='flex gap-2 items-center'>
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                    className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap"
                                 >
-                                    Clear All
-                                </button> */}
-                                {/* <button
-                                    onClick={() => setIsFilterVisible(!isFilterVisible)}
-                                    className="flex items-center gap-2 px-3 py-1 bg-gray-300 text-black rounded-md"
-                                >
-                                    <AiOutlineSetting />
-                                    Filter
-                                </button> */}
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => setIsFilterVisible(!isFilterVisible)}
-                                    className="flex items-center gap-2 px-3 py-1 bg-gray-300 text-black rounded-md"
-                                >
-                                    <AiOutlineSetting />
-                                    Filter
-                                </motion.button>
-
-                                <div className='flex gap-2 items-center'>
-                                    <select
-                                        value={sortBy}
-                                        onChange={(e) => setSortBy(e.target.value)}
-                                        className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap"
+                                    <option value="price-low">Price/Units: Low to High</option>
+                                    <option value="price-high">Price/Units: High to Low</option>
+                                </select>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => handleViewChange('list')}
+                                        className={`p-2 rounded-lg ${view === 'list' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
                                     >
-                                        <option value="price-low">Price/Units: Low to High</option>
-                                        <option value="price-high">Price/Units: High to Low</option>
-                                    </select>
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() => handleViewChange('list')}
-                                            className={`p-2 rounded-lg ${view === 'list' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
-                                        >
-                                            <List size={20} />
-                                        </button>
-                                        <button
-                                            onClick={() => handleViewChange('map')}
-                                            className={`p-2 rounded-lg ${view === 'map' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
-                                        >
-                                            <Map size={20} />
-                                        </button>
-                                    </div>
+                                        <List size={20} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleViewChange('map')}
+                                        className={`p-2 rounded-lg ${view === 'map' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
+                                    >
+                                        <Map size={20} />
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    {/* Filters and Search Section - Conditionally Rendered */}
-                    {/* Animated Filter Section */}
-                    <AnimatePresence>
-                        {isFilterVisible && (
-                            <motion.div
-                                initial="hidden"
-                                animate="visible"
-                                exit="hidden"
-                                variants={filterVariants}
-                                className="bg-white overflow-hidden"
-                            >
-                                <div className="w-full  ">
-                                    <div className="relative w-full ">
-                                        <div className="flex items-center gap-3 transition-all duration-300 ease-in-out">
-                                            <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-1/3' : 'w-auto'}`}>
-                                                {!isSearchExpanded ? (
-                                                    <button
-                                                        onClick={() => setIsSearchExpanded(true)}
-                                                        className="flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300"
-                                                    >
-                                                        <Search size={16} />
-                                                        <span>Easy search</span>
-                                                    </button>
-                                                ) : (
-                                                    <div className="relative w-full">
-                                                        <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Search by name or address..."
-                                                            value={searchQuery}
-                                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                                            onBlur={() => {
-                                                                if (!searchQuery) {
-                                                                    setIsSearchExpanded(false);
-                                                                }
-                                                            }}
-                                                            className="w-full pl-10 pr-4 py-2 bg-white rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-700"
-                                                            autoFocus
-                                                        />
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <button
-                                                onClick={() => setModalOpen(true)}
-                                                className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
-                                            >
-                                                <FiSettings className="text-gray-600" size={20} />
-                                                <span className="text-sm font-medium text-gray-700">Filters</span>
-                                            </button>
-
-                                            {/* Filter Component Modal */}
-                                            <FilterComponent
-                                                modalOpen={modalOpen}
-                                                setModalOpen={setModalOpen}
-                                                activeSection={activeSection}
-                                                setActiveSection={setActiveSection}
-                                            />
-
-                                            {/* <div className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded-xl">
-                                            <button className="px-2">Beds</button>
-                                            <button className="px-2 bg-white border border-none hover:text-red-400">1</button>
-                                            <button className="px-2 bg-white border border-none hover:text-red-400">2</button>
-                                            <button className="px-2 bg-white border border-none hover:text-red-400">3</button>
-                                            <button className="px-2 bg-white border border-none hover:text-red-400">4+</button>
-                                        </div> */}
-
-                                            <button
-                                                onClick={() => setProjectModalOpen(true)}
-                                                className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
-                                            >
-                                                <FiSettings className="text-gray-600" size={20} />
-                                                <span className="text-sm font-medium text-gray-700">Project Filters</span>
-                                            </button>
-
-                                            {/* Filter Component Modal */}
-                                            <ProjectFilterComponent
-                                                modalOpen={projectModalOpen}
-                                                setModalOpen={setProjectModalOpen}
-                                            // activeSection={activeSection}
-                                            // setActiveSection={setActiveSection}
-                                            />
-
-
-                                            <div className={`flex items-center gap-3 transition-all duration-300 ease-in-out overflow-hidden ${isSearchExpanded
-                                                ? 'w-0 opacity-0 invisible'
-                                                : 'w-auto opacity-100 visible'
-                                                }`}>
-                                                <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                                    Price Range
-                                                </button>
-                                                <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                                    Bathroom
-                                                </button>
-                                                <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                                    Floor
-                                                </button>
-                                            </div>
-
-                                            <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                                Purpose
-                                            </button>
-                                            <button className="px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 whitespace-nowrap">
-                                                Amenities
-                                            </button>
-                                            <select
-                                                value={filterType}
-                                                onChange={(e) => setFilterType(e.target.value)}
-                                                className="px-4 py-2 text-black bg-white border border-gray-300 rounded-xl hover:bg-gray-50"
-                                            >
-                                                <option value="all">All Types</option>
-                                                <option value="apartment">Apartments</option>
-                                                <option value="house">Houses</option>
-                                                <option value="office">Offices</option>
-                                                <option value="residential">Buildings</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
                 </div>
 
                 {view === 'list' ? (

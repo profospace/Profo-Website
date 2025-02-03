@@ -467,151 +467,352 @@ const getAllBuildings = async () => {
 //   }
 // };
 
-const applyFilter = async (changedFilters) => {
-  console.log("Applying filters:", changedFilters);
+// const applyFilter = async (changedFilters) => {
+//   console.log("Applying filters:", changedFilters);
 
-  // Initialize empty query parts array
-  const queryParts = [];
+//   // Initialize empty query parts array
+//   const queryParts = [];
 
-  // Helper function to build query parameters
-  const buildQuery = (key, values) => {
-    if (values === null || values === undefined) return '';
-    if (Array.isArray(values)) {
-      return values.map(value => `${key}=${encodeURIComponent(value)}`).join('&');
+//   // Helper function to build query parameters
+//   const buildQuery = (key, values) => {
+//     if (values === null || values === undefined) return '';
+//     if (Array.isArray(values)) {
+//       return values.map(value => `${key}=${encodeURIComponent(value)}`).join('&');
+//     }
+//     return `${key}=${encodeURIComponent(values)}`;
+//   };
+
+//   // Handle numeric filters - property
+//   if (changedFilters.numeric) {
+//     const numericFilters = changedFilters.numeric;
+
+//     // Handle individual numeric values (bedrooms, bathrooms)
+//     if (numericFilters.bedrooms) {
+//       queryParts.push(buildQuery('bedrooms', numericFilters.bedrooms));
+//     }
+//     if (numericFilters.bathrooms) {
+//       queryParts.push(buildQuery('bathrooms', numericFilters.bathrooms));
+//     }
+
+//     // Handle range values
+//     if (numericFilters.price) {
+//       queryParts.push(buildQuery('priceMin', numericFilters.price[0]));
+//       queryParts.push(buildQuery('priceMax', numericFilters.price[1]));
+//     }
+//     if (numericFilters.area) {
+//       queryParts.push(buildQuery('area', numericFilters.area[1])); // Use max value
+//     }
+//     if (numericFilters.carpetArea) {
+//       queryParts.push(buildQuery('carpetArea', numericFilters.carpetArea[1])); // Use max value
+//     }
+//     if (numericFilters.superBuiltupArea) {
+//       queryParts.push(buildQuery('superBuiltupArea', numericFilters.superBuiltupArea[1])); // Use max value
+//     }
+//     if (numericFilters.floor) {
+//       queryParts.push(buildQuery('floorMin', numericFilters.floor[0]));
+//       queryParts.push(buildQuery('floorMax', numericFilters.floor[1]));
+//     }
+//   }
+
+//   // Handle select filters
+//   if (changedFilters.selects) {
+//     const filters = changedFilters.selects;
+
+//     // Handle all types of filters
+//     Object.entries(filters).forEach(([key, value]) => {
+//       // Skip empty values
+//       if (!value || (Array.isArray(value) && value.length === 0)) return;
+
+//       // Handle special cases for ranges
+//       if (key === 'priceMin' || key === 'priceMax') {
+//         queryParts.push(buildQuery(key, value));
+//       }
+//       // Handle arrays
+//       else if (Array.isArray(value)) {
+//         // Check if it's a range array (has exactly 2 numbers)
+//         if (value.length === 2 && typeof value[0] === 'number' && typeof value[1] === 'number') {
+//           // Handle range values based on the key
+//           switch (key) {
+//             case 'totalUnits':
+//               queryParts.push(buildQuery('totalUnits', value[1])); // Use max value
+//               break;
+//             case 'totalTowers':
+//               queryParts.push(buildQuery('totalTowers', value[1])); // Use max value
+//               break;
+//             case 'totalFloors':
+//               queryParts.push(buildQuery('projectTotalFloors', value[1])); // Use max value
+//               break;
+//             default:
+//               // For other range values, use min/max pattern
+//               queryParts.push(buildQuery(`${key}Min`, value[0]));
+//               queryParts.push(buildQuery(`${key}Max`, value[1]));
+//           }
+//         } else {
+//           // Handle regular arrays (like amenities, types, etc.)
+//           queryParts.push(buildQuery(key, value));
+//         }
+//       }
+//       // Handle single values
+//       else {
+//         queryParts.push(buildQuery(key, value));
+//       }
+//     });
+//   }
+
+//   // Handle availability
+//   if (changedFilters.available !== null && changedFilters.available !== undefined) {
+//     queryParts.push(buildQuery('available', changedFilters.available));
+//   }
+
+//   // Handle property amenities
+//   if (changedFilters.propertyAmenities && changedFilters.propertyAmenities.length > 0) {
+//     queryParts.push(buildQuery('propertyAmenities', changedFilters.propertyAmenities));
+//   }
+
+//   // Handle project amenities
+//   if (changedFilters.projectAmenities && changedFilters.projectAmenities.length > 0) {
+//     queryParts.push(buildQuery('projectAmenities', changedFilters.projectAmenities));
+//   }
+
+//   // Additional project filters
+//   if (changedFilters.projectName) {
+//     queryParts.push(buildQuery('projectName', changedFilters.projectName));
+//   }
+//   if (changedFilters.projectType && changedFilters.projectType.length > 0) {
+//     queryParts.push(buildQuery('projectType', changedFilters.projectType));
+//   }
+//   if (changedFilters.projectStatus && changedFilters.projectStatus.length > 0) {
+//     queryParts.push(buildQuery('projectStatus', changedFilters.projectStatus));
+//   }
+//   if (changedFilters.availabilityStatus && changedFilters.availabilityStatus.length > 0) {
+//     queryParts.push(buildQuery('availabilityStatus', changedFilters.availabilityStatus));
+//   }
+
+//   // Handle location filters
+//   if (changedFilters.city && changedFilters.city.length > 0) {
+//     queryParts.push(buildQuery('city', changedFilters.city));
+//   }
+//   if (changedFilters.state && changedFilters.state.length > 0) {
+//     queryParts.push(buildQuery('state', changedFilters.state));
+//   }
+
+//   // Combine all query parts and filter out empty strings
+//   const queryString = queryParts.filter(Boolean).join('&');
+
+//   console.log("Final queryString:", queryString);
+
+//   try {
+//     const response = await axios.get(`${filter_base_url}?${queryString}`);
+//     console.log("Filtered response:", response);
+//     return {
+//       properties: response.data.properties,
+//       totalProperties: response.data.totalProperties,
+//       filters: response.data.filters,
+//       appliedFilters: response.data.appliedFilters
+//     };
+//   } catch (error) {
+//     console.error("Error applying filters:", error);
+//     throw error;
+//   }
+// };
+
+// const applyFilter = async (queryString) => {
+//   console.log('🔍 Starting filter application with query:', queryString);
+
+//   try {
+//     // Log the complete URL being called
+//     const url = `${filter_base_url}?${queryString}`;
+//     console.log('📡 Making API request to:', url);
+
+//     // Make the API call
+//     const response = await axios.get(url);
+
+//     // Log successful response data
+//     console.log('✅ Filter API Response:', {
+//       totalProperties: response.data.totalProperties,
+//       propertiesCount: response.data.properties.length,
+//       filters: response.data.filters,
+//       appliedFilters: response.data.appliedFilters
+//     });
+
+//     // Check if response contains expected data
+//     if (!response.data) {
+//       throw new Error('No data received from filter API');
+//     }
+
+//     // Format and return the response
+//     return {
+//       properties: response.data.properties || [],
+//       totalProperties: response.data.totalProperties || 0,
+//       filters: response.data.filters || {},
+//       appliedFilters: response.data.appliedFilters || {}
+//     };
+
+//   } catch (error) {
+//     // Enhanced error logging
+//     console.error('❌ Filter API Error:', {
+//       message: error.message,
+//       status: error.response?.status,
+//       statusText: error.response?.statusText,
+//       data: error.response?.data
+//     });
+
+//     // If it's an axios error with response
+//     if (error.response) {
+//       console.error('📋 Detailed Error Data:', error.response.data);
+//       throw {
+//         message: error.response.data.message || 'Failed to apply filters',
+//         status: error.response.status,
+//         data: error.response.data
+//       };
+//     }
+
+//     // For network errors or other issues
+//     throw {
+//       message: 'Failed to connect to filter service',
+//       originalError: error.message
+//     };
+//   }
+// };
+
+// const buildQueryString = (filters) => {
+//   const queryParams = new URLSearchParams();
+
+//   // Property Filters
+//   if (filters.price?.min) queryParams.append('priceMin', filters.price.min);
+//   if (filters.price?.max) queryParams.append('priceMax', filters.price.max);
+//   if (filters.bedrooms) queryParams.append('bedrooms', filters.bedrooms);
+//   if (filters.bathrooms) queryParams.append('bathrooms', filters.bathrooms);
+//   if (filters.purpose) queryParams.append('purpose', filters.purpose);
+//   if (filters.propertyType) {
+//     if (Array.isArray(filters.propertyType)) {
+//       filters.propertyType.forEach(type => queryParams.append('type_name[]', type));
+//     } else {
+//       queryParams.append('type_name', filters.propertyType);
+//     }
+//   }
+//   if (filters.amenities) {
+//     if (Array.isArray(filters.amenities)) {
+//       filters.amenities.forEach(amenity =>
+//         queryParams.append('propertyAmenities[]', amenity)
+//       );
+//     }
+//   }
+
+//   // Project Filters
+//   if (filters.projectType) {
+//     if (Array.isArray(filters.projectType)) {
+//       filters.projectType.forEach(type =>
+//         queryParams.append('projectType[]', type)
+//       );
+//     }
+//   }
+//   if (filters.projectStatus) queryParams.append('projectStatus', filters.projectStatus);
+//   if (filters.projectAmenities) {
+//     if (Array.isArray(filters.projectAmenities)) {
+//       filters.projectAmenities.forEach(amenity =>
+//         queryParams.append('projectAmenities[]', amenity)
+//       );
+//     }
+//   }
+//   if (filters.state) queryParams.append('state', filters.state);
+
+//   return queryParams.toString();
+// };
+
+const buildQueryString = (filters) => {
+  const queryParams = new URLSearchParams();
+
+  // Property Filters
+  if (filters.price?.min) queryParams.append('priceMin', filters.price.min);
+  if (filters.price?.max) queryParams.append('priceMax', filters.price.max);
+  if (filters.bedrooms) queryParams.append('bedrooms', filters.bedrooms);
+  if (filters.bathrooms) queryParams.append('bathrooms', filters.bathrooms);
+  if (filters.purpose) queryParams.append('purpose', filters.purpose);
+  if (filters.propertyType) {
+    if (Array.isArray(filters.propertyType)) {
+      filters.propertyType.forEach(type => queryParams.append('type_name[]', type));
+    } else {
+      queryParams.append('type_name', filters.propertyType);
     }
-    return `${key}=${encodeURIComponent(values)}`;
-  };
-
-  // Handle numeric filters - property
-  if (changedFilters.numeric) {
-    const numericFilters = changedFilters.numeric;
-
-    // Handle individual numeric values (bedrooms, bathrooms)
-    if (numericFilters.bedrooms) {
-      queryParts.push(buildQuery('bedrooms', numericFilters.bedrooms));
-    }
-    if (numericFilters.bathrooms) {
-      queryParts.push(buildQuery('bathrooms', numericFilters.bathrooms));
-    }
-
-    // Handle range values
-    if (numericFilters.price) {
-      queryParts.push(buildQuery('priceMin', numericFilters.price[0]));
-      queryParts.push(buildQuery('priceMax', numericFilters.price[1]));
-    }
-    if (numericFilters.area) {
-      queryParts.push(buildQuery('area', numericFilters.area[1])); // Use max value
-    }
-    if (numericFilters.carpetArea) {
-      queryParts.push(buildQuery('carpetArea', numericFilters.carpetArea[1])); // Use max value
-    }
-    if (numericFilters.superBuiltupArea) {
-      queryParts.push(buildQuery('superBuiltupArea', numericFilters.superBuiltupArea[1])); // Use max value
-    }
-    if (numericFilters.floor) {
-      queryParts.push(buildQuery('floorMin', numericFilters.floor[0]));
-      queryParts.push(buildQuery('floorMax', numericFilters.floor[1]));
+  }
+  if (filters.amenities) {
+    if (Array.isArray(filters.amenities)) {
+      filters.amenities.forEach(amenity =>
+        queryParams.append('propertyAmenities[]', amenity)
+      );
     }
   }
 
-  // Handle select filters
-  if (changedFilters.selects) {
-    const filters = changedFilters.selects;
-
-    // Handle all types of filters
-    Object.entries(filters).forEach(([key, value]) => {
-      // Skip empty values
-      if (!value || (Array.isArray(value) && value.length === 0)) return;
-
-      // Handle special cases for ranges
-      if (key === 'priceMin' || key === 'priceMax') {
-        queryParts.push(buildQuery(key, value));
-      }
-      // Handle arrays
-      else if (Array.isArray(value)) {
-        // Check if it's a range array (has exactly 2 numbers)
-        if (value.length === 2 && typeof value[0] === 'number' && typeof value[1] === 'number') {
-          // Handle range values based on the key
-          switch (key) {
-            case 'totalUnits':
-              queryParts.push(buildQuery('totalUnits', value[1])); // Use max value
-              break;
-            case 'totalTowers':
-              queryParts.push(buildQuery('totalTowers', value[1])); // Use max value
-              break;
-            case 'totalFloors':
-              queryParts.push(buildQuery('projectTotalFloors', value[1])); // Use max value
-              break;
-            default:
-              // For other range values, use min/max pattern
-              queryParts.push(buildQuery(`${key}Min`, value[0]));
-              queryParts.push(buildQuery(`${key}Max`, value[1]));
-          }
-        } else {
-          // Handle regular arrays (like amenities, types, etc.)
-          queryParts.push(buildQuery(key, value));
-        }
-      }
-      // Handle single values
-      else {
-        queryParts.push(buildQuery(key, value));
-      }
-    });
+  // Project Filters
+  if (filters.projectType) {
+    if (Array.isArray(filters.projectType)) {
+      filters.projectType.forEach(type =>
+        queryParams.append('projectType[]', type)
+      );
+    }
+  }
+  if (filters.projectStatus) queryParams.append('projectStatus', filters.projectStatus);
+  if (filters.projectAmenities) {
+    if (Array.isArray(filters.projectAmenities)) {
+      filters.projectAmenities.forEach(amenity =>
+        queryParams.append('projectAmenities[]', amenity)
+      );
+    }
   }
 
-  // Handle availability
-  if (changedFilters.available !== null && changedFilters.available !== undefined) {
-    queryParts.push(buildQuery('available', changedFilters.available));
+  // Building Filters
+  if (filters.buildingType) queryParams.append('buildingType', filters.buildingType);
+  if (filters.developmentStatus) queryParams.append('developmentStatus', filters.developmentStatus);
+  if (filters.frontRoad) queryParams.append('frontRoad', filters.frontRoad);
+  if (filters.parkingArea) queryParams.append('parkingArea', filters.parkingArea);
+  if (filters.storey) queryParams.append('storey', filters.storey);
+  if (filters.age) queryParams.append('age', filters.age);
+  if (filters.luda) queryParams.append('luda', filters.luda);
+  if (filters.buildingAmenities) {
+    if (Array.isArray(filters.buildingAmenities)) {
+      filters.buildingAmenities.forEach(amenity =>
+        queryParams.append('buildingAmenities[]', amenity)
+      );
+    }
   }
+  if (filters.totalFloors) queryParams.append('totalFloors', filters.totalFloors);
+  if (filters.numberOfFlatsAvailable) queryParams.append('numberOfFlatsAvailable', filters.numberOfFlatsAvailable);
 
-  // Handle property amenities
-  if (changedFilters.propertyAmenities && changedFilters.propertyAmenities.length > 0) {
-    queryParts.push(buildQuery('propertyAmenities', changedFilters.propertyAmenities));
-  }
+  if (filters.state) queryParams.append('state', filters.state);
 
-  // Handle project amenities
-  if (changedFilters.projectAmenities && changedFilters.projectAmenities.length > 0) {
-    queryParts.push(buildQuery('projectAmenities', changedFilters.projectAmenities));
-  }
+  return queryParams.toString();
+};
 
-  // Additional project filters
-  if (changedFilters.projectName) {
-    queryParts.push(buildQuery('projectName', changedFilters.projectName));
-  }
-  if (changedFilters.projectType && changedFilters.projectType.length > 0) {
-    queryParts.push(buildQuery('projectType', changedFilters.projectType));
-  }
-  if (changedFilters.projectStatus && changedFilters.projectStatus.length > 0) {
-    queryParts.push(buildQuery('projectStatus', changedFilters.projectStatus));
-  }
-  if (changedFilters.availabilityStatus && changedFilters.availabilityStatus.length > 0) {
-    queryParts.push(buildQuery('availabilityStatus', changedFilters.availabilityStatus));
-  }
 
-  // Handle location filters
-  if (changedFilters.city && changedFilters.city.length > 0) {
-    queryParts.push(buildQuery('city', changedFilters.city));
-  }
-  if (changedFilters.state && changedFilters.state.length > 0) {
-    queryParts.push(buildQuery('state', changedFilters.state));
-  }
-
-  // Combine all query parts and filter out empty strings
-  const queryString = queryParts.filter(Boolean).join('&');
-
-  console.log("Final queryString:", queryString);
+const applyFilter = async (filters) => {
+  console.log('🔍 Applying combined filters:', filters);
 
   try {
-    const response = await axios.get(`${filter_base_url}?${queryString}`);
-    console.log("Filtered response:", response);
-    return {
-      properties: response.data.properties,
+    const queryString = buildQueryString(filters);
+    const url = `${filter_base_url}?${queryString}`;
+
+    console.log('📡 Making API request with combined filters to:', url);
+
+    const response = await axios.get(url);
+
+    console.log("response", response)
+
+    console.log('✅ Combined Filter Response:', {
       totalProperties: response.data.totalProperties,
-      filters: response.data.filters,
-      appliedFilters: response.data.appliedFilters
+      propertiesCount: response.data.properties.length,
+      appliedFilters: filters
+    });
+
+    return {
+      properties: response.data.properties || [],
+      totalProperties: response.data.totalProperties || 0,
+      filters: response.data.filters || {},
+      appliedFilters: filters
     };
+
   } catch (error) {
-    console.error("Error applying filters:", error);
+    console.error('❌ Filter API Error:', error);
     throw error;
   }
 };

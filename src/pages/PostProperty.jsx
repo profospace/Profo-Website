@@ -35,7 +35,7 @@ const PostProperty = () => {
     }
 
     return (
-        <div ref={formSectionRef} className="mt-24">
+        <div ref={formSectionRef} className="">
         {/*1 First section - image and form */}
             <div  className="min-h-screen p-4 md:p-8 lg:p-12 bg-gradient-to-b from-white via-lightblue-200 to-blue-200 rounded-b-3xl relative">
                 <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 ">

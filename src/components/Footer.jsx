@@ -264,7 +264,7 @@ const Footer = () => {
   ];
 
   return (
-    <div className="w-full mt-6">
+    <div className="w-full">
       
 
 

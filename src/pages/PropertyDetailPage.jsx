@@ -237,7 +237,7 @@ const SinglePage = () => {
 
 
     return (
-        <div className="mx-8 mt-24">
+        <div className="mx-8">
             {/* Title */}
             <div className="py-4 flex justify-between">
                 <h1 className="text-2xl lg:text-3xl font-semibold text-gray-800 capitalize">
@@ -507,17 +507,29 @@ const SinglePage = () => {
                     <HomeLoanOffers />
 
                     {/* EMI caluc */}
-                    <EMICalculator />
+                    <EMICalculator price={propertyDetail?.price} />
                 </div>
 
                 {/* right */}
-
+                {/* will display builder and if builder not present show owner  */}
                 <div className="col-span-4">
                     <div className="sticky top-24">
-                        <PropertyContactCard
+                        {/* <PropertyContactCard
 
                             handleButtonClick={handleButtonClick}
                             details={propertyDetail?.builder}
+                        /> */}
+                        <PropertyContactCard
+                            handleButtonClick={handleButtonClick}
+                            details={propertyDetail?.builder || {
+                                ownershipTypes: propertyDetail?.ownershipTypes,
+                                contactList: propertyDetail?.contactList,
+                                region: propertyDetail?.region || ['City view','Hold'],
+                                tags: propertyDetail?.tags?.length > 0 ? propertyDetail?.tags  : ['Newly Added', 'Diwali Offer'],
+                                ownerName : propertyDetail?.ownerName || "Ankit Kumar Singh",
+                                createdAt: propertyDetail?.createdAt
+
+                            }}
                         />
                     </div>
                 </div>

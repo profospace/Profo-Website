@@ -525,7 +525,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
         return (
             <div
-                className="bg-white border rounded-xl overflow-hidden transition-all duration-300 transform hover:-translate-y-2 max-w-sm w-full mx-auto cursor-pointer"
+                className="bg-white border rounded-xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 max-w-sm w-full mx-auto cursor-pointer"
                 onClick={handleNavigation}
             >
                 {/* Image Container */}
@@ -554,7 +554,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                             ) : (
                                 <>
                                     {getPropertyIcon(item?.type_name)}
-                                    <span className="text-sm font-medium text-gray-800 ml-2">{item?.type_name}</span>
+                                    <span className=" text-sm font-medium text-gray-800 ml-2">{item?.type_name}</span>
                                 </>
                             )}
                         </div>
@@ -584,7 +584,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                                 </span>
 
                                 <span className="text-xs text-gray-600 font-medium">
-                                    {item?.priceUnit}
+                                    {item?.priceUnit || 'INR'}
                                 </span>
                             </div>
 
@@ -600,7 +600,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                         </div>
 
                         {/* Property Title */}
-                        <h3 className="text-md font-semibold text-gray-800 truncate">
+                        <h3 className="capitalize text-md font-semibold text-gray-800 truncate">
                             {item?.post_title}
                         </h3>
 

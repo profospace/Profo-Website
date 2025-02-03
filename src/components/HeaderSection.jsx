@@ -252,7 +252,7 @@
 //         photos: 26
 //     };
 
-    
+
 //     // Calculate min and max prices from connected properties
 //     const prices = details?.connectedProperties
 //         ?.map(property => property.price)
@@ -315,7 +315,7 @@
 
 //     const pricePerSqFt = calculatePricePerSqFt();
 
-   
+
 
 //     useEffect(() => {
 //         const handleScroll = () => {
@@ -407,7 +407,7 @@
 //               {/* Action Buttons */}
 //               <div className="flex gap-4 mb-6 flex-wrap items-center">
 //                  { details?.contactNumber && <ContactButton />}
-                  
+
 //                   <ConsultationModal />
 //                   {/* <button className="px-3 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors">
 //                       <Heart className="w-6 h-6" />
@@ -419,7 +419,7 @@
 //                   <Camera className="w-5 h-5" />
 //                   <span>{details?.galleryList?.length} photos</span>
 //                   <ImagePreview ref={imagePreviewRef} images={details?.galleryList} />
-                  
+
 //               </button>
 
 //               {/* Developer Info */}
@@ -817,11 +817,11 @@ function HeaderSection({ details, sectionRefs, activeSection }) {
         }
     };
     return (
-        <header className="relative w-full h-[600px] text-white mt-24">
+        <header className="relative w-full h-[600px] text-white">
             <div
                 className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''
                     }`}
-                    // Working , just commented due to bad quality images
+                // Working , just commented due to bad quality images
                 // style={{
                 //     backgroundImage: `url(${details?.galleryList?.[0] ||
                 //         details?.gallery?.[0]?.images?.[0] ||
@@ -941,9 +941,9 @@ function HeaderSection({ details, sectionRefs, activeSection }) {
                         : 'absolute bottom-0 left-0 backdrop-blur-lg'
                         } w-full transition-all duration-300`}
                 >
-                    <div className="max-w-7xl mx-auto">
+                    <div className="max-w-7xl mx-auto text-sm">
                         <div
-                            className={`flex gap-6 text-md px-8 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'
+                            className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'
                                 }`}
                         >
                             {navigationTabs.map((tab) => (

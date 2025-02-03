@@ -755,30 +755,66 @@ const Header = () => {
     };
 
     // Handle Show Results
+    // const handleShowResults = async () => {
+    //     // Prepare filters object
+    //     const filters = {
+    //         selects: {
+    //             type_name: selectedOptions,
+    //             purpose: selectedPurpose
+    //         },
+    //         numeric: {},
+    //     };
+
+    //     // Add purpose filters
+    //     if (purposeFilters.buy) filters.purpose.purpose.push('Buy');
+    //     if (purposeFilters.rent) filters.purpose.purpose.push('Rent');
+
+    //     // Add price filter if specified
+    //     if (maxPrice) {
+    //         filters.numeric.price = [0, parseInt(maxPrice)];
+    //     }
+
+
+    //     console.log(filters)
+    //     dispatch(applyFilter(filters))
+    //     navigate('/main')
+
+    // };
+
     const handleShowResults = async () => {
-        // Prepare filters object
-        const filters = {
-            selects: {
-                type_name: selectedOptions,
-                purpose: selectedPurpose
-            },
-            numeric: {},
-        };
+        // Create a combined filter object that matches our new structure
+        const filters = {};
 
-        // Add purpose filters
-        if (purposeFilters.buy) filters.purpose.purpose.push('Buy');
-        if (purposeFilters.rent) filters.purpose.purpose.push('Rent');
-
-        // Add price filter if specified
-        if (maxPrice) {
-            filters.numeric.price = [0, parseInt(maxPrice)];
+        // Handle property types (selectedOptions)
+        if (selectedOptions && selectedOptions.length > 0) {
+            filters.propertyType = selectedOptions;
         }
 
+        // Handle purpose (Buy/Rent)
+        if (selectedPurpose) {
+            filters.purpose = selectedPurpose.toLowerCase();
+        }
 
-        console.log(filters)
-        dispatch(applyFilter(filters))
-        navigate('/main')
+        // Handle price range
+        if (maxPrice) {
+            filters.price = {
+                min: 0,
+                max: parseInt(maxPrice)
+            };
+        }
 
+        // Add city if selected
+        // if (city) {
+        //     filters.city = city;
+        // }
+
+        console.log('Applied Filters:', filters);
+
+        // Dispatch the filter action
+        dispatch(applyFilter(filters));
+
+        // Navigate to results page
+        navigate('/main');
     };
 
 
@@ -805,9 +841,9 @@ const Header = () => {
         { id: 2, title: 'Find New buildings', count: '136 695', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1a94f43121fc8899c8a95327c26fc0ac.png', "type_name": "buildings" },
         { id: 3, title: 'Project', count: '16 309', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/634a00148bb1c6ed32c05713974b46b6.png', "type_name": "project" },
         { id: 4, title: "Explore Properties Nearby", count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/7410e105dea0ba239fd7f8974a7c4c95.png', "type_name": "properties" },
-        { id: 5, title: 'We will help to pass', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1d3ebf3ab1e13ceb46696a83f711461b.png', "type_name":"post_property"},
+        { id: 5, title: 'We will help to pass', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1d3ebf3ab1e13ceb46696a83f711461b.png', "type_name": "post_property" },
         { id: 6, title: 'EMI Calculator', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/228dd13e77a8223bb042b59546f36646.png' },
-        { id: 7, title: 'Services', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/e69cded9c33e3274c1f2576ebf1d06bd.png' , "type_name": "services" },
+        { id: 7, title: 'Services', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/e69cded9c33e3274c1f2576ebf1d06bd.png', "type_name": "services" },
     ];
 
 
@@ -1011,10 +1047,10 @@ const Header = () => {
 
 
                 }
-                else if (type_name === 'services'){
+                else if (type_name === 'services') {
                     navigate('/services')
                 }
-                else if (type_name === 'post_property'){
+                else if (type_name === 'post_property') {
                     navigate('/post-property-for-free')
                 }
                 else {
@@ -1022,7 +1058,7 @@ const Header = () => {
                     dispatch(getFilterProperties({ latitude, longitude, type_name }));
                     navigate('/main')
                 }
-                
+
 
             },
             (error) => {
@@ -1088,23 +1124,23 @@ const Header = () => {
     }, [dispatch]);
 
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (navbarRef.current) {
-                const navbarHeight = navbarRef.current.offsetHeight;
-                const scrollThreshold = navbarHeight * 0.5;
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         if (navbarRef.current) {
+    //             const navbarHeight = navbarRef.current.offsetHeight;
+    //             const scrollThreshold = navbarHeight * 0.5;
 
-                if (window.scrollY >= scrollThreshold) {
-                    setIsSticky(true);
-                } else {
-                    setIsSticky(false);
-                }
-            }
-        };
+    //             if (window.scrollY >= scrollThreshold) {
+    //                 setIsSticky(true);
+    //             } else {
+    //                 setIsSticky(false);
+    //             }
+    //         }
+    //     };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => window.removeEventListener('scroll', handleScroll);
+    // }, []);
     return (
         <>
             {/* <header
@@ -1115,8 +1151,12 @@ const Header = () => {
             > */}
             <header
                 ref={navbarRef}
-                className={`w-full navbar ${isHomePage ? "bg-[url('https://avatars.mds.yandex.net/get-verba/216201/2a00000193abde37fd3f35e4c7b04d9b6efe/realty_large_1242')]" : "bg-white"}`}
+                className={`w-full relative navbar ${isHomePage ? "bg-[url('https://www.passionroyalcottage.com/images/banner.jpg')] h-[65vh] " : "bg-white"}`}
             >
+                {/* <header
+                ref={navbarRef}
+                className={`w-full navbar ${isHomePage ? "bg-[url('https://avatars.mds.yandex.net/get-verba/216201/2a00000193abde37fd3f35e4c7b04d9b6efe/realty_large_1242')] h-[78vh] " : "bg-white"}`}
+            > */}
                 {/* Top Navigation Bar */}
                 {/* <div className="max-w-7xl mx-auto px-4  "> */}
                 <div
@@ -1166,7 +1206,7 @@ const Header = () => {
                                     <li key={index} className="relative group">
                                         <p
                                             onClick={() => handleFilter(link.href, link?.id)}
-                                            className={`text-sm ${link?.id == selectedId ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-600'} hover:text-red-500 pb-1 cursor-pointer`}
+                                            className={`text-sm ${link?.id == selectedId ? 'text-red-500 border-b-2 border-red-500' : 'text-black'} hover:text-red-500 pb-1 cursor-pointer`}
                                         >
                                             {link.text}
                                         </p>
@@ -1283,12 +1323,18 @@ const Header = () => {
 
                 {/* Main Section */}
                 {
-                    isHomePage && <div className='max-w-7xl mx-auto px-6 mt-32 '>
-                        <h1 className="text-5xl font-bold my-1 text-center uppercase">REAL ESTATE IN {!isCityLoading ? city + ' CITY' : "loading..."} </h1>
+                    isHomePage && <div className='absolute top-[80%] shadow-md shadow-gray-600 left-[20%] bg-white rounded-xl max-w-7xl mx-auto p-6 px-12'>
+                        {/* <h1 className="text-5xl font-bold my-1 text-center uppercase ">REAL ESTATE IN {!isCityLoading ? city + ' CITY' : "loading..."} </h1> */}
+                        <div className="relative flex justify-center mb-6">
+                            <h1 className="text-5xl font-bold text-center uppercase text-black">
+                                REAL ESTATE IN <span className='text-[crimson]'>{!isCityLoading ? city : "loading..."} </span>CITY
+                            </h1>
+                        </div>
+
 
                         {/* Search Bar Section */}
                         <div className="w-full max-w-7xl mx-auto">
-                            <div className="flex flex-wrap items-center gap-2 py-6">
+                            <div className="flex justify-center flex-wrap items-center gap-2">
                                 {/* dropdown */}
                                 <div className="relative inline-block w-64">
                                     <button
@@ -1371,7 +1417,7 @@ const Header = () => {
                                         className="w-full px-4 py-2 text-gray-700 placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div> */}
-                                <div className="flex-grow">
+                                {/* <div className="flex-grow">
                                     <input
                                         type="number"
                                         placeholder="Price up to, ₱"
@@ -1379,7 +1425,7 @@ const Header = () => {
                                         onChange={(e) => setMaxPrice(e.target.value)}
                                         className="w-full px-4 py-2 text-gray-700 placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
-                                </div>
+                                </div> */}
 
                                 {/* Metro filter */}
                                 {/* <button className="px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300">
@@ -1402,12 +1448,12 @@ const Header = () => {
 
             </header>
             {/* Top Section having direct filters  */}
-            <div className={`max-w-7xl mx-auto ${isHomePage && 'p-6'}`}>
+            <div className={`max-w-7xl mx-auto ${isHomePage && 'p-6 mt-20'}`}>
                 {/* Services Section */}
                 {
                     isHomePage && <div className="mb-8">
                         <div className="flex items-center gap-4 mb-4">
-                            <h2 className="text-xl">Frequently searched</h2>
+                            <h2 className="text-xl px-9">Frequently searched</h2>
                             {/* <div className="flex items-center gap-2">
                           <span>Services</span>
                           <span className="border border-black rounded px-2 py-1 text-sm">ПОД КЛЮЧ</span>
@@ -1416,11 +1462,12 @@ const Header = () => {
                       <span>Partner</span> */}
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
+                        {/* <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7"> */}
+                        <div className="flex justify-evenly">
                             {services?.map((service) => (
                                 <div key={service.id}>
                                     <div
-                                       
+
                                         className="bg-[#F3F3F6] rounded-xl shadow-sm cursor-pointer w-32 h-auto overflow-hidden "
                                         onClick={() => handleFilter(service?.type_name)}
                                     >

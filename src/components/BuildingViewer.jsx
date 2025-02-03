@@ -936,14 +936,172 @@
 
 // export default BuildingViewer;
 
+// import React, { useState, useRef, useEffect } from 'react';
+// import { Building, Home } from 'lucide-react';
+
+// const BuildingViewer = ({ config }) => {
+//     const [hoveredBuilding, setHoveredBuilding] = useState(null);
+//     const popupRef = useRef(null);
+//     const canvasRef = useRef(null);
+//     const imageRef = useRef(null);
+
+//     useEffect(() => {
+//         const handleClickOutside = (event) => {
+//             if (popupRef.current && !popupRef.current.contains(event.target)) {
+//                 setHoveredBuilding(null);
+//             }
+//         };
+//         document.addEventListener('mousedown', handleClickOutside);
+//         return () => document.removeEventListener('mousedown', handleClickOutside);
+//     }, []);
+
+//     useEffect(() => {
+//         if (imageRef.current && canvasRef.current) {
+//             const canvas = canvasRef.current;
+//             canvas.width = imageRef.current.width;
+//             canvas.height = imageRef.current.height;
+//             drawHighlight();
+//         }
+//     }, [hoveredBuilding, config]);
+
+//     const drawHighlight = () => {
+//         if (!canvasRef.current || !config?.buildings) return;
+//         const ctx = canvasRef.current.getContext('2d');
+//         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+//         config.buildings.forEach(building => {
+//             if (building.id === hoveredBuilding?.id) {
+//                 ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+//                 ctx.strokeStyle = 'rgba(0,0,0,0)';
+//                 ctx.lineWidth = 3;
+//                 if (building.selectionType === 'rect' && building.area) {
+//                     ctx.fillRect(
+//                         building.area.x * canvasRef.current.width,
+//                         building.area.y * canvasRef.current.height,
+//                         building.area.width * canvasRef.current.width,
+//                         building.area.height * canvasRef.current.height
+//                     );
+//                     ctx.strokeRect(
+//                         building.area.x * canvasRef.current.width,
+//                         building.area.y * canvasRef.current.height,
+//                         building.area.width * canvasRef.current.width,
+//                         building.area.height * canvasRef.current.height
+//                     );
+//                 } else if (building.selectionType === 'lasso' && building.path) {
+//                     ctx.beginPath();
+//                     building.path.forEach((point, index) => {
+//                         if (index === 0) {
+//                             ctx.moveTo(
+//                                 point.x * canvasRef.current.width,
+//                                 point.y * canvasRef.current.height
+//                             );
+//                         } else {
+//                             ctx.lineTo(
+//                                 point.x * canvasRef.current.width,
+//                                 point.y * canvasRef.current.height
+//                             );
+//                         }
+//                     });
+//                     ctx.closePath();
+//                     ctx.fill();
+//                     ctx.stroke();
+//                 }
+//             }
+//         });
+//     };
+
+//     if (!config || !config.image) {
+//         return (
+//             <div className="p-8 text-center text-gray-500">
+//                 No building configuration available
+//             </div>
+//         );
+//     }
+
+//     return (
+//         <div className="w-full">
+//             <div className="mb-6 p-4 bg-white rounded-lg shadow-sm">
+//                 <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+//                     Project Overview
+//                 </h2>
+//                 <p className="text-gray-600">
+//                     Last updated: {new Date(config.metadata.lastModified).toLocaleDateString()}
+//                 </p>
+//                 <div className="mt-2 text-sm text-gray-500">
+//                     Total Buildings: {config.metadata.buildingCount}
+//                 </div>
+//             </div>
+//             <div className="relative border rounded-lg overflow-hidden">
+//                 <img
+//                     ref={imageRef}
+//                     src={config.image.src}
+//                     alt="Property Map"
+//                     className="w-full h-full object-contain"
+//                 />
+//                 <canvas
+//                     ref={canvasRef}
+//                     className="absolute top-0 left-0 w-full h-full pointer-events-none"
+//                 />
+//                 {config.buildings?.map((building) => (
+//                     <div
+//                         key={building.id}
+//                         className="absolute"
+//                         style={{
+//                             top: `${building.position.y * 100}%`,
+//                             left: `${building.position.x * 100}%`,
+//                         }}
+//                     >
+//                         <div
+//                             className="relative"
+//                             onMouseEnter={() => setHoveredBuilding(building)}
+//                             onMouseLeave={() => setHoveredBuilding(null)}
+//                         >
+//                             <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer
+//                                 ${hoveredBuilding?.id === building.id
+//                                     ? 'bg-white ring-4 ring-blue-500'
+//                                     : 'bg-white ring-2 ring-gray-300 hover:ring-blue-500'}`}
+//                             >
+//                                 {building.name.charAt(0)}
+//                             </div>
+//                             {hoveredBuilding?.id === building.id && (
+//                                 <div className="absolute z-10 bg-white rounded-lg shadow-lg p-3 w-64 -translate-x-1/2 mt-2">
+//                                     <div className="absolute top-0 left-2/4 transform -translate-x-1/2 -translate-y-1/2">
+//                                         <div className="w-3 h-3 bg-white rotate-45 transform"></div>
+//                                     </div>
+//                                     <div className="text-lg font-bold mb-1">{building.name}</div>
+//                                     <div className="text-sm text-gray-600 mb-2">
+//                                         {building.developmentStatus && (
+//                                             <div>{building.developmentStatus} • {building.totalFloors} floors</div>
+//                                         )}
+//                                     </div>
+//                                     {building.price && (
+//                                         <div className="text-sm">
+//                                             from {building.price.toLocaleString()} ₽
+//                                         </div>
+//                                     )}
+//                                 </div>
+//                             )}
+//                         </div>
+//                     </div>
+//                 ))}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default BuildingViewer;
+
+
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Building, Home } from 'lucide-react';
+import { Building, Home, Maximize2, Minimize2 } from 'lucide-react';
 
 const BuildingViewer = ({ config }) => {
     const [hoveredBuilding, setHoveredBuilding] = useState(null);
+    const [isFullscreen, setIsFullscreen] = useState(false);
     const popupRef = useRef(null);
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
+    const containerRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -951,9 +1109,21 @@ const BuildingViewer = ({ config }) => {
                 setHoveredBuilding(null);
             }
         };
+
+        const handleEscKey = (event) => {
+            if (event.key === 'Escape' && isFullscreen) {
+                setIsFullscreen(false);
+            }
+        };
+
         document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+        document.addEventListener('keydown', handleEscKey);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEscKey);
+        };
+    }, [isFullscreen]);
 
     useEffect(() => {
         if (imageRef.current && canvasRef.current) {
@@ -1017,72 +1187,97 @@ const BuildingViewer = ({ config }) => {
         );
     }
 
+    const toggleFullscreen = () => {
+        setIsFullscreen(!isFullscreen);
+    };
+
+    const containerClasses = isFullscreen
+        ? "fixed inset-0 z-50 bg-white"
+        : "w-full";
+
+    const contentClasses = isFullscreen
+        ? "h-screen p-4 flex flex-col"
+        : "";
+
     return (
-        <div className="w-full">
-            <div className="mb-6 p-4 bg-white rounded-lg shadow-sm">
-                <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                    Project Overview
-                </h2>
-                <p className="text-gray-600">
-                    Last updated: {new Date(config.metadata.lastModified).toLocaleDateString()}
-                </p>
-                <div className="mt-2 text-sm text-gray-500">
-                    Total Buildings: {config.metadata.buildingCount}
+        <div className={containerClasses} ref={containerRef}>
+            <div className={contentClasses}>
+                <div className={`mb-6 p-4 bg-white rounded-lg shadow-sm ${isFullscreen ? 'flex-shrink-0' : ''}`}>
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                        Project Overview
+                    </h2>
+                    <p className="text-gray-600">
+                        Last updated: {new Date(config.metadata.lastModified).toLocaleDateString()}
+                    </p>
+                    <div className="mt-2 text-sm text-gray-500">
+                        Total Buildings: {config.metadata.buildingCount}
+                    </div>
                 </div>
-            </div>
-            <div className="relative border rounded-lg overflow-hidden">
-                <img
-                    ref={imageRef}
-                    src={config.image.src}
-                    alt="Property Map"
-                    className="w-full h-full object-contain"
-                />
-                <canvas
-                    ref={canvasRef}
-                    className="absolute top-0 left-0 w-full h-full pointer-events-none"
-                />
-                {config.buildings?.map((building) => (
-                    <div
-                        key={building.id}
-                        className="absolute"
-                        style={{
-                            top: `${building.position.y * 100}%`,
-                            left: `${building.position.x * 100}%`,
-                        }}
-                    >
+                <div className={`relative border rounded-lg overflow-hidden ${isFullscreen ? 'flex-grow' : ''}`}>
+                    <img
+                        ref={imageRef}
+                        src={config.image.src}
+                        alt="Property Map"
+                        className="w-full h-full object-contain"
+                    />
+                    <canvas
+                        ref={canvasRef}
+                        className="absolute top-0 left-0 w-full h-full pointer-events-none"
+                    />
+                    {config.buildings?.map((building) => (
                         <div
-                            className="relative"
-                            onMouseEnter={() => setHoveredBuilding(building)}
-                            onMouseLeave={() => setHoveredBuilding(null)}
+                            key={building.id}
+                            className="absolute"
+                            style={{
+                                top: `${building.position.y * 100}%`,
+                                left: `${building.position.x * 100}%`,
+                            }}
                         >
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer
-                                ${hoveredBuilding?.id === building.id
-                                    ? 'bg-white ring-4 ring-blue-500'
-                                    : 'bg-white ring-2 ring-gray-300 hover:ring-blue-500'}`}
+                            <div
+                                className="relative"
+                                onMouseEnter={() => setHoveredBuilding(building)}
+                                onMouseLeave={() => setHoveredBuilding(null)}
                             >
-                                {building.name.charAt(0)}
-                            </div>
-                            {hoveredBuilding?.id === building.id && (
-                                <div className="absolute z-10 bg-white rounded-lg shadow-lg p-3 w-64 -translate-x-1/2 mt-2">
-                                    <div className="absolute top-0 left-2/4 transform -translate-x-1/2 -translate-y-1/2">
-                                        <div className="w-3 h-3 bg-white rotate-45 transform"></div>
-                                    </div>
-                                    <div className="text-lg font-bold mb-1">{building.name}</div>
-                                    <div className="text-sm text-gray-600 mb-2">
-                                        {building.developmentStatus && (
-                                            <div>{building.developmentStatus} • {building.totalFloors} floors</div>
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer
+                                    ${hoveredBuilding?.id === building.id
+                                        ? 'bg-white ring-4 ring-blue-500'
+                                        : 'bg-white ring-2 ring-gray-300 hover:ring-blue-500'}`}
+                                >
+                                    {building.name.charAt(0)}
+                                </div>
+                                {hoveredBuilding?.id === building.id && (
+                                    <div className="absolute z-10 bg-white rounded-lg shadow-lg p-3 w-64 -translate-x-1/2 mt-2">
+                                        <div className="absolute top-0 left-2/4 transform -translate-x-1/2 -translate-y-1/2">
+                                            <div className="w-3 h-3 bg-white rotate-45 transform"></div>
+                                        </div>
+                                        <div className="text-lg font-bold mb-1">{building.name}</div>
+                                        <div className="text-sm text-gray-600 mb-2">
+                                            {building.developmentStatus && (
+                                                <div>{building.developmentStatus} • {building.totalFloors} floors</div>
+                                            )}
+                                        </div>
+                                        {building.price && (
+                                            <div className="text-sm">
+                                                from {building.price.toLocaleString()} ₽
+                                            </div>
                                         )}
                                     </div>
-                                    {building.price && (
-                                        <div className="text-sm">
-                                            from {building.price.toLocaleString()} ₽
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                    <button
+                        onClick={toggleFullscreen}
+                        className="absolute bottom-4 right-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors duration-200"
+                        aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                    >
+                        {isFullscreen ? (
+                            <Minimize2 className="w-6 h-6 text-gray-600" />
+                        ) : (
+                            <Maximize2 className="w-6 h-6 text-gray-600" />
+                        )}
+                    </button>
+                </div>
             </div>
         </div>
     );

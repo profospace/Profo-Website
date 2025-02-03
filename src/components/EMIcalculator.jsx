@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 
 const Card = ({ children, className = "" }) => (
@@ -27,7 +27,7 @@ const Button = ({ children, onClick, disabled, className = "" }) => (
     </button>
 );
 
-const SliderInput = ({ label, value, setValue, min, max, step, format, leftLabel, rightLabel }) => {
+const SliderInput = ({ label, title, value, setValue, min, max, step, format, leftLabel, rightLabel }) => {
     const handleChange = (e) => {
         const newValue = Number(e.target.value);
         setValue(newValue);
@@ -40,7 +40,10 @@ const SliderInput = ({ label, value, setValue, min, max, step, format, leftLabel
             <div className='flex gap-1 flex-col'>
                 <div className="flex justify-between items-center">
                     <label className="text-sm font-medium">{label}</label>
-                    <span className="text-sm font-medium">{format ? format(value) : value}</span>
+                    <div className='flex gap-4 items-center'>
+                        {title && <span className='px-1 border-[0.5px] rounded-sm font-semibold text-xs bg-yellow-100 border-yellow-800'>{title && title}</span>}
+                        <span className="text-sm font-medium"> {format ? format(value) : value}</span>
+                    </div>
                 </div>
                 <div className="relative w-full h-2">
                     <div className="absolute w-full h-[2px] bg-gray-200 rounded-full" />
@@ -78,11 +81,17 @@ const SliderInput = ({ label, value, setValue, min, max, step, format, leftLabel
     );
 };
 
-const EMICalculator = () => {
-    const [loanAmount, setLoanAmount] = useState(2000000);
+const EMICalculator = ({ price }) => {
+    const [loanAmount, setLoanAmount] = useState(0);
     const [interestRate, setInterestRate] = useState(8.5);
     const [tenure, setTenure] = useState(20);
     const [loading, setLoading] = useState(false);
+
+    useEffect(
+        () => {
+            setLoanAmount(price)
+        }, [price]
+    )
 
     const calculateEMI = () => {
         const principal = loanAmount;
@@ -141,14 +150,15 @@ const EMICalculator = () => {
             <CardContent className="space-y-6">
                 <SliderInput
                     label="Loan Amount"
+                    title="Property Price"
                     value={loanAmount}
                     setValue={setLoanAmount}
                     min={100000}
-                    max={10000000}
+                    max={40000000}
                     step={100000}
                     format={formatIndianCurrency}
                     leftLabel="₹1 Lakh"
-                    rightLabel="₹1 Crore"
+                    rightLabel="₹4 Crore"
                 />
 
                 <SliderInput

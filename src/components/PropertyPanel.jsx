@@ -166,8 +166,10 @@
 
 import React from 'react';
 import { X, Home, Building, MapPin, Bath, Bed, Grid, Users, Building2 } from 'lucide-react';
-
+import { MdArrowBackIosNew } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 const PropertyPanel = ({ data, type, onClose }) => {
+    const navigate = useNavigate()
     if (!data) return null;
     console.log("data", data)
 
@@ -180,7 +182,7 @@ const PropertyPanel = ({ data, type, onClose }) => {
     };
 
     const renderPropertyContent = () => (
-        <div className="space-y-4">
+        <div className="space-y-4" onClick={() => navigate(`/api/details/${data?.post_id}`)}>
             <div className="aspect-video rounded-lg bg-gray-200 overflow-hidden">
                 {data?.galleryList?.[0] && (
                     <img
@@ -391,34 +393,40 @@ const PropertyPanel = ({ data, type, onClose }) => {
     );
 
     return (
-        <div className="fixed left-0 top-24 bottom-0 w-96 bg-white p-4 overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-2">
-                    {type === 'property' ? (
-                        <Home className="text-blue-600" size={24} />
-                    ) : type === 'project' ? (
-                        <MapPin className="text-blue-600" size={24} />
-                    ) : (
-                        <Building className="text-blue-600" size={24} />
-                    )}
-                    <span className="font-semibold">
-                        {type === 'property' ? 'Property Details' :
-                            type === 'project' ? 'Project Details' :
-                                'Building Details'}
-                    </span>
-                </div>
-                <button
-                    onClick={onClose}
-                    className="p-1 hover:bg-gray-100 rounded-full"
-                >
-                    <X size={20} />
-                </button>
+       <>
+            <div className="scrollbar-slim absolute left-0 top-[0.1px] z-10 bottom-0 w-96 bg-white p-4 overflow-y-auto">
+
+                {type === 'property' ? renderPropertyContent() :
+                    type === 'project' ? renderProjectContent() :
+                        renderBuildingContent()}
             </div>
-            {type === 'property' ? renderPropertyContent() :
-                type === 'project' ? renderProjectContent() :
-                    renderBuildingContent()}
-        </div>
+            <button onClick={onClose} className='absolute top-4 bg-white p-[10px] rounded-lg shadow-lg shadow-gray-500 border-[1px] left-[24.5rem] z-20'>
+                <MdArrowBackIosNew size={20} />
+            </button>
+       </>
     );
 };
 
 export default PropertyPanel;
+// <div className="flex justify-between items-center mb-4">
+//     <div className="flex items-center gap-2">
+//         {type === 'property' ? (
+//             <Home className="text-blue-600" size={24} />
+//         ) : type === 'project' ? (
+//             <MapPin className="text-blue-600" size={24} />
+//         ) : (
+//             <Building className="text-blue-600" size={24} />
+//         )}
+//         <span className="font-semibold">
+//             {type === 'property' ? 'Property Details' :
+//                 type === 'project' ? 'Project Details' :
+//                     'Building Details'}
+//         </span>
+//     </div>
+//     <button
+//         onClick={onClose}
+//         className="p-1 hover:bg-gray-100 rounded-full"
+//     >
+//         <X size={20} />
+//     </button>
+// </div> 

@@ -1725,10 +1725,10 @@ const MapPage = ({
         //     </div>
         // </div>
 
-        <div className="w-full min-h-screen relative mt-1">
+        <div className="w-full relative">
             {/* Header */}
             <div className="absolute top-0 left-0 right-0 z-10 bg-transparent px-4 flex justify-between items-center py-2">
-                <h1 className="text-xl font-semibold bg-white px-4 py-1 rounded-sm shadow-md">Map View</h1>
+                <h1 className="text-xl font-semibold bg-white px-4 py-1 rounded-sm shadow-md -z-20">Map View</h1>
                 
                 <div className="flex items-center gap-4">
                     {/* Search Bar */}
@@ -1840,7 +1840,7 @@ const MapPage = ({
                         />
                     )}
                     {/* Legend */}
-                    <div className="absolute bottom-24 right-1 bg-white py-2 px-6 rounded-lg shadow-lg">
+                    {/* <div className="absolute bottom-24 right-1 bg-white py-2 px-6 rounded-lg shadow-lg">
                         <div className="text-sm font-medium mb-2">Legend</div>
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">
@@ -1864,7 +1864,7 @@ const MapPage = ({
                                 <span className="text-sm">Building</span>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
