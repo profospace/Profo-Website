@@ -164,12 +164,15 @@
 // export default PropertyPanel;
 
 
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Home, Building, MapPin, Bath, Bed, Grid, Users, Building2 } from 'lucide-react';
 import { MdArrowBackIosNew } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+
 const PropertyPanel = ({ data, type, onClose }) => {
     const navigate = useNavigate()
+    const [isVisible, setIsVisible] = useState(true);
     if (!data) return null;
     console.log("data", data)
 
@@ -180,6 +183,60 @@ const PropertyPanel = ({ data, type, onClose }) => {
             maximumSignificantDigits: 3,
         }).format(price);
     };
+
+    const handleClose = () => {
+        setIsVisible(false);
+        // Delay the actual close callback to allow animation to complete
+        setTimeout(onClose, 400);
+    };
+
+    const panelVariants = {
+        hidden: {
+            x: -384,
+            opacity: 0
+        },
+        visible: {
+            x: 0,
+            opacity: 1,
+            transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 30
+            }
+        },
+        exit: {
+            x: -384,
+            opacity: 0,
+            transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                duration: 0.3
+            }
+        }
+    };
+
+    const buttonVariants = {
+        hidden: {
+            x: -20,
+            opacity: 0
+        },
+        visible: {
+            x: 0,
+            opacity: 1,
+            transition: {
+                delay: 0.2
+            }
+        },
+        exit: {
+            x: -20,
+            opacity: 0,
+            transition: {
+                duration: 0.2
+            }
+        }
+    };
+
 
     const renderPropertyContent = () => (
         <div className="space-y-4" onClick={() => navigate(`/api/details/${data?.post_id}`)}>
@@ -393,17 +450,36 @@ const PropertyPanel = ({ data, type, onClose }) => {
     );
 
     return (
-       <>
-            <div className="scrollbar-slim absolute left-0 top-[0.1px] z-10 bottom-0 w-96 bg-white p-4 overflow-y-auto">
+        <AnimatePresence>
+            {isVisible && (
+                <>
+                    <motion.div
+                        className="absolute left-0 top-0 z-10 bottom-0 w-96 bg-white p-4 overflow-y-auto"
+                        variants={panelVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                    >
+                        {type === 'property' ? renderPropertyContent() :
+                            type === 'project' ? renderProjectContent() :
+                                renderBuildingContent()}
+                    </motion.div>
 
-                {type === 'property' ? renderPropertyContent() :
-                    type === 'project' ? renderProjectContent() :
-                        renderBuildingContent()}
-            </div>
-            <button onClick={onClose} className='absolute top-4 bg-white p-[10px] rounded-lg shadow-lg shadow-gray-500 border-[1px] left-[24.5rem] z-20'>
-                <MdArrowBackIosNew size={20} />
-            </button>
-       </>
+                    <motion.button
+                        onClick={handleClose}
+                        className="absolute top-4 bg-white p-[10px] rounded-lg shadow-lg shadow-gray-500 border-[1px] left-[24.5rem] z-20"
+                        variants={buttonVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <MdArrowBackIosNew size={20} />
+                    </motion.button>
+                </>
+            )}
+        </AnimatePresence>
     );
 };
 

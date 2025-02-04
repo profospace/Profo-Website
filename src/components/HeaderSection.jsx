@@ -701,114 +701,302 @@ export const ConsultationModal = () => {
     );
 };
 
-function HeaderSection({ details, sectionRefs, activeSection }) {
+// function HeaderSection({ details, sectionRefs, activeSection }) {
+//     const [isTabsSticky, setIsTabsSticky] = useState(false);
+//     const [hasBackground, setHasBackground] = useState(false);
+//     const imagePreviewRef = useRef(null);
+//     // Mock data - in real app would come from props
+//     const building = {
+//         name: "Residential complex \"Eco Bunino\"",
+//         rating: 4.7,
+//         priceRange: {
+//             min: "5 654 985",
+//             max: "20 935 632",
+//         },
+//         pricePerMeter: {
+//             min: "160.54",
+//             max: "466.49"
+//         },
+//         location: "Alder",
+//         transportTime: "21",
+//         totalRatings: 3670,
+//         photos: 26
+//     };
+
+
+//     // Calculate min and max prices from connected properties
+//     const prices = details?.connectedProperties
+//         ?.map(property => property.price)
+//         ?.filter(price => price > 0) || [];
+
+//     const minPrice = prices.length ? Math.min(...prices) : null;
+//     const maxPrice = prices.length ? Math.max(...prices) : null;
+
+//     // Format price in Indian currency format (lakhs and crores)
+//     const formatIndianPrice = (price) => {
+//         if (price == null || price <= 0) return null; // Handle invalid or zero prices
+
+//         // Convert to string and handle decimals
+//         const priceStr = Math.floor(price).toString();
+
+//         // Handle numbers less than 1000
+//         if (priceStr.length <= 3) return `₹${priceStr}`;
+
+//         // Handle numbers >= 1000
+//         const lastThree = priceStr.substring(priceStr.length - 3);
+//         const otherNumbers = priceStr.substring(0, priceStr.length - 3);
+//         const formatted = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree;
+
+//         // Add ₹ symbol and determine if in lakhs or crores
+//         if (price >= 10000000) { // ≥ 1 crore
+//             const crores = (price / 10000000).toFixed(2);
+//             return `₹${crores} Cr`;
+//         } else if (price >= 100000) { // ≥ 1 lakh
+//             const lakhs = (price / 100000).toFixed(2);
+//             return `₹${lakhs} L`;
+//         } else {
+//             return `₹${formatted}`;
+//         }
+//     };
+
+//     // Calculate price per square foot
+//     const calculatePricePerSqFt = () => {
+//         const pricesPerSqFt = details?.connectedProperties
+//             ?.map(property => {
+//                 if (property.price > 0 && property.area > 0) {
+//                     return Math.round(property.price / property.area);
+//                 }
+//                 return null;
+//             })
+//             ?.filter(price => price != null) || [];
+
+//         return pricesPerSqFt.length
+//             ? {
+//                 min: Math.min(...pricesPerSqFt),
+//                 max: Math.max(...pricesPerSqFt),
+//             }
+//             : { min: null, max: null };
+//     };
+
+//     // Format price per square foot
+//     const formatPricePerSqFt = (price) => {
+//         if (price == null || price <= 0) return null; // Handle invalid or zero prices
+//         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//     };
+
+//     const pricePerSqFt = calculatePricePerSqFt();
+
+
+
+//     useEffect(() => {
+//         const handleScroll = () => {
+//             const headerHeight = 600;
+//             const scrollPosition = window.scrollY;
+//             setIsTabsSticky(scrollPosition >= headerHeight - 64);
+//             setHasBackground(scrollPosition > 50); // Add background after 50px scroll
+//         };
+
+//         window.addEventListener('scroll', handleScroll);
+//         return () => window.removeEventListener('scroll', handleScroll);
+//     }, []);
+
+//     // Dynamically generate navigation tabs from section references
+//     const navigationTabs = Object.keys(sectionRefs || {});
+
+//     // Scroll to section handler
+//     const scrollToSection = (sectionKey) => {
+//         const sectionElement = sectionRefs[sectionKey]?.current;
+//         if (sectionElement) {
+//             // Scroll with offset to account for sticky header
+//             const offset = 120; // Adjust this value based on your header height
+//             const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
+//             window.scrollTo({
+//                 top: elementPosition - offset,
+//                 behavior: 'smooth'
+//             });
+//         }
+//     };
+//     return (
+//         <header className="relative w-full h-[600px] text-white">
+//             <div
+//                 className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''
+//                     }`}
+//                 // Working , just commented due to bad quality images
+//                 // style={{
+//                 //     backgroundImage: `url(${details?.galleryList?.[0] ||
+//                 //         details?.gallery?.[0]?.images?.[0] ||
+//                 //         'https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize'
+//                 //         })`, // Add a fallback for when the image is not available
+//                 //     backgroundSize: 'cover',
+//                 //     backgroundPosition: 'center',
+//                 // }}
+//                 style={{
+//                     backgroundImage: 'url(https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize)',
+//                     backgroundSize: 'cover',
+//                     backgroundPosition: 'center',
+//                 }}
+//             > {/* Gradient overlay */}
+//                 <div
+//                     className={`absolute inset-0 transition-opacity duration-300 ${hasBackground
+//                         ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100'
+//                         : 'bg-gradient-to-b from-transparent to-black opacity-50'
+//                         }`}
+//                 />
+//             </div>
+//             {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50" /> */}
+//             {/* </div> */}
+
+//             {/* Header Content */}
+//             <div className={`relative h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''
+//                 }`}>
+//                 <nav className="absolute top-4 left-6 text-sm flex flex-wrap items-center gap-2 opacity-80">
+//                     <span>Real estate in Moscow and Moscow region</span>
+//                     <span>•</span>
+//                     <span>Buy</span>
+//                     <span>•</span>
+//                     <span>Apartment in a new building</span>
+//                     <span>•</span>
+//                     <span>{building?.name}</span>
+//                 </nav>
+
+//                 {/* Status Tags */}
+//                 <div className="flex gap-2 mb-4 flex-wrap">
+//                     {details?.developmentStatus && <span className="capitalize px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
+//                         {details?.developmentStatus}
+//                     </span>}
+//                     {/* <span className="px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
+//                                 comfort
+//                             </span> */}
+//                 </div>
+
+//                 {/* Building Title */}
+//                 <div className="flex items-center gap-2 mb-3 flex-wrap">
+//                     <h1 className="capitalize text-6xl  font-bold">{details?.type && `${details?.type}`} {details?.name && `'${details?.name}'`}</h1>
+//                     {/* <div className="flex items-center">
+//                       <span className="text-yellow-400 text-2xl">⭐</span>
+//                       <span className="text-2xl ml-1">{building.rating}</span>
+//                   </div> */}
+//                 </div>
+
+//                 {/* Price Range */}
+//                 <div className="mb-10">
+//                     {minPrice != null && maxPrice != null && (
+//                         <div className="text-4xl font-bold">
+//                             {formatIndianPrice(minPrice)} — {formatIndianPrice(maxPrice)}
+//                         </div>
+//                     )}
+//                     {pricePerSqFt.min != null && pricePerSqFt.max != null && (
+//                         <div className="text-sm opacity-80">
+//                             ₹{formatPricePerSqFt(pricePerSqFt.min)} - ₹{formatPricePerSqFt(pricePerSqFt.max)} per sq.ft
+//                         </div>
+//                     )}
+//                 </div>
+
+//                 {/* Action Buttons */}
+//                 <div className="flex gap-4 mb-6 flex-wrap items-center">
+//                     {details?.contactNumber && <ContactButton />}
+
+//                     <ConsultationModal />
+//                     {/* <button className="px-3 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors">
+//                       <Heart className="w-6 h-6" />
+//                   </button> */}
+//                 </div>
+
+//                 {/* Photo Count */}
+//                 {/* <button className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit" onClick={() => imagePreviewRef.current.openGallery()}>
+//                     <Camera className="w-5 h-5" />
+//                     <span>{details?.galleryList?.length} photos</span>
+//                     <ImagePreview ref={imagePreviewRef} images={details?.galleryList} />
+
+//                 </button> */}
+//                 <button
+//                     className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
+//                     onClick={() => imagePreviewRef.current.openGallery()}
+//                 >
+//                     <Camera className="w-5 h-5" />
+//                     <span>
+//                         {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
+//                     </span>
+//                     <ImagePreview
+//                         ref={imagePreviewRef}
+//                         images={details?.galleryList || details?.gallery?.[0]?.images || []}
+//                     />
+//                 </button>
+
+//                 {/* Developer Info */}
+//                 <div className="flex items-center gap-4 my-8 pb-4 flex-wrap">
+//                     <div className="font-bold text-xl">самолет</div>
+//                     <div className="text-sm">developer #1</div>
+//                     <div className="flex items-center gap-2">
+//                         <span className="text-yellow-400">⭐</span>
+//                         <span>{building.rating}</span>
+//                         <span className="opacity-80">• {building.totalRatings} ratings</span>
+//                     </div>
+//                 </div>
+
+//                 {/* Navigation Tabs */}
+//                 <div
+//                     className={`${isTabsSticky
+//                         ? 'fixed top-16 left-0 z-50 bg-white shadow-sm'
+//                         : 'absolute bottom-0 left-0 backdrop-blur-lg'
+//                         } w-full transition-all duration-300`}
+//                 >
+//                     <div className="max-w-7xl mx-auto text-sm">
+//                         <div
+//                             className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'
+//                                 }`}
+//                         >
+//                             {navigationTabs.map((tab) => (
+//                                 <button
+//                                     key={tab}
+//                                     onClick={() => scrollToSection(tab)}
+//                                     className={`whitespace-nowrap transition-colors relative ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'}
+//                                     ${activeSection === tab ? 'text-red-600 font-semibold' : ''}`}
+//                                 >
+//                                     {tab}
+//                                     {activeSection === tab && (
+//                                         <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-full"></span>
+//                                     )}
+//                                 </button>
+//                             ))}
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+//         </header>
+//     )
+// }
+
+// export default HeaderSection
+
+
+
+const HeaderSection = ({ details, sectionRefs, activeSection }) => {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
+    const [isTitleSticky, setIsTitleSticky] = useState(false);
     const [hasBackground, setHasBackground] = useState(false);
     const imagePreviewRef = useRef(null);
-    // Mock data - in real app would come from props
-    const building = {
-        name: "Residential complex \"Eco Bunino\"",
-        rating: 4.7,
-        priceRange: {
-            min: "5 654 985",
-            max: "20 935 632",
-        },
-        pricePerMeter: {
-            min: "160.54",
-            max: "466.49"
-        },
-        location: "Alder",
-        transportTime: "21",
-        totalRatings: 3670,
-        photos: 26
-    };
-
-
-    // Calculate min and max prices from connected properties
-    const prices = details?.connectedProperties
-        ?.map(property => property.price)
-        ?.filter(price => price > 0) || [];
-
-    const minPrice = prices.length ? Math.min(...prices) : null;
-    const maxPrice = prices.length ? Math.max(...prices) : null;
-
-    // Format price in Indian currency format (lakhs and crores)
-    const formatIndianPrice = (price) => {
-        if (price == null || price <= 0) return null; // Handle invalid or zero prices
-
-        // Convert to string and handle decimals
-        const priceStr = Math.floor(price).toString();
-
-        // Handle numbers less than 1000
-        if (priceStr.length <= 3) return `₹${priceStr}`;
-
-        // Handle numbers >= 1000
-        const lastThree = priceStr.substring(priceStr.length - 3);
-        const otherNumbers = priceStr.substring(0, priceStr.length - 3);
-        const formatted = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree;
-
-        // Add ₹ symbol and determine if in lakhs or crores
-        if (price >= 10000000) { // ≥ 1 crore
-            const crores = (price / 10000000).toFixed(2);
-            return `₹${crores} Cr`;
-        } else if (price >= 100000) { // ≥ 1 lakh
-            const lakhs = (price / 100000).toFixed(2);
-            return `₹${lakhs} L`;
-        } else {
-            return `₹${formatted}`;
-        }
-    };
-
-    // Calculate price per square foot
-    const calculatePricePerSqFt = () => {
-        const pricesPerSqFt = details?.connectedProperties
-            ?.map(property => {
-                if (property.price > 0 && property.area > 0) {
-                    return Math.round(property.price / property.area);
-                }
-                return null;
-            })
-            ?.filter(price => price != null) || [];
-
-        return pricesPerSqFt.length
-            ? {
-                min: Math.min(...pricesPerSqFt),
-                max: Math.max(...pricesPerSqFt),
-            }
-            : { min: null, max: null };
-    };
-
-    // Format price per square foot
-    const formatPricePerSqFt = (price) => {
-        if (price == null || price <= 0) return null; // Handle invalid or zero prices
-        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    };
-
-    const pricePerSqFt = calculatePricePerSqFt();
-
-
 
     useEffect(() => {
         const handleScroll = () => {
             const headerHeight = 600;
             const scrollPosition = window.scrollY;
-            setIsTabsSticky(scrollPosition >= headerHeight - 64);
-            setHasBackground(scrollPosition > 50); // Add background after 50px scroll
+            const titleTriggerPoint = headerHeight - 150; // Trigger point for title
+            const tabsTriggerPoint = headerHeight - 64; // Trigger point for tabs
+
+            setIsTabsSticky(scrollPosition >= tabsTriggerPoint);
+            setIsTitleSticky(scrollPosition >= titleTriggerPoint);
+            setHasBackground(scrollPosition > 50);
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Dynamically generate navigation tabs from section references
-    const navigationTabs = Object.keys(sectionRefs || {});
-
-    // Scroll to section handler
     const scrollToSection = (sectionKey) => {
         const sectionElement = sectionRefs[sectionKey]?.current;
         if (sectionElement) {
-            // Scroll with offset to account for sticky header
-            const offset = 120; // Adjust this value based on your header height
+            const offset = 160; // Increased offset to account for title
             const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
             window.scrollTo({
                 top: elementPosition - offset,
@@ -816,155 +1004,115 @@ function HeaderSection({ details, sectionRefs, activeSection }) {
             });
         }
     };
+
+    const navigationTabs = Object.keys(sectionRefs || {});
+
     return (
-        <header className="relative w-full h-[600px] text-white">
-            <div
-                className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''
-                    }`}
-                // Working , just commented due to bad quality images
-                // style={{
-                //     backgroundImage: `url(${details?.galleryList?.[0] ||
-                //         details?.gallery?.[0]?.images?.[0] ||
-                //         'https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize'
-                //         })`, // Add a fallback for when the image is not available
-                //     backgroundSize: 'cover',
-                //     backgroundPosition: 'center',
-                // }}
+        <header className="relative w-full h-[528px] text-white">
+            {/* Background Image & Overlay */}
+            <div className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
                 style={{
                     backgroundImage: 'url(https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                }}
-            > {/* Gradient overlay */}
-                <div
-                    className={`absolute inset-0 transition-opacity duration-300 ${hasBackground
-                        ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100'
-                        : 'bg-gradient-to-b from-transparent to-black opacity-50'
-                        }`}
-                />
+                }}>
+                <div className={`absolute inset-0 transition-opacity duration-300 
+                    ${hasBackground ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100' : 'bg-gradient-to-b from-transparent to-black opacity-50'}`} />
             </div>
-            {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50" /> */}
-            {/* </div> */}
 
-            {/* Header Content */}
-            <div className={`relative h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''
-                }`}>
-                <nav className="absolute top-4 left-6 text-sm flex flex-wrap items-center gap-2 opacity-80">
-                    <span>Real estate in Moscow and Moscow region</span>
-                    <span>•</span>
-                    <span>Buy</span>
-                    <span>•</span>
-                    <span>Apartment in a new building</span>
-                    <span>•</span>
-                    <span>{building?.name}</span>
-                </nav>
-
-                {/* Status Tags */}
-                <div className="flex gap-2 mb-4 flex-wrap">
-                    {details?.developmentStatus && <span className="capitalize px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
-                        {details?.developmentStatus}
-                    </span>}
-                    {/* <span className="px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
-                                comfort
-                            </span> */}
-                </div>
-
-                {/* Building Title */}
-                <div className="flex items-center gap-2 mb-3 flex-wrap">
-                    <h1 className="capitalize text-6xl  font-bold">{details?.type && `${details?.type}`} {details?.name && `'${details?.name}'`}</h1>
-                    {/* <div className="flex items-center">
-                      <span className="text-yellow-400 text-2xl">⭐</span>
-                      <span className="text-2xl ml-1">{building.rating}</span>
-                  </div> */}
-                </div>
-
-                {/* Price Range */}
-                <div className="mb-10">
-                    {minPrice != null && maxPrice != null && (
-                        <div className="text-4xl font-bold">
-                            {formatIndianPrice(minPrice)} — {formatIndianPrice(maxPrice)}
-                        </div>
-                    )}
-                    {pricePerSqFt.min != null && pricePerSqFt.max != null && (
-                        <div className="text-sm opacity-80">
-                            ₹{formatPricePerSqFt(pricePerSqFt.min)} - ₹{formatPricePerSqFt(pricePerSqFt.max)} per sq.ft
-                        </div>
-                    )}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-4 mb-6 flex-wrap items-center">
-                    {details?.contactNumber && <ContactButton />}
-
-                    <ConsultationModal />
-                    {/* <button className="px-3 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors">
-                      <Heart className="w-6 h-6" />
-                  </button> */}
-                </div>
-
-                {/* Photo Count */}
-                {/* <button className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit" onClick={() => imagePreviewRef.current.openGallery()}>
-                    <Camera className="w-5 h-5" />
-                    <span>{details?.galleryList?.length} photos</span>
-                    <ImagePreview ref={imagePreviewRef} images={details?.galleryList} />
-
-                </button> */}
-                <button
-                    className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
-                    onClick={() => imagePreviewRef.current.openGallery()}
-                >
-                    <Camera className="w-5 h-5" />
-                    <span>
-                        {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
-                    </span>
-                    <ImagePreview
-                        ref={imagePreviewRef}
-                        images={details?.galleryList || details?.gallery?.[0]?.images || []}
-                    />
-                </button>
-
-                {/* Developer Info */}
-                <div className="flex items-center gap-4 my-8 pb-4 flex-wrap">
-                    <div className="font-bold text-xl">самолет</div>
-                    <div className="text-sm">developer #1</div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-yellow-400">⭐</span>
-                        <span>{building.rating}</span>
-                        <span className="opacity-80">• {building.totalRatings} ratings</span>
+            {/* Sticky Title */}
+            {isTitleSticky && (
+                <div className="fixed top-0 left-0 right-0 z-40 bg-[#007BFB] py-2 text-white">
+                    <div className="max-w-7xl mx-auto px-6 py-3">
+                        <h1 className="text-2xl font-semibold capitalize">
+                            {details?.type && `${details.type}`} {details?.name && `'${details.name}'`}
+                        </h1>
                     </div>
                 </div>
+            )}
+
+            {/* Main Content */}
+            <div className={`relative h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''}`}>
+                {/* Original Title - fades out when sticky version appears */}
+                <div className={`flex items-center gap-2 mb-3 flex-wrap transition-opacity duration-300 
+                    ${isTitleSticky ? 'opacity-0' : 'opacity-100'}`}>
+                    <h1 className="capitalize text-6xl font-bold">
+                        {details?.type && `${details.type}`} {details?.name && `'${details.name}'`}
+                    </h1>
+                </div>
+
+                {/* Other content remains the same */}
+                <div className="flex gap-2 mb-4 flex-wrap">
+                    {details?.developmentStatus && (
+                        <span className="capitalize px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
+                            {details.developmentStatus}
+                        </span>
+                    )}
+                </div>
+
+                <div className="flex gap-4 mb-6 flex-wrap items-center">
+                    <ContactButton />
+                    <ConsultationModal />
+                </div>
+
+                <button
+                    className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit mb-8"
+                    onClick={() => imagePreviewRef.current?.openGallery()}
+                >
+                    <Camera className="w-5 h-5" />
+                    <span>{details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos</span>
+                </button>
 
                 {/* Navigation Tabs */}
-                <div
-                    className={`${isTabsSticky
-                        ? 'fixed top-16 left-0 z-50 bg-white shadow-sm'
-                        : 'absolute bottom-0 left-0 backdrop-blur-lg'
-                        } w-full transition-all duration-300`}
-                >
+                {/* <div className={`${isTabsSticky ? 'fixed top-14 left-0 z-30 bg-white shadow-sm' : 'absolute bottom-0 left-0 backdrop-blur-lg'} w-full transition-all duration-300`}>
                     <div className="max-w-7xl mx-auto text-sm">
-                        <div
-                            className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'
-                                }`}
-                        >
+                        <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
                             {navigationTabs.map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => scrollToSection(tab)}
-                                    className={`whitespace-nowrap transition-colors relative ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'}
-                                    ${activeSection === tab ? 'text-red-600 font-semibold' : ''}`}
+                                    className={`whitespace-nowrap transition-colors relative 
+                                        ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'}
+                                        ${activeSection === tab ? 'text-red-600 font-semibold' : ''}`}
                                 >
                                     {tab}
                                     {activeSection === tab && (
-                                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-full"></span>
+                                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-full" />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div> */}
+                <div
+                    className={`${isTabsSticky
+                        ? 'fixed top-[70px] left-0 z-30 bg-white/40 backdrop-blur-xl shadow-sm'
+                        : 'absolute bottom-0 left-0  bg-transparent bg-black/40 backdrop-blur-xl'} 
+    w-full transition-all duration-300`}
+                >
+                    <div className="max-w-7xl mx-auto text-sm">
+                        <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
+                            {navigationTabs.map((tab) => (
+                                <button
+                                    key={tab}
+                                    onClick={() => scrollToSection(tab)}
+                                    className={`whitespace-nowrap transition-colors relative 
+            ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'} 
+            ${activeSection === tab ? 'text-red-600 font-semibold' : ''}`}
+                                >
+                                    {tab}
+                                    {activeSection === tab && (
+                                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-full" />
                                     )}
                                 </button>
                             ))}
                         </div>
                     </div>
                 </div>
+
             </div>
         </header>
-    )
-}
+    );
+};
 
-export default HeaderSection
+export default HeaderSection;

@@ -1151,7 +1151,7 @@ const Header = () => {
             > */}
             <header
                 ref={navbarRef}
-                className={`w-full relative navbar ${isHomePage ? "bg-[url('https://www.passionroyalcottage.com/images/banner.jpg')] h-[65vh] " : "bg-white"}`}
+                className={`w-full relative navbar ${isHomePage ? "bg-[url('https://avatars.mds.yandex.net/get-verba/216201/2a00000193abde37fd3f35e4c7b04d9b6efe/realty_large_1242')] h-[65vh] " : "bg-white"}`}
             >
                 {/* <header
                 ref={navbarRef}
@@ -1323,11 +1323,11 @@ const Header = () => {
 
                 {/* Main Section */}
                 {
-                    isHomePage && <div className='absolute top-[80%] shadow-md shadow-gray-600 left-[20%] bg-white rounded-xl max-w-7xl mx-auto p-6 px-12'>
+                    isHomePage && <div className='absolute top-[80%] shadow-md shadow-gray-300 left-[20%] bg-white rounded-xl max-w-7xl mx-auto p-6 px-12'>
                         {/* <h1 className="text-5xl font-bold my-1 text-center uppercase ">REAL ESTATE IN {!isCityLoading ? city + ' CITY' : "loading..."} </h1> */}
-                        <div className="relative flex justify-center mb-6">
-                            <h1 className="text-5xl font-bold text-center uppercase text-black">
-                                REAL ESTATE IN <span className='text-[crimson]'>{!isCityLoading ? city : "loading..."} </span>CITY
+                        <div className="relative flex justify-center items-center mb-6 ">
+                            <h1 className="text-4xl text-center text-black">
+                                Real estate in <span className='bg-[#FF9B86] px-4 rounded-xl'>{!isCityLoading ? city : "loading..."}</span> City
                             </h1>
                         </div>
 

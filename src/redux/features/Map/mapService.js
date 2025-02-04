@@ -762,20 +762,84 @@ const buildQueryString = (filters) => {
   }
 
   // Building Filters
-  if (filters.buildingType) queryParams.append('buildingType', filters.buildingType);
-  if (filters.developmentStatus) queryParams.append('developmentStatus', filters.developmentStatus);
-  if (filters.frontRoad) queryParams.append('frontRoad', filters.frontRoad);
-  if (filters.parkingArea) queryParams.append('parkingArea', filters.parkingArea);
-  if (filters.storey) queryParams.append('storey', filters.storey);
-  if (filters.age) queryParams.append('age', filters.age);
-  if (filters.luda) queryParams.append('luda', filters.luda);
-  if (filters.buildingAmenities) {
-    if (Array.isArray(filters.buildingAmenities)) {
-      filters.buildingAmenities.forEach(amenity =>
+  // if (filters.buildingType) queryParams.append('buildingType', filters.buildingType);
+  // if (filters.developmentStatus) queryParams.append('developmentStatus', filters.developmentStatus);
+  // if (filters.frontRoad) queryParams.append('frontRoad', filters.frontRoad);
+  // if (filters.parkingArea) queryParams.append('parkingArea', filters.parkingArea);
+  // if (filters.storey) queryParams.append('storey', filters.storey);
+  // if (filters.age) queryParams.append('age', filters.age);
+  // if (filters.luda) queryParams.append('luda', filters.luda);
+  // if (filters.buildingAmenities) {
+  //   if (Array.isArray(filters.buildingAmenities)) {
+  //     filters.buildingAmenities.forEach(amenity =>
+  //       queryParams.append('buildingAmenities[]', amenity)
+  //     );
+  //   }
+  // }
+  // if (filters.totalFloors) queryParams.append('totalFloors', filters.totalFloors);
+  // if (filters.numberOfFlatsAvailable) queryParams.append('numberOfFlatsAvailable', filters.numberOfFlatsAvailable);
+
+  // if (filters.state) queryParams.append('state', filters.state);
+
+  // return queryParams.toString();
+  if (filters.buildingType) {
+    if (Array.isArray(filters.buildingType)) {
+      filters.buildingType.forEach(type =>
+        queryParams.append('buildingType[]', type)
+      );
+    }
+  }
+  if (filters.developmentStatus) {
+    if (Array.isArray(filters.developmentStatus)) {
+      filters.developmentStatus.forEach(status =>
+        queryParams.append('developmentStatus[]', status)
+      );
+    }
+  }
+  if (filters.frontRoad) {
+    if (Array.isArray(filters.frontRoad)) {
+      filters.frontRoad.forEach(road =>
+        queryParams.append('frontRoad[]', road)
+      );
+    }
+  }
+  if (filters.parkingArea) {
+    if (Array.isArray(filters.parkingArea)) {
+      filters.parkingArea.forEach(area =>
+        queryParams.append('parkingArea[]', area)
+      );
+    }
+  }
+  if (filters.storey) {
+    if (Array.isArray(filters.storey)) {
+      filters.storey.forEach(s =>
+        queryParams.append('storey[]', s)
+      );
+    }
+  }
+  if (filters.age) {
+    if (Array.isArray(filters.age)) {
+      filters.age.forEach(a =>
+        queryParams.append('age[]', a)
+      );
+    }
+  }
+  if (filters.luda) {
+    if (Array.isArray(filters.luda)) {
+      filters.luda.forEach(l =>
+        queryParams.append('luda[]', l)
+      );
+    }
+  }
+  if (filters.amenities) {
+    if (Array.isArray(filters.amenities)) {
+      filters.amenities.forEach(amenity =>
         queryParams.append('buildingAmenities[]', amenity)
       );
     }
   }
+
+  // Handle increment type filters
   if (filters.totalFloors) queryParams.append('totalFloors', filters.totalFloors);
   if (filters.numberOfFlatsAvailable) queryParams.append('numberOfFlatsAvailable', filters.numberOfFlatsAvailable);
 
@@ -806,6 +870,8 @@ const applyFilter = async (filters) => {
 
     return {
       properties: response.data.properties || [],
+      projects: response.data.projects || [],
+      buildings: response.data.buildings || [],
       totalProperties: response.data.totalProperties || 0,
       filters: response.data.filters || {},
       appliedFilters: filters

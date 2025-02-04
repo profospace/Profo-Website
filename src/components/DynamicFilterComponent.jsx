@@ -1550,16 +1550,186 @@ const ProjectFilter = ({ modalOpen, setModalOpen }) => {
 };
 
 // Building Filter Component
+// const BuildingFilter = ({ modalOpen, setModalOpen }) => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
+//     const [filters, setFilters] = useState(null);
+//     const [selectedFilters, setSelectedFilters] = useState(() => {
+//         // Initialize with existing building-related filters
+//         const buildingFilters = {};
+//         if (appliedFilters) {
+//             ['buildingType', 'developmentStatus', 'frontRoad', 'parkingArea', 'storey',
+//                 'age', 'luda', 'buildingAmenities', 'totalFloors', 'numberOfFlatsAvailable'].forEach(key => {
+//                     if (appliedFilters[key]) buildingFilters[key] = appliedFilters[key];
+//                 });
+//         }
+//         return buildingFilters;
+//     });
+
+//     useEffect(() => {
+//         if (modalOpen) {
+//             fetch('http://localhost:5053/api/web/building/structure')
+//                 .then(res => res.json())
+//                 .then(data => {
+//                     setFilters(data.data);
+//                 });
+//         }
+//     }, [modalOpen]);
+
+//     const handleApplyFilters = () => {
+//         const combinedFilters = {
+//             ...appliedFilters,
+//             ...selectedFilters,
+//             filterType: 'building'
+//         };
+//         dispatch(applyFilter(combinedFilters));
+//         setModalOpen(false);
+//     };
+
+//     const handleClearBuildingFilters = () => {
+//         const remainingFilters = {};
+//         Object.keys(appliedFilters).forEach(key => {
+//             if (!['buildingType', 'developmentStatus', 'frontRoad', 'parkingArea', 'storey',
+//                 'age', 'luda', 'buildingAmenities', 'totalFloors', 'numberOfFlatsAvailable'].includes(key)) {
+//                 remainingFilters[key] = appliedFilters[key];
+//             }
+//         });
+//         dispatch(applyFilter(remainingFilters));
+//         setSelectedFilters({});
+//     };
+
+//     return (
+//         <Modal
+//             open={modalOpen}
+//             onCancel={() => setModalOpen(false)}
+//             title="Building Filters"
+//             footer={[
+//                 <Button key="clear" onClick={handleClearBuildingFilters}>
+//                     Clear All
+//                 </Button>,
+//                 <Button key="apply" type="primary" onClick={handleApplyFilters}>
+//                     Apply Filters
+//                 </Button>
+//             ]}
+//             width={800}
+//         >
+//             {!filters ? (
+//                 <div className="flex justify-center items-center h-40">
+//                     <Spin size="large" />
+//                 </div>
+//             ) : (
+//                 <div className="space-y-6">
+//                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//                         {/* Building Type */}
+//                         <div>
+//                             <div className="mb-2">Building Type</div>
+//                             <Checkbox.Group
+//                                 options={filters.buildingType.values.map(value => ({ label: value, value }))}
+//                                 value={selectedFilters.buildingType}
+//                                 onChange={(values) => setSelectedFilters(prev => ({ ...prev, buildingType: values }))}
+//                                 className="flex flex-col gap-2"
+//                             />
+//                         </div>
+
+//                         {/* Development Status */}
+//                         <div>
+//                             <div className="mb-2">Development Status</div>
+//                             <Checkbox.Group
+//                                 options={filters.developmentStatus.values.map(value => ({ label: value, value }))}
+//                                 value={selectedFilters.developmentStatus}
+//                                 onChange={(values) => setSelectedFilters(prev => ({ ...prev, developmentStatus: values }))}
+//                                 className="flex flex-col gap-2"
+//                             />
+//                         </div>
+//                     </div>
+
+//                     <Divider />
+
+//                     {/* Numerical Ranges */}
+//                     <div className="space-y-4">
+//                         <div>
+//                             <div className="mb-2">Total Floors</div>
+//                             <Slider
+//                                 range
+//                                 min={filters.totalFloors.min}
+//                                 max={filters.totalFloors.max}
+//                                 value={[
+//                                     selectedFilters.totalFloors?.min || filters.totalFloors.min,
+//                                     selectedFilters.totalFloors?.max || filters.totalFloors.max
+//                                 ]}
+//                                 onChange={(values) => setSelectedFilters(prev => ({
+//                                     ...prev,
+//                                     totalFloors: { min: values[0], max: values[1] }
+//                                 }))}
+//                             />
+//                         </div>
+
+//                         <div>
+//                             <div className="mb-2">Available Flats</div>
+//                             <Slider
+//                                 range
+//                                 min={filters.numberOfFlatsAvailable.min}
+//                                 max={filters.numberOfFlatsAvailable.max}
+//                                 value={[
+//                                     selectedFilters.numberOfFlatsAvailable?.min || filters.numberOfFlatsAvailable.min,
+//                                     selectedFilters.numberOfFlatsAvailable?.max || filters.numberOfFlatsAvailable.max
+//                                 ]}
+//                                 onChange={(values) => setSelectedFilters(prev => ({
+//                                     ...prev,
+//                                     numberOfFlatsAvailable: { min: values[0], max: values[1] }
+//                                 }))}
+//                             />
+//                         </div>
+//                     </div>
+
+//                     <Divider />
+
+//                     {/* Other Filters */}
+//                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//                         <div>
+//                             <div className="mb-2">Building Amenities</div>
+//                             <Checkbox.Group
+//                                 options={filters.amenities.values.map(value => ({ label: value, value }))}
+//                                 value={selectedFilters.buildingAmenities}
+//                                 onChange={(values) => setSelectedFilters(prev => ({ ...prev, buildingAmenities: values }))}
+//                                 className="flex flex-col gap-2"
+//                             />
+//                         </div>
+//                         <div className="space-y-4">
+//                             <div>
+//                                 <div className="mb-2">Front Road</div>
+//                                 <Checkbox.Group
+//                                     options={filters.frontRoad.values.map(value => ({ label: value, value }))}
+//                                     value={selectedFilters.frontRoad}
+//                                     onChange={(values) => setSelectedFilters(prev => ({ ...prev, frontRoad: values }))}
+//                                     className="flex flex-col gap-2"
+//                                 />
+//                             </div>
+//                             <div>
+//                                 <div className="mb-2">Parking Area</div>
+//                                 <Checkbox.Group
+//                                     options={filters.parkingArea.values.map(value => ({ label: value, value }))}
+//                                     value={selectedFilters.parkingArea}
+//                                     onChange={(values) => setSelectedFilters(prev => ({ ...prev, parkingArea: values }))}
+//                                     className="flex flex-col gap-2"
+//                                 />
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+//             )}
+//         </Modal>
+//     );
+// }
 const BuildingFilter = ({ modalOpen, setModalOpen }) => {
     const dispatch = useDispatch();
     const { appliedFilters } = useSelector((state) => state.map);
     const [filters, setFilters] = useState(null);
     const [selectedFilters, setSelectedFilters] = useState(() => {
-        // Initialize with existing building-related filters
         const buildingFilters = {};
         if (appliedFilters) {
             ['buildingType', 'developmentStatus', 'frontRoad', 'parkingArea', 'storey',
-                'age', 'luda', 'buildingAmenities', 'totalFloors', 'numberOfFlatsAvailable'].forEach(key => {
+                'age', 'luda', 'amenities', 'totalFloors', 'numberOfFlatsAvailable'].forEach(key => {
                     if (appliedFilters[key]) buildingFilters[key] = appliedFilters[key];
                 });
         }
@@ -1590,13 +1760,38 @@ const BuildingFilter = ({ modalOpen, setModalOpen }) => {
         const remainingFilters = {};
         Object.keys(appliedFilters).forEach(key => {
             if (!['buildingType', 'developmentStatus', 'frontRoad', 'parkingArea', 'storey',
-                'age', 'luda', 'buildingAmenities', 'totalFloors', 'numberOfFlatsAvailable'].includes(key)) {
+                'age', 'luda', 'amenities', 'totalFloors', 'numberOfFlatsAvailable'].includes(key)) {
                 remainingFilters[key] = appliedFilters[key];
             }
         });
         dispatch(applyFilter(remainingFilters));
         setSelectedFilters({});
     };
+
+    const renderIncrementFilter = (key, label, max) => (
+        <div className="space-y-2">
+            <div className="mb-2">{label}</div>
+            <InputNumber
+                min={0}
+                max={max}
+                value={selectedFilters[key] || 0}
+                onChange={(value) => setSelectedFilters(prev => ({ ...prev, [key]: value }))}
+                className="w-full"
+            />
+        </div>
+    );
+
+    const renderMultiselectFilter = (key, label, values) => (
+        <div>
+            <div className="mb-2">{label}</div>
+            <Checkbox.Group
+                options={values.map(value => ({ label: value, value }))}
+                value={selectedFilters[key]}
+                onChange={(values) => setSelectedFilters(prev => ({ ...prev, [key]: values }))}
+                className="flex flex-col gap-2"
+            />
+        </div>
+    );
 
     return (
         <Modal
@@ -1619,109 +1814,40 @@ const BuildingFilter = ({ modalOpen, setModalOpen }) => {
                 </div>
             ) : (
                 <div className="space-y-6">
+                    {/* Increment Filters */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Building Type */}
-                        <div>
-                            <div className="mb-2">Building Type</div>
-                            <Checkbox.Group
-                                options={filters.buildingType.values.map(value => ({ label: value, value }))}
-                                value={selectedFilters.buildingType}
-                                onChange={(values) => setSelectedFilters(prev => ({ ...prev, buildingType: values }))}
-                                className="flex flex-col gap-2"
-                            />
-                        </div>
-
-                        {/* Development Status */}
-                        <div>
-                            <div className="mb-2">Development Status</div>
-                            <Checkbox.Group
-                                options={filters.developmentStatus.values.map(value => ({ label: value, value }))}
-                                value={selectedFilters.developmentStatus}
-                                onChange={(values) => setSelectedFilters(prev => ({ ...prev, developmentStatus: values }))}
-                                className="flex flex-col gap-2"
-                            />
-                        </div>
+                        {renderIncrementFilter('totalFloors', filters.totalFloors.label, filters.totalFloors.max)}
+                        {renderIncrementFilter('numberOfFlatsAvailable', filters.numberOfFlatsAvailable.label, filters.numberOfFlatsAvailable.max)}
                     </div>
 
                     <Divider />
 
-                    {/* Numerical Ranges */}
-                    <div className="space-y-4">
-                        <div>
-                            <div className="mb-2">Total Floors</div>
-                            <Slider
-                                range
-                                min={filters.totalFloors.min}
-                                max={filters.totalFloors.max}
-                                value={[
-                                    selectedFilters.totalFloors?.min || filters.totalFloors.min,
-                                    selectedFilters.totalFloors?.max || filters.totalFloors.max
-                                ]}
-                                onChange={(values) => setSelectedFilters(prev => ({
-                                    ...prev,
-                                    totalFloors: { min: values[0], max: values[1] }
-                                }))}
-                            />
-                        </div>
-
-                        <div>
-                            <div className="mb-2">Available Flats</div>
-                            <Slider
-                                range
-                                min={filters.numberOfFlatsAvailable.min}
-                                max={filters.numberOfFlatsAvailable.max}
-                                value={[
-                                    selectedFilters.numberOfFlatsAvailable?.min || filters.numberOfFlatsAvailable.min,
-                                    selectedFilters.numberOfFlatsAvailable?.max || filters.numberOfFlatsAvailable.max
-                                ]}
-                                onChange={(values) => setSelectedFilters(prev => ({
-                                    ...prev,
-                                    numberOfFlatsAvailable: { min: values[0], max: values[1] }
-                                }))}
-                            />
-                        </div>
+                    {/* Building Type and Development Status */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {renderMultiselectFilter('buildingType', filters.buildingType.label, filters.buildingType.values)}
+                        {renderMultiselectFilter('developmentStatus', filters.developmentStatus.label, filters.developmentStatus.values)}
                     </div>
 
                     <Divider />
 
                     {/* Other Filters */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <div className="mb-2">Building Amenities</div>
-                            <Checkbox.Group
-                                options={filters.amenities.values.map(value => ({ label: value, value }))}
-                                value={selectedFilters.buildingAmenities}
-                                onChange={(values) => setSelectedFilters(prev => ({ ...prev, buildingAmenities: values }))}
-                                className="flex flex-col gap-2"
-                            />
+                        <div className="space-y-4">
+                            {renderMultiselectFilter('amenities', filters.amenities.label, filters.amenities.values)}
+                            {renderMultiselectFilter('frontRoad', filters.frontRoad.label, filters.frontRoad.values)}
                         </div>
                         <div className="space-y-4">
-                            <div>
-                                <div className="mb-2">Front Road</div>
-                                <Checkbox.Group
-                                    options={filters.frontRoad.values.map(value => ({ label: value, value }))}
-                                    value={selectedFilters.frontRoad}
-                                    onChange={(values) => setSelectedFilters(prev => ({ ...prev, frontRoad: values }))}
-                                    className="flex flex-col gap-2"
-                                />
-                            </div>
-                            <div>
-                                <div className="mb-2">Parking Area</div>
-                                <Checkbox.Group
-                                    options={filters.parkingArea.values.map(value => ({ label: value, value }))}
-                                    value={selectedFilters.parkingArea}
-                                    onChange={(values) => setSelectedFilters(prev => ({ ...prev, parkingArea: values }))}
-                                    className="flex flex-col gap-2"
-                                />
-                            </div>
+                            {renderMultiselectFilter('parkingArea', filters.parkingArea.label, filters.parkingArea.values)}
+                            {renderMultiselectFilter('storey', filters.storey.label, filters.storey.values)}
+                            {renderMultiselectFilter('age', filters.age.label, filters.age.values)}
+                            {renderMultiselectFilter('luda', filters.luda.label, filters.luda.values)}
                         </div>
                     </div>
                 </div>
             )}
         </Modal>
     );
-}
-
+};
 export { PropertyFilter, ProjectFilter , BuildingFilter};
 
 

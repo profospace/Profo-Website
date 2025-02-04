@@ -189,6 +189,8 @@ const mapSlice = createSlice({
         state.isSuccess = true;
         console.log(action?.payload)
         state.properties = action.payload.properties;
+        state.projects = action.payload.projects;
+        state.buildings = action.payload.buildings;
         state.filters = action.payload.filters;
         state.appliedFilters = action.payload.appliedFilters
         state.totalProperties = action.payload.totalProperties
