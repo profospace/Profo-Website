@@ -715,7 +715,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
             return price.toString();
         };
 
-        console.log(buildings)
+        // console.log(buildings)
 
         const formatPriceRange = (properties) => {
             if (!properties || properties.length === 0) {

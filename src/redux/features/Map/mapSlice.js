@@ -106,10 +106,10 @@ const mapSlice = createSlice({
         state.isSuccess = true;
 
         const { results, searchParams } = action.payload || {}; // Safely extract results from action.payload
-        state.properties = results?.properties?.items || []; // Default to an empty array if undefined
-        state.projects = results?.projects?.items || [];
-        state.buildings = results?.buildings?.items || [];
-        state.searchParams = searchParams || {};
+        // state.properties = results?.properties?.items || []; // Default to an empty array if undefined
+        // state.projects = results?.projects?.items || [];
+        // state.buildings = results?.buildings?.items || [];
+        // state.searchParams = searchParams || {};
 
 
       })

@@ -723,6 +723,8 @@ const getAllBuildings = async () => {
 const buildQueryString = (filters) => {
   const queryParams = new URLSearchParams();
 
+  // Add vanilla parameter if present
+  if (filters.vanilla) queryParams.append('vanilla', filters.vanilla);
   // Property Filters
   if (filters.price?.min) queryParams.append('priceMin', filters.price.min);
   if (filters.price?.max) queryParams.append('priceMax', filters.price.max);
@@ -855,6 +857,7 @@ const applyFilter = async (filters) => {
   try {
     const queryString = buildQueryString(filters);
     const url = `${filter_base_url}?${queryString}`;
+    console.log("url" , url)
 
     console.log('📡 Making API request with combined filters to:', url);
 
@@ -862,11 +865,11 @@ const applyFilter = async (filters) => {
 
     console.log("response", response)
 
-    console.log('✅ Combined Filter Response:', {
-      totalProperties: response.data.totalProperties,
-      propertiesCount: response.data.properties.length,
-      appliedFilters: filters
-    });
+    // console.log('✅ Combined Filter Response:', {
+    //   totalProperties: response.data.totalProperties,
+    //   propertiesCount: response.data.properties.length,
+    //   appliedFilters: filters
+    // });
 
     return {
       properties: response.data.properties || [],

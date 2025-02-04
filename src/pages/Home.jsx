@@ -21,7 +21,7 @@ function Home() {
                 headingText="New Properties"
                 details={properties}
                 salesAdsPosition="right"
-                type_name="properties" // where to navigate
+                type_name="property" // where to navigate
             />
             <FlexibleLayout
                 type="project"
@@ -35,7 +35,7 @@ function Home() {
                 headingText="New Buildings"
                 details={buildings}
                 salesAdsPosition="right"
-                type_name="buildings"
+                type_name="building"
             />
 
 

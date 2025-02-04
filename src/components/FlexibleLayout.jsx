@@ -2,13 +2,13 @@ import React from 'react';
 import { MdNavigateNext } from "react-icons/md";
 import HomePageCard from './HomePageCard';
 import { useDispatch } from 'react-redux';
-import { getAllBuildings, getAllProjects, getAllProperties, getFilterProperties } from '../redux/features/Map/mapSlice';
+import { applyFilter, getAllBuildings, getAllProjects, getAllProperties, getFilterProperties } from '../redux/features/Map/mapSlice';
 import { useNavigate } from 'react-router-dom';
 
-const FlexibleLayout = ({ 
+const FlexibleLayout = ({
   headingText = "New buildings",
   details = [],
-  type ,
+  type,
   type_name,
   salesAdsPosition = "right", // can be "right" or "left"
   salesAdsTitle = "START OF SALES",
@@ -18,47 +18,56 @@ const FlexibleLayout = ({
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const handleFilter = (type_name) => {
-          if (!navigator.geolocation) {
-              alert("Geolocation is not supported by your browser");
-              return;
-          }
-  
-          navigator.geolocation.getCurrentPosition(
-              (position) => {
-                  const { latitude, longitude } = position.coords;
-  
-                  if (type_name === "project"){
-                      dispatch(getAllProjects())
-  
-                  }
-                  else if (type_name === "buildings"){
-                      dispatch(getAllBuildings())
-                      
-                  }
-                  else if (type_name === "properties"){
-                      dispatch(getAllProperties())
-                  }
-                  else if (type_name === 'getMapFeed'){
-                      dispatch(getMapFeed({
-                          latitude,
-                          longitude ,
-                          radius : 1
-                      }))
-                  }
-                  else{
-                      // Dispatch action with the location and type_name
-                      dispatch(getFilterProperties({ latitude, longitude, type_name }));
-                  }
-                  navigate('/main')
-                  
-              },
-              (error) => {
-                  console.error("Error retrieving location:", error);
-                  alert("Unable to retrieve your location. Please try again.");
-              }
-          );
-      };
+  const handleFilter = (type_name)=> {
+    console.log("type_name", type_name)
+    dispatch(applyFilter( {
+      vanilla : type_name
+    }))
+    navigate('/main')
+
+  }
+
+  // const handleFilter = (type_name) => {
+  //   if (!navigator.geolocation) {
+  //     alert("Geolocation is not supported by your browser");
+  //     return;
+  //   }
+
+  //   navigator.geolocation.getCurrentPosition(
+  //     (position) => {
+  //       const { latitude, longitude } = position.coords;
+
+  //       if (type_name === "project") {
+  //         dispatch(getAllProjects())
+
+  //       }
+  //       else if (type_name === "buildings") {
+  //         dispatch(getAllBuildings())
+
+  //       }
+  //       else if (type_name === "properties") {
+  //         dispatch(getAllProperties())
+  //       }
+  //       else if (type_name === 'getMapFeed') {
+  //         dispatch(getMapFeed({
+  //           latitude,
+  //           longitude,
+  //           radius: 1
+  //         }))
+  //       }
+  //       else {
+  //         // Dispatch action with the location and type_name
+  //         dispatch(getFilterProperties({ latitude, longitude, type_name }));
+  //       }
+  //       navigate('/main')
+
+  //     },
+  //     (error) => {
+  //       console.error("Error retrieving location:", error);
+  //       alert("Unable to retrieve your location. Please try again.");
+  //     }
+  //   );
+  // };
 
 
   const SalesAdsCard = () => (
@@ -75,23 +84,14 @@ const FlexibleLayout = ({
     </div>
   );
 
-  // const PropertyGrid = () => (
-  //   <div className="lg:w-full">
-  //     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-  //       {details?.map((info, index) => (
-  //         <HomePageCard key={index} info={info} image={info?.galleryList?.[0]} price={info?.price} label={info?.post_title} type={info?.type_name} />
-  //       ))}
-  //     </div>
-  //   </div>
-  // );
-
+ 
   const PropertyGrid = () => {
     if (type === 'property') {
       return (
         <div className="lg:w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {details
-              ?.slice(0,6) // Get the last 6 items
+              ?.slice(0, 6) // Get the last 6 items
               .map((info, index) => (
                 <HomePageCard
                   key={index}
@@ -107,48 +107,48 @@ const FlexibleLayout = ({
         </div>
       );
     }
-    else if (type === 'project'){
+    else if (type === 'project') {
       return (
         <div className="lg:w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {details?.map((info, index) => (
-                <HomePageCard
-                  key={index}
-                  // info={info}
+              <HomePageCard
+                key={index}
+                // info={info}
                 image={info?.gallery?.[0]?.images?.[0] || 'https://avatars.mds.yandex.net/get-realty-offers/14535939/1710ec57-6a73-4d64-8b64-56c5ae4a4994/large'}
-                  price={info?.price || 50000}
-                  label={info?.name}
-                  type={info?.type}
+                price={info?.price || 50000}
+                label={info?.name}
+                type={info?.type}
                 navigation={`/api/details/project/${info?.projectId}`}
 
-                />
-              ))}
+              />
+            ))}
           </div>
         </div>
       );
     }
-    else if (type === 'building'){
+    else if (type === 'building') {
       return (
         <div className="lg:w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {details?.slice(-6).map((info, index) => (
-                <HomePageCard
-                  key={index}
-                  info={info}
+              <HomePageCard
+                key={index}
+                info={info}
                 image={info?.galleryList?.[0] || 'https://avatars.mds.yandex.net/get-realty-offers/14535939/1710ec57-6a73-4d64-8b64-56c5ae4a4994/large'}
-                  price={info?.price || 560000}
-                  label={info?.name || 'Not Available'}
-                  type={info?.type}
+                price={info?.price || 560000}
+                label={info?.name || 'Not Available'}
+                type={info?.type}
                 navigation={`/api/details/building/${info?.buildingId}`}
 
-                />
-              ))}
+              />
+            ))}
           </div>
         </div>
       );
     }
 
-    
+
   };
 
 
@@ -165,7 +165,7 @@ const FlexibleLayout = ({
             <SalesAdsCard />
           </div>
         )}
-        
+
         <div className={`lg:w-${salesAdsPosition === "none" ? "full" : "3/4"}`}>
           <PropertyGrid />
         </div>
