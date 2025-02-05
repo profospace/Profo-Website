@@ -1007,6 +1007,8 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
 
     const navigationTabs = Object.keys(sectionRefs || {});
 
+    console.log(details)
+
     return (
         <header className="relative w-full h-[528px] text-white">
             {/* Background Image & Overlay */}
@@ -1025,7 +1027,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
                 <div className="fixed top-0 left-0 right-0 z-40 bg-[#007BFB] py-2 text-white">
                     <div className="max-w-7xl mx-auto px-6 py-3">
                         <h1 className="text-2xl font-semibold capitalize">
-                            {details?.type && `${details.type}`} {details?.name && `'${details.name}'`}
+                            {details?.name && `${details.name}`}
                         </h1>
                     </div>
                 </div>

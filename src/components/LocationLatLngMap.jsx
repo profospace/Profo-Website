@@ -89,6 +89,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import HeadingCommon from './HeadingCommon';
 
 function LocationLatLngMap({ latitude, longitude }) {
     const [map, setMap] = useState(null);
@@ -162,8 +163,10 @@ function LocationLatLngMap({ latitude, longitude }) {
     }, [latitude, longitude, map]);
 
     return (
-        <div className="mt-8 p-4 border rounded-lg shadow-sm bg-white">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Where you'll be</h3>
+        <div className="mt-8 p-4 bg-white">
+            {/* <h3 className="text-xl font-semibold text-gray-800 mb-4">Where you'll be</h3> */}
+            <HeadingCommon title={"Where you'll be"} dual />
+
             <div className="relative rounded-lg overflow-hidden">
                 {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-gray-100">

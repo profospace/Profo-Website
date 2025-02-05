@@ -28,9 +28,10 @@ import LocationLatLngMap from "../components/LocationLatLngMap";
 import { Heart, TrendingUp, CircleDollarSign, IndianRupee, Images } from 'lucide-react';
 import PropertyContactCard from "../components/PropertyContactCard";
 import ImagePreview from "../components/ImagesPreview";
-import PropertyDetailBuildingInfo from "../components/PropertyDetailBuildingInfo";
+import PropertyDetailBuildingInfo from "../components/PropertyDetailProjectInfo";
 import PropertyCard from "../components/PropertyCard";
 import HeadingCommon from "../components/HeadingCommon";
+import PropertyDetailProjectInfo from "../components/PropertyDetailProjectInfo";
 
 
 export const FacilitiesSection = ({ facilities }) => {
@@ -524,9 +525,9 @@ const SinglePage = () => {
                             details={propertyDetail?.builder || {
                                 ownershipTypes: propertyDetail?.ownershipTypes,
                                 contactList: propertyDetail?.contactList,
-                                region: propertyDetail?.region || ['City view','Hold'],
-                                tags: propertyDetail?.tags?.length > 0 ? propertyDetail?.tags  : ['Newly Added', 'Diwali Offer'],
-                                ownerName : propertyDetail?.ownerName || "Ankit Kumar Singh",
+                                region: propertyDetail?.region || ['City view', 'Hold'],
+                                tags: propertyDetail?.tags?.length > 0 ? propertyDetail?.tags : ['Newly Added', 'Diwali Offer'],
+                                ownerName: propertyDetail?.ownerName || "Ankit Kumar Singh",
                                 createdAt: propertyDetail?.createdAt
 
                             }}
@@ -547,9 +548,18 @@ const SinglePage = () => {
                 </div>
             }
 
-            {
-                propertyDetail?.building && <PropertyDetailBuildingInfo data={propertyDetail?.building} />
-            }
+            {/* <div className="mt-12">
+                <HeadingCommon title="Property Under The Building" dual />
+                {
+                    propertyDetail?.building && <PropertyDetailBuildingInfo data={propertyDetail?.building} />
+                }
+            </div> */}
+            <div className="mt-12">
+                <HeadingCommon title="Property Under The Project" dual />
+                {
+                    propertyDetail?.connectedWithProject && <PropertyDetailProjectInfo data={propertyDetail?.connectedWithProject} contactNumber={propertyDetail?.contactList?.[0]} />
+                }
+            </div>
 
 
             {/* similiar properties */}

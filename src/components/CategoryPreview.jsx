@@ -192,6 +192,7 @@
 
 import React from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import HeadingCommon from './HeadingCommon';
 
 const GalleryGrid = ({ gallery = [] }) => {
     const [isGalleryOpen, setIsGalleryOpen] = React.useState(false);
@@ -276,33 +277,36 @@ const GalleryGrid = ({ gallery = [] }) => {
                 ))}
 
             </div> */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 py-4">
-                {gallery.map((category) => (
-                    <div
-                        key={category._id}
-                        onClick={() => handleCategoryClick(category)}
-                        className="group cursor-pointer overflow-hidden transition-all duration-300 "
-                    >
-                        <div className="relative">
-                            <img
-                                // src={category.images[0]}
-                                src={'/assets/testing.avif'}
-                                alt={`${category.category} thumbnail`}
-                                className="w-full min-w-[40vw] max-h-64 object-cover rounded-lg"  // Added rounded-lg here
-                            />
-                            {/* Black overlay that appears on hover */}
-                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-lg" /> {/* Added rounded-lg to overlay */}
+            <div>
+                <HeadingCommon dual="true" title='Gallery' />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
+                    {gallery.map((category) => (
+                        <div
+                            key={category._id}
+                            onClick={() => handleCategoryClick(category)}
+                            className="group cursor-pointer overflow-hidden transition-all duration-300 "
+                        >
+                            <div className="relative">
+                                <img
+                                    // src={category.images[0]}
+                                    src={'/assets/testing.avif'}
+                                    alt={`${category.category} thumbnail`}
+                                    className="w-full min-w-[40vw] max-h-64 object-cover rounded-lg"  // Added rounded-lg here
+                                />
+                                {/* Black overlay that appears on hover */}
+                                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-lg" /> {/* Added rounded-lg to overlay */}
 
-                            <p className="absolute bottom-2 right-4 text-md text-gray-800 bg-white px-2 rounded-sm">
-                                {category?.images?.length}+ photos
-                            </p>
-                            <h3 className="absolute bottom-2 left-4 text-md  bg-white px-2 rounded-sm">{category.category}</h3>
-                        </div>
-                        {/* <div className="py-1 px-0 bg-white">
+                                <p className="absolute bottom-2 right-4 text-md text-gray-800 bg-white px-2 rounded-sm">
+                                    {category?.images?.length}+ photos
+                                </p>
+                                <h3 className="absolute bottom-2 left-4 text-md  bg-white px-2 rounded-sm">{category.category}</h3>
+                            </div>
+                            {/* <div className="py-1 px-0 bg-white">
                             <h3 className="text-lg">{category.category}</h3>
                         </div> */}
-                    </div>
-                ))}
+                        </div>
+                    ))}
+                </div>
             </div>
 
             

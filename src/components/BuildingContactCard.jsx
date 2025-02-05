@@ -295,7 +295,7 @@ const BuildingContactCard = ({ info }) => {
 
     return (
         <div className="max-w-xl w-full bg-white rounded-lg relative">
-            <div className="p-4">
+            <div className="py-4">
                 {hasValidData() && (<div className="bg-gray-50 rounded-lg px-6 py-4">
                     <div className="flex justify-between items-center mb-2">
                         <div className="flex items-center gap-2">

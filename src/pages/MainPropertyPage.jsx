@@ -708,16 +708,6 @@ const MainPropertyPage = () => {
         setView(newView);
     };
 
-    // useEffect(
-    //     ()=>{
-           
-    //         if (properties.length == 0 && projects.length == 0 && buildings.length == 0){
-
-    //             dispatch(applyFilter({}))
-    //         }
-    //     },[]
-    // )
-
     return (
         <LoadScript
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
