@@ -1126,7 +1126,8 @@ const Header = () => {
                     case 'project':
                     case 'building':
                     case 'property':
-                        dispatch(applyFilter({ vanilla: type_name }));
+                        dispatch(applyFilter({  }));
+                        // dispatch(applyFilter({ vanilla: type_name }));
                         navigate('/main')
                         break;
                     case 'getMapFeed':
@@ -1138,9 +1139,12 @@ const Header = () => {
                     case 'Buy':
                     case 'Rent':
                         dispatch(applyFilter({
-                            vanilla: 'property',
                             purpose: type_name
                         }));
+                        // dispatch(applyFilter({
+                        //     vanilla: 'property',
+                        //     purpose: type_name
+                        // }));
                         break;
                     case 'services':
                         navigate('/services');
@@ -1150,12 +1154,14 @@ const Header = () => {
                         return;
                     case 'apartment':
                         // For property type filters
-                        dispatch(applyFilter({ vanilla: 'property', propertyType: 'apartment' }));
+                        dispatch(applyFilter({  propertyType: 'apartment' }));
+                        // dispatch(applyFilter({ vanilla: 'property', propertyType: 'apartment' }));
                         navigate('/main')
                         return;
                     case 'Office':
                         // For property type filters
-                        dispatch(applyFilter({ vanilla: 'property', propertyType: 'Office' }));
+                        dispatch(applyFilter({  propertyType: 'Office' }));
+                        // dispatch(applyFilter({ vanilla: 'property', propertyType: 'Office' }));
                         return;
                     case 'lands':
                         // For property type filters
