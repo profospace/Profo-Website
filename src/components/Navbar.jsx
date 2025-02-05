@@ -781,21 +781,66 @@ const Header = () => {
 
     // };
 
-    const handleShowResults = async () => {
-        // Create a combined filter object that matches our new structure
-        const filters = {};
+    // const handleShowResults = async () => {
+    //     // Create a combined filter object that matches our new structure
+    //     const filters = {};
 
-        // Handle property types (selectedOptions)
+    //     // Handle property types (selectedOptions)
+    //     if (selectedOptions && selectedOptions.length > 0) {
+    //         filters.propertyType = selectedOptions;
+    //     }
+
+    //     // Handle purpose (Buy/Rent)
+    //     if (selectedPurpose) {
+    //         filters.purpose = selectedPurpose.toLowerCase();
+    //     }
+
+    //     // Handle price range
+    //     if (maxPrice) {
+    //         filters.price = {
+    //             min: 0,
+    //             max: parseInt(maxPrice)
+    //         };
+    //     }
+
+    //     // Add city if selected
+    //     // if (city) {
+    //     //     filters.city = city;
+    //     // }
+
+    //     console.log('Applied Filters:', filters);
+
+    //     // Dispatch the filter action
+    //     dispatch(applyFilter({
+    //         filters: {
+    //             vanilla: 'property',
+    //             ...filters, // Correct use of spread syntax
+    //         }
+    //     }));
+
+
+    //     // Navigate to results page
+    //     navigate('/main');
+    // };
+
+    // Handle show results with direct filters
+    const handleShowResults = async () => {
+        // Create new filters object without merging
+        const filters = {
+            vanilla: 'property' // Identifier for property filters
+        };
+
+        // Add property types if selected
         if (selectedOptions && selectedOptions.length > 0) {
             filters.propertyType = selectedOptions;
         }
 
-        // Handle purpose (Buy/Rent)
+        // Add purpose if selected
         if (selectedPurpose) {
             filters.purpose = selectedPurpose.toLowerCase();
         }
 
-        // Handle price range
+        // Add price range if specified
         if (maxPrice) {
             filters.price = {
                 min: 0,
@@ -803,19 +848,12 @@ const Header = () => {
             };
         }
 
-        // Add city if selected
-        // if (city) {
-        //     filters.city = city;
-        // }
-
-        console.log('Applied Filters:', filters);
-
-        // Dispatch the filter action
-        dispatch(applyFilter(filters));
-
-        // Navigate to results page
+        console.log("filters", filters)
+        // Dispatch new filters directly
+        dispatch(applyFilter({ ...filters }));
         navigate('/main');
     };
+
 
 
 
@@ -838,9 +876,9 @@ const Header = () => {
 
     const services = [
         { id: 1, title: 'Find Apartments', count: '782', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/4396ddc22fcd275632c522c910167b73.png', "type_name": "apartment" },
-        { id: 2, title: 'Find New buildings', count: '136 695', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1a94f43121fc8899c8a95327c26fc0ac.png', "type_name": "buildings" },
+        { id: 2, title: 'Find New buildings', count: '136 695', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1a94f43121fc8899c8a95327c26fc0ac.png', "type_name": "building" },
         { id: 3, title: 'Project', count: '16 309', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/634a00148bb1c6ed32c05713974b46b6.png', "type_name": "project" },
-        { id: 4, title: "Explore Properties Nearby", count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/7410e105dea0ba239fd7f8974a7c4c95.png', "type_name": "properties" },
+        { id: 4, title: "Explore Properties Nearby", count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/7410e105dea0ba239fd7f8974a7c4c95.png', "type_name": "property" },
         { id: 5, title: 'We will help to pass', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/1d3ebf3ab1e13ceb46696a83f711461b.png', "type_name": "post_property" },
         { id: 6, title: 'EMI Calculator', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/228dd13e77a8223bb042b59546f36646.png' },
         { id: 7, title: 'Services', count: '', icon: 'https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/e69cded9c33e3274c1f2576ebf1d06bd.png', "type_name": "services" },
@@ -886,7 +924,7 @@ const Header = () => {
         {
             id: 2,
             text: 'Rent',
-            href: 'rent',
+            href: 'Rent',
             // deepLinks: [{
             //     column1: [
             //         { text: 'Apartments for sale', href: '#' },
@@ -907,7 +945,7 @@ const Header = () => {
         {
             id: 3,
             text: 'Buy',
-            href: 'buy',
+            href: 'Buy',
             // deepLinks: [{
             //     column1: [
             //         { text: 'Apartments for sale', href: '#' },
@@ -928,7 +966,7 @@ const Header = () => {
         {
             id: 4,
             text: 'Office',
-            href: 'office',
+            href: 'Office',
             // deepLinks: [{
             //     column1: [
             //         { text: 'Apartments for sale', href: '#' },
@@ -949,7 +987,7 @@ const Header = () => {
         {
             id: 5,
             text: 'Flats',
-            href: '#',
+            href: 'flats',
             // deepLinks: [{
             //     column1: [
             //         { text: 'Apartments for sale', href: '#' },
@@ -970,25 +1008,25 @@ const Header = () => {
         {
             id: 6,
             text: 'Warehouses',
-            href: '#',
+            href: 'warehouses',
 
         },
         {
             id: 7,
             text: 'Lands',
-            href: '#',
+            href: 'lands',
 
         },
         {
             id: 8,
             text: 'Kheti Jameen',
-            href: '#',
+            href: 'khetijameen',
 
         },
         {
             id: 9,
             text: 'Services',
-            href: '#',
+            href: 'services',
             // deepLinks: [{
             //     column1: [
             //         { text: 'EMI Calculator', href: '#' },
@@ -1002,9 +1040,79 @@ const Header = () => {
     ];
 
 
+    // const handleFilter = (type_name, id) => {
+    //     setSelectedId(id)
+    //     console.log(type_name)
+    //     if (!navigator.geolocation) {
+    //         alert("Geolocation is not supported by your browser");
+    //         return;
+    //     }
+
+    //     navigator.geolocation.getCurrentPosition(
+    //         (position) => {
+    //             const { latitude, longitude } = position.coords;
+
+    //             if (type_name === "project") {
+    //                 dispatch(getAllProjects())
+    //                 navigate('/main')
+    //             }
+    //             else if (type_name === "buildings") {
+    //                 dispatch(getAllBuildings())
+    //                 navigate('/main')
+
+    //             }
+    //             else if (type_name === "properties") {
+    //                 dispatch(getAllProperties())
+    //                 navigate('/main')
+    //             }
+    //             else if (type_name === 'getMapFeed') {
+    //                 dispatch(getMapFeed({
+    //                     latitude,
+    //                     longitude,
+    //                     radius: 1000
+    //                 }))
+    //                 navigate('/main')
+    //             }
+    //             else if (type_name === 'rent') {
+    //                 dispatch(getFilterProperties({ latitude, longitude, purpose: type_name }));
+    //                 navigate('/main')
+
+
+    //             }
+    //             else if (type_name === 'buy') {
+    //                 dispatch(getFilterProperties({ latitude, longitude, purpose: type_name }));
+    //                 navigate('/main')
+
+
+    //             }
+    //             else if (type_name === 'services') {
+    //                 navigate('/services')
+    //             }
+    //             else if (type_name === 'post_property') {
+    //                 navigate('/post-property-for-free')
+    //             }
+    //             else {
+    //                 // Dispatch action with the location and type_name
+    //                 dispatch(getFilterProperties({ latitude, longitude, type_name }));
+    //                 navigate('/main')
+    //             }
+
+
+    //         },
+    //         (error) => {
+    //             console.error("Error retrieving location:", error);
+    //             alert("Unable to retrieve your location. Please try again.");
+    //         }
+    //     );
+    // };
+
+
+    // City location fetch
+
+    // Handle filter with direct dispatch
     const handleFilter = (type_name, id) => {
-        setSelectedId(id)
-        console.log(type_name)
+        setSelectedId(id);
+
         if (!navigator.geolocation) {
             alert("Geolocation is not supported by your browser");
             return;
@@ -1014,49 +1122,48 @@ const Header = () => {
             (position) => {
                 const { latitude, longitude } = position.coords;
 
-                if (type_name === "project") {
-                    dispatch(getAllProjects())
-                    navigate('/main')
-                }
-                else if (type_name === "buildings") {
-                    dispatch(getAllBuildings())
-                    navigate('/main')
-
-                }
-                else if (type_name === "properties") {
-                    dispatch(getAllProperties())
-                    navigate('/main')
-                }
-                else if (type_name === 'getMapFeed') {
-                    dispatch(getMapFeed({
-                        latitude,
-                        longitude,
-                        radius: 1000
-                    }))
-                    navigate('/main')
-                }
-                else if (type_name === 'rent') {
-                    dispatch(getFilterProperties({ latitude, longitude, purpose: type_name }));
-                    navigate('/main')
-
-
-                }
-                else if (type_name === 'buy') {
-                    dispatch(getFilterProperties({ latitude, longitude, purpose: type_name }));
-                    navigate('/main')
-
-
-                }
-                else if (type_name === 'services') {
-                    navigate('/services')
-                }
-                else if (type_name === 'post_property') {
-                    navigate('/post-property-for-free')
-                }
-                else {
-                    // Dispatch action with the location and type_name
-                    dispatch(getFilterProperties({ latitude, longitude, type_name }));
-                    navigate('/main')
+                switch (type_name) {
+                    case 'project':
+                    case 'building':
+                    case 'property':
+                        dispatch(applyFilter({ vanilla: type_name }));
+                        navigate('/main')
+                        break;
+                    case 'getMapFeed':
+                        dispatch(applyFilter({}));
+                        navigate('/main')
+                        break;
+                    case 'rent':
+                    case 'buy':
+                    case 'Buy':
+                    case 'Rent':
+                        dispatch(applyFilter({
+                            vanilla: 'property',
+                            purpose: type_name
+                        }));
+                        break;
+                    case 'services':
+                        navigate('/services');
+                        return;
+                    case 'post_property':
+                        navigate('/post-property-for-free');
+                        return;
+                    case 'apartment':
+                        // For property type filters
+                        dispatch(applyFilter({ vanilla: 'property', propertyType: 'apartment' }));
+                        navigate('/main')
+                        return;
+                    case 'Office':
+                        // For property type filters
+                        dispatch(applyFilter({ vanilla: 'property', propertyType: 'Office' }));
+                        return;
+                    case 'lands':
+                        // For property type filters
+                        dispatch(applyFilter());
+                        return;
+                    default:
+                        dispatch(applyFilter({}))
+                        navigate('/main')
                 }
 
 
@@ -1068,8 +1175,6 @@ const Header = () => {
         );
     };
 
-
-    // City location fetch
     useEffect(() => {
         if (!navigator.geolocation) {
             alert("Geolocation is not supported by your browser");
@@ -1081,7 +1186,7 @@ const Header = () => {
                 const { latitude, longitude } = position.coords;
                 setIsCityLoading(true);
                 // Dispatch map feed action
-                dispatch(getMapFeed({ latitude, longitude, radius: 10000 }));
+                // dispatch(getMapFeed({ latitude, longitude, radius: 10000 }));
 
                 try {
                     // Use Google Maps Geocoding API to get city and state

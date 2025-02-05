@@ -721,6 +721,7 @@ const getAllBuildings = async () => {
 // };
 
 const buildQueryString = (filters) => {
+  console.log("filters coming", filters)
   const queryParams = new URLSearchParams();
 
   // Add vanilla parameter if present
@@ -851,13 +852,50 @@ const buildQueryString = (filters) => {
 };
 
 
+// const applyFilter = async (filters) => {
+//   console.log('🔍 Applying combined filters:', filters);
+
+//   try {
+//     const queryString = buildQueryString(filters);
+//     console.log("queryString", queryString)
+//     const url = `${filter_base_url}?${queryString}`;
+//     console.log("url" , url)
+
+//     console.log('📡 Making API request with combined filters to:', url);
+
+//     const response = await axios.get(url);
+
+//     console.log("response", response)
+
+//     // console.log('✅ Combined Filter Response:', {
+//     //   totalProperties: response.data.totalProperties,
+//     //   propertiesCount: response.data.properties.length,
+//     //   appliedFilters: filters
+//     // });
+
+//     return {
+//       properties: response.data.properties || [],
+//       projects: response.data.projects || [],
+//       buildings: response.data.buildings || [],
+//       totalProperties: response.data.totalProperties || 0,
+//       filters: response.data.filters || {},
+//       appliedFilters: filters
+//     };
+
+//   } catch (error) {
+//     console.error('❌ Filter API Error:', error);
+//     throw error;
+//   }
+// };
+
 const applyFilter = async (filters) => {
   console.log('🔍 Applying combined filters:', filters);
 
   try {
     const queryString = buildQueryString(filters);
+    console.log("queryString", queryString)
     const url = `${filter_base_url}?${queryString}`;
-    console.log("url" , url)
+    console.log("url", url)
 
     console.log('📡 Making API request with combined filters to:', url);
 
@@ -865,12 +903,34 @@ const applyFilter = async (filters) => {
 
     console.log("response", response)
 
-    // console.log('✅ Combined Filter Response:', {
-    //   totalProperties: response.data.totalProperties,
-    //   propertiesCount: response.data.properties.length,
-    //   appliedFilters: filters
-    // });
+    // If vanilla parameter is present, return only relevant data
+    if (filters.vanilla) {
+      switch (filters.vanilla.toLowerCase()) {
+        case 'property':
+          return {
+            properties: response.data.properties || [],
+            totalProperties: response.data.totalProperties || 0,
+            filters: response.data.filters || {},
+            appliedFilters: filters
+          };
+        case 'building':
+          return {
+            buildings: response.data.buildings || [],
+            totalBuildings: response.data.totalBuildings || 0,
+            filters: response.data.filters || {},
+            appliedFilters: filters
+          };
+        case 'project':
+          return {
+            projects: response.data.projects || [],
+            totalProjects: response.data.totalProjects || 0,
+            filters: response.data.filters || {},
+            appliedFilters: filters
+          };
+      }
+    }
 
+    // If no vanilla parameter or invalid value, return all data (original behavior)
     return {
       properties: response.data.properties || [],
       projects: response.data.projects || [],

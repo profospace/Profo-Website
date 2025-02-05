@@ -3,15 +3,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import FlexibleLayout from '../components/FlexibleLayout';
 import AppDownloadBanner from '../components/AppDownloadBanner';
 import { useNavigate } from 'react-router-dom';
+import { getHomeFeed } from '../redux/features/HomeFeed/homeFeedSlice';
 
 function Home() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
 
-    const { properties, projects } = useSelector(state => state.map)
-    const { buildings } = useSelector(state => state.buildings)
+    const {properties , projects , buildings} = useSelector(state => state.homeFeed)
 
+    useEffect(() => {
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+                // Dispatch map feed action
+                dispatch(getHomeFeed({ latitude, longitude, radius: 10000 }));
+
+            }
+        );
+    }, [dispatch]);
 
     return (
         <div className=' px-8'>

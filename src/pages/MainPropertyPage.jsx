@@ -659,6 +659,7 @@ import { AiOutlineSetting } from 'react-icons/ai';
 import ActiveFiltersDisplay from '../components/ActiveFiltersDisplay';
 import { BuildingFilter, ProjectFilter, PropertyFilter } from '../components/DynamicFilterComponent';
 import ViewSwitcher from '../components/ViewSwitcher';
+import { applyFilter } from '../redux/features/Map/mapSlice';
 
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
@@ -707,6 +708,15 @@ const MainPropertyPage = () => {
         setView(newView);
     };
 
+    // useEffect(
+    //     ()=>{
+           
+    //         if (properties.length == 0 && projects.length == 0 && buildings.length == 0){
+
+    //             dispatch(applyFilter({}))
+    //         }
+    //     },[]
+    // )
 
     return (
         <LoadScript
