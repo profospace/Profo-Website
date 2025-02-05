@@ -30,6 +30,7 @@ import { getAllBuildings } from './redux/features/Buildings/buildingsSlice';
 import MapPage from './pages/MapPage';
 import PostProperty from './pages/PostProperty';
 import Services from './pages/Services';
+import TermsAndConditions from './pages/TermsAndConditions';
 // import MainPropertyPage from './pages/MainPropertyPage';
 
 function App() {
@@ -75,6 +76,9 @@ function App() {
           <Route path='/api/details/building/:buildingId' element={<BuildingDetailPage />} /> {/* buildings detail page */}
           <Route path='/api/details/:post_id' element={<SinglePage />} /> {/* properties */}
           {/* <Route path='/gallery' element={<Gallery />} /> */}
+
+
+          <Route path='/terms-conditions' element={<TermsAndConditions />} />
         </Route>
       </Routes>
     </div>

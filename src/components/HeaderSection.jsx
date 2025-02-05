@@ -1010,7 +1010,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
     console.log(details)
 
     return (
-        <header className="relative w-full h-[528px] text-white">
+        <header className="relative w-full h-[530px] text-white">
             {/* Background Image & Overlay */}
             <div className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
                 style={{
@@ -1034,7 +1034,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
             )}
 
             {/* Main Content */}
-            <div className={`relative h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''}`}>
+            <div className={`relative  h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''}`}>
                 {/* Original Title - fades out when sticky version appears */}
                 <div className={`flex items-center gap-2 mb-3 flex-wrap transition-opacity duration-300 
                     ${isTitleSticky ? 'opacity-0' : 'opacity-100'}`}>
@@ -1058,12 +1058,19 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
                 </div>
 
                 <button
-                    className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit mb-8"
-                    onClick={() => imagePreviewRef.current?.openGallery()}
+                    className="flex items-center gap-2 px-4 py-2 mb-20 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
+                    onClick={() => imagePreviewRef.current.openGallery()}
                 >
                     <Camera className="w-5 h-5" />
-                    <span>{details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos</span>
+                    <span>
+                        {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
+                    </span>
+                    <ImagePreview
+                        ref={imagePreviewRef}
+                        images={details?.galleryList || details?.gallery?.[0]?.images || []}
+                    />
                 </button>
+
 
                 {/* Navigation Tabs */}
                 {/* <div className={`${isTabsSticky ? 'fixed top-14 left-0 z-30 bg-white shadow-sm' : 'absolute bottom-0 left-0 backdrop-blur-lg'} w-full transition-all duration-300`}>

@@ -22,7 +22,8 @@ function Home() {
             async (position) => {
                 const { latitude, longitude } = position.coords;
                 // Dispatch map feed action
-                dispatch(getHomeFeed({ latitude, longitude, radius: 10000 }));
+                // dispatch(getHomeFeed({ latitude, longitude, radius: 10000 }));
+                dispatch(getHomeFeed());
 
             }
         );

@@ -13,14 +13,24 @@ const initialState = {
 // get home feed
 export const getHomeFeed = createAsyncThunk(
   "map/getHomeFeed",
-  async (info, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      return await homeFeedService.getHomeFeed(info);
+      return await homeFeedService.getHomeFeed();
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
+// export const getHomeFeed = createAsyncThunk(
+//   "map/getHomeFeed",
+//   async (info, thunkAPI) => {
+//     try {
+//       return await homeFeedService.getHomeFeed(info);
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.response.data);
+//     }
+//   }
+// );
 
 
 
