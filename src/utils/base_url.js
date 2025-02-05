@@ -22,6 +22,7 @@
 
 // export const project_upload_url = 'https://propertify.onrender.com'
 
+// Propertify
 export const base_url = 'https://propertify.onrender.com'
 export const properties_base_url = 'https://propertify.onrender.com/api/properties/all'
 export const properties_base_url_map = 'https://propertify.onrender.com/api/properties/all'
@@ -32,9 +33,9 @@ export const projects_base_url = 'https://propertify.onrender.com/api/projects'
 export const map_base_url = 'https://propertify.onrender.com/api/search/nearby'
 export const home_feed_base_url = 'https://propertify.onrender.com/api/search/nearby'
 export const filter_base_url = 'https://propertify.onrender.com/api/web/properties/filter'
+export const project_upload_url = 'https://propertify.onrender.com'
 
 // Local
-// export const project_upload_url = 'http://localhost:5053'
 // export const base_url = 'http://localhost:5053'
 // export const properties_base_url = 'http://localhost:5053/api/properties/all'
 // export const properties_base_url_map = 'http://localhost:5053/api/properties/all'
