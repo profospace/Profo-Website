@@ -1007,7 +1007,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
 
     const navigationTabs = Object.keys(sectionRefs || {});
 
-    console.log(details)
+    console.log(details)    
 
     return (
         <header className="relative w-full h-[530px] text-white">

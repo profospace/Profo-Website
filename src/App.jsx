@@ -31,6 +31,7 @@ import MapPage from './pages/MapPage';
 import PostProperty from './pages/PostProperty';
 import Services from './pages/Services';
 import TermsAndConditions from './pages/TermsAndConditions';
+import BuildingManager from './components/BuildingManager';
 // import MainPropertyPage from './pages/MainPropertyPage';
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
 
 
           <Route path='/terms-conditions' element={<TermsAndConditions />} />
+          <Route path='/project-3d' element={<BuildingManager />} />
         </Route>
       </Routes>
     </div>

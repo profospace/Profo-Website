@@ -1,11 +1,11 @@
 export const getConfig = () => {
-    // const getTokenFromLocalStorage = localStorage.getItem("user")
-    //     ? JSON.parse(localStorage.getItem("user")).result.token
-    //     : "";
+    const getTokenFromLocalStorage = localStorage.getItem("profo-auth-token")
+        ? JSON.parse(localStorage.getItem("profo-auth-token"))
+        : "";
 
 
     return {
-        headers: {
+        header: {
             Authorization: `Bearer ${getTokenFromLocalStorage}`,
             Accept: "application/json",
         },

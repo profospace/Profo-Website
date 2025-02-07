@@ -1,5 +1,6 @@
 import axios from "axios";
 import { properties_base_url, properties_filter_base_url, single_property_base_url } from "../../../utils/base_url";
+import { getConfig } from "../../../utils/config";
 // import { getConfig } from "../../utils/config";
 // import { config } from "../../utils/config";
 
@@ -46,6 +47,7 @@ const getAllFilteredProperties = async (filters) => {
 
 const getSingleProperty = async (post_id) => {
   const response = await axios.get(`${single_property_base_url}${post_id}`);
+  console.log("getConfig")
   console.log(response)
   return response.data;
 };

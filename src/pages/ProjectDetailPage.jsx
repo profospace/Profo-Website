@@ -21,7 +21,7 @@ import ProjectNearbyLocations from '../components/ProjectNearbyLocations'
 import DownloadBrochures from '../components/DownloadBrochures'
 import PropertyDetailBuildingInfo from '../components/PropertyDetailProjectInfo'
 import { motion, AnimatePresence } from 'framer-motion';
-
+import BuildingSelector from '../components/BuildingSelector'
 
 // function ProjectDetailPage() {
 //   const { projectDetail } = useSelector(state => state.projects)
@@ -409,7 +409,7 @@ function ProjectDetailPage() {
 
     // Track active section
     const handleActiveSection = () => {
-      if (!isScrolling) return;
+      // if (!isScrolling) return;
 
       const scrollPosition = window.scrollY + 200;
       let activeFound = false;
@@ -423,6 +423,7 @@ function ProjectDetailPage() {
         const elementBottom = bottom + window.scrollY;
 
         if (scrollPosition >= elementTop && scrollPosition <= elementBottom) {
+          console.log("S", section)
           setActiveSection(section);
           activeFound = true;
           break;
@@ -553,6 +554,7 @@ function ProjectDetailPage() {
               )}
             </motion.div>
 
+
             {/* project overview */}
             <motion.div
               className="w-full"
@@ -560,7 +562,7 @@ function ProjectDetailPage() {
               layout
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <BuildingViewer config={buildingConfig} />
+              <BuildingViewer  projectId={projectDetail?.projectId} />
             </motion.div>
 
             {/* Location Map */}
@@ -605,7 +607,7 @@ function ProjectDetailPage() {
             }
 
             {/* Connected Properties */}
-            {projectDetail?.connectedProperties?.length > 0  && <div className="" ref={sectionRefs['ConnectedProperties']}>
+            {projectDetail?.connectedProperties?.length > 0 && <div className="" ref={sectionRefs['ConnectedProperties']}>
               <h1 className="text-xl font-semibold mb-4">Connected Properties</h1>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                 {projectDetail?.connectedProperties?.length > 0 &&
@@ -647,6 +649,13 @@ function ProjectDetailPage() {
           </AnimatePresence>
         </div>
       </div>
+      {/* <div className="mb-8">
+        <BuildingManager />
+      </div>
+      <div className="mb-8">
+        <BuildingViewer config={buildingConfig} />
+      </div> */}
+
     </div>
   );
 }

@@ -326,7 +326,7 @@ const BuildingContactCard = ({ info }) => {
                             <div className="font-semibold mb-1">{info?.experience}+ years</div>
                             <div className="text-gray-600 text-sm">of experience in construction</div>
                         </div>}
-                        {info?.operatingLocations?.length  && <div>
+                        {info?.operatingLocations?.length > 0   && <div>
                             <div className="font-semibold mb-1">{info?.operatingLocations?.length || 0}</div>
                             <div className="text-gray-600 text-sm">operating locations</div>
                         </div>}

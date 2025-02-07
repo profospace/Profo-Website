@@ -284,7 +284,7 @@ const GalleryGrid = ({ gallery = [] }) => {
                         <div
                             key={category._id}
                             onClick={() => handleCategoryClick(category)}
-                            className="group cursor-pointer overflow-hidden transition-all duration-300 "
+                            className="group cursor-pointer rounded-lg overflow-hidden transition-all duration-300 "
                         >
                             <div className="relative">
                                 <img

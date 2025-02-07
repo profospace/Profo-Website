@@ -174,12 +174,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Eye } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
     const [phoneNo, setPhoneNo] = useState('');
     const [otp, setOtp] = useState('');
     const [showOtp, setShowOtp] = useState(false);
     const [email, setEmail] = useState('');
+    const navigate = useNavigate()
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -187,6 +189,8 @@ const Signup = () => {
             const response = await axios.post('https://propertify.onrender.com/api/send-otp', {
                 phoneNumber: phoneNo,
             });
+
+            console.log("response", response)
 
             if (response?.data?.success === 'true') {
                 setShowOtp(true);
@@ -205,6 +209,15 @@ const Signup = () => {
                 otp: otp,
             });
             console.log(response)
+            if (response?.data?.status_code === '200'){
+                localStorage.setItem('profo-auth-token' , response?.data?.data?.token)
+                navigate('/')
+
+            }else{
+                // will show notification
+                
+            }
+
         } catch (error) {
             console.error('Error verifying OTP:', error);
         }
