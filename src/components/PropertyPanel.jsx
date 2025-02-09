@@ -277,13 +277,13 @@ const PropertyPanel = ({ data, type, onClose }) => {
     );
 
     const renderProjectContent = () => (
-        <div className="space-y-4">
+        <div className="space-y-4" onClick={() => navigate(`/api/details/project/${data?.projectId}`)}>
             <div className="space-y-2">
                 <h2 className="text-xl font-semibold">{data.name}</h2>
                 <div className="aspect-video rounded-lg bg-gray-200 overflow-hidden">
-                    {data.galleryList?.[0] && (
+                    {data?.gallery?.[0]?.images?.[0] && (
                         <img
-                            src={data.galleryList[0]}
+                            src={data?.gallery?.[0]?.images?.[0]}
                             alt={data.name}
                             className="w-full h-full object-cover"
                         />
@@ -362,7 +362,7 @@ const PropertyPanel = ({ data, type, onClose }) => {
     );
 
     const renderBuildingContent = () => (
-        <div className="space-y-4">
+        <div className="space-y-4" onClick={() => navigate(`/api/details/building/${data?.buildingId}`)}>
             <div className="space-y-2">
                 <h2 className="text-xl font-semibold">{data.name}</h2>
                 <div className="aspect-video rounded-lg bg-gray-200 overflow-hidden">

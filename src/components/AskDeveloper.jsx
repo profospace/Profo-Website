@@ -70,7 +70,7 @@ const AskDeveloper = ({ contact }) => {
     };
 
     return (
-        <div className="max-w-4xl w-full mx-auto py-6">
+        <div className="max-w-4xl w-full mx-auto container">
             {/* Custom Card Component */}
             <div className="bg-gray-50 rounded-lg shadow-lg overflow-hidden">
                 <div className="p-6">

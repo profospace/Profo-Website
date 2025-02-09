@@ -9,7 +9,7 @@ const GalleryList = ({ images }) => {
     });
 
     return (
-        <div className="w-full p-4">
+        <div className="w-full container">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {columns.map((column, columnIndex) => (
                     <div key={columnIndex} className="flex flex-col gap-4">
@@ -21,7 +21,7 @@ const GalleryList = ({ images }) => {
                                 <img
                                     src={imageUrl}
                                     alt={`Gallery image ${columnIndex * column.length + imageIndex + 1}`}
-                                    className="w-full h-auto object-cover"
+                                    className="w-full h-52 object-cover"
                                     loading="lazy"
                                 />
                             </div>

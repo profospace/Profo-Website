@@ -300,7 +300,7 @@ const IconBuildings = () => (
 );
 
 export default function BuildingLCDParameters() {
-    const [showMore, setShowMore] = useState(false);
+    const [showMore, setShowMore] = useState(true);
     const { buildingDetail } = useSelector(state => state.buildings);
     const [buildingData, setBuildingData] = useState({});
 
@@ -353,7 +353,7 @@ export default function BuildingLCDParameters() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-6 py-5 font-sans">
+        <div className="max-w-4xl mx-auto container">
             <h1 className="text-3xl font-bold mb-2">{initialData.title}</h1>
             <p className="text-gray-500 mb-8">{initialData.subtitle}</p>
 

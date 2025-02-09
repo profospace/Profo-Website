@@ -1012,15 +1012,46 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
     return (
         <header className="relative w-full h-[530px] text-white">
             {/* Background Image & Overlay */}
-            <div className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
+            {/* <div className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
                 style={{
-                    backgroundImage: 'url(https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize)',
+                    backgroundImage: 'url(details?.galleryList?.[0])',
+                    // backgroundImage: 'url(https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}>
                 <div className={`absolute inset-0 transition-opacity duration-300 
                     ${hasBackground ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100' : 'bg-gradient-to-b from-transparent to-black opacity-50'}`} />
+            </div> */}
+            {/* <div
+                className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
+                style={{
+                    backgroundImage: details?.galleryList?.[0] ? `url(${details.galleryList[0]})` : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            > */}
+            <div
+                className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
+                style={{
+                    backgroundImage: details?.galleryList?.[0]
+                        ? `url(${details.galleryList[0]})`
+                        : details?.gallery?.[0]?.images?.[0]
+                            ? `url(${details.gallery[0].images[0]})`
+                            : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            >
+
+                <div
+                    className={`absolute inset-0 transition-opacity duration-300 
+      ${hasBackground
+                            ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100'
+                            : 'bg-gradient-to-b from-transparent to-black opacity-50'
+                        }`}
+                />
             </div>
+
 
             {/* Sticky Title */}
             {isTitleSticky && (

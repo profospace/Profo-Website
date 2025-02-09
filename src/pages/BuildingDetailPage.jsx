@@ -12,6 +12,7 @@ import AskDeveloper from '../components/AskDeveloper';
 import LocationLatLngMap from '../components/LocationLatLngMap';
 import HeaderSection from '../components/HeaderSection';
 import HeadingCommon from '../components/HeadingCommon';
+import BuildingViewer from '../components/BuildingViewer';
 
 function BuildingDetailPage() {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
@@ -144,18 +145,22 @@ function BuildingDetailPage() {
                 {/* Add spacer div to prevent content jump */}
                 {isTabsSticky && <div className="h-[64px]" />}
 
+                
+
                 {/* Content Grid Layout */}
                 <div className="max-w-7xl mx-auto px-4">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 mb-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
                         {/* Main Content Area */}
                         <main className="lg:col-span-8">
-                            <div className="space-y-8">
+                            <div className="">
                                 <div ref={sectionRefs['Description']}>
                                     <BuildingLCDParameters />
                                 </div>
 
+                                <BuildingViewer id={buildingDetail?.buildingId} viewer="Building" />
+
                                 {/* Request Section */}
-                                <div ref={sectionRefs['LeaveARequest']}>
+                                <div ref={sectionRefs['LeaveARequest']} className='container'>
                                     <div className="bg-gray-100 rounded-3xl overflow-hidden">
                                         <div className="flex flex-col md:flex-row">
                                             <div className="p-8 md:w-1/2 flex flex-col justify-center space-y-6">
@@ -205,10 +210,10 @@ function BuildingDetailPage() {
 
                                 <div ref={sectionRefs['Map']}>
                                     {/* Location - Map */}
-                                    <LocationLatLngMap latitude={buildingDetail?.location?.coordinates?.[0]} longitude={buildingDetail?.location?.coordinates?.[1]} />
+                                    <LocationLatLngMap latitude={buildingDetail?.location?.coordinates?.[1]} longitude={buildingDetail?.location?.coordinates?.[0]} />
                                 </div>
 
-                                <div className="px-4" ref={sectionRefs['EmiCalculator']}>
+                                <div className="container" ref={sectionRefs['EmiCalculator']}>
                                     <EMICalculator />
                                 </div>
 
@@ -233,7 +238,7 @@ function BuildingDetailPage() {
                         </aside>
                     </div>
                     {/* Display Connected Properties */}
-                    <div className="" ref={sectionRefs['ConnectedProperties']}>
+                    <div className="container" ref={sectionRefs['ConnectedProperties']}>
                         {/* <h1 className="text-xl font-semibold mb-4">Connected Properties</h1> */}
                         <HeadingCommon title='Connected Properties' dual="true" />
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

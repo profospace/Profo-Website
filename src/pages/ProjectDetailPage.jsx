@@ -562,7 +562,7 @@ function ProjectDetailPage() {
               layout
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <BuildingViewer  projectId={projectDetail?.projectId} />
+              <BuildingViewer id={projectDetail?.projectId} viewer="Project" />
             </motion.div>
 
             {/* Location Map */}

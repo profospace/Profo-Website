@@ -32,6 +32,7 @@ import PostProperty from './pages/PostProperty';
 import Services from './pages/Services';
 import TermsAndConditions from './pages/TermsAndConditions';
 import BuildingManager from './components/BuildingManager';
+import PrivacyAndPolicy from './pages/PrivacyAndPolicy';
 // import MainPropertyPage from './pages/MainPropertyPage';
 
 function App() {
@@ -80,7 +81,8 @@ function App() {
 
 
           <Route path='/terms-conditions' element={<TermsAndConditions />} />
-          <Route path='/project-3d' element={<BuildingManager />} />
+          <Route path='/privacy-policy' element={<PrivacyAndPolicy />} />
+          <Route path='/project-3d' element={<BuildingManager />} /> {/* testing */}
         </Route>
       </Routes>
     </div>

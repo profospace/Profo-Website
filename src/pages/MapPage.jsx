@@ -1356,69 +1356,282 @@ const MapPage = ({
         // Create clusters
         const clusters = createClusters(allItems, clusterDistance);
 
+        // const createMarker = (item, isMedian = false, isClusterMedian = false) => {
+        //     const position = {
+        //         lat: item?.location?.coordinates?.[1],
+        //         lng: item?.location?.coordinates?.[0]
+        //     };
+
+        //     const formatPrice = (price) => {
+        //         if (price >= 10000000) {
+        //             // For Crores (1 Crore = 10 million)
+        //             return (price / 10000000).toFixed(2).replace(/\.?0+$/, '') + ' Cr';
+        //         } else if (price >= 100000) {
+        //             // For Lakhs (1 Lakh = 100,000)
+        //             return (price / 100000).toFixed(2).replace(/\.?0+$/, '') + ' L';
+        //         } else {
+        //             // For prices less than a lakh
+        //             return price.toLocaleString('en-IN');
+        //         }
+        //     };
+
+        //     const createMarkerIcon = (price) => {
+        //         // Always show full marker for median or when zoomed in
+        //         if (isMedian || isClusterMedian || currentZoom >= 14) {
+        //             const formattedPrice = formatPrice(price);
+        //             const markerSvg = `
+        //             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -5 160 80">
+        //                 <path d="
+        //                     M10,0 
+        //                     h90 
+        //                     a20,20 0 0 1 20,20 
+        //                     v10 
+        //                     a20,20 0 0 1 -20,20 
+        //                     h-35 
+        //                     q-5,0 -10,15 
+        //                     q-5,-15 -10,-15 
+        //                     h-35 
+        //                     a20,20 0 0 1 -20,-20 
+        //                     v-10 
+        //                     a20,20 0 0 1 20,-20 
+        //                     z" 
+        //                     fill="${isMedian ? '#FF6B6B' : (isClusterMedian ? '#4CAF50' : '#3B82F6')}" 
+        //                     stroke="#FFFFFF" 
+        //                     stroke-width="2"/>
+        //                 <text x="55" 
+        //                     y="25" 
+        //                     font-family="Arial" 
+        //                     font-size="20" 
+        //                     fill="#FFFFFF" 
+        //                     text-anchor="middle" 
+        //                     dominant-baseline="middle">${formattedPrice}</text>
+        //             </svg>
+        //         `;
+        //             return {
+        //                 url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
+        //                 scaledSize: new google.maps.Size(80, 40),
+        //                 anchor: new google.maps.Point(40, 40)
+        //             };
+        //         } else {
+        //             // Dot marker for zoomed out view
+        //             const dotSvg = `
+        //             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        //                 <circle cx="8" cy="8" r="6" fill="#3B82F6" stroke="#FFFFFF" stroke-width="2"/>
+        //             </svg>
+        //         `;
+        //             return {
+        //                 url: 'data:image/svg+xml;base64,' + btoa(dotSvg),
+        //                 scaledSize: new google.maps.Size(16, 16),
+        //                 anchor: new google.maps.Point(8, 8)
+        //             };
+        //         }
+        //     };
+
+        //     const price = item.price || 4160000;
+        //     const markerIcon = createMarkerIcon(price);
+
+        //     const marker = new google.maps.Marker({
+        //         position,
+        //         map: mapInstanceRef.current,
+        //         icon: markerIcon
+        //     });
+
+        //     marker.addListener('click', () => {
+        //         setSelectedItem(item);
+        //         setSelectedItemType(item.type);
+        //     });
+
+        //     return marker;
+        // };
+
+
+
+        // Process clusters
+       
+        // const createMarker = (item, isMedian = false, isClusterMedian = false) => {
+        //     console.log('item', item)
+        //     const position = {
+        //         lat: item?.location?.coordinates?.[1],
+        //         lng: item?.location?.coordinates?.[0]
+        //     };
+
+        //     const formatPrice = (price) => {
+        //         if (price >= 10000000) {
+        //             return (price / 10000000).toFixed(2).replace(/\.?0+$/, '') + ' Cr';
+        //         } else if (price >= 100000) {
+        //             return (price / 100000).toFixed(2).replace(/\.?0+$/, '') + ' L';
+        //         } else {
+        //             return price.toLocaleString('en-IN');
+        //         }
+        //     };
+
+        //     const getMarkerColor = (itemType) => {
+        //         switch (itemType) {
+        //             case 'property':
+        //                 return '#3B82F6'; // Blue for properties (unchanged)
+        //             case 'project':
+        //                 return '#10B981'; // Green for projects
+        //             case 'building':
+        //                 return '#F59E0B'; // Amber for buildings
+        //             default:
+        //                 return '#3B82F6';
+        //         }
+        //     };
+
+        //     const createMarkerIcon = (price) => {
+        //         const markerColor = getMarkerColor(item.type);
+
+        //         if (isMedian || isClusterMedian || currentZoom >= 14) {
+        //             const formattedPrice = formatPrice(price);
+        //             const markerSvg = `
+        //             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -5 160 80">
+        //                 <path d="
+        //                     M10,0 
+        //                     h90 
+        //                     a20,20 0 0 1 20,20 
+        //                     v10 
+        //                     a20,20 0 0 1 -20,20 
+        //                     h-35 
+        //                     q-5,0 -10,15 
+        //                     q-5,-15 -10,-15 
+        //                     h-35 
+        //                     a20,20 0 0 1 -20,-20 
+        //                     v-10 
+        //                     a20,20 0 0 1 20,-20 
+        //                     z" 
+        //                     fill="${isMedian ? '#FF6B6B' : (isClusterMedian ? '#4CAF50' : markerColor)}" 
+        //                     stroke="#FFFFFF" 
+        //                     stroke-width="2"/>
+        //                 <text x="55" 
+        //                     y="25" 
+        //                     font-family="Arial" 
+        //                     font-size="20" 
+        //                     fill="#FFFFFF" 
+        //                     text-anchor="middle" 
+        //                     dominant-baseline="middle">${formattedPrice}</text>
+        //             </svg>
+        //         `;
+        //             return {
+        //                 url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
+        //                 scaledSize: new google.maps.Size(80, 40),
+        //                 anchor: new google.maps.Point(40, 40)
+        //             };
+        //         } else {
+        //             const dotSvg = `
+        //             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+        //                 <circle cx="8" cy="8" r="6" fill="${markerColor}" stroke="#FFFFFF" stroke-width="2"/>
+        //             </svg>
+        //         `;
+        //             return {
+        //                 url: 'data:image/svg+xml;base64,' + btoa(dotSvg),
+        //                 scaledSize: new google.maps.Size(16, 16),
+        //                 anchor: new google.maps.Point(8, 8)
+        //             };
+        //         }
+        //     };
+
+        //     const price = item.price || 4160000;
+        //     const markerIcon = createMarkerIcon(price);
+
+        //     const marker = new google.maps.Marker({
+        //         position,
+        //         map: mapInstanceRef.current,
+        //         icon: markerIcon
+        //     });
+
+        //     marker.addListener('click', () => {
+        //         setSelectedItem(item);
+        //         setSelectedItemType(item.type);
+        //     });
+
+        //     return marker;
+        // };
+
         const createMarker = (item, isMedian = false, isClusterMedian = false) => {
-            const position = {
-                lat: item?.location?.coordinates?.[1],
-                lng: item?.location?.coordinates?.[0]
-            };
+            // Get coordinates based on item type
+            let position;
+            if (item.type === 'project') {
+                // For projects, use latitude and longitude directly
+                position = {
+                    lat: item.latitude,
+                    lng: item.longitude
+                };
+            } else {
+                // For properties and buildings, use the existing location.coordinates structure
+                position = {
+                    lat: item?.location?.coordinates?.[1],
+                    lng: item?.location?.coordinates?.[0]
+                };
+            }
 
             const formatPrice = (price) => {
                 if (price >= 10000000) {
-                    // For Crores (1 Crore = 10 million)
                     return (price / 10000000).toFixed(2).replace(/\.?0+$/, '') + ' Cr';
                 } else if (price >= 100000) {
-                    // For Lakhs (1 Lakh = 100,000)
                     return (price / 100000).toFixed(2).replace(/\.?0+$/, '') + ' L';
                 } else {
-                    // For prices less than a lakh
                     return price.toLocaleString('en-IN');
                 }
             };
 
+            const getMarkerColor = (itemType) => {
+                switch (itemType) {
+                    case 'property':
+                        return '#3B82F6'; // Blue for properties
+                    case 'project':
+                        // return '#10B981'; // Green for projects
+                        return 'crimson'; // Green for projects
+                    case 'building':
+                        return '#F59E0B'; // Amber for buildings
+                    default:
+                        return '#3B82F6';
+                }
+            };
+
             const createMarkerIcon = (price) => {
-                // Always show full marker for median or when zoomed in
+                const markerColor = getMarkerColor(item.type);
+
                 if (isMedian || isClusterMedian || currentZoom >= 14) {
                     const formattedPrice = formatPrice(price);
                     const markerSvg = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -5 160 80">
-                        <path d="
-                            M10,0 
-                            h90 
-                            a20,20 0 0 1 20,20 
-                            v10 
-                            a20,20 0 0 1 -20,20 
-                            h-35 
-                            q-5,0 -10,15 
-                            q-5,-15 -10,-15 
-                            h-35 
-                            a20,20 0 0 1 -20,-20 
-                            v-10 
-                            a20,20 0 0 1 20,-20 
-                            z" 
-                            fill="${isMedian ? '#FF6B6B' : (isClusterMedian ? '#4CAF50' : '#3B82F6')}" 
-                            stroke="#FFFFFF" 
-                            stroke-width="2"/>
-                        <text x="55" 
-                            y="25" 
-                            font-family="Arial" 
-                            font-size="20" 
-                            fill="#FFFFFF" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle">${formattedPrice}</text>
-                    </svg>
-                `;
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -5 160 80">
+                    <path d="
+                        M10,0 
+                        h90 
+                        a20,20 0 0 1 20,20 
+                        v10 
+                        a20,20 0 0 1 -20,20 
+                        h-35 
+                        q-5,0 -10,15 
+                        q-5,-15 -10,-15 
+                        h-35 
+                        a20,20 0 0 1 -20,-20 
+                        v-10 
+                        a20,20 0 0 1 20,-20 
+                        z" 
+                        fill="${isMedian ? '#FF6B6B' : (isClusterMedian ? '#4CAF50' : markerColor)}" 
+                        stroke="#FFFFFF" 
+                        stroke-width="2"/>
+                    <text x="55" 
+                        y="25" 
+                        font-family="Arial" 
+                        font-size="20" 
+                        fill="#FFFFFF" 
+                        text-anchor="middle" 
+                        dominant-baseline="middle">${formattedPrice}</text>
+                </svg>
+            `;
                     return {
                         url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
                         scaledSize: new google.maps.Size(80, 40),
                         anchor: new google.maps.Point(40, 40)
                     };
                 } else {
-                    // Dot marker for zoomed out view
                     const dotSvg = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                        <circle cx="8" cy="8" r="6" fill="#3B82F6" stroke="#FFFFFF" stroke-width="2"/>
-                    </svg>
-                `;
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                    <circle cx="8" cy="8" r="6" fill="${markerColor}" stroke="#FFFFFF" stroke-width="2"/>
+                </svg>
+            `;
                     return {
                         url: 'data:image/svg+xml;base64,' + btoa(dotSvg),
                         scaledSize: new google.maps.Size(16, 16),
@@ -1444,7 +1657,6 @@ const MapPage = ({
             return marker;
         };
 
-        // Process clusters
         clusters.forEach(cluster => {
             if (cluster.length === 0) return;
 
