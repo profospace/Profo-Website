@@ -642,6 +642,302 @@
 
 // export default MainPropertyPage;
 
+// import React, { useState, useEffect } from 'react';
+// import { LoadScript } from '@react-google-maps/api';
+// import MapPage from './MapPage';
+// import { useDispatch, useSelector } from 'react-redux';
+// import ListingPage from '../components/ListingPage';
+// import {
+//     Map,
+//     List,
+//     Building,
+//     Search,
+//     SlidersHorizontal,
+// } from 'lucide-react';
+// import { FiSettings } from 'react-icons/fi';
+// import { AiOutlineSetting } from 'react-icons/ai';
+// import ActiveFiltersDisplay from '../components/ActiveFiltersDisplay';
+// import { BuildingFilter, ProjectFilter, PropertyFilter } from '../components/DynamicFilterComponent';
+// import ViewSwitcher from '../components/ViewSwitcher';
+// import { applyFilter } from '../redux/features/Map/mapSlice';
+
+// const MainPropertyPage = () => {
+//     const dispatch = useDispatch();
+//     const { properties, projects, buildings, appliedFilters, isLoading } = useSelector(state => state.map);
+
+//     const [view, setView] = useState('list'); // list / map view
+//     const [center, setCenter] = useState(null);
+//     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+
+//     // State for filters and search
+//     const [sortBy, setSortBy] = useState('');
+//     const [filterType, setFilterType] = useState('all');
+//     const [searchQuery, setSearchQuery] = useState('');
+//     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+//     const [isFilterVisible, setIsFilterVisible] = useState(false);
+
+//     // filter button popup
+//     const [modalOpen, setModalOpen] = useState(false);
+//     const [projectModalOpen, setProjectModalOpen] = useState(false);
+//     const [buildingModalOpen, setBuildingModalOpen] = useState(false);
+//     const [activeSection, setActiveSection] = useState('');
+
+//     // Get initial location
+//     useEffect(() => {
+//         if (navigator.geolocation) {
+//             navigator.geolocation.getCurrentPosition(
+//                 (position) => {
+//                     const currentLocation = {
+//                         lat: position.coords.latitude,
+//                         lng: position.coords.longitude
+//                     };
+//                     setCenter(currentLocation);
+//                 },
+//                 (error) => {
+//                     console.error("Error getting location:", error);
+//                     setCenter({
+//                         lat: 26.4735846,
+//                         lng: 80.2855738
+//                     });
+//                 }
+//             );
+//         }
+//     }, []);
+
+//     const handleViewChange = (newView) => {
+//         setView(newView);
+//     };
+
+//     return (
+//         <LoadScript
+//             googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
+//             onLoad={() => setIsScriptLoaded(true)}
+//         >
+//             <div className="min-h-screen px-2 overflow-hidden">
+//                 <div className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'>
+//                     <div className="flex items-center gap-2 py-1 justify-between">
+//                         <div className='flex gap-2 items-center'>
+//                             {/* easy search */}
+//                             <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-[30rem]' : 'w-auto'}`}>
+//                                 {!isSearchExpanded ? (
+//                                     <button
+//                                         onClick={() => setIsSearchExpanded(true)}
+//                                         className="flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+//                                     >
+//                                         <Search size={16} />
+//                                         <span className='text-sm'>Easy search</span>
+//                                     </button>
+//                                 ) : (
+//                                     <div className="relative w-full rounded-md">
+//                                         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+//                                         <input
+//                                             type="text"
+//                                             placeholder="Search by name or address..."
+//                                             value={searchQuery}
+//                                             onChange={(e) => setSearchQuery(e.target.value)}
+//                                             onBlur={() => {
+//                                                 if (!searchQuery) {
+//                                                     setIsSearchExpanded(false);
+//                                                 }
+//                                             }}
+//                                             className="w-full text-sm pl-10 pr-4 py-2 bg-white rounded-md focus:outline-none focus:ring-1 focus:ring-gray-700"
+//                                             autoFocus
+//                                         />
+//                                     </div>
+//                                 )}
+//                             </div>
+
+
+
+
+//                             {/* Filter Component Modal */}
+//                             {/* property filter */}
+//                             <button
+//                                 onClick={() => setModalOpen(true)}
+//                                 className={`flex items-center gap-2 px-3 py-2 rounded-md border-[0.5px] transition-colors duration-300
+//         ${appliedFilters.filterType === "property"
+//                                         ? "bg-yellow-200 border-yellow-900 text-black"
+//                                         : "bg-white border-gray-300 text-gray-700"
+//                                     }`}
+//                             >
+//                                 <FiSettings
+//                                     className={`size-5 transition-colors duration-300 ${appliedFilters.filterType === "property" ? "text-black" : "text-gray-600"
+//                                         }`}
+//                                 />
+//                                 <span
+//                                     className={`text-sm font-medium transition-colors duration-300 ${appliedFilters.filterType === "property" ? "text-black" : "text-gray-700"
+//                                         }`}
+//                                 >
+//                                     Filters
+//                                 </span>
+//                             </button>
+//                             <PropertyFilter modalOpen={modalOpen}
+//                                 setModalOpen={setModalOpen} activeSection={activeSection}
+//                                 setActiveSection={setActiveSection} />
+
+//                             {/* Filter Component Modal */}
+//                             <button
+//                                 onClick={() => setProjectModalOpen(true)}
+//                                 className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
+//                             >
+//                                 <FiSettings className="text-gray-600 shrink-0" size={20} />
+//                                 <span className="text-sm font-medium text-gray-700 whitespace-nowrap">
+//                                     Project Filters
+//                                 </span>
+//                             </button>
+//                             <ProjectFilter modalOpen={projectModalOpen}
+//                                 setModalOpen={setProjectModalOpen}
+//                                 activeSection={activeSection}
+//                                 setActiveSection={setActiveSection} />
+
+//                             {/* Building OCmponent mOdel */}
+//                             <button
+//                                 onClick={() => setBuildingModalOpen(true)}
+//                                 className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-gray-200 transition-all duration-300 max-w-[180px] sm:max-w-none"
+//                             >
+//                                 <FiSettings className="text-gray-600 shrink-0" size={20} />
+//                                 <span className="text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap">
+//                                     Building Filters
+//                                 </span>
+//                             </button>
+
+//                             <BuildingFilter
+//                                 modalOpen={buildingModalOpen}
+//                                 setModalOpen={setBuildingModalOpen}
+//                             />
+
+
+
+//                         </div>
+//                         <div className='flex gap-2 items-center'>
+//                             {/* applied filters */}
+//                             <ActiveFiltersDisplay />
+
+//                             {/* sorting */}
+//                             <div className="relative">
+//                                 <select
+//                                     value={filterType}
+//                                     onChange={(e) => setFilterType(e.target.value)}
+//                                     className="px-4 py-[5px] text-black bg-white border border-gray-300 rounded-md hover:bg-gray-50 appearance-none w-full pr-10 text-md"
+//                                 >
+//                                     <option value="all">All Types</option>
+//                                     <option value="apartment">Apartments</option>
+//                                     <option value="house">Houses</option>
+//                                     <option value="office">Offices</option>
+//                                     <option value="residential">Buildings</option>
+//                                 </select>
+//                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+//                                     <svg
+//                                         className="w-4 h-4 text-gray-500"
+//                                         fill="none"
+//                                         stroke="currentColor"
+//                                         viewBox="0 0 24 24"
+//                                         xmlns="http://www.w3.org/2000/svg"
+//                                     >
+//                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+//                                     </svg>
+//                                 </div>
+//                             </div>
+
+//                             {/* sorting filter */}
+//                             <div className="relative">
+//                                 <select
+//                                     value={sortBy}
+//                                     onChange={(e) => setSortBy(e.target.value)}
+//                                     className="pl-4 pr-8 py-[5px] bg-white border border-gray-300 rounded-md hover:bg-gray-50 appearance-none whitespace-nowrap max-w-40"
+//                                 >
+//                                     <option value="">Sort</option>
+//                                     <option value="price-low">Price: Low to High</option>
+//                                     <option value="price-high">Price: High to Low</option>
+//                                 </select>
+//                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+//                                     <svg
+//                                         className="w-4 h-4 text-gray-500"
+//                                         fill="none"
+//                                         stroke="currentColor"
+//                                         viewBox="0 0 24 24"
+//                                         xmlns="http://www.w3.org/2000/svg"
+//                                     >
+//                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+//                                     </svg>
+//                                 </div>
+//                             </div>
+
+//                             <button
+//                                 onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+//                                 className="p-2 rounded-lg flex min-w-28 items-center gap-2 bg-blue-100 text-blue-600 hover:bg-gray-100"
+//                             >
+//                                 {view === 'list' ? <List size={20} /> : <Map size={20} />}
+//                                 <span className='text-xs'>{view === 'list' ? 'List View' : 'Map View'}</span>
+//                             </button>
+
+
+//                         </div>
+//                     </div>
+//                 </div>
+
+//                 {view === 'list' ? (
+//                     <ListingPage
+//                         properties={properties || []}
+//                         projects={projects || []}
+//                         buildings={buildings || []}
+//                         isLoading={isLoading}
+//                         onViewChange={handleViewChange}
+//                         // Pass down filter states if needed
+//                         sortBy={sortBy}
+//                         filterType={filterType}
+//                         searchQuery={searchQuery}
+//                     />
+//                 ) : (
+//                     isScriptLoaded && (
+//                         <MapPage
+//                             onViewChange={handleViewChange}
+//                             center={center}
+//                             setCenter={setCenter}
+//                             properties={properties || []}
+//                             projects={projects || []}
+//                             buildings={buildings || []}
+//                             isLoading={isLoading}
+//                             setIsFilterVisible={setIsFilterVisible}
+//                         />
+//                     )
+//                 )}
+
+//                 {/* Replace the existing view switching code with: */}
+//                 {/* <ViewSwitcher view={view}>
+//                     {view === 'list' ? (
+//                         <ListingPage
+//                             properties={properties || []}
+//                             projects={projects || []}
+//                             buildings={buildings || []}
+//                             isLoading={isLoading}
+//                             onViewChange={handleViewChange}
+//                             sortBy={sortBy}
+//                             filterType={filterType}
+//                             searchQuery={searchQuery}
+//                         />
+//                     ) : (
+//                         isScriptLoaded && (
+//                             <MapPage
+//                                 onViewChange={handleViewChange}
+//                                 center={center}
+//                                 setCenter={setCenter}
+//                                 properties={properties || []}
+//                                 projects={projects || []}
+//                                 buildings={buildings || []}
+//                                 isLoading={isLoading}
+//                                 setIsFilterVisible={setIsFilterVisible}
+//                             />
+//                         )
+//                     )}
+//                 </ViewSwitcher> */}
+//             </div>
+//         </LoadScript>
+//     );
+// };
+
+// export default MainPropertyPage;
+
 import React, { useState, useEffect } from 'react';
 import { LoadScript } from '@react-google-maps/api';
 import MapPage from './MapPage';
@@ -650,22 +946,19 @@ import ListingPage from '../components/ListingPage';
 import {
     Map,
     List,
-    Building,
     Search,
-    SlidersHorizontal,
 } from 'lucide-react';
 import { FiSettings } from 'react-icons/fi';
-import { AiOutlineSetting } from 'react-icons/ai';
 import ActiveFiltersDisplay from '../components/ActiveFiltersDisplay';
 import { BuildingFilter, ProjectFilter, PropertyFilter } from '../components/DynamicFilterComponent';
-import ViewSwitcher from '../components/ViewSwitcher';
-import { applyFilter } from '../redux/features/Map/mapSlice';
 
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
-    const { properties, projects, buildings, appliedFilters, isLoading } = useSelector(state => state.map);
+    // Add default value for appliedFilters
+    const { properties = [], projects = [], buildings = [], appliedFilters = { filterType: null }, isLoading = false }
+        = useSelector(state => state.map || {});
 
-    const [view, setView] = useState('list'); // list / map view
+    const [view, setView] = useState('list');
     const [center, setCenter] = useState(null);
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
@@ -682,16 +975,14 @@ const MainPropertyPage = () => {
     const [buildingModalOpen, setBuildingModalOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
 
-    // Get initial location
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    const currentLocation = {
+                    setCenter({
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
-                    };
-                    setCenter(currentLocation);
+                    });
                 },
                 (error) => {
                     console.error("Error getting location:", error);
@@ -708,6 +999,9 @@ const MainPropertyPage = () => {
         setView(newView);
     };
 
+    // Add a safe check for the filter type
+    const isPropertyFilter = appliedFilters?.filterType === "property";
+
     return (
         <LoadScript
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
@@ -717,7 +1011,7 @@ const MainPropertyPage = () => {
                 <div className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'>
                     <div className="flex items-center gap-2 py-1 justify-between">
                         <div className='flex gap-2 items-center'>
-                            {/* easy search */}
+                            {/* Search component */}
                             <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-[30rem]' : 'w-auto'}`}>
                                 {!isSearchExpanded ? (
                                     <button
@@ -747,35 +1041,30 @@ const MainPropertyPage = () => {
                                 )}
                             </div>
 
-
-
-
-                            {/* Filter Component Modal */}
-                            {/* property filter */}
+                            {/* Property filter button */}
                             <button
                                 onClick={() => setModalOpen(true)}
                                 className={`flex items-center gap-2 px-3 py-2 rounded-md border-[0.5px] transition-colors duration-300
-        ${appliedFilters.filterType === "property"
+                                    ${isPropertyFilter
                                         ? "bg-yellow-200 border-yellow-900 text-black"
                                         : "bg-white border-gray-300 text-gray-700"
                                     }`}
                             >
                                 <FiSettings
-                                    className={`size-5 transition-colors duration-300 ${appliedFilters.filterType === "property" ? "text-black" : "text-gray-600"
-                                        }`}
+                                    className={`size-5 transition-colors duration-300 ${isPropertyFilter ? "text-black" : "text-gray-600"}`}
                                 />
-                                <span
-                                    className={`text-sm font-medium transition-colors duration-300 ${appliedFilters.filterType === "property" ? "text-black" : "text-gray-700"
-                                        }`}
-                                >
+                                <span className={`text-sm font-medium transition-colors duration-300 ${isPropertyFilter ? "text-black" : "text-gray-700"}`}>
                                     Filters
                                 </span>
                             </button>
-                            <PropertyFilter modalOpen={modalOpen}
-                                setModalOpen={setModalOpen} activeSection={activeSection}
-                                setActiveSection={setActiveSection} />
+                            <PropertyFilter
+                                modalOpen={modalOpen}
+                                setModalOpen={setModalOpen}
+                                activeSection={activeSection}
+                                setActiveSection={setActiveSection}
+                            />
 
-                            {/* Filter Component Modal */}
+                            {/* Project filter button */}
                             <button
                                 onClick={() => setProjectModalOpen(true)}
                                 className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
@@ -785,12 +1074,14 @@ const MainPropertyPage = () => {
                                     Project Filters
                                 </span>
                             </button>
-                            <ProjectFilter modalOpen={projectModalOpen}
+                            <ProjectFilter
+                                modalOpen={projectModalOpen}
                                 setModalOpen={setProjectModalOpen}
                                 activeSection={activeSection}
-                                setActiveSection={setActiveSection} />
+                                setActiveSection={setActiveSection}
+                            />
 
-                            {/* Building OCmponent mOdel */}
+                            {/* Building filter button */}
                             <button
                                 onClick={() => setBuildingModalOpen(true)}
                                 className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-gray-200 transition-all duration-300 max-w-[180px] sm:max-w-none"
@@ -800,20 +1091,16 @@ const MainPropertyPage = () => {
                                     Building Filters
                                 </span>
                             </button>
-
                             <BuildingFilter
                                 modalOpen={buildingModalOpen}
                                 setModalOpen={setBuildingModalOpen}
                             />
-
-
-
                         </div>
+
                         <div className='flex gap-2 items-center'>
-                            {/* applied filters */}
                             <ActiveFiltersDisplay />
 
-                            {/* sorting */}
+                            {/* Type filter */}
                             <div className="relative">
                                 <select
                                     value={filterType}
@@ -827,19 +1114,13 @@ const MainPropertyPage = () => {
                                     <option value="residential">Buildings</option>
                                 </select>
                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                                    <svg
-                                        className="w-4 h-4 text-gray-500"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
+                                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                             </div>
 
-                            {/* sorting filter */}
+                            {/* Sort filter */}
                             <div className="relative">
                                 <select
                                     value={sortBy}
@@ -851,18 +1132,13 @@ const MainPropertyPage = () => {
                                     <option value="price-high">Price: High to Low</option>
                                 </select>
                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                                    <svg
-                                        className="w-4 h-4 text-gray-500"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
+                                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                             </div>
 
+                            {/* View toggle button */}
                             <button
                                 onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
                                 className="p-2 rounded-lg flex min-w-28 items-center gap-2 bg-blue-100 text-blue-600 hover:bg-gray-100"
@@ -870,20 +1146,18 @@ const MainPropertyPage = () => {
                                 {view === 'list' ? <List size={20} /> : <Map size={20} />}
                                 <span className='text-xs'>{view === 'list' ? 'List View' : 'Map View'}</span>
                             </button>
-
-
                         </div>
                     </div>
                 </div>
 
+                {/* Main content */}
                 {view === 'list' ? (
                     <ListingPage
-                        properties={properties || []}
-                        projects={projects || []}
-                        buildings={buildings || []}
+                        properties={properties}
+                        projects={projects}
+                        buildings={buildings}
                         isLoading={isLoading}
                         onViewChange={handleViewChange}
-                        // Pass down filter states if needed
                         sortBy={sortBy}
                         filterType={filterType}
                         searchQuery={searchQuery}
@@ -894,43 +1168,14 @@ const MainPropertyPage = () => {
                             onViewChange={handleViewChange}
                             center={center}
                             setCenter={setCenter}
-                            properties={properties || []}
-                            projects={projects || []}
-                            buildings={buildings || []}
+                            properties={properties}
+                            projects={projects}
+                            buildings={buildings}
                             isLoading={isLoading}
                             setIsFilterVisible={setIsFilterVisible}
                         />
                     )
                 )}
-
-                {/* Replace the existing view switching code with: */}
-                {/* <ViewSwitcher view={view}>
-                    {view === 'list' ? (
-                        <ListingPage
-                            properties={properties || []}
-                            projects={projects || []}
-                            buildings={buildings || []}
-                            isLoading={isLoading}
-                            onViewChange={handleViewChange}
-                            sortBy={sortBy}
-                            filterType={filterType}
-                            searchQuery={searchQuery}
-                        />
-                    ) : (
-                        isScriptLoaded && (
-                            <MapPage
-                                onViewChange={handleViewChange}
-                                center={center}
-                                setCenter={setCenter}
-                                properties={properties || []}
-                                projects={projects || []}
-                                buildings={buildings || []}
-                                isLoading={isLoading}
-                                setIsFilterVisible={setIsFilterVisible}
-                            />
-                        )
-                    )}
-                </ViewSwitcher> */}
             </div>
         </LoadScript>
     );
