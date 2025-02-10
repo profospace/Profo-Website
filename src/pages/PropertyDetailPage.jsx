@@ -729,9 +729,9 @@ const SinglePage = () => {
 
 
     return (
-        <div className="mx-8 font-'Inter'">
+        <div className=" font-'Inter'">
             {/* Title */}
-            <div className="py-4 flex justify-between">
+            <div className="py-4 flex justify-between mx-8">
                 <h1 className="text-2xl lg:text-3xl font-semibold text-gray-800 capitalize">
                     {propertyDetail?.post_title}
                 </h1>
@@ -807,7 +807,7 @@ const SinglePage = () => {
 
 
             {/* <div className="relative"> */}
-            <div ref={targetDivRef} className="relative">
+            <div ref={targetDivRef} className="relative mx-8">
                 {/* Desktop Grid */}
                 {images?.length > 3 ? (
                     <div className="hidden lg:grid grid-cols-2 gap-2 items-center">
@@ -877,19 +877,19 @@ const SinglePage = () => {
 
             {/* labels click to scroll section */}
             <motion.div
-                className="sticky top-0 z-40 bg-white shadow-sm"
+                className="sticky max-w-full top-[4.5rem] z-40 bg-[#fff]/50 backdrop-blur-lg py-2 px-8"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
             >
-                <div className="flex gap-6 px-8 py-4 overflow-x-auto">
+                <div className="flex gap-10 overflow-hidden">
                     {getAvailableSections().map(({ id, label, ref }) => (
                         <motion.button
                             key={id}
                             onClick={() => scrollToSection(ref, id)}
-                            className={`whitespace-nowrap px-4 py-2 rounded-full transition-colors ${activeSection === id
-                                    ? 'bg-black text-white'
-                                    : 'text-gray-600 hover:bg-gray-100'
+                            className={`whitespace-nowrap rounded-full transition-colors ${activeSection === id
+                                ? ' text-[crimson] underline underline-[crimson] underline-offset-4 font-semibold'
+                                : 'text-gray-600'
                                 }`}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
@@ -899,8 +899,8 @@ const SinglePage = () => {
                     ))}
                 </div>
             </motion.div>
-            
-            <div className="grid grid-flow-col grid-cols-12 gap-2 my-4">
+
+            <div className="grid grid-flow-col grid-cols-12 gap-2 my-4 mx-4">
                 {/* left */}
                 <div className="col-span-8">
                     {/* Property Info Section */}

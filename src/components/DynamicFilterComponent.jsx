@@ -175,7 +175,7 @@
 
 //     useEffect(() => {
 //         if (modalOpen) {
-//             fetch('http://localhost:5053/api/web/filter/structure')
+//             fetch('`/api/web/filter/structure')
 //                 .then(res => res.json())
 //                 .then(data => {
 //                     setFilters(data.data);
@@ -368,7 +368,7 @@
 
 //     useEffect(() => {
 //         // Fetch project filter structure
-//         fetch('http://localhost:5053/api/web/projects/filter-options')
+//         fetch('`/api/web/projects/filter-options')
 //             .then(res => res.json())
 //             .then(data => {
 //                 setFilters(data.data);
@@ -1131,9 +1131,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Button, Spin, Slider, InputNumber, Checkbox,Radio, Space, Divider } from 'antd';
+import { Modal, Button, Spin, Slider, InputNumber, Checkbox, Radio, Space, Divider } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { applyFilter } from '../redux/features/Map/mapSlice';
+import { base_url } from '../utils/base_url';
 
 
 // Utility function to merge filters
@@ -1162,7 +1163,7 @@ const PropertyFilter = ({ modalOpen, setModalOpen, activeSection, setActiveSecti
 
     useEffect(() => {
         if (modalOpen) {
-            fetch('http://localhost:5053/api/web/filter/structure')
+            fetch(`${base_url}/api/web/filter/structure`)
                 .then(res => res.json())
                 .then(data => {
                     setFilters(data.data);
@@ -1187,7 +1188,7 @@ const PropertyFilter = ({ modalOpen, setModalOpen, activeSection, setActiveSecti
         // Only clear property-related filters
         const remainingFilters = {};
         Object.keys(appliedFilters).forEach(key => {
-            if (!['price', 'bedrooms', 'bathrooms', 'propertyType', 'propertyAmenities' , 'purpose'].includes(key)) {
+            if (!['price', 'bedrooms', 'bathrooms', 'propertyType', 'propertyAmenities', 'purpose'].includes(key)) {
                 remainingFilters[key] = appliedFilters[key];
             }
         });
@@ -1409,7 +1410,7 @@ const ProjectFilter = ({ modalOpen, setModalOpen }) => {
 
     useEffect(() => {
         if (modalOpen) {
-            fetch('http://localhost:5053/api/web/projects/filter-options')
+            fetch(`${base_url}/api/web/projects/filter-options`)
                 .then(res => res.json())
                 .then(data => {
                     setFilters(data.data);
@@ -1568,7 +1569,7 @@ const ProjectFilter = ({ modalOpen, setModalOpen }) => {
 
 //     useEffect(() => {
 //         if (modalOpen) {
-//             fetch('http://localhost:5053/api/web/building/structure')
+//             fetch('`/api/web/building/structure')
 //                 .then(res => res.json())
 //                 .then(data => {
 //                     setFilters(data.data);
@@ -1738,7 +1739,7 @@ const BuildingFilter = ({ modalOpen, setModalOpen }) => {
 
     useEffect(() => {
         if (modalOpen) {
-            fetch('http://localhost:5053/api/web/building/structure')
+            fetch(`${base_url}/api/web/building/structure`)
                 .then(res => res.json())
                 .then(data => {
                     setFilters(data.data);
@@ -1848,7 +1849,7 @@ const BuildingFilter = ({ modalOpen, setModalOpen }) => {
         </Modal>
     );
 };
-export { PropertyFilter, ProjectFilter , BuildingFilter};
+export { PropertyFilter, ProjectFilter, BuildingFilter };
 
 
 

@@ -640,10 +640,21 @@ import {
     Heart
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+import { motion, AnimatePresence } from 'framer-motion';
 const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading = false, sortBy, filterType, searchQuery }) => {
     const [viewType, setViewType] = useState('list');
-
+    const cardVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5 }
+        },
+        hover: {
+            y: -8,
+            transition: { duration: 0.2 }
+        }
+    };
     // Filter and sort items
     const filteredItems = [...(properties || []), ...(projects || []), ...(buildings || [])]
         .filter(item => {
@@ -679,7 +690,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
             }
         });
 
-    const PropertyCard = ({ item }) => {
+    const PropertyCard = ({ item,index }) => {
         const navigate = useNavigate();
         const isProject = 'overview' in item;
         const isBuilding = 'buildingId' in item;
@@ -749,12 +760,26 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
         if (isBuilding) {
             return (
-                <div
-                    className="bg-white shadow-md border rounded-xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 max-w-sm w-full mx-auto cursor-pointer"
+                // <div
+                //     className="bg-white shadow-md border rounded-xl overflow-hidden transition-all duration-300 transform hover:-translate-y-1 max-w-sm w-full mx-auto cursor-pointer"
+                //     onClick={handleNavigation}
+                // >
+                <motion.div
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover="hover"
+                    transition={{ delay: index * 0.1 }}
+                    className="bg-white shadow-md border rounded-xl overflow-hidden cursor-pointer"
                     onClick={handleNavigation}
                 >
                     {/* Image Container */}
-                    <div className="relative aspect-[5/3] overflow-hidden">
+                    {/* <div className="relative aspect-[5/3] overflow-hidden"> */}
+                    <motion.div
+                        className="relative aspect-[5/3] overflow-hidden"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                    >
                         {item.galleryList?.[0] ? (
                             <img
                                 src={item.galleryList[0]}
@@ -793,16 +818,28 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                         </div>
 
                         {/* Favorite Button */}
-                        <button
+                        {/* <button
                             className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md hover:bg-white hover:shadow-lg transition-all"
+                            onClick={(e) => e.stopPropagation()}
+                        > */}
+                        <motion.button
+                            className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Heart size={20} className="text-gray-500 hover:text-red-500 transition-colors" />
-                        </button>
-                    </div>
+                        </motion.button>
+                    </motion.div>
 
                     {/* Content Section */}
-                    <div className="px-2 py-2">
+                    {/* <div className="px-2 py-2"> */}
+                    <motion.div
+                        className="px-2 py-2"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                    >
                         {/* Building Name and Price */}
                         <div className="flex justify-between items-start flex-col">
                             {/* {item.connectedProperties?.[0]?.price && (
@@ -851,8 +888,8 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             );
         }
         // Original Property Card
@@ -1006,38 +1043,62 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
     };
 
     return (
-        <div className="min-h-screen bg-white p-4">
+        // <div className="min-h-screen bg-white p-4">
+        <motion.div
+            className="min-h-screen bg-white p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+        >
             {/* Grid View */}
-            {viewType === 'list' && (
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {filteredItems.map((item) => (
-                            <PropertyCard
-                                key={item?._id}
-                                item={item}
-                            />
-                        ))}
-                    </div>
-                    {filteredItems?.length === 0 && !isLoading && (
-                        <div className="text-center py-12">
-                            <div className="text-gray-400 mb-2">
-                                <Building size={48} className="mx-auto" />
-                            </div>
-                            <h3 className="text-lg font-medium text-gray-900">No items found</h3>
-                            <p className="text-gray-600">
-                                Try adjusting your filters or search query
-                            </p>
+            <AnimatePresence>
+                {viewType === 'list' && (
+                    <motion.div
+                        className="max-w-7xl mx-auto"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {filteredItems.map((item, index) => (
+                                <PropertyCard
+                                    key={item?._id}
+                                    item={item}
+                                    index={index}
+                                />
+                            ))}
                         </div>
-                    )}
-                </div>
-            )}
-            {/* Map View Container */}
-            {viewType === 'map' && (
-                <div className="h-[calc(100vh-280px)]">
-                    {/* Map component will be rendered here by parent */}
-                </div>
-            )}
-        </div>
+                        <AnimatePresence>
+                            {filteredItems?.length === 0 && !isLoading && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    className="text-center py-12"
+                                >
+                                <div className="text-gray-400 mb-2">
+                                    <Building size={48} className="mx-auto" />
+                                </div>
+                                <h3 className="text-lg font-medium text-gray-900">No items found</h3>
+                                <p className="text-gray-600">
+                                    Try adjusting your filters or search query
+                                </p>
+                            </motion.div>
+                        )}
+                        </AnimatePresence>
+                    </motion.div>
+                )}
+
+                {/* Map View Container */}
+                {viewType === 'map' && (
+                    <div className="h-[calc(100vh-280px)]">
+                        {/* Map component will be rendered here by parent */}
+                    </div>
+                )}
+            </AnimatePresence>
+        </motion.div>
     );
 };
 export default ListingPage;

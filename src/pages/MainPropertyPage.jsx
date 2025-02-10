@@ -943,6 +943,7 @@ import { LoadScript } from '@react-google-maps/api';
 import MapPage from './MapPage';
 import { useDispatch, useSelector } from 'react-redux';
 import ListingPage from '../components/ListingPage';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Map,
     List,
@@ -1002,17 +1003,54 @@ const MainPropertyPage = () => {
     // Add a safe check for the filter type
     const isPropertyFilter = appliedFilters?.filterType === "property";
 
+    // Animation variants
+    const pageTransition = {
+        initial: { opacity: 0, x: 20 },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: -20 }
+    };
+
+    const filterButtonVariants = {
+        hover: { scale: 1.05 },
+        tap: { scale: 0.95 }
+    };
+
+    const searchExpandVariants = {
+        collapsed: { width: 'auto' },
+        expanded: { width: '30rem' }
+    };
+
+
     return (
         <LoadScript
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
             onLoad={() => setIsScriptLoaded(true)}
         >
-            <div className="min-h-screen px-2 overflow-hidden">
-                <div className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'>
+            {/* <div className="min-h-screen px-2 overflow-hidden">
+                <div className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'> */}
+            <motion.div
+                className="min-h-screen px-2 overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <motion.div
+                    className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'
+                    initial={{ y: -20 }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                >
                     <div className="flex items-center gap-2 py-1 justify-between">
                         <div className='flex gap-2 items-center'>
                             {/* Search component */}
-                            <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-[30rem]' : 'w-auto'}`}>
+                            {/* <div className={`transition-all duration-300 ease-in-out ${isSearchExpanded ? 'w-[30rem]' : 'w-auto'}`}> */}
+                            <motion.div
+                                variants={searchExpandVariants}
+                                initial="collapsed"
+                                animate={isSearchExpanded ? "expanded" : "collapsed"}
+                                transition={{ duration: 0.3 }}
+                                className="transition-all duration-300 ease-in-out"
+                            >
                                 {!isSearchExpanded ? (
                                     <button
                                         onClick={() => setIsSearchExpanded(true)}
@@ -1039,16 +1077,24 @@ const MainPropertyPage = () => {
                                         />
                                     </div>
                                 )}
-                            </div>
+                            </motion.div>
 
                             {/* Property filter button */}
-                            <button
+                            {/* <button
                                 onClick={() => setModalOpen(true)}
                                 className={`flex items-center gap-2 px-3 py-2 rounded-md border-[0.5px] transition-colors duration-300
                                     ${isPropertyFilter
                                         ? "bg-yellow-200 border-yellow-900 text-black"
                                         : "bg-white border-gray-300 text-gray-700"
                                     }`}
+                            > */}
+                            <motion.button
+                                variants={filterButtonVariants}
+                                whileHover="hover"
+                                whileTap="tap"
+                                onClick={() => setModalOpen(true)}
+                                className={`flex items-center gap-2 px-3 py-2 rounded-md border-[0.5px] transition-colors duration-300
+                                    ${isPropertyFilter ? "bg-yellow-200 border-yellow-900" : "bg-white border-gray-300"}`}
                             >
                                 <FiSettings
                                     className={`size-5 transition-colors duration-300 ${isPropertyFilter ? "text-black" : "text-gray-600"}`}
@@ -1056,7 +1102,7 @@ const MainPropertyPage = () => {
                                 <span className={`text-sm font-medium transition-colors duration-300 ${isPropertyFilter ? "text-black" : "text-gray-700"}`}>
                                     Filters
                                 </span>
-                            </button>
+                            </motion.button>
                             <PropertyFilter
                                 modalOpen={modalOpen}
                                 setModalOpen={setModalOpen}
@@ -1139,19 +1185,26 @@ const MainPropertyPage = () => {
                             </div>
 
                             {/* View toggle button */}
-                            <button
+                            {/* <button
+                                onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+                                className="p-2 rounded-lg flex min-w-28 items-center gap-2 bg-blue-100 text-blue-600 hover:bg-gray-100"
+                            > */}
+                            <motion.button
+                                variants={filterButtonVariants}
+                                whileHover="hover"
+                                whileTap="tap"
                                 onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
                                 className="p-2 rounded-lg flex min-w-28 items-center gap-2 bg-blue-100 text-blue-600 hover:bg-gray-100"
                             >
                                 {view === 'list' ? <List size={20} /> : <Map size={20} />}
                                 <span className='text-xs'>{view === 'list' ? 'List View' : 'Map View'}</span>
-                            </button>
+                            </motion.button>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Main content */}
-                {view === 'list' ? (
+                {/* {view === 'list' ? (
                     <ListingPage
                         properties={properties}
                         projects={projects}
@@ -1175,8 +1228,53 @@ const MainPropertyPage = () => {
                             setIsFilterVisible={setIsFilterVisible}
                         />
                     )
-                )}
-            </div>
+                )} */}
+                <AnimatePresence mode="wait">
+                    {view === 'list' ? (
+                        <motion.div
+                            key="list"
+                            variants={pageTransition}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            transition={{ duration: 0.3 }}
+                        >
+                            <ListingPage
+                                properties={properties}
+                                projects={projects}
+                                buildings={buildings}
+                                isLoading={isLoading}
+                                onViewChange={handleViewChange}
+                                sortBy={sortBy}
+                                filterType={filterType}
+                                searchQuery={searchQuery}
+                            />
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="map"
+                            variants={pageTransition}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            transition={{ duration: 0.3 }}
+                        >
+                            {isScriptLoaded && (
+                                <MapPage
+                                    onViewChange={handleViewChange}
+                                    center={center}
+                                    setCenter={setCenter}
+                                    properties={properties}
+                                    projects={projects}
+                                    buildings={buildings}
+                                    isLoading={isLoading}
+                                    setIsFilterVisible={setIsFilterVisible}
+                                />
+                            )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
         </LoadScript>
     );
 };
