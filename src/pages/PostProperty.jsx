@@ -1057,7 +1057,7 @@ const PostProperty = () => {
                         </div>
                     ))}
                 </div> */}
-                <div className="grid md:grid-cols-3 gap-8">
+                {/* <div className="grid md:grid-cols-3 gap-8">
                     {steps.map((step, index) => (
                         <div key={index} className="flex flex-col">
                             <div className=" rounded-lg mb-4">
@@ -1074,7 +1074,7 @@ const PostProperty = () => {
                             </div>
                         </div>
                     ))}
-                </div>
+                </div> */}
 
                 <div className="text-center mt-12">
                     <button

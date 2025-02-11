@@ -33,18 +33,26 @@ import Services from './pages/Services';
 import TermsAndConditions from './pages/TermsAndConditions';
 import BuildingManager from './components/BuildingManager';
 import PrivacyAndPolicy from './pages/PrivacyAndPolicy';
+import { getHomeFeed } from './redux/features/HomeFeed/homeFeedSlice';
 // import MainPropertyPage from './pages/MainPropertyPage';
 
 function App() {
   const dispatch = useDispatch()
   const { pathname } = useLocation()
 
+  // useEffect(
+  //   () => {
+  //     dispatch(getAllProperties())
+  //     dispatch(getAllBuildings())
+
+  //   }, []
+  // )
+
   useEffect(
     () => {
-      dispatch(getAllProperties())
-      dispatch(getAllBuildings())
-
-    }, []
+      console.log("HI")
+      dispatch(getHomeFeed());
+    }, [dispatch]
   )
 
   useEffect(

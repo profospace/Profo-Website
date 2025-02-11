@@ -100,6 +100,7 @@ const FlexibleLayout = ({
                   price={info?.price}
                   label={info?.post_title}
                   type={info?.type_name}
+                  contactList = {info?.contactList}
                   navigation={`/api/details/${info?.post_id}`}
                 />
               ))}

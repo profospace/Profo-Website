@@ -60,7 +60,7 @@ const homeFeedSlice = createSlice({
       .addCase(getHomeFeed.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload.message;
+        // state.message = action.payload.message;
       })
   },
 });

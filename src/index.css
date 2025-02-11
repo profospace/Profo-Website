@@ -123,6 +123,11 @@ body {
   z-index: -1;
 }
 
+.apply-text-shadow{
+  text-shadow: 2px 0px 0px rgb(255, 255, 255);
+    /* X, Y, Blur, Color */
+}
+
 @keyframes slide-down {
   0% {
     transform: translateY(-100%);
