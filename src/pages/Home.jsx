@@ -6,10 +6,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getHomeFeed } from '../redux/features/HomeFeed/homeFeedSlice';
 import ImageCarousel from '../components/ImageCarousel';
 import axios from 'axios';
+import { applyFilter } from '../redux/features/Map/mapSlice';
 
 function Home() {
 
     const { properties, projects, buildings } = useSelector(state => state.homeFeed)
+    
 
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();

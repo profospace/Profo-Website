@@ -1,45 +1,45 @@
-import React from 'react';
-import { Heart } from 'lucide-react';
-import { base_url } from '../utils/base_url';
-import { useNavigate } from 'react-router-dom';
+// import React from 'react';
+// import { Heart } from 'lucide-react';
+// import { base_url } from '../utils/base_url';
+// import { useNavigate } from 'react-router-dom';
 
-const HomePageCard = ({ info, image, price, label, type, navigation }) => {
-    const navigate = useNavigate()
-    // console.log(info)
-    return (
+// const HomePageCard = ({ info, image, price, label, type, navigation }) => {
+//     const navigate = useNavigate()
+//     // console.log(info)
+//     return (
 
-        <div className="relative overflow-hidden bg-white transition-shadow" onClick={() => navigate(navigation)}>
-            <div className="relative h-48 w-full">
-                <img
-                    src={image}
-                    alt={info?.name}
-                    className="w-full h-full object-cover rounded-xl"
-                />
-                {type && (
-                    <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-sm">
-                        {type}
-                    </div>
-                )}
-                <button className="absolute top-4 right-4 p-1.5 rounded-full bg-white/80 hover:bg-white">
-                    <Heart className="w-5 h-5 text-gray-600" />
-                </button>
-            </div>
+//         <div className="relative overflow-hidden bg-white transition-shadow" onClick={() => navigate(navigation)}>
+//             <div className="relative h-48 w-full">
+//                 <img
+//                     src={image}
+//                     alt={info?.name}
+//                     className="w-full h-full object-cover rounded-xl"
+//                 />
+//                 {type && (
+//                     <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-sm">
+//                         {type}
+//                     </div>
+//                 )}
+//                 <button className="absolute top-4 right-4 p-1.5 rounded-full bg-white/80 hover:bg-white">
+//                     <Heart className="w-5 h-5 text-gray-600" />
+//                 </button>
+//             </div>
 
-            <div className="mt-2">
-                <div className="text-xl font-semibold">
-                    {price}$
-                </div>
+//             <div className="mt-2">
+//                 <div className="text-xl font-semibold">
+//                     {price}$
+//                 </div>
 
-                <h3 className="text-sm font-medium">{label}</h3>
+//                 <h3 className="text-sm font-medium">{label}</h3>
 
 
-            </div>
+//             </div>
 
-        </div>
-    );
-}
+//         </div>
+//     );
+// }
 
-export default HomePageCard
+// export default HomePageCard
 
 
 
@@ -273,3 +273,160 @@ export default HomePageCard
 // };
 
 // export default HomePageCard;
+
+// import React from 'react';
+// import { Heart, Phone } from 'lucide-react';
+// import { motion, AnimatePresence } from 'framer-motion';
+
+// const HomePageCard = ({ info, image, price, label, type, navigation, contactList }) => {
+//     const handleContactClick = (e) => {
+//         e.stopPropagation();
+//         if (contactList?.[0]) {
+//             window.location.href = `tel:${contactList[0]}`;
+//         }
+//     };
+
+//     return (
+//         <div
+//             className="group relative w-full rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+//             onClick={() => navigation && navigate(navigation)}
+//         >
+//             {/* Image Container */}
+//             <div className="relative h-72 md:h-80 w-full overflow-hidden">
+//                 <motion.img
+//                     src={image}
+//                     alt={info?.name}
+//                     className="w-full h-full object-cover"
+//                     whileHover={{ scale: 1.05 }}
+//                     transition={{ duration: 0.4 }}
+//                 />
+
+//                 {/* Overlay Gradient */}
+//                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+//                 {/* Type Badge */}
+//                 <motion.div
+//                     className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium shadow-sm"
+//                     initial={{ opacity: 0, x: -20 }}
+//                     animate={{ opacity: 1, x: 0 }}
+//                 >
+//                     {type}
+//                 </motion.div>
+
+//                 {/* Heart Button */}
+//                 <motion.button
+//                     className="absolute top-4 right-4 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white group/heart"
+//                     whileHover={{ scale: 1.1 }}
+//                     whileTap={{ scale: 0.95 }}
+//                 >
+//                     <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
+//                 </motion.button>
+
+//                 {/* Content Container */}
+//                 <div className="absolute -bottom-12 left-0 right-0 p-4">
+//                     <motion.div
+//                         className="space-y-2"
+//                         initial="visible"
+//                         whileHover="hover"
+//                         animate="visible"
+//                         variants={{
+//                             visible: { y: 0 },
+//                             hover: { y: -48 }
+//                         }}
+//                     >
+//                         {/* Price and Label Container */}
+//                         <div className="text-white">
+//                             <div className="flex items-center justify-between">
+//                                 <h3 className="text-lg font-semibold line-clamp-1">{label}</h3>
+//                                 <span className="text-xl font-bold">${price}</span>
+//                             </div>
+//                         </div>
+
+//                         {/* Contact Button */}
+//                         <motion.button
+//                             onClick={handleContactClick}
+//                             className="w-full mt-4 bg-white/90 backdrop-blur-sm text-gray-800 py-2 rounded-lg font-medium flex items-center justify-center gap-2"
+//                             variants={{
+//                                 visible: { opacity: 0, y: 48 },
+//                                 hover: { opacity: 1, y: 0 }
+//                             }}
+//                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
+//                         >
+//                             <Phone className="w-4 h-4" />
+//                             Contact Now
+//                         </motion.button>
+//                     </motion.div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default HomePageCard;
+
+import React from 'react';
+import { Heart, Phone } from 'lucide-react';
+
+const HomePageCard = ({ info, image, price, label, type, navigation, contactList }) => {
+    const handleContactClick = (e) => {
+        e.stopPropagation();
+        if (contactList?.[0]) {
+            window.location.href = `tel:${contactList[0]}`;
+        }
+    };
+
+    return (
+        <div
+            className="group relative w-full rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+            onClick={() => navigation && navigate(navigation)}
+        >
+            {/* Image Container */}
+            <div className="relative h-72 md:h-80 w-full overflow-hidden">
+                <img
+                    src={image}
+                    alt={info?.name}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Type Badge */}
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium shadow-sm">
+                    {type}
+                </div>
+
+                {/* Heart Button */}
+                <button
+                    className="absolute top-4 right-4 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white group/heart transition-transform duration-300 hover:scale-110 active:scale-95"
+                >
+                    <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
+                </button>
+
+                {/* Content Container */}
+                <div className="absolute bottom-0 left-0 right-0 px-4 py-2 transform translate-y-12 group-hover:translate-y-0 transition-transform duration-300  bg-black/20 backdrop-blur-sm">
+                    <div className="space-y-2">
+                        {/* Price and Label Container */}
+                        <div className="text-white">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-lg font-semibold line-clamp-1">{label}</h3>
+                                <span className="text-xl font-bold">${price}</span>
+                            </div>
+                        </div>
+
+                        {/* Contact Button */}
+                        <button
+                            onClick={handleContactClick}
+                            className="w-full mt-4 bg-white/90 backdrop-blur-sm text-gray-800 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-300 hover:bg-white"
+                        >
+                            <Phone className="w-4 h-4" />
+                            Contact Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default HomePageCard;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Menu, Heart, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { applyFilter, getAllBuildings, getAllProjects, getAllProperties, getFilterProperties, getMapFeed } from '../redux/features/Map/mapSlice';
 import axios from 'axios';
 
@@ -17,6 +17,7 @@ const Header = () => {
 
     const [isSticky, setIsSticky] = useState(false);
     const topNavRef = useRef(null);
+
 
     const [purposeFilters, setPurposeFilters] = useState({
         buy: false,
