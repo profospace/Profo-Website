@@ -143,7 +143,7 @@ const ImageCarousel = () => {
 
     const images = [
         {
-            url: 'https://avatars.mds.yandex.net/get-verba/216201/2a00000193abde37fd3f35e4c7b04d9b6efe/realty_large_1242',
+            url: 'https://wityysaver.s3.ap-south-1.amazonaws.com/gallery_images/bb252d04-9c6c-4691-80d7-25a173f10c93_8a9f0d87880b970201880be07b6919a9_84580_163684_large.jpg',
             alt: 'Real Estate 1'
         },
         {
@@ -176,7 +176,7 @@ const ImageCarousel = () => {
 
     return (
         <div className="relative w-full h-full px-4 md:px-12 mt-6 ">
-            <div className="relative w-full h-[300px] md:h-[400px] lg:h-[340px] overflow-hidden rounded-2xl">
+            <div className="relative w-full h-[300px] md:h-[400px] lg:h-[280px] overflow-hidden rounded-2xl">
                 {images.map((image, index) => (
                     <div
                         key={index}
@@ -186,7 +186,7 @@ const ImageCarousel = () => {
                         <img
                             src={image.url}
                             alt={image.alt}
-                            className="w-full h-full object-cover object-center"
+                            className="w-full h-full object-cover object-[25% , 75%]"
                         />
                     </div>
                 ))}

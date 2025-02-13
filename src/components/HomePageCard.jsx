@@ -42,332 +42,16 @@
 // export default HomePageCard
 
 
-
-// import React from 'react';
-// import { Heart } from 'lucide-react';
-// import { motion } from 'framer-motion';
-
-// const HomePageCard = ({ info, image, price, label, type, navigation, contactList }) => {
-//     return (
-//         <motion.div
-//             className="group relative w-full rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-//             onClick={() => navigation && navigate(navigation)}
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             whileHover={{ scale: 1.02 }}
-//             transition={{ duration: 0.2 }}
-//         >
-//             {/* Image Container */}
-//             <div className="relative h-72 md:h-80 w-full overflow-hidden">
-//                 <motion.img
-//                     src={image}
-//                     alt={info?.name}
-//                     className="w-full h-full object-cover"
-//                     whileHover={{ scale: 1.05 }}
-//                     transition={{ duration: 0.4 }}
-//                 />
-
-//                 {/* Overlay Gradient */}
-//                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-//                 {/* Type Badge */}
-//                 {type && (
-//                     <motion.div
-//                         className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium shadow-sm"
-//                         initial={{ opacity: 0, x: -20 }}
-//                         animate={{ opacity: 1, x: 0 }}
-//                     >
-//                         {type}
-//                     </motion.div>
-//                 )}
-
-//                 {/* Heart Button */}
-//                 <motion.button
-//                     className="absolute top-4 right-4 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white group/heart"
-//                     whileHover={{ scale: 1.1 }}
-//                     whileTap={{ scale: 0.95 }}
-//                 >
-//                     <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
-//                 </motion.button>
-
-//                 {/* Content Container - Positioned at bottom of image */}
-//                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-//                     <motion.div
-//                         initial={{ opacity: 0, y: 10 }}
-//                         animate={{ opacity: 1, y: 0 }}
-//                         transition={{ delay: 0.1 }}
-//                         className="space-y-2"
-//                     >
-//                         <div className="flex items-center justify-between">
-//                             <h3 className="text-lg font-semibold line-clamp-1">{label}</h3>
-//                             <span className="text-xl font-bold">${price}</span>
-//                         </div>
-//                         <div>{contactList?.[0]}</div>
-//                     </motion.div>
-//                 </div>
-//             </div>
-//         </motion.div>
-//     );
-// };
-
-// export default HomePageCard;
-
-// import React from 'react';
-// import { Heart, Phone } from 'lucide-react';
-
-// const HomePageCard = ({ info, image, price, label, type, navigation, contactList }) => {
-//     const handleContactClick = (e) => {
-//         e.stopPropagation();
-//         if (contactList?.[0]) {
-//             window.location.href = `tel:${contactList[0]}`;
-//         }
-//     };
-
-//     return (
-//         <div
-//             className="group relative w-full rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-//             onClick={() => navigation && navigate(navigation)}
-//         >
-//             {/* Image Container */}
-//             <div className="relative h-72 md:h-80 w-full overflow-hidden">
-//                 <img
-//                     src={image}
-//                     alt={info?.name}
-//                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-//                 />
-
-//                 {/* Overlay Gradient */}
-//                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-//                 {/* Type Badge */}
-//                 {type && (
-//                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium shadow-sm">
-//                         {type}
-//                     </div>
-//                 )}
-
-//                 {/* Heart Button */}
-//                 <button
-//                     className="absolute top-4 right-4 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white group/heart"
-//                 >
-//                     <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
-//                 </button>
-
-//                 {/* Content Container */}
-//                 <div className="absolute -bottom-12 left-0 right-0 p-4">
-//                     {/* Price and Label Container - Moves up on hover */}
-//                     <div className="transform transition-all duration-300 group-hover:-translate-y-8">
-//                         <div className="text-white space-y-2">
-//                             <div className="flex items-center justify-between">
-//                                 <h3 className="text-lg font-semibold line-clamp-1">{label}</h3>
-//                                 <span className="text-xl font-bold">${price}</span>
-//                             </div>
-//                         </div>
-//                     </div>
-
-//                     {/* Contact Button - Appears from bottom on hover */}
-//                     <button
-//                         onClick={handleContactClick}
-//                         className="w-full mt-2 bg-white/90 backdrop-blur-sm text-gray-800 py-2 rounded-lg font-medium flex items-center justify-center gap-2 opacity-0 transform translate-y-full transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-white"
-//                     >
-//                         <Phone className="w-4 h-4" />
-//                         Contact Now
-//                     </button>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default HomePageCard;
-
-// import React from 'react';
-// import { Heart, Phone } from 'lucide-react';
-// import { motion } from 'framer-motion';
-
-// const HomePageCard = ({ info, image, price, label, type, navigation, contactList }) => {
-//     const handleContactClick = (e) => {
-//         e.stopPropagation();
-//         if (contactList?.[0]) {
-//             window.location.href = `tel:${contactList[0]}`;
-//         }
-//     };
-
-//     return (
-//         <motion.div
-//             className="group relative w-full rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-//             onClick={() => navigation && navigate(navigation)}
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             whileHover={{ scale: 1.02 }}
-//             transition={{ duration: 0.2 }}
-//         >
-//             {/* Image Container */}
-//             <div className="relative h-72 md:h-80 w-full overflow-hidden">
-//                 <motion.img
-//                     src={image}
-//                     alt={info?.name}
-//                     className="w-full h-full object-cover"
-//                     whileHover={{ scale: 1.05 }}
-//                     transition={{ duration: 0.4 }}
-//                 />
-
-//                 {/* Overlay Gradient */}
-//                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-//                 {/* Type Badge */}
-//                 {type && (
-//                     <motion.div
-//                         className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium shadow-sm"
-//                         initial={{ opacity: 0, x: -20 }}
-//                         animate={{ opacity: 1, x: 0 }}
-//                     >
-//                         {type}
-//                     </motion.div>
-//                 )}
-
-//                 {/* Heart Button */}
-//                 <motion.button
-//                     className="absolute top-4 right-4 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white group/heart"
-//                     whileHover={{ scale: 1.1 }}
-//                     whileTap={{ scale: 0.95 }}
-//                 >
-//                     <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
-//                 </motion.button>
-
-//                 {/* Content Container */}
-//                 <div className="absolute -bottom-12 left-0 right-0 p-4">
-//                     {/* Price and Label Container */}
-//                     <motion.div
-//                         className="text-white space-y-2"
-//                         initial={{ y: 0 }}
-//                         animate={{ y: 0 }}
-//                         whileHover={{ y: -48 }}
-//                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//                     >
-//                         <div className="flex items-center justify-between">
-//                             <h3 className="text-lg font-semibold line-clamp-1">{label}</h3>
-//                             <span className="text-xl font-bold">${price}</span>
-//                         </div>
-//                     </motion.div>
-
-//                     {/* Contact Button */}
-//                     <motion.button
-//                         onClick={handleContactClick}
-//                         className="w-full mt-2 bg-white/90 backdrop-blur-sm text-gray-800 py-2 rounded-lg font-medium flex items-center justify-center gap-2"
-//                         initial={{ y: 100, opacity: 0 }}
-//                         whileHover={{
-//                             y: -48,
-//                             opacity: 1,
-//                             transition: { type: "spring", stiffness: 300, damping: 30 }
-//                         }}
-//                         transition={{ duration: 0.3 }}
-//                     >
-//                         <Phone className="w-4 h-4" />
-//                         Contact Now
-//                     </motion.button>
-//                 </div>
-//             </div>
-//         </motion.div>
-//     );
-// };
-
-// export default HomePageCard;
-
-// import React from 'react';
-// import { Heart, Phone } from 'lucide-react';
-// import { motion, AnimatePresence } from 'framer-motion';
-
-// const HomePageCard = ({ info, image, price, label, type, navigation, contactList }) => {
-//     const handleContactClick = (e) => {
-//         e.stopPropagation();
-//         if (contactList?.[0]) {
-//             window.location.href = `tel:${contactList[0]}`;
-//         }
-//     };
-
-//     return (
-//         <div
-//             className="group relative w-full rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-//             onClick={() => navigation && navigate(navigation)}
-//         >
-//             {/* Image Container */}
-//             <div className="relative h-72 md:h-80 w-full overflow-hidden">
-//                 <motion.img
-//                     src={image}
-//                     alt={info?.name}
-//                     className="w-full h-full object-cover"
-//                     whileHover={{ scale: 1.05 }}
-//                     transition={{ duration: 0.4 }}
-//                 />
-
-//                 {/* Overlay Gradient */}
-//                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-//                 {/* Type Badge */}
-//                 <motion.div
-//                     className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium shadow-sm"
-//                     initial={{ opacity: 0, x: -20 }}
-//                     animate={{ opacity: 1, x: 0 }}
-//                 >
-//                     {type}
-//                 </motion.div>
-
-//                 {/* Heart Button */}
-//                 <motion.button
-//                     className="absolute top-4 right-4 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white group/heart"
-//                     whileHover={{ scale: 1.1 }}
-//                     whileTap={{ scale: 0.95 }}
-//                 >
-//                     <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
-//                 </motion.button>
-
-//                 {/* Content Container */}
-//                 <div className="absolute -bottom-12 left-0 right-0 p-4">
-//                     <motion.div
-//                         className="space-y-2"
-//                         initial="visible"
-//                         whileHover="hover"
-//                         animate="visible"
-//                         variants={{
-//                             visible: { y: 0 },
-//                             hover: { y: -48 }
-//                         }}
-//                     >
-//                         {/* Price and Label Container */}
-//                         <div className="text-white">
-//                             <div className="flex items-center justify-between">
-//                                 <h3 className="text-lg font-semibold line-clamp-1">{label}</h3>
-//                                 <span className="text-xl font-bold">${price}</span>
-//                             </div>
-//                         </div>
-
-//                         {/* Contact Button */}
-//                         <motion.button
-//                             onClick={handleContactClick}
-//                             className="w-full mt-4 bg-white/90 backdrop-blur-sm text-gray-800 py-2 rounded-lg font-medium flex items-center justify-center gap-2"
-//                             variants={{
-//                                 visible: { opacity: 0, y: 48 },
-//                                 hover: { opacity: 1, y: 0 }
-//                             }}
-//                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//                         >
-//                             <Phone className="w-4 h-4" />
-//                             Contact Now
-//                         </motion.button>
-//                     </motion.div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default HomePageCard;
-
+/* working */
 import React from 'react';
 import { Heart, Phone } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { base_url } from '../utils/base_url';
 
-const HomePageCard = ({ info, image, price, label, type, navigation, contactList }) => {
+
+const HomePageCard = ({ info, image, price, label, type, navigation, contactList, bedrooms, address, amenities , gallery }) => {
+    console.log(gallery)
+    const navigate = useNavigate()
     const handleContactClick = (e) => {
         e.stopPropagation();
         if (contactList?.[0]) {
@@ -381,24 +65,27 @@ const HomePageCard = ({ info, image, price, label, type, navigation, contactList
             onClick={() => navigation && navigate(navigation)}
         >
             {/* Image Container */}
-            <div className="relative h-72 md:h-80 w-full overflow-hidden">
+            <div className="relative h-72 md:h-96 w-full overflow-hidden">
                 <img
                     src={image}
                     alt={info?.name}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-125"
                 />
 
                 {/* Overlay Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Type Badge */}
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium shadow-sm">
+                <div className="absolute top-4 left-4 bg-white/50 backdrop-blur-xl px-4 py-[2px] rounded-full text-sm font-medium shadow-sm">
                     {type}
                 </div>
 
                 {/* Heart Button */}
-                <button
+                {/* <button
                     className="absolute top-4 right-4 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white group/heart transition-transform duration-300 hover:scale-110 active:scale-95"
+                > */}
+                <button
+                    className="absolute top-4 right-4 backdrop-blur-sm shadow-sm group/heart transition-transform duration-300 hover:scale-110 active:scale-95"
                 >
                     <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
                 </button>
@@ -409,9 +96,17 @@ const HomePageCard = ({ info, image, price, label, type, navigation, contactList
                         {/* Price and Label Container */}
                         <div className="text-white">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold line-clamp-1">{label}</h3>
-                                <span className="text-xl font-bold">${price}</span>
+                                <h3 className="text-md font-semibold line-clamp-1">{label}</h3>
+                                <span className="text-md font-semibold">{bedrooms} BHK</span>
                             </div>
+                            <div className='text-xs text-gray-500'>{address}</div>
+                           <div className='flex justify-between items-center'>
+                                <div className='text-md text-white'>{price} INR</div>
+                                <div className='flex gap-2 items-center'>
+                                    <h1 className=' text-xs'>Amenities</h1>
+                                    <div className='rounded-full bg-black text-[10px] px-2 py-[1px]'>{amenities}+</div>
+                                </div>
+                           </div>
                         </div>
 
                         {/* Contact Button */}
@@ -430,3 +125,148 @@ const HomePageCard = ({ info, image, price, label, type, navigation, contactList
 };
 
 export default HomePageCard;
+
+
+// import { useNavigate } from 'react-router-dom';
+// import { Heart, Phone } from 'lucide-react';
+
+// const HomePageCard = ({ info, image, price, label, type, navigation, contactList, bedrooms, address, amenities, gallery }) => {
+//     const navigate = useNavigate();
+//     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+//     const [prevMouseX, setPrevMouseX] = useState(null);
+
+//     // Get first 3 images from gallery or use default image
+//     const displayImages = gallery?.slice(0, 3) || [image];
+//     const remainingImages = Math.max(0, (gallery?.length || 0) - 3);
+
+//     const handleMouseMove = (e) => {
+//         const rect = e.currentTarget.getBoundingClientRect();
+//         const currentX = e.clientX - rect.left;
+
+//         if (prevMouseX !== null) {
+//             const movement = currentX - prevMouseX;
+
+//             // Increased sensitivity by reducing the movement threshold
+//             if (movement > 5 && currentImageIndex < displayImages.length - 1) {
+//                 setCurrentImageIndex(prev => prev + 1);
+//             } else if (movement < -5 && currentImageIndex > 0) {
+//                 setCurrentImageIndex(prev => prev - 1);
+//             }
+//         }
+
+//         setPrevMouseX(currentX);
+//     };
+
+//     const handleContactClick = (e) => {
+//         e.stopPropagation();
+//         if (contactList?.[0]) {
+//             window.location.href = `tel:${contactList[0]}`;
+//         }
+//     };
+
+//     return (
+//         <div
+//             className="group relative w-full rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+//             onClick={() => navigation && navigate(navigation)}
+//             onMouseEnter={() => setPrevMouseX(null)}
+//             onMouseLeave={() => {
+//                 setPrevMouseX(null);
+//                 setCurrentImageIndex(0);
+//             }}
+//             onMouseMove={handleMouseMove}
+//         >
+//             {/* Image Container */}
+//             <div className="relative h-72 md:h-96 w-full overflow-hidden">
+//                 {/* Images */}
+//                 <div className="relative w-full h-full">
+//                     {displayImages.map((img, index) => (
+//                         <img
+//                             key={index}
+//                             src={img}
+//                             alt={`${info?.name} ${index + 1}`}
+//                             className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${currentImageIndex === index ? 'opacity-100' : 'opacity-0'
+//                                 }`}
+//                         />
+//                     ))}
+
+//                     {/* Image Navigation Hint */}
+//                     <div className="absolute inset-0 flex opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+//                         <div className="w-1/2 bg-gradient-to-r from-black/20 to-transparent" />
+//                         <div className="w-1/2 bg-gradient-to-l from-black/20 to-transparent" />
+//                     </div>
+//                 </div>
+
+//                 {/* Last Image Overlay */}
+//                 {currentImageIndex === 2 && remainingImages > 0 && (
+//                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+//                         <p className="text-white text-xl font-semibold">
+//                             +{remainingImages} more images
+//                         </p>
+//                     </div>
+//                 )}
+
+//                 {/* Carousel Indicators */}
+//                 <div className="absolute bottom-20 left-0 right-0 flex justify-center gap-2 z-10">
+//                     {displayImages.map((_, index) => (
+//                         <div
+//                             key={index}
+//                             className={`w-2 h-2 rounded-full transition-all duration-300 ${currentImageIndex === index
+//                                     ? 'bg-white scale-125'
+//                                     : 'bg-white/50'
+//                                 }`}
+//                         />
+//                     ))}
+//                     {remainingImages > 0 && (
+//                         <div className="text-white text-xs bg-black/50 rounded-full px-2 py-1">
+//                             +{remainingImages}
+//                         </div>
+//                     )}
+//                 </div>
+
+//                 {/* Type Badge */}
+//                 <div className="absolute top-4 left-4 bg-white/50 backdrop-blur-xl px-4 py-[2px] rounded-full text-sm font-medium shadow-sm">
+//                     {type}
+//                 </div>
+
+//                 {/* Heart Button */}
+//                 <button className="absolute top-4 right-4 backdrop-blur-sm shadow-sm group/heart transition-transform duration-300 hover:scale-110 active:scale-95">
+//                     <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
+//                 </button>
+
+//                 {/* Content Container */}
+//                 <div className="absolute bottom-0 left-0 right-0 px-4 py-2 transform translate-y-12 group-hover:translate-y-0 transition-transform duration-300 bg-black/20 backdrop-blur-sm">
+//                     <div className="space-y-2">
+//                         {/* Price and Label Container */}
+//                         <div className="text-white">
+//                             <div className="flex items-center justify-between">
+//                                 <h3 className="text-md font-semibold line-clamp-1">{label}</h3>
+//                                 <span className="text-md font-semibold">{bedrooms} BHK</span>
+//                             </div>
+//                             <div className="text-xs text-gray-500">{address}</div>
+//                             <div className="flex justify-between items-center">
+//                                 <div className="text-md text-white">{price} INR</div>
+//                                 <div className="flex gap-2 items-center">
+//                                     <h1 className="text-xs">Amenities</h1>
+//                                     <div className="rounded-full bg-black text-[10px] px-2 py-[1px]">
+//                                         {amenities}+
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         </div>
+
+//                         {/* Contact Button */}
+//                         <button
+//                             onClick={handleContactClick}
+//                             className="w-full mt-4 bg-white/90 backdrop-blur-sm text-gray-800 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-300 hover:bg-white"
+//                         >
+//                             <Phone className="w-4 h-4" />
+//                             Contact Now
+//                         </button>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default HomePageCard;

@@ -949,24 +949,24 @@ const Signup = () => {
 
     // Image arrays for carousel
     const images1 = [
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F3.png&w=1920&q=75',
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F11.png&w=640&q=75',
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F5.png&w=640&q=75'
+        'https://avatars.mds.yandex.net/get-vertis-journal/4220003/DSC02013.JPG_1739263425314/1428x1428',
+        'https://avatars.mds.yandex.net/get-verba/216201/2a0000018e98b10886372eeff1e30b738e75/realty_large_1242',
+        'https://avatars.mds.yandex.net/get-verba/1672712/2a0000019353719d01da0a727ab4edacdc14/realty_large_1242'
     ];
     const images2 = [
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F3.png&w=1920&q=75',
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F5.png&w=640&q=75',
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F11.png&w=640&q=75'
+        'https://avatars.mds.yandex.net/get-verba/1672712/2a0000019353719d01da0a727ab4edacdc14/realty_large_1242',
+        'https://avatars.mds.yandex.net/get-verba/1540742/2a000001938ce76f87578a9a7f0caa9e70e6/realty_special_photo_3840',
+        'https://avatars.mds.yandex.net/get-vertis-journal/4465444/orig.webp_1739273748206/1098x1098'
     ];
     const images3 = [
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F11.png&w=640&q=75',
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F3.png&w=1920&q=75',
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F11.png&w=640&q=75'
+        'https://avatars.mds.yandex.net/get-vertis-journal/4220003/DSC02013.JPG_1739263425314/1428x1428',
+        'https://avatars.mds.yandex.net/get-vertis-journal/4465444/orig.webp_1739273748206/1098x1098',
+        'https://avatars.mds.yandex.net/get-verba/216201/2a0000018e98b10886372eeff1e30b738e75/realty_large_1242'
     ];
     const images4 = [
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F11.png&w=640&q=75',
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F11.png&w=640&q=75',
-        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F11.png&w=640&q=75'
+        'https://avatars.mds.yandex.net/get-verba/1672712/2a0000019353719d01da0a727ab4edacdc14/realty_large_1242',
+        'https://avatars.mds.yandex.net/get-vertis-journal/4465444/orig.webp_1739273748206/1098x1098',
+        'https://avatars.mds.yandex.net/get-verba/1540742/2a000001938ce76f87578a9a7f0caa9e70e6/realty_special_photo_3840'
     ];
 
     // Animation variants
@@ -1060,6 +1060,32 @@ const Signup = () => {
         }, []);
     // Your existing useEffect and handler functions...
 
+    useEffect(() => {
+        const carousels = document.querySelectorAll('.carousel-container');
+
+        const startAnimation = (element, direction) => {
+            element.style.animation = 'none';
+            element.offsetHeight; // Trigger reflow
+            element.style.animation = `scroll${direction} 15s linear infinite`;
+        };
+
+        carousels.forEach((carousel, index) => {
+            const direction = index % 2 === 0 ? 'Down' : 'Up';
+            startAnimation(carousel, direction);
+
+            // Reset animation when it reaches the end
+            carousel.addEventListener('animationend', () => {
+                startAnimation(carousel, direction);
+            });
+        });
+
+        return () => {
+            carousels.forEach(carousel => {
+                carousel.style.animation = 'none';
+            });
+        };
+    }, []);
+
     return (
         <motion.div
             initial="hidden"
@@ -1070,22 +1096,23 @@ const Signup = () => {
             {/* Left Section - Animated Image Carousels */}
             <motion.div
                 variants={carouselVariants}
-                className="min-w-[64vw] relative flex-1 flex gap-1 p-4 bg-gradient-to-b from-gray-50 via-white to-gray-50"
+                className="min-w-[52vw] relative flex-1 flex gap-1 bg-gradient-to-b from-gray-50 via-white to-gray-50"
             >
                 {[images1, images2, images3, images4].map((images, index) => (
                     <motion.div
                         key={index}
                         variants={itemVariants}
-                        className="carousel relative flex-1 overflow-hidden"
-                        style={{ minHeight: '200%' }}
+                        className="relative flex-1 overflow-hidden"
+                        style={{ height: '100%' }}
                         whileHover={{ scale: 1.02 }}
                         transition={{ type: "spring", stiffness: 300 }}
                     >
-                        <div className="flex flex-col gap-1">
-                            {[...images, ...images, ...images].map((src, imgIndex) => (
+                        <div className="carousel-container absolute w-full" style={{ willChange: 'transform' }}>
+                            {/* Duplicate the images array three times for smooth infinite scroll */}
+                            {[...images, ...images, ...images, ...images].map((src, imgIndex) => (
                                 <motion.div
                                     key={imgIndex}
-                                    className="w-full h-72 aspect-square rounded-lg overflow-hidden"
+                                    className="w-full h-auto bg-black aspect-square rounded-lg overflow-hidden mb-1"
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: "spring", stiffness: 300 }}
                                 >
@@ -1093,6 +1120,7 @@ const Signup = () => {
                                         src={src}
                                         alt={`carousel-${index}-${imgIndex}`}
                                         className="w-full h-full object-cover"
+                                        loading="lazy"
                                     />
                                 </motion.div>
                             ))}
@@ -1103,11 +1131,10 @@ const Signup = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-white/80" />
                 <div className="absolute right-0 inset-y-0 w-1/3 bg-gradient-to-r from-transparent to-white" />
             </motion.div>
-
             {/* Right Section - Enhanced Animated Form */}
             <motion.div
                 variants={itemVariants}
-                className="relative flex-1 flex items-center justify-center p-12 bg-white"
+                className="relative text-center flex-1 flex items-center justify-center p-12 bg-white"
             >
                 <motion.div
                     variants={containerVariants}
@@ -1119,18 +1146,21 @@ const Signup = () => {
                     >
                         <motion.div
                             className="flex items-center gap-2 mb-2"
-                            whileHover={{ scale: 1.02 }}
+                            whileHover={{ scale: 1 }}
                         >
                             <motion.span
-                                className="text-[#F9464C] text-7xl font-bold"
+                                className="text-[#F9464C] text-7xl flex justify-center font-bold w-full"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: 0.2 }}
                             >
                                 {/* PROFO */}
-                                <div>
-                                    <img src='./assets/profo-gif.gif' alt="PROFO" className='w-auto h-16' />
+                                <div className='bg-red text-center'>
+                                    <img src='assets/profo-black-2.gif' alt="PROFO" className='w-auto h-16' />
                                 </div>
+                                {/* <div className='bg-yellow-500'>
+                                    <img src='assets/profo-black.gif' alt="PROFO" className='w-auto h-28' />
+                                </div> */}
                             </motion.span>
                         </motion.div>
                         <motion.h1
@@ -1201,7 +1231,7 @@ const Signup = () => {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={showOtp ? handleVerifyOtp : handleSignup}
-                            className="w-full p-4 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            className="w-full p-4 rounded-full bg-transparent text-black border-2  hover:bg-[crimson] hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                         >
                             {showOtp ? 'Verify OTP' : 'Send OTP'}
                         </motion.button>

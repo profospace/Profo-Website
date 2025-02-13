@@ -1,17 +1,57 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import FlexibleLayout from '../components/FlexibleLayout';
-import AppDownloadBanner from '../components/AppDownloadBanner';
+import React, { useState, useRef, useEffect } from 'react';
+import { Camera } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getHomeFeed } from '../redux/features/HomeFeed/homeFeedSlice';
-import ImageCarousel from '../components/ImageCarousel';
-import axios from 'axios';
-import { applyFilter } from '../redux/features/Map/mapSlice';
+import { useLocale } from 'antd/es/locale';
+import { useDispatch } from 'react-redux';
 
-function Home() {
+const PropertyHeader = () => {
+    const [isTitleSticky, setIsTitleSticky] = useState(false);
+    const [isTabsSticky, setTabsSticky] = useState(false);
+    const [activeSection, setActiveSection] = useState('Overview');
+    const imagePreviewRef = useRef();
 
-    const { properties, projects, buildings } = useSelector(state => state.homeFeed)
-    
+    // Dummy data
+    const details = {
+        type: "Apartment",
+        name: "Luxury Sky Villa",
+        developmentStatus: "Ready to Move",
+        galleryList: [
+            "https://wityysaver.s3.ap-south-1.amazonaws.com/gallery_images/bb981916-4132-45f7-af50-8aa709ee702f_8a9f0d87880b970201880be07b6919a9_84580_163684_large.jpg",
+            // Add more dummy images if needed
+        ],
+    };
+
+    const navigationTabs = [
+        'Overview',
+        'Location',
+        'Amenities',
+        'Floor Plans',
+        'Payment Plan',
+        'Similar Properties'
+    ];
+
+    const hasBackground = details?.galleryList?.length > 0;
+
+    const scrollToSection = (section) => {
+        setActiveSection(section);
+    };
+
+    // Dummy components for demonstration
+    const ContactButton = () => (
+        <button className="px-6 py-2 bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
+            Contact Now
+        </button>
+    );
+
+    const ConsultationModal = () => (
+        <button className="px-6 py-2 bg-white text-black rounded-lg hover:bg-gray-100 transition-colors">
+            Book Consultation
+        </button>
+    );
+
+    const ImagePreview = React.forwardRef((props, ref) => (
+        <div ref={ref}></div>
+    ));
 
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
@@ -252,25 +292,94 @@ function Home() {
         );
     }, [dispatch]);
 
-
-
-
-
-
-
     return (
-        <div className=' px-8'>
-           
-            {/* carousal */}
-            {/* <div className='w-full h-full px-16 mt-6'>
-                <img src='https://avatars.mds.yandex.net/get-verba/216201/2a00000193abde37fd3f35e4c7b04d9b6efe/realty_large_1242' className='w-[100vw] max-h-[50vh]   object-[25% 85%]  rounded-3xl' />
-            </div> */}
-            <ImageCarousel />
+        <header className="relative w-full h-[580px] text-white">
+            {/* Background Image & Overlay */}
+            <div
+                className={`absolute inset-0 transition-all duration-300 ${hasBackground ? '' : ''}`}
+                style={{
+                    backgroundImage: `url(${details.galleryList[0]})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            >
+                {/* <div
+                    className={`absolute inset-0 transition-opacity duration-300 
+            ${hasBackground
+                            ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100'
+                            : 'bg-gradient-to-b from-transparent to-black opacity-50'
+                        }`}
+                /> */}
+            </div>
 
-            {/* Search Bar Section */}
-            <div className="w-full max-w-7xl my-2 mx-auto mt-12">
-                <div className="flex justify-center flex-wrap items-center gap-2">
-                    {/* dropdown */}
+            {/* Sticky Title */}
+            {isTitleSticky && (
+                <div className="fixed top-0 left-0 right-0 z-40 bg-blue-600 py-2 text-white">
+                    <div className="max-w-7xl mx-auto px-6 py-3">
+                        <h1 className="text-2xl font-semibold capitalize">
+                            {details.name}
+                        </h1>
+                    </div>
+                </div>
+            )}
+
+            {/* Main Content */}
+            <div className={`relative h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''}`}>
+                <div className={`flex items-center gap-2 mb-3 flex-wrap transition-opacity duration-300 
+          ${isTitleSticky ? 'opacity-0' : 'opacity-100'}`}>
+                    <h1 className="capitalize text-6xl font-bold">
+                        {details.type} '{details.name}'
+                    </h1>
+                </div>
+
+                <div className="flex gap-2 mb-4 flex-wrap">
+                    <span className="capitalize px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
+                        {details.developmentStatus}
+                    </span>
+                </div>
+
+                <div className="flex gap-4 mb-6 flex-wrap items-center">
+                    <ContactButton />
+                    <ConsultationModal />
+                </div>
+
+                <button
+                    className="flex items-center gap-2 px-4 py-2 mb-20 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
+                    onClick={() => { }}
+                >
+                    <Camera className="w-5 h-5" />
+                    <span>
+                        {details.galleryList.length} photos
+                    </span>
+                </button>
+
+                {/* <div
+                    className={`${isTabsSticky
+                        ? 'fixed top-[70px] left-0 z-30 bg-white/40 backdrop-blur-xl shadow-sm'
+                        : 'absolute bottom-0 left-0 bg-transparent bg-black/40 backdrop-blur-xl'} 
+          w-full transition-all duration-300`}
+                >
+                    <div className="max-w-7xl mx-auto text-sm">
+                        <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
+                            {navigationTabs.map((tab) => (
+                                <button
+                                    key={tab}
+                                    onClick={() => scrollToSection(tab)}
+                                    className={`whitespace-nowrap transition-colors relative 
+                    ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'} 
+                    ${activeSection === tab ? 'text-red-600 font-semibold' : ''}`}
+                                >
+                                    {tab}
+                                    {activeSection === tab && (
+                                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-full" />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div> */}
+                <div className="w-full max-w-7xl my-2 mx-auto mt-10  ">
+                <div className="flex justify-start flex-wrap items-center gap-2">
                     <div className="relative inline-block w-64">
                         <button
                             className="flex items-center justify-between w-full px-4 py-2 text-gray-700 bg-gray-50 rounded-md border border-gray-300"
@@ -319,7 +428,6 @@ function Home() {
                         )}
                     </div>
 
-                    {/* Buy / Rent Button filters */}
                     <div className="flex flex-wrap gap-2">
                         <button
                             className={`px-4 py-2 rounded-md border border-gray-300 ${selectedPurpose === 'buy' ? 'bg-black text-white' : 'text-gray-700 bg-gray-50'}`}
@@ -336,90 +444,17 @@ function Home() {
                     </div>
 
 
-                    {/* Show results button */}
                     <button onClick={handleShowResults} className="px-6 py-2 bg-[#F5CA20] hover:bg-yellow-500 text-gray-900 font-medium rounded-md transition-colors">
                         Show Results
                     </button>
-                    {/* Map toggle */}
                     <button className="px-4 py-2 text-white bg-[#2E7D32] rounded-md " onClick={() => handleFilter('getMapFeed')} >
                         On the map
                     </button>
                 </div>
             </div>
-
-
-            {/*  direct filters  */}
-            <div className='max-w-7xl mx-auto pt-2 mt-4 z-50'>
-                {/* Services Section */}
-                <div className="mb-8">
-                    {/* <div className="flex items-center gap-4 mb-4">
-                            <h2 className="text-xl px-9">Frequently searched</h2> */}
-                    {/* <div className="flex items-center gap-2">
-                          <span>Services</span>
-                          <span className="border border-black rounded px-2 py-1 text-sm">ПОД КЛЮЧ</span>
-                      </div>
-                      <span className="ml-auto">About the house</span>
-                      <span>Partner</span> */}
-                    {/* </div> */}
-
-                    {/* <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7"> */}
-                    <div className="flex justify-evenly">
-                        {services?.map((service) => (
-                            <div key={service.id}>
-                                <div
-
-                                    className="bg-[#F3F3F6] rounded-xl shadow-sm cursor-pointer w-32 h-auto overflow-hidden "
-                                    onClick={() => handleFilter(service?.type_name)}
-                                >
-                                    <img
-                                        src={service.icon}
-                                        alt={service.title}
-                                        className=" rounded scale-150 hover:scale-150 transition-all ease-in-out duration-150 cover "
-                                    />
-                                </div>
-                                <div className="text-xs flex justify-start mt-2 ">
-                                    <p className='font-semibold'>{service.title}</p>
-                                    {/* {service.count && (
-                                      <p className="text-gray-500">.{service.count}</p>
-                                  )} */}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
             </div>
+        </header>
+    );
+};
 
-            <FlexibleLayout
-                type="property"
-                headingText="New Properties"
-                details={properties}
-                salesAdsPosition="right"
-                type_name="property" // where to navigate
-            />
-            <FlexibleLayout
-                type="project"
-                headingText="New Projects"
-                details={projects}
-                salesAdsPosition="left"
-                type_name="project"
-            />
-            <FlexibleLayout
-                type="building"
-                headingText="New Buildings"
-                details={buildings}
-                salesAdsPosition="right"
-                type_name="building"
-            />
-
-
-
-            <div className='my-12'>
-                <AppDownloadBanner />
-            </div>
-
-        </div>
-    )
-}
-
-export default Home
+export default PropertyHeader;
