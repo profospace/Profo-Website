@@ -1156,7 +1156,8 @@ const Signup = () => {
                             >
                                 {/* PROFO */}
                                 <div className='bg-red text-center'>
-                                    <img src='assets/profo-black-2.gif' alt="PROFO" className='w-auto h-16' />
+                                    <img src='assets/output-onlinegiftool.gif' alt="PROFO" className='w-auto h-20' />
+                                    {/* <img src='assets/profo-black-2.gif' alt="PROFO" className='w-auto h-16' /> */}
                                 </div>
                                 {/* <div className='bg-yellow-500'>
                                     <img src='assets/profo-black.gif' alt="PROFO" className='w-auto h-28' />
