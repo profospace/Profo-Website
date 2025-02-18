@@ -65,11 +65,11 @@ const PropertyAminities = ({ amenities = [] }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
                 {features.map((feature, index) => (
                     <div key={index} className="flex items-center gap-4">
-                        <div className="w-8 h-8 flex items-center justify-center text-gray-600">
+                        <div className="w-8 h-8 flex items-center justify-center text-black">
                             {icons[feature.icon]}
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-gray-900 text-base font-medium">
+                            <span className="text-gray-900 text-base font-semibold">
                                 {feature.label}
                             </span>
                             {feature.value && (

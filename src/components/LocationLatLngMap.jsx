@@ -523,9 +523,9 @@ function LocationLatLngMap({ latitude, longitude }) {
 
     if (loadError) {
         return (
-            <div className="container bg-white p-4">
+            <div className="  container ">
                 <HeadingCommon title={"Where you'll be"} dual />
-                <div className="rounded-lg bg-red-50 p-4 text-red-800">
+                <div className="rounded-sm bg-red-50 p-4 text-red-800">
                     Error loading map. Please try again later.
                 </div>
             </div>
@@ -534,8 +534,8 @@ function LocationLatLngMap({ latitude, longitude }) {
 
     if (!isLoaded) {
         return (
-            <div className="container bg-white p-4">
-                <HeadingCommon title={"Where you'll be"} dual />
+            <div className=" container ">
+                <HeadingCommon title={"Where you'll be"} textColor='black' />
                 <div className="relative rounded-lg overflow-hidden bg-gray-100" style={mapContainerStyle}>
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -546,9 +546,9 @@ function LocationLatLngMap({ latitude, longitude }) {
     }
 
     return (
-        <div className="container bg-white">
-            <HeadingCommon title={"Where you'll be"} dual />
-            <div className="relative rounded-lg overflow-hidden">
+        <div className="  container ">
+            <HeadingCommon title={"Where you'll be"} textColor='black' />
+            <div className="relative rounded-sm overflow-hidden">
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
                     center={center}

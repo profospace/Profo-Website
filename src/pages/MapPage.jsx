@@ -29,17 +29,21 @@ const MapPage = ({
     const mapInstanceRef = useRef(null);
     const markersRef = useRef([]);
     const circleRef = useRef(null);
+    const userMarkerRef = useRef(null); // Reference for user location marker
+
 
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedItemType, setSelectedItemType] = useState(null);
     const [radius, setRadius] = useState(1);
+    const [currentLocation, setCurrentLocation] = useState(null); // State to track current location
+
 
     const [zoomIn, setZoomIn] = useState(0)
     const [zoomOut, setZoomout] = useState(0)
     const [isSatellite, setIsSatellite] = useState(false);
-    
+
 
     /* by default filter hide */
     useEffect(
@@ -239,7 +243,7 @@ const MapPage = ({
         const clusters = createClusters(allItems, clusterDistance);
 
         const createMarker = (item, isMedian = false, isClusterMedian = false) => {
-            if (item?.name === 'Anurag Blown up the DB Update 2'){
+            if (item?.name === 'Anurag Blown up the DB Update 2') {
                 console.log("item", item)
 
             }
@@ -271,7 +275,7 @@ const MapPage = ({
                     return price.toLocaleString('en-IN');
                 }
             };
-            
+
 
             const getMarkerColor = (itemType) => {
                 switch (itemType) {
@@ -431,6 +435,190 @@ const MapPage = ({
         };
     }, [properties, projects, buildings]);
 
+
+    // // Initialize map with user's location
+    // useEffect(() => {
+    //     if (!mapRef.current || mapInstanceRef.current) return;
+
+    //     // Get user's current location
+    //     navigator.geolocation.getCurrentPosition(
+    //         (position) => {
+    //             const userLocation = {
+    //                 lat: position.coords.latitude,
+    //                 lng: position.coords.longitude
+    //             };
+    //             setCurrentLocation(userLocation);
+    //             setCenter(userLocation); // Set initial center to user's location
+    //         },
+    //         (error) => {
+    //             console.error('Geolocation error:', error);
+    //             // Fallback to default center if geolocation fails
+    //             setCurrentLocation(center);
+    //         }
+    //     );
+
+    //     // Initialize map with current center
+    //     const mapOptions = {
+    //         center: center,
+    //         zoom: 12,
+    //         mapTypeId: isSatellite ? 'satellite' : 'roadmap',
+    //         styles: isSatellite ? [] : [
+    //             // ... (existing styles remain the same)
+    //         ],
+    //         disableDefaultUI: true,
+    //         zoomControl: false,
+    //         streetViewControl: false,
+    //         mapTypeControl: false
+    //     };
+    //     mapInstanceRef.current = new google.maps.Map(mapRef.current, mapOptions);
+    // }, [center, isSatellite]);
+
+useEffect(() => {
+        if (!mapRef.current || mapInstanceRef.current) return;
+        const mapOptions = {
+            center: center,
+            zoom: 12,
+            mapTypeId: isSatellite ? 'satellite' : 'roadmap',
+            styles: isSatellite ? [] : [
+                {
+                    featureType: 'all',
+                    elementType: 'geometry',
+                    stylers: [{ saturation: -80 }]
+                },
+                {
+                    featureType: 'poi.park',
+                    elementType: 'geometry.fill',
+                    stylers: [
+                        { color: '#8aba6b' },
+                        { saturation: 40 },
+                        { lightness: 20 }
+                    ]
+                },
+                {
+                    featureType: 'water',
+                    elementType: 'geometry.fill',
+                    stylers: [{ color: '#a5d6f7' }]
+                },
+                {
+                    featureType: 'road',
+                    elementType: 'geometry.fill',
+                    stylers: [{ color: '#ffffff' }]
+                }
+            ],
+            disableDefaultUI: true,
+            zoomControl: false,
+            streetViewControl: false,
+            mapTypeControl: false
+        };
+        mapInstanceRef.current = new google.maps.Map(mapRef.current, mapOptions);
+    }, [center, isSatellite]);
+
+    
+    // Update user location marker and radius circle
+    useEffect(() => {
+        if (!mapInstanceRef.current || !currentLocation) return;
+
+        // Clear existing user marker and circle
+        if (userMarkerRef.current) {
+            userMarkerRef.current.setMap(null);
+        }
+        if (circleRef.current) {
+            circleRef.current.setMap(null);
+        }
+
+        // Create user location marker with custom icon
+        const userMarkerIcon = {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: '#4285F4',
+            fillOpacity: 1,
+            strokeColor: '#FFFFFF',
+            strokeWeight: 2,
+            scale: 8
+        };
+
+        userMarkerRef.current = new google.maps.Marker({
+            position: currentLocation,
+            map: mapInstanceRef.current,
+            icon: userMarkerIcon,
+            zIndex: 999 // Ensure user marker stays on top
+        });
+
+        // Create 1km radius circle
+        circleRef.current = new google.maps.Circle({
+            map: mapInstanceRef.current,
+            center: currentLocation,
+            radius: 1000, // 1km in meters
+            fillColor: '#4285F4',
+            fillOpacity: 0.1,
+            strokeColor: '#4285F4',
+            strokeOpacity: 0.8,
+            strokeWeight: 2
+        });
+
+    }, [currentLocation, mapInstanceRef.current]);
+
+    // const handleSearch = async () => {
+    //     if (!searchQuery.trim() || !mapInstanceRef.current) return;
+
+    //     setIsSearching(true);
+    //     const geocoder = new google.maps.Geocoder();
+
+    //     try {
+    //         const { results } = await new Promise((resolve, reject) => {
+    //             geocoder.geocode(
+    //                 {
+    //                     address: searchQuery,
+    //                     region: 'IN' // Set region to India
+    //                 },
+    //                 (results, status) => {
+    //                     if (status === 'OK' && results && results.length > 0) {
+    //                         resolve({ results });
+    //                     } else {
+    //                         reject(new Error(`Geocoding failed: ${status}`));
+    //                     }
+    //                 }
+    //             );
+    //         });
+
+
+    //         if (results && results.length > 0) {
+    //             const location = results[0].geometry.location;
+    //             const newCenter = {
+    //                 lat: location.lat(),
+    //                 lng: location.lng()
+    //             };
+
+    //             // Update center state
+    //             setCenter(newCenter);
+
+    //             // Update map view
+    //             if (mapInstanceRef.current) {
+    //                 // Smooth pan to new location
+    //                 mapInstanceRef.current.panTo(newCenter);
+
+    //                 // Zoom in to show the area better
+    //                 mapInstanceRef.current.setZoom(15);
+
+    //                 // Update the search circle
+    //                 if (circleRef.current) {
+    //                     circleRef.current.setCenter(newCenter);
+    //                 }
+    //             }
+    //         } else {
+    //             console.warn('No results found for the search query');
+    //             // Optionally show a user-friendly message
+    //             alert('No location found. Please try a different search term.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Search error:', error);
+    //         // Optionally show a user-friendly error message
+    //         alert('Unable to find the location. Please try again.');
+    //     } finally {
+    //         setIsSearching(false);
+    //     }
+    // };
+
+    // Modified search handler to update current location
     const handleSearch = async () => {
         if (!searchQuery.trim() || !mapInstanceRef.current) return;
 
@@ -442,7 +630,7 @@ const MapPage = ({
                 geocoder.geocode(
                     {
                         address: searchQuery,
-                        region: 'IN' // Set region to India
+                        region: 'IN'
                     },
                     (results, status) => {
                         if (status === 'OK' && results && results.length > 0) {
@@ -454,44 +642,49 @@ const MapPage = ({
                 );
             });
 
-
             if (results && results.length > 0) {
                 const location = results[0].geometry.location;
-                const newCenter = {
+                const newLocation = {
                     lat: location.lat(),
                     lng: location.lng()
                 };
 
-                // Update center state
-                setCenter(newCenter);
+                setCurrentLocation(newLocation); // Update current location
+                setCenter(newLocation);
 
-                // Update map view
                 if (mapInstanceRef.current) {
-                    // Smooth pan to new location
-                    mapInstanceRef.current.panTo(newCenter);
-
-                    // Zoom in to show the area better
-                    mapInstanceRef.current.setZoom(15);
-
-                    // Update the search circle
-                    if (circleRef.current) {
-                        circleRef.current.setCenter(newCenter);
-                    }
+                    mapInstanceRef.current.panTo(newLocation);
+                    mapInstanceRef.current.setZoom(14);
                 }
             } else {
-                console.warn('No results found for the search query');
-                // Optionally show a user-friendly message
                 alert('No location found. Please try a different search term.');
             }
         } catch (error) {
             console.error('Search error:', error);
-            // Optionally show a user-friendly error message
             alert('Unable to find the location. Please try again.');
         } finally {
             setIsSearching(false);
         }
     };
 
+
+    // const handleLocateMe = () => {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(
+    //             (position) => {
+    //                 const location = {
+    //                     lat: position.coords.latitude,
+    //                     lng: position.coords.longitude
+    //                 };
+    //                 setCenter(location);
+    //                 mapInstanceRef.current?.panTo(location);
+    //                 mapInstanceRef.current?.setZoom(15);
+    //             }
+    //         );
+    //     }
+    // };
+
+    // Modified locate me handler
     const handleLocateMe = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -500,9 +693,10 @@ const MapPage = ({
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
+                    setCurrentLocation(location); // Update current location
                     setCenter(location);
                     mapInstanceRef.current?.panTo(location);
-                    mapInstanceRef.current?.setZoom(15);
+                    mapInstanceRef.current?.setZoom(14);
                 }
             );
         }
@@ -582,7 +776,7 @@ const MapPage = ({
                             <LocateFixed size={20} />
                         </button>
 
-                         <button
+                        <button
                             onClick={() => setIsSatellite(!isSatellite)}
                             className={`p-2 hover:bg-gray-100 rounded-b-lg ${isSatellite ? 'bg-blue-50' : ''}`}
                             title={isSatellite ? 'Switch to street view' : 'Switch to satellite view'}

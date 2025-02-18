@@ -2147,31 +2147,42 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import HeadingCommon from './HeadingCommon';
 
-const BuildingViewer = ({id , viewer}) => {
+const BuildingViewer = ({ id,config ,viewer }) => {
     const [hoveredBuilding, setHoveredBuilding] = useState(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const popupRef = useRef(null);
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
     const containerRef = useRef(null);
-    const [config, setConfig] = useState([]);
+    // const [config, setConfig] = useState([]);
 
     
-    useEffect(() => {
-        const fetchConfig = async () => {
-            try {
-                const response = await fetch(`https://propertify.onrender.com/api/export-config/${id}`);
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
-                }
-                const data = await response.json();
-                setConfig(data?.data);
-            } catch (error) {
-                console.log("Error fetching configuration:", error);
-            }
-        };
-        fetchConfig();
-    }, [id]);
+    // useEffect(() => {
+    //     const fetchConfig = async () => {
+    //         try {
+    //             const response = await fetch(`https://propertify.onrender.com/api/export-config/${id}`);
+    //             console.log("response", response?.status)
+    //             console.log("BuildingViewer", response)
+    //             if(response?.status != 404){
+    //                 setConfigAvailable(true)
+    //                 const data = await response.json();
+    //                 alert("Data")
+    //                 console.log(data?.status)
+    //                 setConfig(data?.data);
+    //             }else{
+
+    //                 setConfigAvailable(false)
+    //             }
+    //             // if (!response.ok) {
+    //                 //     throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    //                 // }
+    //             } catch (error) {
+    //             setConfigAvailable(false)
+    //             console.log("Error fetching configuration:", error);
+    //         }
+    //     };
+    //     fetchConfig();
+    // }, [id]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -2286,23 +2297,26 @@ const BuildingViewer = ({id , viewer}) => {
         });
     };
 
-    if (!config || !config.image) {
-        return (
-            <div className="p-8 text-center text-gray-500">
-                No building configuration available
-            </div>
-        );
-    }
+    // if (!config || !config.image) {
+    //     return (
+    //         <div className="p-8 text-center text-gray-500">
+    //             No building configuration available
+    //         </div>
+    //     );
+    // }
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen);
     };
 
+    
+
     return (
-        <div className={`container ${isFullscreen ? 'fixed inset-0 z-50 bg-black' : 'w-full'}`} ref={containerRef}>
+        <div className={`${isFullscreen ? 'fixed inset-0 z-50 bg-black' : 'w-full'}`} ref={containerRef}>
             {!isFullscreen && (
-                <div className="mb-1">
-                    <h1 className="text-3xl font-semibold text-balck mb-2">{viewer} View</h1>
+                <div className="">
+                    {/* <h1 className="text-3xl font-semibold text-balck mb-2">{viewer} 3D View</h1> */}
+                    <p className='pl-[2.5rem]'><HeadingCommon textColor="black" title={`${viewer} 3D View`} /></p>
                     <p className="text-gray-600">
                         {/* <HeadingCommon title='3D View' textColor="#000" /> */}
                         {/* Last updated: {formatDate(config.exportedAt)} */}
@@ -2311,14 +2325,15 @@ const BuildingViewer = ({id , viewer}) => {
                         Total Areas: {config.buildings?.length || 0}
                     </div> */}
                 </div>
+
             )}
 
             <div className={`relative ${isFullscreen ? 'h-screen' : ''}`}>
                 <img
                     ref={imageRef}
-                    src={config.image.src}
+                    src={config?.image?.src}
                     alt="Property Map"
-                    className={`rounded-lg ${isFullscreen ? 'h-screen w-screen object-contain' : 'w-full h-full object-contain'}`}
+                    className={` ${isFullscreen ? 'h-screen w-screen object-contain' : 'w-full h-full object-contain'}`}
                 />
                 <canvas
                     ref={canvasRef}

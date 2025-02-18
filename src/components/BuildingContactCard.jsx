@@ -255,7 +255,7 @@ const PhonePopup = ({ phone, isOpen, onClose }) => {
 
 const BuildingContactCard = ({ info }) => {
     const [showPhonePopup, setShowPhonePopup] = useState(false);
-
+    console.log("info", info)
     const calculateStats = () => {
         const buildingCount = info?.buildings?.length || 0;
         const propertyCount = info?.properties?.length || 0;
@@ -291,13 +291,47 @@ const BuildingContactCard = ({ info }) => {
     };
 
 
+    // Extract connected properties
+    const connectedProperties = info?.connectedProperties || [];
+    const isSingleProperty = connectedProperties.length === 1;
+
+    // Calculate values or ranges
+    let areaDisplay = '';
+    let priceDisplay = '';
+
+    if (isSingleProperty) {
+        // Single property - show direct values
+        const property = connectedProperties[0];
+        areaDisplay = `${parseFloat(property.area || 0).toFixed(1)} sqft`;
+        priceDisplay = `${new Intl.NumberFormat('en-US').format(property.price || 0)} INR`;
+    } else if (connectedProperties.length > 1) {
+        // Multiple properties - show ranges
+        const areas = connectedProperties.map(prop => parseFloat(prop.area) || 0);
+        const prices = connectedProperties.map(prop => prop.price || 0);
+
+        const minArea = Math.min(...areas);
+        const maxArea = Math.max(...areas);
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+
+        areaDisplay = `from ${minArea.toFixed(1)} to ${maxArea.toFixed(1)} sqft`;
+        priceDisplay = `from ${new Intl.NumberFormat('en-US').format(minPrice)} to ${new Intl.NumberFormat('en-US').format(maxPrice)} INR`;
+    }
+
+
+
+
+
+
+
+
 
 
     return (
-        <div className="max-w-xl w-full bg-white rounded-lg relative container">
+        <div className="max-w-3xl w-full  rounded-lg relative container2">
             <div className="">
-                {hasValidData() && (<div className="bg-gray-50 rounded-lg px-6 py-4">
-                    <div className="flex justify-between items-center mb-2">
+                {hasValidData() && (<div className="bg-[#F5F5F5] rounded-lg px-6 py-4">
+                    <div className="flex justify-between items-center mb-1">
                         <div className="flex items-center gap-2">
                             <div className=''>
                                 {
@@ -321,18 +355,60 @@ const BuildingContactCard = ({ info }) => {
                         }
                     </div>
 
-                    <div className="grid grid-cols-2 gap-6 mb-4">
+                    {/* <div className="grid grid-cols-2 gap-6 mb-4">
                         {info?.experience && <div>
                             <div className="font-semibold mb-1">{info?.experience}+ years</div>
                             <div className="text-gray-600 text-sm">of experience in construction</div>
                         </div>}
-                        {info?.operatingLocations?.length > 0   && <div>
+                        {info?.operatingLocations?.length > 0 && <div>
                             <div className="font-semibold mb-1">{info?.operatingLocations?.length || 0}</div>
                             <div className="text-gray-600 text-sm">operating locations</div>
                         </div>}
+                    </div> */}
+
+                    {/*  some connected properties info   */}
+                    <div className="flex gap-6 mb-4">
+                        <div className='flex items-center gap-1'>
+                            <div className="font-semibold text-md">{info?.connectedProperties?.length}</div>
+                            <div className="text-gray-600 text-md">Property Available</div>
+                        </div>
+                        <div className='flex items-center gap-1'>
+                            <div className="font-semibold text-md">{info?.totalFloors}</div>
+                            <div className="text-gray-600 text-md">Floor Available</div>
+                        </div>
+
+
                     </div>
 
-                    <div className="grid grid-cols-2 gap-6 mb-2">
+
+                    {/* more */}
+                    <div className="max-w-md space-y-4 mb-4">
+                        <div className="space-y-4">
+                            <div className="flex">
+                                <div className="w-32">
+                                    <h2 className="text-gray-500 font-normal">Apartments</h2>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-black font-normal">{areaDisplay}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex">
+                                <div className="w-32">
+                                    <h2 className="text-gray-500 font-normal">Price</h2>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-black font-normal">{priceDisplay}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    {/* <div className="grid grid-cols-2 gap-6 mb-2">
                         {stats?.completedCount?.length && <div>
                             <div className="font-semibold mb-1">
                                 {stats?.completedCount} projects completed
@@ -346,19 +422,19 @@ const BuildingContactCard = ({ info }) => {
                             </div>
                             <div className="text-gray-600 text-sm">Under construction</div>
                         </div>}
-                    </div>
+                    </div> */}
 
                     {
                         info?.contactNumber && <div>
                             <button
                                 onClick={() => setShowPhonePopup(true)}
-                                className="w-full bg-[#FED42B] text-black rounded-lg py-4 mb-2 hover:bg-gray-900 hover:text-white transition-colors"
+                                className="w-full bg-[#FED42B] text-black rounded-xl py-3 mb-2 hover:bg-gray-900 hover:text-white transition-colors"
                             >
                                 Show phone
                             </button>
                             <button
                                 onClick={handleCallClick}
-                                className="w-full bg-white border border-gray-200 rounded-lg py-4 hover:bg-gray-50 transition-colors"
+                                className="w-full bg-white border border-gray-200 rounded-xl py-3 hover:bg-gray-50 transition-colors"
                             >
                                 Call me
                             </button>

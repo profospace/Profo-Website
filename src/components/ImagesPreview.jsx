@@ -1,144 +1,6 @@
-// import React, { useState } from 'react';
-// import { X, ChevronLeft, ChevronRight, Camera } from 'lucide-react';
-
-// const ImagePreview = ({ images }) => {
-//     const [isOpen, setIsOpen] = useState(false);
-//     const [currentIndex, setCurrentIndex] = useState(0);
-
-//     const openGallery = () => {
-//         setIsOpen(true);
-//     };
-
-//     const closeGallery = () => {
-//         setIsOpen(false);
-//     };
-
-//     const navigateImage = (direction) => {
-//         const newIndex = (currentIndex + direction + images.length) % images.length;
-//         setCurrentIndex(newIndex);
-//     };
-
-//     if (!images || images.length === 0) return null;
-
-//     return (
-//         <>
-//             <button
-//                 onClick={openGallery}
-//                 className="flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
-//             >
-//                 <Camera className="w-5 h-5" />
-//                 <span>{images.length} photos</span>
-//             </button>
-
-//             {isOpen && (
-//                 <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center">
-//                     <button
-//                         onClick={closeGallery}
-//                         className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-60"
-//                     >
-//                         <X size={32} />
-//                     </button>
-
-//                     <button
-//                         onClick={() => navigateImage(-1)}
-//                         className="absolute left-4 text-white hover:text-gray-300 transition-colors z-60"
-//                     >
-//                         <ChevronLeft size={48} />
-//                     </button>
-
-//                     <button
-//                         onClick={() => navigateImage(1)}
-//                         className="absolute right-4 text-white hover:text-gray-300 transition-colors z-60"
-//                     >
-//                         <ChevronRight size={48} />
-//                     </button>
-
-//                     <img
-//                         src={images[currentIndex]}
-//                         alt={`Gallery image ${currentIndex + 1}`}
-//                         className="max-w-[95%] max-h-[95%] object-contain"
-//                     />
-
-//                     <div className="absolute bottom-4 text-white">
-//                         {currentIndex + 1} / {images.length}
-//                     </div>
-//                 </div>
-//             )}
-//         </>
-//     );
-// };
-
-// export default ImagePreview;
-
-// import React, { useState, forwardRef, useImperativeHandle } from 'react';
-// import { X, ChevronLeft, ChevronRight, Camera } from 'lucide-react';
-
-// const ImagePreview = forwardRef(({ images }, ref) => {
-//     const [isOpen, setIsOpen] = useState(false);
-//     const [currentIndex, setCurrentIndex] = useState(0);
-
-//     useImperativeHandle(ref, () => ({
-//         openGallery: () => {
-//             setIsOpen(true);
-//         }
-//     }));
-
-//     const closeGallery = () => {
-//         setIsOpen(false);
-//     };
-
-//     const navigateImage = (direction) => {
-//         const newIndex = (currentIndex + direction + images.length) % images.length;
-//         setCurrentIndex(newIndex);
-//     };
-
-//     if (!images || images.length === 0) return null;
-
-//     return (
-//         <>
-//             {isOpen && (
-//                 <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center">
-//                     <button
-//                         onClick={closeGallery}
-//                         className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-60"
-//                     >
-//                         <X size={32} />
-//                     </button>
-
-//                     <button
-//                         onClick={() => navigateImage(-1)}
-//                         className="absolute left-4 text-white hover:text-gray-300 transition-colors z-60"
-//                     >
-//                         <ChevronLeft size={48} />
-//                     </button>
-
-//                     <button
-//                         onClick={() => navigateImage(1)}
-//                         className="absolute right-4 text-white hover:text-gray-300 transition-colors z-60"
-//                     >
-//                         <ChevronRight size={48} />
-//                     </button>
-
-//                     <img
-//                         src={images[currentIndex]}
-//                         alt={`Gallery image ${currentIndex + 1}`}
-//                         className="max-w-[95%] max-h-[95%] object-contain"
-//                     />
-
-//                     <div className="absolute bottom-4 text-white">
-//                         {currentIndex + 1} / {images.length}
-//                     </div>
-//                 </div>
-//             )}
-//         </>
-//     );
-// });
-
-// export default ImagePreview;
-
-
 // import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 // import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+// import { motion, AnimatePresence } from 'framer-motion';
 
 // const ImagePreview = forwardRef(({ images }, ref) => {
 //     const [isOpen, setIsOpen] = useState(false);
@@ -165,14 +27,10 @@
 
 //             switch (e.key) {
 //                 case 'ArrowRight':
-//                     navigateImage(1);
-//                     break;
-//                 case 'ArrowLeft':
-//                     navigateImage(-1);
-//                     break;
 //                 case 'ArrowUp':
 //                     navigateImage(1);
 //                     break;
+//                 case 'ArrowLeft':
 //                 case 'ArrowDown':
 //                     navigateImage(-1);
 //                     break;
@@ -191,12 +49,17 @@
 //     if (!images || images.length === 0) return null;
 
 //     return (
-//         <>
+//         <AnimatePresence>
 //             {isOpen && (
-//                 <div
+//                 <motion.div
 //                     className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center"
+//                     initial={{ opacity: 0, scale: 0.8 }}
+//                     animate={{ opacity: 1, scale: 1 }}
+//                     exit={{ opacity: 0, scale: 0.8 }}
+//                     transition={{ duration: 0.3, ease: 'easeInOut' }}
 //                     onClick={closeGallery}
 //                 >
+//                     {/* Close Button */}
 //                     <button
 //                         onClick={(e) => {
 //                             e.stopPropagation();
@@ -207,6 +70,7 @@
 //                         <X size={32} />
 //                     </button>
 
+//                     {/* Left Navigation */}
 //                     <button
 //                         onClick={(e) => {
 //                             e.stopPropagation();
@@ -217,6 +81,7 @@
 //                         <ChevronLeft size={48} />
 //                     </button>
 
+//                     {/* Right Navigation */}
 //                     <button
 //                         onClick={(e) => {
 //                             e.stopPropagation();
@@ -227,23 +92,33 @@
 //                         <ChevronRight size={48} />
 //                     </button>
 
-//                     <img
+//                     {/* Image Preview with Animation */}
+//                     <motion.img
+//                         key={currentIndex}
 //                         src={images[currentIndex]}
 //                         alt={`Gallery image ${currentIndex + 1}`}
 //                         className="max-w-[95%] max-h-[95%] object-contain"
+//                         initial={{ opacity: 0, scale: 0.9 }}
+//                         animate={{ opacity: 1, scale: 1 }}
+//                         exit={{ opacity: 0, scale: 0.9 }}
+//                         transition={{ duration: 0.3, ease: 'easeInOut' }}
 //                         onClick={(e) => e.stopPropagation()}
 //                     />
 
+//                     {/* Image Counter */}
 //                     <div className="absolute bottom-4 text-white">
 //                         {currentIndex + 1} / {images.length}
 //                     </div>
-//                 </div>
+//                 </motion.div>
 //             )}
-//         </>
+//         </AnimatePresence>
 //     );
 // });
 
 // export default ImagePreview;
+
+
+
 
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -258,6 +133,35 @@ const ImagePreview = forwardRef(({ images }, ref) => {
             setIsOpen(true);
         }
     }));
+
+    // Add scroll lock effect
+    useEffect(() => {
+        if (isOpen) {
+            // Save current scroll position
+            const scrollPosition = window.scrollY;
+            // Add styles to prevent scrolling
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollPosition}px`;
+            document.body.style.width = '100%';
+        } else {
+            // Restore scrolling and position
+            const scrollPosition = document.body.style.top;
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            window.scrollTo(0, parseInt(scrollPosition || '0') * -1);
+        }
+
+        // Cleanup function
+        return () => {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+        };
+    }, [isOpen]);
 
     const closeGallery = () => {
         setIsOpen(false);

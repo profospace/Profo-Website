@@ -330,7 +330,7 @@
 //                                 className="p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors"
 //                                 onClick={() => setSelectedType(selectedType === type ? null : type)}
 //                             >
-                        
+
 //                     {/* <div className="flex items-center justify-between">
 //                                     <div className="flex items-center gap-2">
 //                                         <Icon className="w-5 h-5" />
@@ -607,9 +607,9 @@
 //                                 </div>
 //                             </div>
 //                         </div>
-                        
 
-                                                
+
+
 
 
 //                     );
@@ -944,7 +944,7 @@ const PropertyListing = () => {
 
     // PropertyCard component remains the same
     const PropertyCard = ({ property }) => (
-        <div className="bg-gray-50 container rounded-lg p-4 cursor-pointer" onClick={() => navigate(`/api/details/${property?.post_id}`)}>
+        <div className=" rounded-lg p-4 cursor-pointer" onClick={() => navigate(`/api/details/${property?.post_id}`)}>
             <div className="flex gap-4">
                 <div className="w-32 h-32 flex-shrink-0">
                     <img
@@ -956,12 +956,11 @@ const PropertyListing = () => {
                 <div className="flex-1 min-w-0">
                     <div className='flex justify-between items-center'>
                         <h4 className="font-semibold text-lg truncate">{property.post_title}</h4>
-                        <div className='flex items-center gap-2'>
-                            <p className='px-2 py-[0.5px] text-sm rounded bg-gray-200'>{property.floor + 'th floor'}</p>
-                            <div className="text-sm bg-black rounded text-white">
-                                <span className="px-2 py-1">
+                        <div className='flex items-center gap-2'>                            <div className="text-sm bg-[#1E88E5] rounded text-white px-3 py-1">
+                                    {property.floor + 'th floor'}
+                            </div>
+                            <div className="text-sm bg-[#1E88E5] rounded text-white px-3 py-1">
                                     {property.purpose}
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -1017,19 +1016,19 @@ const PropertyListing = () => {
     );
 
     return (
-        <div className="max-w-4xl mx-auto p-4">
+        <div className="max-w-4xl mx-auto container">
             <div className="mb-6">
-                <h2 className="text-3xl font-bold">{buildingData.name}</h2>
-                <p className="text-gray-600">{buildingData.description}</p>
+                <h2 className="text-3xl font-bold">Property Present In {buildingData.name}</h2>
+                {/* <p className="text-gray-600">{buildingData.description}</p> */}
                 <div className="mt-2 flex flex-wrap gap-4 text-sm">
                     <div className="flex items-center gap-1">
-                        <span className="font-semibold">Total Properties:</span> {buildingData.totalProperties}
+                        <span className="font-semibold text-gray-600">Total Properties:</span> {buildingData.totalProperties}
                     </div>
                     <div className="flex items-center gap-1">
-                        <span className="font-semibold">Available:</span> {buildingData.freeProperties}
+                        <span className="font-semibold text-gray-600">Available:</span> {buildingData.freeProperties}
                     </div>
                     <div className="flex items-center gap-1">
-                        <span className="font-semibold">Total Floors:</span> {buildingData.totalFloors}
+                        <span className="font-semibold text-gray-600">Total Floors:</span> {buildingData.totalFloors}
                     </div>
                 </div>
             </div>
@@ -1044,29 +1043,29 @@ const PropertyListing = () => {
                     const isOpen = openTypes.has(type);
 
                     return (
-                        <div key={type} className="bg-white rounded-lg overflow-hidden">
+                        <div key={type} className=" rounded-lg overflow-hidden">
                             <div
-                                className="p-4 border-b border-gray-200 cursor-pointer bg-gray-900 text-white transition-colors duration-200"
+                                className="accordianGradient p-4 border-b border-gray-200 bg-white cursor-pointer transition-colors duration-200"
                                 onClick={() => toggleAccordion(type)}
                             >
-                                <div className="grid grid-cols-3 items-center text-white">
+                                <div className="grid grid-cols-3 items-center text-black">
                                     <div className="flex items-center gap-2">
                                         <Icon className="w-5 h-5" />
                                         <h3 className="text-lg font-semibold">{displayType}</h3>
                                     </div>
                                     {startingPrice > 0 && (
-                                        <div className="flex items-center text-white justify-start gap-0">
-                                            <span className='text-gray-800 font-semibold text-white'>from </span>
+                                        <div className="flex items-center text-black justify-start gap-0">
+                                            <span className='text-gray-800 font-semibold text-black'>from </span>
                                             <IndianRupee className="w-4 h-4 font-bold" />
                                             <span className="font-semibold">{formatPrice(startingPrice)}</span>
                                         </div>
                                     )}
                                     <div className="flex items-center justify-end gap-4">
-                                        <span className="text-white px-3 py-1 rounded-full text-md">
+                                        <span className="text-black px-3 py-1 rounded-full text-md">
                                             {properties.length} Available
                                         </span>
                                         <div className={`transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
-                                            <ChevronDown className="w-7 h-7 text-white animate-bounce ease-linear " style={{ animationDuration: '2s' }} />
+                                            <ChevronDown className="w-7 h-7 text-black animate-bounce ease-linear " style={{ animationDuration: '2s' }} />
                                         </div>
                                     </div>
                                 </div>
@@ -1080,8 +1079,8 @@ const PropertyListing = () => {
                                     opacity: isOpen ? 1 : 0
                                 }}
                             >
-                                <div className="p-4">
-                                    <div className="space-y-4">
+                                <div className="">
+                                    <div className="">
                                         {properties.map((property) => (
                                             <PropertyCard key={property._id} property={property} />
                                         ))}

@@ -88,8 +88,10 @@
 
 import React from 'react';
 import { Heart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const PropertyDetailProjectInfo = ({ data , contactNumber }) => {
+    const navigate = useNavigate()
     console.log('data' , data)
     const formatPrice = (min, max) => {
         return `${(min / 1000000).toFixed(1)} — ${(max / 1000000).toFixed(1)} ₹`;
@@ -103,7 +105,7 @@ const PropertyDetailProjectInfo = ({ data , contactNumber }) => {
     };
 
     return (
-        <div className="relative flex h-[500px] w-full overflow-hidden rounded-xl bg-white shadow-lg">
+        <div className="relative flex h-[500px] w-full overflow-hidden rounded-xl bg-white shadow-lg" onClick={() => navigate(`/api/details/project/${data?.projectId}`)}>
             {/* Left side - Image */}
             <div className="relative w-2/3">
                 <img

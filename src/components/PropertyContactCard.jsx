@@ -148,6 +148,7 @@
 
 import React, { useState } from 'react';
 import { Heart, MapPin, Mail, Phone } from 'lucide-react';
+import { Callback } from './Callback';
 
 const PropertyContactCard = ({ details, handleButtonClick }) => {
     const [isLiked, setIsLiked] = useState(false);
@@ -287,7 +288,7 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                     </button>
                 }
 
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-3">
                     {details?.name && <img
                         src='https://yastatic.net/s3/realty-front-deploy/build-static/realty-front-desktop/_/68322723ec624a9d1c49f92c279d66e2.svg'
                         className='w-10 h-10'
@@ -301,6 +302,7 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                             <p className="text-blue-500">{details.website}</p>
                         }
                     </div>}
+                    <Callback />
                 </div>
 
                 <div className="flex items-start gap-3">
@@ -324,6 +326,8 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                         }
                     </div>
                 </div>
+
+                
 
                 {showContacts && details?.contactList?.length > 1 && (
                     <div className="mt-4 space-y-2">

@@ -102,8 +102,9 @@
 // export default PropertyCard
 
 import React from 'react';
-import { Heart, Home , Square } from 'lucide-react';
+import { Heart, Home, Square } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'antd';
 
 const PropertyCard = ({ property }) => {
     // Formatting price to show in millions
@@ -116,11 +117,11 @@ const PropertyCard = ({ property }) => {
         return `from ${area} m²`;
     };
 
-        const navigate = useNavigate()
-        // console.log(property)
-        const handleCardClick = () => {
-            navigate(`/api/details/${property?.post_id}`); // Navigate to the route with the post ID
-        };
+    const navigate = useNavigate()
+    // console.log(property)
+    const handleCardClick = () => {
+        navigate(`/api/details/${property?.post_id}`); // Navigate to the route with the post ID
+    };
     // console.log(property)
 
     return (
@@ -156,45 +157,49 @@ const PropertyCard = ({ property }) => {
             {/* Content Section */}
 
 
-                <div className="max-w-xl border border-gray-200">
-                    {/* Title */}
-                    <h2 className="capitalize text-xl font-serif text-gray-800 px-2 py-4">
+            <div className="max-w-xl border border-gray-200">
+                {/* Title */}
+                <h2 className="capitalize text-xl font-serif text-gray-800 px-2 py-4">
                     {property?.post_title}
-                    </h2>
+                </h2>
 
-                    <hr></hr>
+                <hr></hr>
 
-                    {/* Details Container */}
-                    <div className="flex items-center justify-between px-2 py-4">
-                        <div className="flex flex-col items-start gap-2">
-                            {/* Left section with home icon and BHK */}
-                            <div className="flex items-center space-x-2">
-                                <Home className="h-5 w-5 text-gray-600" />
+                {/* Details Container */}
+                <div className="flex items-center justify-between px-2 py-4">
+                    <div className="flex flex-col items-start gap-2">
+                        {/* Left section with home icon and BHK */}
+                        <div className="flex items-center space-x-2">
+                            <Home className="h-5 w-5 text-gray-600" />
                             <span className="text-gray-800">{property?.bedrooms || 1} BHK Apartment</span>
-                            </div>
+                        </div>
 
-                            {/* Middle section with area */}
-                            <div className="flex flex-start">
-                                <Square className="h-5 w-5 text-gray-600" />
-                                <span className="text-gray-800">1600 ft<sup>2</sup></span>
+                        {/* Middle section with area */}
+                        <div className="flex flex-start">
+                            <Square className="h-5 w-5 text-gray-600" />
+                            <span className="text-gray-800">1600 ft<sup>2</sup></span>
                             {/* Floor info */}
                             <div className="text-gray-800">
                                 3rd Floor
                             </div>
-                            </div>
-
                         </div>
 
-                        {/* Right section with price and availability */}
-                        <div className="text-right">
-                            <div className="text-gray-600 text-sm">Rooms from</div>
-                            <div className="text-gray-800 font-medium">₹31000/mo</div>
-                            <div className="text-green-600">Available</div>
-                        </div>
                     </div>
-                </div>
 
-                
+                    {/* Right section with price and availability */}
+                    <div className="text-right">
+                        <div className="text-gray-600 text-sm">Rooms from</div>
+                        <div className="text-gray-800 font-medium">₹31000/mo</div>
+                        <div className="text-green-600">Available</div>
+                    </div>
+
+                </div>
+                <div className='w-[100%]'>
+                    <Button className='bg-[#FED42B] w-full text-md hover:bg-black hover:text-white ' >Contact Owner</Button>
+                </div>
+            </div>
+
+
         </div>
     );
 };

@@ -275,30 +275,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
-const IconCompletion = () => (
-    <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor">
-        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const IconHouseType = () => (
-    <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor">
-        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const IconHousingClass = () => (
-    <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor">
-        <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const IconBuildings = () => (
-    <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor">
-        <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
 export default function BuildingLCDParameters() {
     const [showMore, setShowMore] = useState(true);
     const { buildingDetail } = useSelector(state => state.buildings);
@@ -354,7 +330,7 @@ export default function BuildingLCDParameters() {
 
     return (
         <div className="max-w-4xl mx-auto container">
-            <h1 className="text-3xl font-bold mb-2">{initialData.title}</h1>
+            {/* <h1 className="text-3xl font-bold mb-2">{initialData.title}</h1>
             <p className="text-gray-500 mb-8">{initialData.subtitle}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -389,7 +365,7 @@ export default function BuildingLCDParameters() {
                         <p className="font-semibold">{initialData.buildings.value}</p>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* <button
                 onClick={() => setShowMore(!showMore)}
@@ -399,15 +375,15 @@ export default function BuildingLCDParameters() {
             </button> */}
             <button
                 onClick={() => setShowMore(!showMore)}
-                className="w-full bg-black text-white rounded-lg p-4 text-left font-semibold transition-colors flex justify-between items-center"
+                className="w-full bg-[#F5F5F5] text-black rounded-lg p-4 text-left font-semibold transition-colors flex justify-between items-center"
             >
-                <span>Additional options</span>
+                <span>More Building Details</span>
                 <div className={`transform transition-transform duration-300 ${showMore ? 'rotate-180' : ''}`}>
                     <ChevronDown size={20} />
                 </div>
             </button>
 
-            <div className={`mt-6 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-6 overflow-hidden transition-all duration-500 ease-in-out ${showMore ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className={`mt-3 px-2 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-6 overflow-hidden transition-all duration-500 ease-in-out ${showMore ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
                 {Object.entries(initialData.additionalOptions).map(([key, item]) => (
                     <div key={key} className="flex justify-between border-b border-gray-200 py-2">
                         <span className="text-gray-500">{item.label}</span>

@@ -26,11 +26,10 @@ function Contact() {
         <BreadCrumb title="Contact" />
       </div> */}
 
-      <div className="w-full lg:px-10 px-5 py-5">
 
-      <div>
+      {/* <div>
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7144.799359844576!2d80.28250410000001!3d26.44284270000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c47e7eb728e3d%3A0x4eeaaae900a2b383!2sRatan%20Lal%20Nagar%2C%20Kanpur%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1722073104503!5m2!1sen!2sin" height="450" style={{border:"none"}} allowfullscreen="" loading="lazy" className ="w-full" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
+      </div> */}
 
       <div className="grid lg:grid-cols-2 lg:gap-0 gap-16 grid-cols-1 my-5 bg-white rounded-md lg:px-10 md:px-12 px-4 lg:py-10 py-8">
         <form className="grid gap-5" onSubmit={handleEnquiry}>
@@ -73,7 +72,6 @@ function Contact() {
 
       </div>
 
-      </div>
     </div>
   );
 }

@@ -161,7 +161,7 @@ const Header = () => {
     return (
         <div
             ref={topNavRef}
-            className={`max-w-7xl mx-auto px-4 ${isSticky ? 'fixed top-0 left-0 right-0 bg-white transition-all duration-300 ease-in-out z-50' : ''}`}
+            className={`max-w-7xl mx-auto px-4 ${isSticky ? 'fixed top-0 left-0 right-0 bg-white transition-all duration-300 ease-in-out ' : ''}`}
         >
 
             <div className="flex items-center justify-between h-16">

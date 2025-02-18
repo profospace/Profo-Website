@@ -459,7 +459,28 @@ const PropertyPanel = ({ data, type, onClose }) => {
                         initial="hidden"
                         animate="visible"
                         exit="exit"
+                        style={{
+                            scrollbarWidth: 'thin',
+                            scrollbarColor: '#CBD5E1 transparent',
+                        }}
                     >
+                        <style>
+                            {`
+                            .custom-scrollbar::-webkit-scrollbar {
+                                width: 2px;
+                            }
+                            .custom-scrollbar::-webkit-scrollbar-track {
+                                background: transparent;
+                            }
+                            .custom-scrollbar::-webkit-scrollbar-thumb {
+                                background-color: #CBD5E1;
+                                border-radius: 3px;
+                            }
+                            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                                background-color: #94A3B8;
+                            }
+                            `}
+                        </style>
                         {type === 'property' ? renderPropertyContent() :
                             type === 'project' ? renderProjectContent() :
                                 renderBuildingContent()}

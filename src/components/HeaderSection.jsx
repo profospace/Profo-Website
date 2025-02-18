@@ -471,10 +471,10 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux';
-import { X, ChevronDown, Check } from 'lucide-react';
 import { QRCode } from 'antd';
 import { Camera } from 'lucide-react';
 import ImagePreview from './ImagesPreview';
+import { Callback } from './Callback';
 
 export const ContactButton = () => {
     const [step, setStep] = useState(1);
@@ -525,181 +525,181 @@ export const ContactButton = () => {
     );
 };
 
-export const ConsultationModal = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [selectedTime, setSelectedTime] = useState('As soon as possible');
-    const [phoneNumber, setPhoneNumber] = useState('');
+// export const ConsultationModal = () => {
+//     const [isOpen, setIsOpen] = useState(false);
+//     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+//     const [selectedTime, setSelectedTime] = useState('As soon as possible');
+//     const [phoneNumber, setPhoneNumber] = useState('');
 
-    const generateTimeSlots = () => {
-        const slots = ['As soon as possible'];
-        const intervals = [];
+//     const generateTimeSlots = () => {
+//         const slots = ['As soon as possible'];
+//         const intervals = [];
 
-        // Function to format time in 12-hour AM/PM format
-        const formatTime = (hour, minute) => {
-            const period = hour >= 12 ? 'PM' : 'AM';
-            const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
-            const formattedMinute = String(minute).padStart(2, '0');
-            return `${formattedHour}:${formattedMinute} ${period}`;
-        };
+//         // Function to format time in 12-hour AM/PM format
+//         const formatTime = (hour, minute) => {
+//             const period = hour >= 12 ? 'PM' : 'AM';
+//             const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+//             const formattedMinute = String(minute).padStart(2, '0');
+//             return `${formattedHour}:${formattedMinute} ${period}`;
+//         };
 
-        // Generate intervals for 24 hours in 30-minute increments
-        for (let hour = 0; hour < 24; hour++) {
-            for (let minute = 0; minute < 60; minute += 30) {
-                const startTime = formatTime(hour, minute);
-                const endHour = minute === 30 ? hour + 1 : hour;
-                const endMinute = minute === 30 ? 0 : 30;
-                const endTime = formatTime(endHour % 24, endMinute);
-                intervals.push(`${startTime} – ${endTime}`);
-            }
-        }
+//         // Generate intervals for 24 hours in 30-minute increments
+//         for (let hour = 0; hour < 24; hour++) {
+//             for (let minute = 0; minute < 60; minute += 30) {
+//                 const startTime = formatTime(hour, minute);
+//                 const endHour = minute === 30 ? hour + 1 : hour;
+//                 const endMinute = minute === 30 ? 0 : 30;
+//                 const endTime = formatTime(endHour % 24, endMinute);
+//                 intervals.push(`${startTime} – ${endTime}`);
+//             }
+//         }
 
-        // Add today's slots
-        const todaySlots = intervals.slice(0, 24); // First 12 hours
-        todaySlots.forEach(slot => slots.push(slot));
+//         // Add today's slots
+//         const todaySlots = intervals.slice(0, 24); // First 12 hours
+//         todaySlots.forEach(slot => slots.push(slot));
 
-        // Add tomorrow's slots
-        const tomorrowSlots = intervals.slice(0, 24); // First 12 hours
-        tomorrowSlots.forEach(slot => slots.push(`Tomorrow ${slot}`));
+//         // Add tomorrow's slots
+//         const tomorrowSlots = intervals.slice(0, 24); // First 12 hours
+//         tomorrowSlots.forEach(slot => slots.push(`Tomorrow ${slot}`));
 
-        // Add day after tomorrow slots
-        const dayAfterSlots = intervals.slice(0, 24); // Remaining slots up to 48 hours
-        const dayAfter = new Date();
-        dayAfter.setDate(dayAfter.getDate() + 2);
-        const dayAfterStr = dayAfter.toLocaleDateString('en-US', { weekday: 'long' });
-        dayAfterSlots.forEach(slot => slots.push(`${dayAfterStr} ${slot}`));
+//         // Add day after tomorrow slots
+//         const dayAfterSlots = intervals.slice(0, 24); // Remaining slots up to 48 hours
+//         const dayAfter = new Date();
+//         dayAfter.setDate(dayAfter.getDate() + 2);
+//         const dayAfterStr = dayAfter.toLocaleDateString('en-US', { weekday: 'long' });
+//         dayAfterSlots.forEach(slot => slots.push(`${dayAfterStr} ${slot}`));
 
-        return slots;
-    };
+//         return slots;
+//     };
 
 
-    const timeSlots = generateTimeSlots();
+//     const timeSlots = generateTimeSlots();
 
-    const toggleModal = () => setIsOpen(!isOpen);
-    const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+//     const toggleModal = () => setIsOpen(!isOpen);
+//     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-    const selectTime = (time) => {
-        setSelectedTime(time);
-        setIsDropdownOpen(false);
-    };
+//     const selectTime = (time) => {
+//         setSelectedTime(time);
+//         setIsDropdownOpen(false);
+//     };
 
-    return (
-        <div className="">
-            {/* Trigger Button */}
-            <button
-                onClick={toggleModal}
-                className="px-6 py-3 bg-yellow-400 text-black font-medium rounded-lg hover:bg-yellow-500 transition-colors"
-            >
-                Callback
-            </button>
+//     return (
+//         <div className="">
+//             {/* Trigger Button */}
+//             <button
+//                 onClick={toggleModal}
+//                 className="px-6 py-3 bg-yellow-400 text-black font-medium rounded-lg hover:bg-yellow-500 transition-colors"
+//             >
+//                 Callback
+//             </button>
 
-            {/* Modal Overlay */}
-            <div
-                className={`text-black fixed inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? 'opacity-100 z-50' : 'opacity-0 pointer-events-none'
-                    }`}
-                onClick={toggleModal}
-            >
-                {/* Modal Content */}
-                <div
-                    className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-8 w-full max-w-md transition-all duration-300 ${isOpen
-                        ? 'opacity-100 scale-100 translate-y-[-50%]'
-                        : 'opacity-0 scale-95 translate-y-[-45%]'
-                        }`}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    {/* Close Button */}
-                    <button
-                        onClick={toggleModal}
-                        className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
-                    >
-                        <X size={24} />
-                    </button>
+//             {/* Modal Overlay */}
+//             <div
+//                 className={`text-black fixed inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? 'opacity-100 z-50' : 'opacity-0 pointer-events-none'
+//                     }`}
+//                 onClick={toggleModal}
+//             >
+//                 {/* Modal Content */}
+//                 <div
+//                     className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-8 w-full max-w-md transition-all duration-300 ${isOpen
+//                         ? 'opacity-100 scale-100 translate-y-[-50%]'
+//                         : 'opacity-0 scale-95 translate-y-[-45%]'
+//                         }`}
+//                     onClick={(e) => e.stopPropagation()}
+//                 >
+//                     {/* Close Button */}
+//                     <button
+//                         onClick={toggleModal}
+//                         className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
+//                     >
+//                         <X size={24} />
+//                     </button>
 
-                    {/* Content */}
-                    <div className="space-y-6">
-                        <div>
-                            <h2 className="text-2xl font-semibold mb-2">
-                                Consultation from the developer
-                            </h2>
-                            <p className="text-gray-600">
-                                Company specialist «Group «Aircraft »» will talk about discounts and promotions, apartments in the presence of mortgage programs
-                            </p>
-                        </div>
+//                     {/* Content */}
+//                     <div className="space-y-6">
+//                         <div>
+//                             <h2 className="text-2xl font-semibold mb-2">
+//                                 Consultation from the developer
+//                             </h2>
+//                             <p className="text-gray-600">
+//                                 Company specialist «Group «Aircraft »» will talk about discounts and promotions, apartments in the presence of mortgage programs
+//                             </p>
+//                         </div>
 
-                        {/* Form */}
-                        <div className="space-y-4">
-                            {/* Custom Dropdown */}
-                            <div className="relative">
-                                <label className="block text-sm text-gray-500 mb-1">
-                                    Call time
-                                </label>
-                                <button
-                                    type="button"
-                                    onClick={toggleDropdown}
-                                    className="w-full p-4 bg-gray-50 rounded-lg text-left flex items-center justify-between border border-gray-200 focus:outline-none focus:border-yellow-400"
-                                >
-                                    <span>{selectedTime}</span>
-                                    <ChevronDown
-                                        className={`transform transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''
-                                            }`}
-                                    />
-                                </button>
+//                         {/* Form */}
+//                         <div className="space-y-4">
+//                             {/* Custom Dropdown */}
+//                             <div className="relative">
+//                                 <label className="block text-sm text-gray-500 mb-1">
+//                                     Call time
+//                                 </label>
+//                                 <button
+//                                     type="button"
+//                                     onClick={toggleDropdown}
+//                                     className="w-full p-4 bg-gray-50 rounded-lg text-left flex items-center justify-between border border-gray-200 focus:outline-none focus:border-yellow-400"
+//                                 >
+//                                     <span>{selectedTime}</span>
+//                                     <ChevronDown
+//                                         className={`transform transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''
+//                                             }`}
+//                                     />
+//                                 </button>
 
-                                {/* Dropdown Menu */}
-                                <div
-                                    className={`absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden transition-all duration-200 ${isDropdownOpen
-                                        ? 'opacity-100 translate-y-0'
-                                        : 'opacity-0 translate-y-2 pointer-events-none'
-                                        }`}
-                                >
-                                    <div className="max-h-60 overflow-y-auto">
-                                        {timeSlots.map((time) => (
-                                            <button
-                                                key={time}
-                                                onClick={() => selectTime(time)}
-                                                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center justify-between group"
-                                            >
-                                                <span className="truncate">{time}</span>
-                                                {selectedTime === time && (
-                                                    <Check className="text-yellow-500 flex-shrink-0 ml-2" size={20} />
-                                                )}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
+//                                 {/* Dropdown Menu */}
+//                                 <div
+//                                     className={`absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden transition-all duration-200 ${isDropdownOpen
+//                                         ? 'opacity-100 translate-y-0'
+//                                         : 'opacity-0 translate-y-2 pointer-events-none'
+//                                         }`}
+//                                 >
+//                                     <div className="max-h-60 overflow-y-auto">
+//                                         {timeSlots.map((time) => (
+//                                             <button
+//                                                 key={time}
+//                                                 onClick={() => selectTime(time)}
+//                                                 className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center justify-between group"
+//                                             >
+//                                                 <span className="truncate">{time}</span>
+//                                                 {selectedTime === time && (
+//                                                     <Check className="text-yellow-500 flex-shrink-0 ml-2" size={20} />
+//                                                 )}
+//                                             </button>
+//                                         ))}
+//                                     </div>
+//                                 </div>
+//                             </div>
 
-                            {/* Phone input */}
-                            <div>
-                                <input
-                                    type="tel"
-                                    placeholder="Phone number"
-                                    value={phoneNumber}
-                                    onChange={(e) => setPhoneNumber(e.target.value)}
-                                    className="w-full p-4 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:border-yellow-400"
-                                />
-                            </div>
+//                             {/* Phone input */}
+//                             <div>
+//                                 <input
+//                                     type="tel"
+//                                     placeholder="Phone number"
+//                                     value={phoneNumber}
+//                                     onChange={(e) => setPhoneNumber(e.target.value)}
+//                                     className="w-full p-4 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:border-yellow-400"
+//                                 />
+//                             </div>
 
-                            {/* Submit button */}
-                            <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-4 rounded-lg transition-colors">
-                                Call me
-                            </button>
+//                             {/* Submit button */}
+//                             <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-4 rounded-lg transition-colors">
+//                                 Call me
+//                             </button>
 
-                            {/* Consent text */}
-                            <p className="text-sm text-gray-500">
-                                By sending an application, you give your{' '}
-                                <a href="#" className="text-blue-600 hover:underline">
-                                    consent
-                                </a>{' '}
-                                for the processing of personal data
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
+//                             {/* Consent text */}
+//                             <p className="text-sm text-gray-500">
+//                                 By sending an application, you give your{' '}
+//                                 <a href="#" className="text-blue-600 hover:underline">
+//                                     consent
+//                                 </a>{' '}
+//                                 for the processing of personal data
+//                             </p>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
 
 // function HeaderSection({ details, sectionRefs, activeSection }) {
 //     const [isTabsSticky, setIsTabsSticky] = useState(false);
@@ -996,7 +996,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
     const scrollToSection = (sectionKey) => {
         const sectionElement = sectionRefs[sectionKey]?.current;
         if (sectionElement) {
-            const offset = 160; // Increased offset to account for title
+            const offset = 160;
             const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
             window.scrollTo({
                 top: elementPosition - offset,
@@ -1007,7 +1007,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
 
     const navigationTabs = Object.keys(sectionRefs || {});
 
-    console.log(details)    
+    console.log(details)
 
     return (
         <header className="relative w-full h-[530px] text-white">
@@ -1085,7 +1085,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
 
                 <div className="flex gap-4 mb-6 flex-wrap items-center">
                     <ContactButton />
-                    <ConsultationModal />
+                    <Callback />
                 </div>
 
                 <button
@@ -1124,31 +1124,30 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
                         </div>
                     </div>
                 </div> */}
-                <div
-                    className={`${isTabsSticky
-                        ? 'fixed top-[70px] left-0 z-30 bg-white/40 backdrop-blur-xl shadow-sm'
-                        : 'absolute bottom-0 left-0  bg-transparent bg-black/40 backdrop-blur-xl'} 
-    w-full transition-all duration-300`}
-                >
-                    <div className="max-w-7xl mx-auto text-sm">
-                        <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
-                            {navigationTabs.map((tab) => (
-                                <button
-                                    key={tab}
-                                    onClick={() => scrollToSection(tab)}
-                                    className={`whitespace-nowrap transition-colors relative 
-            ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'} 
-            ${activeSection === tab ? 'text-red-600 font-semibold' : ''}`}
-                                >
-                                    {tab}
-                                    {activeSection === tab && (
-                                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-full" />
-                                    )}
-                                </button>
-                            ))}
+                {navigationTabs.length > 0 && (
+                    <div
+                        className={`${isTabsSticky
+                            ? 'fixed top-[70px] left-0 z-30 bg-white/40 backdrop-blur-xl shadow-sm'
+                            : 'absolute bottom-0 left-0 bg-transparent bg-black/40 backdrop-blur-xl'} 
+                        w-full transition-all duration-300`}
+                    >
+                        <div className="max-w-7xl mx-auto text-sm">
+                            <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
+                                {navigationTabs.map((tab) => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => scrollToSection(tab)}
+                                        className={`whitespace-nowrap transition-colors relative 
+                                        ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'} 
+                                        ${activeSection === tab ? 'text-red-500 font-semibold border-2 rounded-full px-[25px] py-[1px] border-red-500' : ''}`}
+                                    >
+                                        {tab}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
             </div>
         </header>
