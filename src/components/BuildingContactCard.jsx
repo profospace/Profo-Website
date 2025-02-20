@@ -370,11 +370,11 @@ const BuildingContactCard = ({ info }) => {
                     <div className="flex gap-6 mb-4">
                         <div className='flex items-center gap-1'>
                             <div className="font-semibold text-md">{info?.connectedProperties?.length}</div>
-                            <div className="text-gray-600 text-md">Property Available</div>
+                            <div className="text-gray-600 text-sm">Property Available</div>
                         </div>
                         <div className='flex items-center gap-1'>
                             <div className="font-semibold text-md">{info?.totalFloors}</div>
-                            <div className="text-gray-600 text-md">Floor Available</div>
+                            <div className="text-gray-600 text-sm">Floor Available</div>
                         </div>
 
 

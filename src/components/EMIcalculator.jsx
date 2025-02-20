@@ -1115,26 +1115,245 @@
 
 // export default EMICalculator;
 
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
+// import { AlertCircle, Lock } from 'lucide-react';
+// import { Slider } from 'antd';
+
+// const Card = ({ children, className = "container" }) => (
+//     <div className={`w-full ${className}`}>{children}</div>
+// );
+
+// const CardTitle = ({ children }) => (
+//     <h1 className="text-3xl font-bold mb-2">{children}</h1>
+// );
+
+// const SliderInput = ({ label, value, setValue, min, max, step, format, showLock = false, percentage }) => {
+//     const handleChange = (newValue) => {
+//         setValue(newValue);
+//     };
+
+//     return (
+//         <div className="bg-gray-50 rounded-xl p-4 mb-4">
+//             <div className="flex justify-between items-center mb-2">
+//                 <label className="text-gray-600">{label}</label>
+//                 <div className="flex items-center gap-2">
+//                     {showLock && <Lock className="w-4 h-4 text-gray-400" />}
+//                     <span className="text-xl font-semibold">
+//                         {format ? format(value) : value}
+//                     </span>
+//                     {percentage && <span className="text-gray-500">{percentage}</span>}
+//                 </div>
+//             </div>
+//             <Slider
+//                 value={value}
+//                 onChange={handleChange}
+//                 min={min}
+//                 max={max}
+//                 step={step}
+//                 className="custom-slider"
+//                 styles={{
+//                     track: {
+//                         backgroundColor: 'black',
+//                         height: '2.5px'
+//                     },
+//                     rail: {
+//                         backgroundColor: '#e5e7eb',
+//                         height: '2.5px'
+//                     },
+//                     handle: {
+//                         borderColor: 'black',
+//                         height: '16px',
+//                         width: '16px',
+//                         marginTop: '-7px',
+//                         backgroundColor: 'white',
+//                         boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+//                     }
+//                 }}
+//             />
+//         </div>
+//     );
+// };
+
+// const EMICalculator = ({ price = 10000000 }) => {
+//     const [loanAmount, setLoanAmount] = useState(price);
+//     const [downPayment, setDownPayment] = useState(price * 0.3);
+//     const [downPaymentPercentage, setDownPaymentPercentage] = useState(30);
+//     const [tenure, setTenure] = useState(20);
+//     const [percentage, setPercentage] = useState(5);
+
+//     useEffect(() => {
+//         setLoanAmount(price);
+//         setDownPayment(price * 0.3);
+//         setDownPaymentPercentage(30);
+//     }, [price]);
+
+//     const handleLoanAmountChange = (newAmount) => {
+//         setLoanAmount(newAmount);
+//         const newDownPayment = (downPaymentPercentage / 100) * newAmount;
+//         setDownPayment(Math.round(newDownPayment));
+//     };
+
+//     const handleDownPaymentChange = (newDownPayment) => {
+//         setDownPayment(newDownPayment);
+//         const newPercentage = (newDownPayment / loanAmount) * 100;
+//         setDownPaymentPercentage(newPercentage);
+//     };
+
+//     const calculateEMI = (amount, rate) => {
+//         const principal = amount;
+//         const ratePerMonth = rate / (12 * 100);
+//         const numberOfPayments = tenure * 12;
+
+//         const emi = principal *
+//             ratePerMonth *
+//             Math.pow(1 + ratePerMonth, numberOfPayments) /
+//             (Math.pow(1 + ratePerMonth, numberOfPayments) - 1);
+
+//         return Math.round(emi);
+//     };
+
+//     const formatCurrency = (amount) => {
+//         return new Intl.NumberFormat('en-IN', {
+//             style: 'currency',
+//             currency: 'INR',
+//             maximumFractionDigits: 0
+//         }).format(amount);
+//     };
+
+//     const monthlyEMI = calculateEMI(loanAmount - downPayment, percentage);
+
+//     return (
+//         <Card>
+//             <CardTitle>Mortgage calculator</CardTitle>
+//             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+//                 <div className="space-y-4">
+//                     <SliderInput
+//                         label="Apartment price, ₹"
+//                         value={loanAmount}
+//                         setValue={handleLoanAmountChange}
+//                         min={1000000}
+//                         max={40000000}
+//                         step={100000}
+//                         format={formatCurrency}
+//                         showLock={true}
+//                     />
+
+//                     <SliderInput
+//                         label="First installment, ₹"
+//                         value={downPayment}
+//                         setValue={handleDownPaymentChange}
+//                         min={loanAmount * 0.1}
+//                         max={loanAmount * 0.9}
+//                         step={100000}
+//                         format={formatCurrency}
+//                         percentage={`${downPaymentPercentage.toFixed(0)}%`}
+//                     />
+
+//                     <SliderInput
+//                         label="Loan term"
+//                         value={tenure}
+//                         setValue={setTenure}
+//                         min={1}
+//                         max={30}
+//                         step={1}
+//                         format={(val) => `${val} years`}
+//                     />
+//                 </div>
+
+//                 <div className="bg-gray-50 rounded-xl">
+//                     <div className="p-5">
+//                         <div className="flex justify-between items-center mb-1">
+//                             <h3 className="text-xl">Estimated Monthly EMI</h3>
+//                             <span className="text-xl font-bold">{formatCurrency(monthlyEMI)}</span>
+//                         </div>
+//                         <p className="text-gray-600 text-sm">Standard mortgage {percentage}%</p>
+//                         <p className="text-gray-600 text-sm">payment per month</p>
+//                     </div>
+
+//                     <SliderInput
+//                         label="Loan Percentage"
+//                         value={percentage}
+//                         setValue={setPercentage}
+//                         min={1}
+//                         max={30}
+//                         step={1}
+//                         format={(val) => `${val}%`}
+//                     />
+
+//                     <p className="text-center text-sm text-gray-500 px-2 mt-4">
+//                         The calculation is for informational purposes only and is not a public offer.
+//                     </p>
+//                 </div>
+//             </div>
+//         </Card>
+//     );
+// };
+
+// export default EMICalculator;
+
+import React, { useEffect, useState, useRef } from 'react';
 import { AlertCircle, Lock } from 'lucide-react';
-import { Slider } from 'antd';
 
 const Card = ({ children, className = "container" }) => (
     <div className={`w-full ${className}`}>{children}</div>
 );
 
 const CardTitle = ({ children }) => (
-    <h1 className="text-3xl font-bold mb-8">{children}</h1>
+    <h1 className="text-3xl font-bold mb-2">{children}</h1>
 );
 
-const SliderInput = ({ label, value, setValue, min, max, step, format, showLock = false, percentage }) => {
-    const handleChange = (newValue) => {
-        setValue(newValue);
+const RangeSlider = ({ value, onChange, min, max, step }) => {
+    const [isDragging, setIsDragging] = useState(false);
+    const sliderRef = useRef(null);
+
+    const getPercentage = (value) => {
+        return ((value - min) / (max - min)) * 100;
+    };
+
+    const handleMouseDown = (e) => {
+        setIsDragging(true);
+        handleMouseMove(e);
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    const handleMouseMove = (e) => {
+        if (!sliderRef.current) return;
+
+        const rect = sliderRef.current.getBoundingClientRect();
+        const percentage = Math.min(Math.max(0, (e.clientX - rect.left) / rect.width), 1);
+        const newValue = Math.round((percentage * (max - min) + min) / step) * step;
+        onChange(Math.min(Math.max(min, newValue), max));
     };
 
     return (
-        <div className="bg-gray-50 rounded-xl p-4 mb-4">
-            <div className="flex justify-between items-center mb-2">
+        <div className="relative w-full h-6 cursor-pointer" ref={sliderRef} onMouseDown={handleMouseDown}>
+            <div className="absolute top-[11px] w-full h-[2.5px] bg-gray-200 rounded" />
+            <div
+                className="absolute top-[11px] h-[2.5px] bg-black rounded"
+                style={{ width: `${getPercentage(value)}%` }}
+            />
+            <div
+                className="absolute w-4 h-4 bg-white border-2 border-black rounded-full shadow-sm transform -translate-y-1/2"
+                style={{
+                    left: `${getPercentage(value)}%`,
+                    transform: 'translateX(-50%) translateY(4px)'
+                }}
+            />
+        </div>
+    );
+};
+
+const SliderInput = ({ label, value, setValue, min, max, step, format, showLock = false, percentage }) => {
+    return (
+        <div className="bg-gray-50 rounded-lg px-4 py-3 mb-4">
+            <div className="flex justify-between items-center mb-">
                 <label className="text-gray-600">{label}</label>
                 <div className="flex items-center gap-2">
                     {showLock && <Lock className="w-4 h-4 text-gray-400" />}
@@ -1144,31 +1363,12 @@ const SliderInput = ({ label, value, setValue, min, max, step, format, showLock 
                     {percentage && <span className="text-gray-500">{percentage}</span>}
                 </div>
             </div>
-            <Slider
+            <RangeSlider
                 value={value}
-                onChange={handleChange}
+                onChange={setValue}
                 min={min}
                 max={max}
                 step={step}
-                className="custom-slider"
-                styles={{
-                    track: {
-                        backgroundColor: 'black',
-                        height: '2.5px'
-                    },
-                    rail: {
-                        backgroundColor: '#e5e7eb',
-                        height: '2.5px'
-                    },
-                    handle: {
-                        borderColor: 'black',
-                        height: '16px',
-                        width: '16px',
-                        marginTop: '-7px',
-                        backgroundColor: 'white',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-                    }
-                }}
             />
         </div>
     );

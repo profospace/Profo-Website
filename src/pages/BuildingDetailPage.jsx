@@ -473,7 +473,7 @@ import BuildingViewer2 from '../components/BuildingViewer2';
 function BuildingDetailPage() {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
     const [activeSection, setActiveSection] = useState(null);
-    const [configAvailable, setConfigAvailable] = useState(false);
+    const [configAvailable, setConfigAvailable] = useState(true);
     const [hasBackground, setHasBackground] = useState(false);
 
     const { buildingId } = useParams();
@@ -483,6 +483,8 @@ function BuildingDetailPage() {
 
     const sectionRefs = {
         'Description': useRef(null),
+        '3D Viewer': useRef(null),
+        'LCDParameters': useRef(null),
         'PropertyListing': useRef(null),
         'Map': useRef(null),
         'EmiCalculator': useRef(null),
@@ -531,14 +533,15 @@ function BuildingDetailPage() {
         <div className="">
             <div className="relative">
                 {/* Header Section */}
-                <HeaderSection details={buildingDetail} sectionRefs={sectionRefs} activeSection={activeSection} />
+                <HeaderSection details={buildingDetail} sectionRefs={sectionRefs} activeSection={activeSection} configAvailable={configAvailable} />
 
                 {isTabsSticky && <div className="h-[64px]" />}
 
                 {/* Main Content Wrapper */}
                 <div className="max-w-7xl mx-auto">
+
                     {!configAvailable ? (
-                        // Layout when configAvailable is false
+                        // Layout when configAvailable is not available
                         <div className="grid grid-cols-12 gap-1">
                             {/* Main Content Column */}
                             <div className="col-span-8">
@@ -549,18 +552,8 @@ function BuildingDetailPage() {
                                     </div>
                                 </div>
 
-                                {/* Building Viewer Section */}
-                                {buildingDetail?.buildingId && (
-                                    <BuildingViewer2
-                                        id={buildingDetail?.buildingId}
-                                        viewer="Building"
-                                        configAvailable={configAvailable}
-                                        setConfigAvailable={setConfigAvailable}
-                                    />
-                                )}
-
                                 {/* Rest of the content */}
-                                <div ref={sectionRefs['Description']}>
+                                <div ref={sectionRefs['LCDParameters']}>
                                     <BuildingLCDParameters />
                                 </div>
 
@@ -601,7 +594,7 @@ function BuildingDetailPage() {
 
                             {/* Sticky Contact Card Column */}
                             <div className="col-span-4">
-                                <div className="sticky top-32">
+                                <div className="sticky top-36">
                                     <BuildingContactCard info={buildingDetail} />
                                 </div>
                             </div>
@@ -609,7 +602,7 @@ function BuildingDetailPage() {
                            
                         </div>
                     ) : (
-                        // Layout when configAvailable is true
+                        // Layout when configAvailable is available
                         <>
                             {/* First Section: BuildingInfo and Contact Card */}
                             <div className="grid grid-cols-12 gap-8 items-center">
@@ -619,26 +612,30 @@ function BuildingDetailPage() {
                                     </div>
                                 </div>
                                 <div className="col-span-4">
-                                    <div className="sticky top-32">
+                                    <div className="sticky top-36">
                                         <BuildingContactCard info={buildingDetail} />
                                     </div>
                                 </div>
                             </div>
 
+                            
+
                             {/* Building Viewer Section */}
-                            {buildingDetail?.buildingId && (
-                                <BuildingViewer2
-                                    id={buildingDetail?.buildingId}
-                                    viewer="Building"
-                                    configAvailable={configAvailable}
-                                    setConfigAvailable={setConfigAvailable}
-                                />
-                            )}
+                                {buildingDetail?.buildingId && (
+                                    <div ref={sectionRefs['3D Viewer']}>
+                                        <BuildingViewer2
+                                            id={buildingDetail?.buildingId}
+                                            viewer="Building"
+                                            configAvailable={configAvailable}
+                                            setConfigAvailable={setConfigAvailable}
+                                        />
+                                    </div>
+                                )}
 
                             {/* Main Content Section */}
                             <div className="grid grid-cols-12 gap-0">
                                 <div className="col-span-8">
-                                    <div ref={sectionRefs['Description']}>
+                                        <div ref={sectionRefs['LCDParameters']}>
                                         <BuildingLCDParameters />
                                     </div>
 
@@ -668,27 +665,17 @@ function BuildingDetailPage() {
                                 </div>
 
                                 <div className="col-span-4">
-                                    <div className="sticky top-64">
+                                    <div className="sticky top-36">
                                         <BuildingContactCard info={buildingDetail} />
                                     </div>
                                 </div>
                             </div>
-                            {
-                                buildingDetail?.connectedProperties?.length > 0 && (<div className='container' ref={sectionRefs['ConnectedProperties']}>
-                                    <HeadingCommon title='Connected Properties' dual="true" />
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {buildingDetail?.connectedProperties?.map((property, index) => (
-                                            <PropertyCard key={index} property={property} />
-                                        ))}
-                                    </div>
-                                </div>)
-                            }
                         </>
                     )}
                 </div>
                 {
                     buildingDetail?.connectedProperties?.length > 0 && (<div className='container' ref={sectionRefs['ConnectedProperties']}>
-                        <HeadingCommon title='Connected Properties' dual="true" />
+                        <HeadingCommon title='Properties Under The Building' textColor='black' />
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {buildingDetail?.connectedProperties?.map((property, index) => (
                                 <PropertyCard key={index} property={property} />

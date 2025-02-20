@@ -75,7 +75,7 @@ export const Callback = () => {
     };
 
     return (
-        <div className="z-50">
+        <div className="">
             {/* Trigger Button */}
             <button
                 onClick={toggleModal}

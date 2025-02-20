@@ -165,7 +165,7 @@ function BuildingInfo() {
     const typeCounts = getTypeNameCount([]);
 
     // const typeCounts = getTypeNameCount(buildingDetail?.connectedProperties);
-    console.log(typeCounts);
+    // console.log(typeCounts);
     return (
         <div className="max-w-4xl mx-auto container">
             <h1 className="text-3xl font-bold mb-2">{initialData.title}</h1>

@@ -971,18 +971,233 @@ export const ContactButton = () => {
 
 
 
-const HeaderSection = ({ details, sectionRefs, activeSection }) => {
+// const HeaderSection = ({ details, sectionRefs, activeSection }) => {
+//     const [isTabsSticky, setIsTabsSticky] = useState(false);
+//     const [isTitleSticky, setIsTitleSticky] = useState(false);
+//     const [hasBackground, setHasBackground] = useState(false);
+//     const imagePreviewRef = useRef(null);
+
+//     useEffect(() => {
+//         const handleScroll = () => {
+//             const headerHeight = 600;
+//             const scrollPosition = window.scrollY;
+//             const titleTriggerPoint = headerHeight - 150; // Trigger point for title
+//             const tabsTriggerPoint = headerHeight - 64; // Trigger point for tabs
+
+//             setIsTabsSticky(scrollPosition >= tabsTriggerPoint);
+//             setIsTitleSticky(scrollPosition >= titleTriggerPoint);
+//             setHasBackground(scrollPosition > 50);
+//         };
+
+//         window.addEventListener('scroll', handleScroll);
+//         return () => window.removeEventListener('scroll', handleScroll);
+//     }, []);
+
+//     const scrollToSection = (sectionKey) => {
+//         const sectionElement = sectionRefs[sectionKey]?.current;
+//         if (sectionElement) {
+//             const offset = 160;
+//             const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
+//             window.scrollTo({
+//                 top: elementPosition - offset,
+//                 behavior: 'smooth'
+//             });
+//         }
+//     };
+
+//     const navigationTabs = Object.keys(sectionRefs || {});
+
+//     console.log(details)
+
+//     return (
+//         <header className="relative w-full h-[570px] text-white">
+//             {/* Background Image & Overlay */}
+//             {/* <div className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
+//                 style={{
+//                     backgroundImage: 'url(details?.galleryList?.[0])',
+//                     // backgroundImage: 'url(https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize)',
+//                     backgroundSize: 'cover',
+//                     backgroundPosition: 'center',
+//                 }}>
+//                 <div className={`absolute inset-0 transition-opacity duration-300 
+//                     ${hasBackground ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100' : 'bg-gradient-to-b from-transparent to-black opacity-50'}`} />
+//             </div> */}
+//             {/* <div
+//                 className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
+//                 style={{
+//                     backgroundImage: details?.galleryList?.[0] ? `url(${details.galleryList[0]})` : 'none',
+//                     backgroundSize: 'cover',
+//                     backgroundPosition: 'center',
+//                 }}
+//             > */}
+//             <div
+//                 className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
+//                 style={{
+//                     backgroundImage: details?.galleryList?.[0]
+//                         ? `url(${details.galleryList[0]})`
+//                         : details?.gallery?.[0]?.images?.[0]
+//                             ? `url(${details.gallery[0].images[0]})`
+//                             : 'none',
+//                     backgroundSize: 'cover',
+//                     backgroundPosition: 'center',
+//                 }}
+//             >
+
+//                 <div
+//                     className={`absolute inset-0 transition-opacity duration-300 
+//       ${hasBackground
+//                             ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100'
+//                             : 'bg-gradient-to-b from-transparent to-black opacity-50'
+//                         }`}
+//                 />
+//             </div>
+
+
+//             {/* Sticky Title */}
+//             {isTitleSticky && (
+//                 <div className="fixed top-0 left-0 right-0 z-40 bg-[#007BFB] py-2 text-white">
+//                     <div className="max-w-7xl mx-auto px-6 py-3">
+//                         <h1 className="text-2xl font-semibold capitalize">
+//                             {details?.name && `${details.name}`}
+//                         </h1>
+//                     </div>
+//                 </div>
+//             )}
+
+//             {/* Main Content */}
+//             <div className={`relative  h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''}`}>
+//                 {/* Original Title - fades out when sticky version appears */}
+//                 <div className={`flex items-center gap-2 mb-3 flex-wrap transition-opacity duration-300 
+//                     ${isTitleSticky ? 'opacity-0' : 'opacity-100'}`}>
+//                     <h1 className="capitalize text-6xl font-bold">
+//                         {details?.type && `${details.type}`} {details?.name && `'${details.name}'`}
+//                     </h1>
+//                 </div>
+
+//                 {/* Other content remains the same */}
+//                 <div className="flex gap-2 mb-4 flex-wrap">
+//                     {details?.developmentStatus && (
+//                         <span className="capitalize px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
+//                             {details.developmentStatus}
+//                         </span>
+//                     )}
+//                 </div>
+
+//                 <div className="flex gap-4 mb-6 flex-wrap items-center">
+//                     <ContactButton />
+//                     <Callback />
+//                 </div>
+
+//                 <button
+//                     className="flex items-center gap-2 px-4 py-2 mb-20 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
+//                     onClick={() => imagePreviewRef.current.openGallery()}
+//                 >
+//                     <Camera className="w-5 h-5" />
+//                     <span>
+//                         {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
+//                     </span>
+//                     <ImagePreview
+//                         ref={imagePreviewRef}
+//                         images={details?.galleryList || details?.gallery?.[0]?.images || []}
+//                     />
+//                 </button>
+
+
+//                 {/* Navigation Tabs */}
+//                 {/* <div className={`${isTabsSticky ? 'fixed top-14 left-0 z-30 bg-white shadow-sm' : 'absolute bottom-0 left-0 backdrop-blur-lg'} w-full transition-all duration-300`}>
+//                     <div className="max-w-7xl mx-auto text-sm">
+//                         <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
+//                             {navigationTabs.map((tab) => (
+//                                 <button
+//                                     key={tab}
+//                                     onClick={() => scrollToSection(tab)}
+//                                     className={`whitespace-nowrap transition-colors relative 
+//                                         ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'}
+//                                         ${activeSection === tab ? 'text-red-600 font-semibold' : ''}`}
+//                                 >
+//                                     {tab}
+//                                     {activeSection === tab && (
+//                                         <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-full" />
+//                                     )}
+//                                 </button>
+//                             ))}
+//                         </div>
+//                     </div>
+//                 </div> */}
+//                 {navigationTabs.length > 0 && (
+//                     <div
+//                         className={`${isTabsSticky
+//                             ? 'fixed top-[70px] left-0 z-30 bg-white/40 backdrop-blur-xl shadow-sm'
+//                             : 'absolute bottom-0 left-0 bg-transparent bg-black/40 backdrop-blur-xl'} 
+//                         w-full transition-all duration-300`}
+//                     >
+//                         <div className="max-w-7xl mx-auto text-sm">
+//                             <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
+//                                 {navigationTabs.map((tab) => (
+//                                     <button
+//                                         key={tab}
+//                                         onClick={() => scrollToSection(tab)}
+//                                         className={`whitespace-nowrap transition-colors relative 
+//                                         ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'} 
+//                                         ${activeSection === tab ? 'text-red-500 font-semibold border-2 rounded-full px-[25px] py-[1px] border-red-500' : ''}`}
+//                                     >
+//                                         {tab}
+//                                     </button>
+//                                 ))}
+//                             </div>
+//                         </div>
+//                     </div>
+//                 )}
+
+//             </div>
+//         </header>
+//     );
+// };
+
+// export default HeaderSection;
+
+
+const HeaderSection = ({ details, sectionRefs, activeSection, configAvailable }) => {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
     const [isTitleSticky, setIsTitleSticky] = useState(false);
     const [hasBackground, setHasBackground] = useState(false);
     const imagePreviewRef = useRef(null);
 
+    // Function to check if a section has data
+    const hasSectionData = (sectionKey) => {
+        switch (sectionKey) {
+            case 'Description':
+                return Boolean(details?.description);
+            case '3D Viewer':
+                return Boolean(configAvailable);
+            case 'LCDParameters':
+                return Boolean(details?.luda || details?.parkingArea || details?.frontRoad);
+            case 'PropertyListing':
+                return Boolean(details?.totalProperties);
+            case 'Map':
+                return Boolean(details?.location?.coordinates?.length === 2);
+            case 'EmiCalculator':
+                return true; // Always show if it's a core feature
+            case 'Gallery':
+                return Boolean(details?.galleryList?.length > 0);
+            case 'AskTheDeveloper':
+                return Boolean(details?.ownerId);
+            case 'ConnectedProperties':
+                return Boolean(details?.connectedProperties?.length > 0);
+            default:
+                return false;
+        }
+    };
+
+    // Filter navigation tabs to only show sections with data
+    const availableTabs = Object.keys(sectionRefs || {}).filter(tab => hasSectionData(tab));
+
     useEffect(() => {
         const handleScroll = () => {
             const headerHeight = 600;
             const scrollPosition = window.scrollY;
-            const titleTriggerPoint = headerHeight - 150; // Trigger point for title
-            const tabsTriggerPoint = headerHeight - 64; // Trigger point for tabs
+            const titleTriggerPoint = headerHeight - 150;
+            const tabsTriggerPoint = headerHeight - 64;
 
             setIsTabsSticky(scrollPosition >= tabsTriggerPoint);
             setIsTitleSticky(scrollPosition >= titleTriggerPoint);
@@ -1005,31 +1220,8 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
         }
     };
 
-    const navigationTabs = Object.keys(sectionRefs || {});
-
-    console.log(details)
-
     return (
         <header className="relative w-full h-[570px] text-white">
-            {/* Background Image & Overlay */}
-            {/* <div className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
-                style={{
-                    backgroundImage: 'url(details?.galleryList?.[0])',
-                    // backgroundImage: 'url(https://avatars.mds.yandex.net/get-verba/1672712/2a000001938b26cdc34fcffb74eebe7c291a/optimize)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}>
-                <div className={`absolute inset-0 transition-opacity duration-300 
-                    ${hasBackground ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100' : 'bg-gradient-to-b from-transparent to-black opacity-50'}`} />
-            </div> */}
-            {/* <div
-                className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
-                style={{
-                    backgroundImage: details?.galleryList?.[0] ? `url(${details.galleryList[0]})` : 'none',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}
-            > */}
             <div
                 className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
                 style={{
@@ -1042,31 +1234,23 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
                     backgroundPosition: 'center',
                 }}
             >
-
                 <div
                     className={`absolute inset-0 transition-opacity duration-300 
-      ${hasBackground
-                            ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100'
-                            : 'bg-gradient-to-b from-transparent to-black opacity-50'
-                        }`}
+                    ${hasBackground ? 'bg-gradient-to-b from-black/50 to-black/90 opacity-100' : 'bg-gradient-to-b from-transparent to-black opacity-50'}`}
                 />
             </div>
 
-
-            {/* Sticky Title */}
             {isTitleSticky && (
                 <div className="fixed top-0 left-0 right-0 z-40 bg-[#007BFB] py-2 text-white">
                     <div className="max-w-7xl mx-auto px-6 py-3">
                         <h1 className="text-2xl font-semibold capitalize">
-                            {details?.name && `${details.name}`}
+                            {details?.name}
                         </h1>
                     </div>
                 </div>
             )}
 
-            {/* Main Content */}
-            <div className={`relative  h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''}`}>
-                {/* Original Title - fades out when sticky version appears */}
+            <div className={`relative h-full flex flex-col justify-end p-6 max-w-7xl mx-auto transition-all duration-300 ${hasBackground ? 'bg-black/20' : ''}`}>
                 <div className={`flex items-center gap-2 mb-3 flex-wrap transition-opacity duration-300 
                     ${isTitleSticky ? 'opacity-0' : 'opacity-100'}`}>
                     <h1 className="capitalize text-6xl font-bold">
@@ -1074,7 +1258,6 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
                     </h1>
                 </div>
 
-                {/* Other content remains the same */}
                 <div className="flex gap-2 mb-4 flex-wrap">
                     {details?.developmentStatus && (
                         <span className="capitalize px-3 py-1 bg-black bg-opacity-50 rounded-lg text-sm">
@@ -1088,43 +1271,23 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
                     <Callback />
                 </div>
 
-                <button
-                    className="flex items-center gap-2 px-4 py-2 mb-20 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
-                    onClick={() => imagePreviewRef.current.openGallery()}
-                >
-                    <Camera className="w-5 h-5" />
-                    <span>
-                        {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
-                    </span>
-                    <ImagePreview
-                        ref={imagePreviewRef}
-                        images={details?.galleryList || details?.gallery?.[0]?.images || []}
-                    />
-                </button>
+                {details?.galleryList?.length > 0 && (
+                    <button
+                        className="flex items-center gap-2 px-4 py-2 mb-20 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
+                        onClick={() => imagePreviewRef.current.openGallery()}
+                    >
+                        <Camera className="w-5 h-5" />
+                        <span>
+                            {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
+                        </span>
+                        <ImagePreview
+                            ref={imagePreviewRef}
+                            images={details?.galleryList || details?.gallery?.[0]?.images || []}
+                        />
+                    </button>
+                )}
 
-
-                {/* Navigation Tabs */}
-                {/* <div className={`${isTabsSticky ? 'fixed top-14 left-0 z-30 bg-white shadow-sm' : 'absolute bottom-0 left-0 backdrop-blur-lg'} w-full transition-all duration-300`}>
-                    <div className="max-w-7xl mx-auto text-sm">
-                        <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
-                            {navigationTabs.map((tab) => (
-                                <button
-                                    key={tab}
-                                    onClick={() => scrollToSection(tab)}
-                                    className={`whitespace-nowrap transition-colors relative 
-                                        ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'}
-                                        ${activeSection === tab ? 'text-red-600 font-semibold' : ''}`}
-                                >
-                                    {tab}
-                                    {activeSection === tab && (
-                                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-red-600 rounded-full" />
-                                    )}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div> */}
-                {navigationTabs.length > 0 && (
+                {availableTabs.length > 0 && (
                     <div
                         className={`${isTabsSticky
                             ? 'fixed top-[70px] left-0 z-30 bg-white/40 backdrop-blur-xl shadow-sm'
@@ -1133,7 +1296,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
                     >
                         <div className="max-w-7xl mx-auto text-sm">
                             <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
-                                {navigationTabs.map((tab) => (
+                                {availableTabs.map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => scrollToSection(tab)}
@@ -1148,7 +1311,6 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
                         </div>
                     </div>
                 )}
-
             </div>
         </header>
     );
