@@ -37,6 +37,8 @@ import { getHomeFeed } from './redux/features/HomeFeed/homeFeedSlice';
 import Error from './pages/Error';
 import { Button } from 'antd';
 import Contact from './pages/Contact';
+import Testing from './Testing/Testing';
+import Wishlist from './pages/Wishlist';
 
 // import MainPropertyPage from './pages/MainPropertyPage';
 
@@ -118,6 +120,8 @@ function App() {
         <Routes>
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/testing' element={<Testing />} />
+
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path='/about' element={<About />} />
@@ -128,6 +132,7 @@ function App() {
             <Route path='/buildings' element={<BuildingPage />} />
             <Route path='/main' element={<MainPropertyPage />} />
             <Route path='/post-property-for-free' element={<PostProperty />} />
+            <Route path='/wishlist' element={<Wishlist />} />
 
 
             <Route path='/api/details/project/:post_id' element={<ProjectDetailPage />} />{ /* projects detail page */}
@@ -140,6 +145,7 @@ function App() {
             <Route path='/privacy-policy' element={<PrivacyAndPolicy />} />
             <Route path='/project-3d' element={<BuildingManager />} /> {/* testing */}
             <Route path='/contact-us' element={<Contact />} />
+
             <Route path="*" element={<Error />} />
           </Route>
         </Routes>

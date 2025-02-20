@@ -13,7 +13,7 @@ const Footer = () => {
   ];
 
   return (
-    <div className="w-full mt-12">
+    <div className="w-full">
       {/* Third Footer - With Horizontal Lines */}
       <footer className="bg-[#171717] text-gray-400 py-6 ">
         <div className="max-w-[1200px] mx-auto px-4">

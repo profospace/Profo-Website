@@ -679,15 +679,24 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
             const valueA = getPriceEquivalent(a);
             const valueB = getPriceEquivalent(b);
+            const getCreatedAt = (item) => new Date(item.createdAt || 0);
+
 
             switch (sortBy) {
                 case 'price-low':
                     return valueA - valueB;
                 case 'price-high':
                     return valueB - valueA;
+                case 'new-old':
+                    return getCreatedAt(b) - getCreatedAt(a);
+                case 'old-new':
+                    return getCreatedAt(a) - getCreatedAt(b);
+
                 default:
                     return 0;
             }
+
+
         });
 
     const PropertyCard = ({ item,index }) => {

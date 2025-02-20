@@ -105,6 +105,17 @@ body {
   margin: 1.8rem 0;
 }
 
+/* .testing - is in tailwind config */
+
+.projectContainer {
+  /* padding: 0.5rem 2.5rem; */
+  padding-top: 0rem;
+  padding-right: 0;
+  padding-bottom: 0.5rem;
+  padding-left: 2.5rem;
+  margin: 1.8rem 0;
+}
+
 
 .accordianGradient {
   background: linear-gradient(to right, rgba(255, 255, 255), rgba(253, 234, 181, 0.95));

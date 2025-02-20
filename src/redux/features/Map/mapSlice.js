@@ -78,6 +78,7 @@ export const getAllBuildings = createAsyncThunk(
 export const applyFilter = createAsyncThunk(
   "map/applyFilter",
   async (filters, thunkAPI) => {
+    console.log("filters", filters)
     try {
       return await mapService.applyFilter(filters);
     } catch (error) {

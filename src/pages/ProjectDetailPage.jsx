@@ -1687,10 +1687,10 @@ function ProjectDetailPage() {
 
       {config ? (
         <>
-          <div className='grid grid-cols-12'>
+          <div className='grid grid-cols-12 gap-4'>
             {/* first left div */}
-            <div className='col-span-8'>
-              <div className="max-w-4xl mx-auto p-4 py-12" ref={sectionRefs['Description']}>
+            <div className='col-span-8 projectContainer'>
+              <div className="max-w-4xl mx-auto" ref={sectionRefs['Description']}>
                 {/* Header Section */}
                 <div className="mb-6">
                   {/* New Launch Badge - Only show if availabilityStatus is COMING_SOON */}
@@ -1831,9 +1831,9 @@ function ProjectDetailPage() {
           <div>
             <BuildingViewer id={projectDetail?.projectId} config={config} viewer="Project"  />
           </div>
-          <div className='grid grid-cols-12'>
+          <div className='grid grid-cols-12 '>
             {/* second left div */}
-            <div className='col-span-8'>
+            <div className='col-span-8 projectContainer'>
               {/* Floor Plans - conditionally render */}
               {projectDetail?.floorPlans?.length > 0 && (
                 <motion.div className="" ref={sectionRefs['FloorPlans']}>
@@ -1843,7 +1843,7 @@ function ProjectDetailPage() {
               )}
 
               {/* Location Map - conditionally render */}
-              <div className="mb-8 mt-20" ref={sectionRefs['Map']}>
+              <div className="" ref={sectionRefs['Map']}>
                 <LocationLatLngMap
                   latitude={projectDetail?.location?.coordinates?.coordinates?.[1]}
                   longitude={projectDetail?.location?.coordinates?.coordinates?.[0]}
@@ -1852,28 +1852,28 @@ function ProjectDetailPage() {
 
               {/* Specifications - conditionally render */}
               {projectDetail?.specification?.length > 0 && (
-                <div className="mb-8" ref={sectionRefs['Specifications']}>
+                <div className="" ref={sectionRefs['Specifications']}>
                   <ProjectSpecificationCard specifications={projectDetail?.specification} />
                 </div>
               )}
 
               {/* Amenities - conditionally render */}
               {projectDetail?.amenities?.length > 0 && (
-                <div className="mb-2" ref={sectionRefs['Amenities']}>
+                <div className="" ref={sectionRefs['Amenities']}>
                   <AmenitiesDisplay amenities={projectDetail?.amenities} />
                 </div>
               )}
 
               {/* highlights - conditionally render */}
               {projectDetail?.highlights?.length > 0 && (
-                <div className="mb-2" ref={sectionRefs['highlights']}>
+                <div className="" ref={sectionRefs['highlights']}>
                   <ProjectHighlights highlights={projectDetail?.highlights} />
                 </div>
               )}
 
               {/* nearbyLocations - conditionally render */}
               {projectDetail?.nearbyLocations?.length > 0 && (
-                <div className="mb-2" ref={sectionRefs['NearBy']}>
+                <div className="" ref={sectionRefs['NearBy']}>
                   <ProjectNearbyLocations nearbyLocations={projectDetail?.nearbyLocations} />
                 </div>
               )}

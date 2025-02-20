@@ -1010,7 +1010,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection }) => {
     console.log(details)
 
     return (
-        <header className="relative w-full h-[530px] text-white">
+        <header className="relative w-full h-[570px] text-white">
             {/* Background Image & Overlay */}
             {/* <div className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
                 style={{

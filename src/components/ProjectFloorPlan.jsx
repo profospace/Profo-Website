@@ -454,7 +454,7 @@ const ProjectFloorPlan = ({ floorPlans }) => {
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-4">
+        <div className="w-full max-w-4xl mx-auto">
             <div className="mb-6 flex gap-4">
                 <span className="text-gray-600">Sort:</span>
                 <button

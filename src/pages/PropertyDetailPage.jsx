@@ -550,6 +550,7 @@ import PropertyDetailProjectInfo from "../components/PropertyDetailProjectInfo";
 import BuildingViewer from "../components/BuildingViewer";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
+import BuildingViewer2 from "../components/BuildingViewer2";
 
 
 export const FacilitiesSection = ({ facilities }) => {
@@ -1021,7 +1022,7 @@ const SinglePage = () => {
 
                 </div>
 
-                <BuildingViewer id={propertyDetail?.post_id} viewer="Property" configAvailable={configAvailable}
+                <BuildingViewer2 id={propertyDetail?.post_id} viewer="Property" configAvailable={configAvailable}
                     setConfigAvailable={setConfigAvailable}
                 />
 

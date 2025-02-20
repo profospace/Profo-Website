@@ -523,7 +523,7 @@ function LocationLatLngMap({ latitude, longitude }) {
 
     if (loadError) {
         return (
-            <div className="  container ">
+            <div className="  ">
                 <HeadingCommon title={"Where you'll be"} dual />
                 <div className="rounded-sm bg-red-50 p-4 text-red-800">
                     Error loading map. Please try again later.
@@ -534,7 +534,7 @@ function LocationLatLngMap({ latitude, longitude }) {
 
     if (!isLoaded) {
         return (
-            <div className=" container ">
+            <div className="  ">
                 <HeadingCommon title={"Where you'll be"} textColor='black' />
                 <div className="relative rounded-lg overflow-hidden bg-gray-100" style={mapContainerStyle}>
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -546,7 +546,7 @@ function LocationLatLngMap({ latitude, longitude }) {
     }
 
     return (
-        <div className="  container ">
+        <div className=" ">
             <HeadingCommon title={"Where you'll be"} textColor='black' />
             <div className="relative rounded-sm overflow-hidden">
                 <GoogleMap

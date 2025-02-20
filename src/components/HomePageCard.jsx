@@ -65,7 +65,7 @@ const HomePageCard = ({ info, image, price, label, type, navigation, contactList
             onClick={() => navigation && navigate(navigation)}
         >
             {/* Image Container */}
-            <div className="relative h-72 md:h-96 w-full overflow-hidden">
+            <div className="relative h-72 w-full overflow-hidden">
                 <img
                     src={image}
                     alt={info?.name}

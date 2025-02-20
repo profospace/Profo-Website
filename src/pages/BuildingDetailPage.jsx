@@ -468,6 +468,7 @@ import HeaderSection from '../components/HeaderSection';
 import HeadingCommon from '../components/HeadingCommon';
 import BuildingViewer from '../components/BuildingViewer';
 import BuildingInfo from '../components/BuildingInfo';
+import BuildingViewer2 from '../components/BuildingViewer2';
 
 function BuildingDetailPage() {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
@@ -550,7 +551,7 @@ function BuildingDetailPage() {
 
                                 {/* Building Viewer Section */}
                                 {buildingDetail?.buildingId && (
-                                    <BuildingViewer
+                                    <BuildingViewer2
                                         id={buildingDetail?.buildingId}
                                         viewer="Building"
                                         configAvailable={configAvailable}
@@ -567,7 +568,7 @@ function BuildingDetailPage() {
                                     <PropertyListing />
                                 </div>
 
-                                <div ref={sectionRefs['Map']}>
+                                <div ref={sectionRefs['Map']} className='container'>
                                     <LocationLatLngMap
                                         latitude={buildingDetail?.location?.coordinates?.[1]}
                                         longitude={buildingDetail?.location?.coordinates?.[0]}
@@ -586,7 +587,7 @@ function BuildingDetailPage() {
                                     <AskDeveloper />
                                 </div>
 
-                                {
+                                {/* {
                                     buildingDetail?.connectedProperties?.length > 0 && (<div ref={sectionRefs['ConnectedProperties']}>
                                         <HeadingCommon title='Connected Properties' dual="true" />
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -595,7 +596,7 @@ function BuildingDetailPage() {
                                             ))}
                                         </div>
                                     </div>)
-                                }
+                                } */}
                             </div>
 
                             {/* Sticky Contact Card Column */}
@@ -604,6 +605,8 @@ function BuildingDetailPage() {
                                     <BuildingContactCard info={buildingDetail} />
                                 </div>
                             </div>
+
+                           
                         </div>
                     ) : (
                         // Layout when configAvailable is true
@@ -624,7 +627,7 @@ function BuildingDetailPage() {
 
                             {/* Building Viewer Section */}
                             {buildingDetail?.buildingId && (
-                                <BuildingViewer
+                                <BuildingViewer2
                                     id={buildingDetail?.buildingId}
                                     viewer="Building"
                                     configAvailable={configAvailable}
@@ -643,7 +646,7 @@ function BuildingDetailPage() {
                                         <PropertyListing />
                                     </div>
 
-                                    <div ref={sectionRefs['Map']}>
+                                    <div ref={sectionRefs['Map']} className='container'>
                                         <LocationLatLngMap
                                             latitude={buildingDetail?.location?.coordinates?.[1]}
                                             longitude={buildingDetail?.location?.coordinates?.[0]}
@@ -683,6 +686,16 @@ function BuildingDetailPage() {
                         </>
                     )}
                 </div>
+                {
+                    buildingDetail?.connectedProperties?.length > 0 && (<div className='container' ref={sectionRefs['ConnectedProperties']}>
+                        <HeadingCommon title='Connected Properties' dual="true" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {buildingDetail?.connectedProperties?.map((property, index) => (
+                                <PropertyCard key={index} property={property} />
+                            ))}
+                        </div>
+                    </div>)
+                }
             </div>
         </div>
     );
