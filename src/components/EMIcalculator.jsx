@@ -1432,7 +1432,7 @@ const EMICalculator = ({ price = 10000000 }) => {
                         value={loanAmount}
                         setValue={handleLoanAmountChange}
                         min={1000000}
-                        max={40000000}
+                        max={500000000}
                         step={100000}
                         format={formatCurrency}
                         showLock={true}

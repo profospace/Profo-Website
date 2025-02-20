@@ -1495,74 +1495,96 @@ function ProjectDetailPage() {
   // Create an object to store only valid section refs
   const [validSectionRefs, setValidSectionRefs] = useState({});
 
-  // Create initial section refs
+  // // Create initial section refs
+  // const sectionRefs = {
+  //   'Description': useRef(null),
+  //   'FloorPlans': useRef(null),
+  //   'ProjectOverview': useRef(null),
+  //   'Map': useRef(null),
+  //   'Specifications': useRef(null),
+  //   'Amenities': useRef(null),
+  //   'highlights': useRef(null),
+  //   'NearBy': useRef(null),
+  //   'Gallery': useRef(null),
+  //   'ConnectedProperties': useRef(null),
+  //   'AskTheDeveloper': useRef(null),
+  // };
+
+  // Create refs for all possible sections
   const sectionRefs = {
     'Description': useRef(null),
+    '3D Viewer': useRef(null),
     'FloorPlans': useRef(null),
-    'ProjectOverview': useRef(null),
     'Map': useRef(null),
     'Specifications': useRef(null),
     'Amenities': useRef(null),
-    'highlights': useRef(null),
+    'Highlights': useRef(null),
     'NearBy': useRef(null),
     'Gallery': useRef(null),
-    'ConnectedProperties': useRef(null),
+    'LCDParameters': useRef(null),
+    'PropertyListing': useRef(null),
+    'EmiCalculator': useRef(null),
     'AskTheDeveloper': useRef(null),
+    'ConnectedProperties': useRef(null),
   };
+
+  // Function to check if a section has data
+  const hasSectionData = (sectionKey) => {
+    switch (sectionKey) {
+      case 'Description':
+        return Boolean(projectDetail?.description);
+      case '3D Viewer':
+        return Boolean(projectDetail?.projectId && config);
+      case 'FloorPlans':
+        return Boolean(projectDetail?.floorPlans?.length > 0);
+      case 'Map':
+        return Boolean(projectDetail?.location?.coordinates?.coordinates?.length === 2);
+      case 'Specifications':
+        return Boolean(projectDetail?.specification?.length > 0);
+      case 'Amenities':
+        return Boolean(projectDetail?.amenities?.length > 0);
+      case 'Highlights':
+        return Boolean(projectDetail?.highlights?.length > 0);
+      case 'NearBy':
+        return Boolean(projectDetail?.nearbyLocations?.length > 0);
+      case 'Gallery':
+        return Boolean(projectDetail?.gallery?.length > 0);
+      case 'LCDParameters':
+        return Boolean(projectDetail?.luda || projectDetail?.parkingArea || projectDetail?.frontRoad);
+      case 'PropertyListing':
+        return Boolean(projectDetail?.totalProperties);
+      case 'EmiCalculator':
+        return true; // Always available as a core feature
+      case 'AskTheDeveloper':
+        return Boolean(projectDetail?.contacts?.[0]);
+      case 'ConnectedProperties':
+        return Boolean(projectDetail?.connectedProperties?.length > 0);
+      default:
+        return false;
+    }
+  };
+
+  // Filter available tabs based on data
+  const availableTabs = Object.keys(sectionRefs).filter(tab => hasSectionData(tab));
 
   // Fetch project data
   useEffect(() => {
     dispatch(getSingleProject(post_id));
   }, [post_id, dispatch]);
 
-  // Update valid section refs when project data changes
+  // Update validSectionRefs when project data changes
   useEffect(() => {
     if (projectDetail) {
-      const newValidSectionRefs = {
-        'Description': sectionRefs['Description'], // Description is always shown
-        'ProjectOverview': sectionRefs['ProjectOverview'], // Building Viewer is always shown
-      };
-
-      // Add conditional sections based on data availability
-      if (projectDetail?.floorPlans?.length > 0) {
-        newValidSectionRefs['FloorPlans'] = sectionRefs['FloorPlans'];
-      }
-
-      if (projectDetail?.location?.coordinates?.coordinates?.length > 0) {
-        newValidSectionRefs['Map'] = sectionRefs['Map'];
-      }
-
-      if (projectDetail?.specification?.length > 0) {
-        newValidSectionRefs['Specifications'] = sectionRefs['Specifications'];
-      }
-
-      if (projectDetail?.amenities?.length > 0) {
-        newValidSectionRefs['Amenities'] = sectionRefs['Amenities'];
-      }
-
-      if (projectDetail?.highlights?.length > 0) {
-        newValidSectionRefs['highlights'] = sectionRefs['highlights'];
-      }
-
-      if (projectDetail?.nearbyLocations?.length > 0) {
-        newValidSectionRefs['NearBy'] = sectionRefs['NearBy'];
-      }
-
-      if (projectDetail?.gallery?.length > 0) {
-        newValidSectionRefs['Gallery'] = sectionRefs['Gallery'];
-      }
-
-      if (projectDetail?.connectedProperties?.length > 0) {
-        newValidSectionRefs['ConnectedProperties'] = sectionRefs['ConnectedProperties'];
-      }
-
-      if (projectDetail?.contacts?.[0]) {
-        newValidSectionRefs['AskTheDeveloper'] = sectionRefs['AskTheDeveloper'];
-      }
-
+      // Create an object containing only the refs for sections with data
+      const newValidSectionRefs = {};
+      
+      availableTabs.forEach(tab => {
+        newValidSectionRefs[tab] = sectionRefs[tab];
+      });
+      
       setValidSectionRefs(newValidSectionRefs);
     }
-  }, [projectDetail]);
+  }, [projectDetail, availableTabs]);
 
   // Scroll and intersection detection
   useEffect(() => {
@@ -1655,10 +1677,10 @@ function ProjectDetailPage() {
         // alert("Data")
         console.log("BuildingViewer", response)
         // if (response?.status != 404) {
-          const data = await response.json();
-          console.log(data?.status)
+        const data = await response.json();
+        console.log(data?.status)
         console.log("data", data)
-          setConfig(data?.data);
+        setConfig(data?.data);
         // }
         // if (!response.ok) {
         //     throw new Error(`Error: ${response.status} - ${response.statusText}`);
@@ -1681,6 +1703,7 @@ function ProjectDetailPage() {
             details={projectDetail}
             sectionRefs={validSectionRefs}
             activeSection={activeSection}
+            availableTabs={availableTabs}
           />
         </div>
       </div>
@@ -1828,8 +1851,8 @@ function ProjectDetailPage() {
             </div>
           </div>
           {/* Building Viewer */}
-          <div>
-            <BuildingViewer id={projectDetail?.projectId} config={config} viewer="Project"  />
+          <div ref={sectionRefs['3D Viewer']}>
+            <BuildingViewer id={projectDetail?.projectId} config={config} viewer="Project" />
           </div>
           <div className='grid grid-cols-12 '>
             {/* second left div */}

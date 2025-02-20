@@ -1157,40 +1157,42 @@ export const ContactButton = () => {
 // export default HeaderSection;
 
 
-const HeaderSection = ({ details, sectionRefs, activeSection, configAvailable }) => {
+const HeaderSection = ({ details, sectionRefs, activeSection, availableTabs }) => {
     const [isTabsSticky, setIsTabsSticky] = useState(false);
     const [isTitleSticky, setIsTitleSticky] = useState(false);
     const [hasBackground, setHasBackground] = useState(false);
     const imagePreviewRef = useRef(null);
 
-    // Function to check if a section has data
-    const hasSectionData = (sectionKey) => {
-        switch (sectionKey) {
-            case 'Description':
-                return Boolean(details?.description);
-            case '3D Viewer':
-                return Boolean(configAvailable);
-            case 'LCDParameters':
-                return Boolean(details?.luda || details?.parkingArea || details?.frontRoad);
-            case 'PropertyListing':
-                return Boolean(details?.totalProperties);
-            case 'Map':
-                return Boolean(details?.location?.coordinates?.length === 2);
-            case 'EmiCalculator':
-                return true; // Always show if it's a core feature
-            case 'Gallery':
-                return Boolean(details?.galleryList?.length > 0);
-            case 'AskTheDeveloper':
-                return Boolean(details?.ownerId);
-            case 'ConnectedProperties':
-                return Boolean(details?.connectedProperties?.length > 0);
-            default:
-                return false;
-        }
-    };
+    // // Function to check if a section has data
+    // const hasSectionData = (sectionKey) => {
+    //     switch (sectionKey) {
+    //         case 'Description':
+    //             return Boolean(details?.description);
+    //         case '3D Viewer':
+    //             return Boolean(configAvailable);
+    //         case 'LCDParameters':
+    //             return Boolean(details?.luda || details?.parkingArea || details?.frontRoad);
+    //         case 'PropertyListing':
+    //             return Boolean(details?.totalProperties);
+    //         case 'Map':
+    //             return Boolean(details?.location?.coordinates?.length === 2);
+    //         case 'EmiCalculator':
+    //             return true; // Always show if it's a core feature
+    //         case 'Gallery':
+    //             return Boolean(details?.galleryList?.length > 0);
+    //         case 'AskTheDeveloper':
+    //             return Boolean(details?.ownerId);
+    //         case 'ConnectedProperties':
+    //             return Boolean(details?.connectedProperties?.length > 0);
+    //         default:
+    //             return false;
+    //     }
+    // };
 
-    // Filter navigation tabs to only show sections with data
-    const availableTabs = Object.keys(sectionRefs || {}).filter(tab => hasSectionData(tab));
+    // // Filter navigation tabs to only show sections with data
+    // const availableTabs = Object.keys(sectionRefs || {}).filter(tab => hasSectionData(tab));
+
+    // console.log("availableTabs", availableTabs)
 
     useEffect(() => {
         const handleScroll = () => {
@@ -1271,21 +1273,23 @@ const HeaderSection = ({ details, sectionRefs, activeSection, configAvailable })
                     <Callback />
                 </div>
 
-                {details?.galleryList?.length > 0 && (
-                    <button
-                        className="flex items-center gap-2 px-4 py-2 mb-20 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
-                        onClick={() => imagePreviewRef.current.openGallery()}
-                    >
-                        <Camera className="w-5 h-5" />
-                        <span>
-                            {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
-                        </span>
-                        <ImagePreview
-                            ref={imagePreviewRef}
-                            images={details?.galleryList || details?.gallery?.[0]?.images || []}
-                        />
-                    </button>
-                )}
+                <div className='min-h-32'>
+                    {details?.galleryList?.length > 0 && (
+                        <button
+                            className="flex items-center gap-2 px-4 py-2 mb-20 bg-black bg-opacity-50 rounded-lg hover:bg-opacity-60 transition-colors w-fit"
+                            onClick={() => imagePreviewRef.current.openGallery()}
+                        >
+                            <Camera className="w-5 h-5" />
+                            <div>
+                                {details?.galleryList?.length || details?.gallery?.[0]?.images?.length || 0} photos
+                            </div>
+                            <ImagePreview
+                                ref={imagePreviewRef}
+                                images={details?.galleryList || details?.gallery?.[0]?.images || []}
+                            />
+                        </button>
+                    )}
+                </div>
 
                 {availableTabs.length > 0 && (
                     <div

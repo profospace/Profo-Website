@@ -493,6 +493,37 @@ function BuildingDetailPage() {
         'ConnectedProperties': useRef(null)
     };
 
+    // Function to check if a section has data
+    const hasSectionData = (sectionKey) => {
+        switch (sectionKey) {
+            case 'Description':
+                return Boolean(buildingDetail?.description);
+            case '3D Viewer':
+                return Boolean(configAvailable);
+            case 'LCDParameters':
+                return Boolean(buildingDetail?.luda || buildingDetail?.parkingArea || buildingDetail?.frontRoad);
+            case 'PropertyListing':
+                return Boolean(buildingDetail?.totalProperties);
+            case 'Map':
+                return Boolean(buildingDetail?.location?.coordinates?.length === 2);
+            case 'EmiCalculator':
+                return true; // Always show if it's a core feature
+            case 'Gallery':
+                return Boolean(buildingDetail?.galleryList?.length > 0);
+            case 'AskTheDeveloper':
+                return Boolean(buildingDetail?.ownerId);
+            case 'ConnectedProperties':
+                return Boolean(buildingDetail?.connectedProperties?.length > 0);
+            default:
+                return false;
+        }
+    };
+
+    // Filter navigation tabs to only show sections with data
+    const availableTabs = Object.keys(sectionRefs || {}).filter(tab => hasSectionData(tab));
+
+    console.log("availableTabs", availableTabs)
+
     useEffect(() => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
@@ -533,7 +564,7 @@ function BuildingDetailPage() {
         <div className="">
             <div className="relative">
                 {/* Header Section */}
-                <HeaderSection details={buildingDetail} sectionRefs={sectionRefs} activeSection={activeSection} configAvailable={configAvailable} />
+                <HeaderSection details={buildingDetail} sectionRefs={sectionRefs} activeSection={activeSection} availableTabs={availableTabs}/>
 
                 {isTabsSticky && <div className="h-[64px]" />}
 
@@ -599,7 +630,7 @@ function BuildingDetailPage() {
                                 </div>
                             </div>
 
-                           
+
                         </div>
                     ) : (
                         // Layout when configAvailable is available
@@ -618,24 +649,24 @@ function BuildingDetailPage() {
                                 </div>
                             </div>
 
-                            
+
 
                             {/* Building Viewer Section */}
-                                {buildingDetail?.buildingId && (
-                                    <div ref={sectionRefs['3D Viewer']}>
-                                        <BuildingViewer2
-                                            id={buildingDetail?.buildingId}
-                                            viewer="Building"
-                                            configAvailable={configAvailable}
-                                            setConfigAvailable={setConfigAvailable}
-                                        />
-                                    </div>
-                                )}
+                            {buildingDetail?.buildingId && (
+                                <div ref={sectionRefs['3D Viewer']} className='mt-6'>
+                                    <BuildingViewer2
+                                        id={buildingDetail?.buildingId}
+                                        viewer="Building"
+                                        configAvailable={configAvailable}
+                                        setConfigAvailable={setConfigAvailable}
+                                    />
+                                </div>
+                            )}
 
                             {/* Main Content Section */}
                             <div className="grid grid-cols-12 gap-0">
                                 <div className="col-span-8">
-                                        <div ref={sectionRefs['LCDParameters']}>
+                                    <div ref={sectionRefs['LCDParameters']}>
                                         <BuildingLCDParameters />
                                     </div>
 
