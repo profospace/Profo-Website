@@ -85,7 +85,7 @@ const propertiesSlice = createSlice({
       .addCase(getAllFilteredProperties.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload.message;
+        // state.message = action.payload.message;
       })
       .addCase(getSingleProperty.pending, (state) => {
         state.isLoading = true;
@@ -98,7 +98,7 @@ const propertiesSlice = createSlice({
       .addCase(getSingleProperty.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload.message;
+        // state.message = action.payload.message;
       })
   },
 });

@@ -46,8 +46,8 @@ const getAllFilteredProperties = async (filters) => {
 };
 
 const getSingleProperty = async (post_id) => {
-  const response = await axios.get(`${single_property_base_url}${post_id}`);
-  console.log("getConfig")
+  const response = await axios.get(`${single_property_base_url}${post_id}` , getConfig());
+  // console.log("getConfig" , getConfig())
   console.log(response)
   return response.data;
 };
