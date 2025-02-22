@@ -1136,7 +1136,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { getConfig } from '../utils/config';
+import { getAuthToken, getConfig } from '../utils/config';
 
 // Common utility functions
 const formatPrice = (price) => {
@@ -1795,6 +1795,20 @@ const PropertyCard = ({ item, index }) => {
 
     const handleAddToWhislist = async (e, post_id) => {
         e.stopPropagation();
+        if(getAuthToken() === null){
+            navigate('/signup')
+            toast("SignIn Required", {
+                // icon: isLocalWishlisted ? '💔' : '❤️',
+                style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                },
+            });
+
+            return;
+        }
+        
         console.log(post_id);
 
         // Toggle local state immediately for instant UI feedback
