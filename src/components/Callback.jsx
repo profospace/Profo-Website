@@ -86,7 +86,7 @@ export const Callback = () => {
 
             {/* Modal Overlay */}
             <div
-                className={`text-black sticky inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? 'opacity-100 z-50' : 'opacity-0 pointer-events-none z-50'
+                className={`text-black fixed inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? 'opacity-100 z-50' : 'opacity-0 pointer-events-none'
                     }`}
                 onClick={toggleModal}
             >

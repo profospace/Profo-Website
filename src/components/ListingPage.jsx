@@ -1797,7 +1797,7 @@ const PropertyCard = ({ item, index }) => {
         e.stopPropagation();
         if(getAuthToken() === null){
             navigate('/signup')
-            toast("SignIn Required", {
+            toast.error("SignIn Required", {
                 // icon: isLocalWishlisted ? '💔' : '❤️',
                 style: {
                     borderRadius: '10px',
