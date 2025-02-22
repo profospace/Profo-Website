@@ -50,7 +50,7 @@ import { base_url } from '../utils/base_url';
 
 
 const HomePageCard = ({ info, image, price, label, type, navigation, contactList, bedrooms, address, amenities , gallery }) => {
-    console.log(gallery)
+    // console.log(gallery)
     const navigate = useNavigate()
     const handleContactClick = (e) => {
         e.stopPropagation();

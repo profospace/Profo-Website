@@ -1986,7 +1986,7 @@ function ProjectDetailPage() {
         <div className='grid grid-cols-12'>
           {/* buildingConfig not available */}
           {/* first left div */}
-            <div className='col-span-8 projectContainer flex flex-col gap-10'>
+          <div className='col-span-8 projectContainer flex flex-col gap-10'>
             <div className="max-w-4xl" ref={sectionRefs['Description']}>
               {/* Header Section */}
               <div className="mb-6">
@@ -2162,7 +2162,7 @@ function ProjectDetailPage() {
             )}
           </div>
           {/* first right div */}
-            <div className='col-span-4 p-5'>
+          <div className='col-span-4 p-5'>
             <div className="sticky top-32">
               <ProjectContactCard info={projectDetail?.builder} connectedProperties={projectDetail?.connectedProperties} />
               {/* <DownloadBrochures /> */}

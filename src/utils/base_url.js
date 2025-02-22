@@ -34,6 +34,8 @@ export const map_base_url = 'https://propertify.onrender.com/api/search/nearby'
 export const home_feed_base_url = 'https://propertify.onrender.com/api/search/nearby'
 export const filter_base_url = 'https://propertify.onrender.com/api/web/properties/filter'
 export const project_upload_url = 'https://propertify.onrender.com'
+export const get_user_wishlist = 'https://propertify.onrender.com/api/users/profile'
+
 
 // Local
 // export const base_url = 'http://localhost:5053'
@@ -48,3 +50,5 @@ export const project_upload_url = 'https://propertify.onrender.com'
 // export const filter_base_url = 'http://localhost:5053/api/web/properties/filter'
 
 // export const project_upload_url = 'http://localhost:5053'
+
+// export const get_user_wishlist = 'http://localhost:5053/api/users/profile'

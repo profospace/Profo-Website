@@ -396,6 +396,7 @@ import { FiSettings } from 'react-icons/fi';
 import ActiveFiltersDisplay from '../components/ActiveFiltersDisplay';
 import { BuildingFilter, ProjectFilter, PropertyFilter } from '../components/DynamicFilterComponent';
 import SearchSection from '../components/SearchSection';
+import { getWishlist } from '../redux/features/wishlist/wishlistSlice';
 
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
@@ -467,6 +468,10 @@ const MainPropertyPage = () => {
         collapsed: { width: 'auto' },
         expanded: { width: '30rem' }
     };
+
+    useEffect(() => {
+        dispatch(getWishlist())
+      }, []);
 
 
     return (

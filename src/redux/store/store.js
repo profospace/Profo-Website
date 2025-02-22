@@ -12,7 +12,7 @@
 //         projects : projectsReducer,
 //         map: mapReducer,
 //         homeFeed : homeFeedReducer
-        
+
 //     }
 // })
 
@@ -23,7 +23,8 @@ import propertiesReducer from "../features/Properties/propertiesSlice";
 import buildingsReducer from "../features/Buildings/buildingsSlice";
 import projectsReducer from "../features/Projects/projectsSlice";
 import mapReducer from "../features/Map/mapSlice";
-import homeFeedReducer from "../features/HomeFeed/homeFeedSlice"
+import homeFeedReducer from "../features/HomeFeed/homeFeedSlice";
+import wishlistReducer from "../features/Wishlist/wishlistSlice";
 import { combineReducers } from "redux";
 
 // Combine all reducers
@@ -32,15 +33,15 @@ const rootReducer = combineReducers({
     buildings: buildingsReducer,
     projects: projectsReducer,
     map: mapReducer,
-    homeFeed : homeFeedReducer
-
+    homeFeed: homeFeedReducer,
+    wishlist: wishlistReducer
 });
 
 // Redux Persist configuration
 const persistConfig = {
     key: "root", // Key to store the persisted state
     storage,     // Storage engine
-    whitelist: ["map"], // Specify which slices to persist
+    wishlist: ["map"], // Specify which slices to persist
 };
 
 // Create a persisted reducer

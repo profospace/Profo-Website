@@ -90,49 +90,93 @@ function SinglePage() {
     const [activeSection, setActiveSection] = useState('overview');
 
     // Function to check which section is in view
-    useEffect(() => {
-        const handleScroll = () => {
-            const sections = [
-                { id: 'overview', ref: overviewRef },
-                { id: 'amenities', ref: amenitiesRef },
-                { id: 'facilities', ref: facilitiesRef },
-                { id: 'location', ref: locationRef },
-                { id: 'loans', ref: loansRef },
-                { id: 'projectInfo', ref: projectInfoRef },
-                { id: '3dview', ref: buildingViewRef }
-            ].filter(section => section.ref.current); // Only include sections that exist
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const sections = [
+    //             { id: 'overview', ref: overviewRef },
+    //             { id: 'amenities', ref: amenitiesRef },
+    //             { id: 'facilities', ref: facilitiesRef },
+    //             { id: 'location', ref: locationRef },
+    //             { id: 'loans', ref: loansRef },
+    //             { id: 'projectInfo', ref: projectInfoRef },
+    //             { id: '3dview', ref: buildingViewRef }
+    //         ].filter(section => section.ref.current); // Only include sections that exist
 
-            const currentSection = sections.find(section => {
-                const element = section.ref.current;
-                if (!element) return false;
-                const rect = element.getBoundingClientRect();
-                return rect.top <= 100 && rect.bottom >= 100;
-            });
+    //         const currentSection = sections.find(section => {
+    //             const element = section.ref.current;
+    //             if (!element) return false;
+    //             const rect = element.getBoundingClientRect();
+    //             return rect.top <= 100 && rect.bottom >= 100;
+    //         });
 
-            if (currentSection) {
-                setActiveSection(currentSection.id);
-            }
-        };
+    //         if (currentSection) {
+    //             setActiveSection(currentSection.id);
+    //         }
+    //     };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => window.removeEventListener('scroll', handleScroll);
+    // }, []);
+
+
 
     // Function to scroll to section
+    // const scrollToSection = (sectionRef, sectionId) => {
+    //     sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    //     setActiveSection(sectionId);
+    // };
+
+
+    const SCROLL_OFFSET = 120; // Adjust this value based on your header height + navigation height
+
     const scrollToSection = (sectionRef, sectionId) => {
-        sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+        const element = sectionRef.current;
+        if (!element) return;
+
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - SCROLL_OFFSET;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
         setActiveSection(sectionId);
+    };
+
+    // Update the scroll detection accordingly
+    const handleScroll = () => {
+        const sections = [
+            { id: 'overview', ref: overviewRef },
+            { id: 'amenities', ref: amenitiesRef },
+            { id: 'facilities', ref: facilitiesRef },
+            { id: 'location', ref: locationRef },
+            { id: 'loans', ref: loansRef },
+            { id: 'projectInfo', ref: projectInfoRef },
+            { id: '3dview', ref: buildingViewRef }
+        ].filter(section => section.ref.current);
+
+        const currentSection = sections.find(section => {
+            const element = section.ref.current;
+            if (!element) return false;
+            const rect = element.getBoundingClientRect();
+            return rect.top <= SCROLL_OFFSET && rect.bottom >= SCROLL_OFFSET;
+        });
+
+        if (currentSection) {
+            setActiveSection(currentSection.id);
+        }
     };
 
     // Get available sections based on property data
     const getAvailableSections = () => {
         const sections = [
             { id: 'overview', label: 'Overview', ref: overviewRef, always: true },
+            { id: '3dview', label: '3D View', ref: buildingViewRef, condition: configAvailable },
             { id: 'amenities', label: 'Amenities', ref: amenitiesRef, condition: propertyDetail?.amenities?.length > 0 },
             { id: 'facilities', label: 'Facilities', ref: facilitiesRef, condition: propertyDetail?.facilities?.length > 0 },
             { id: 'location', label: 'Location', ref: locationRef, condition: propertyDetail?.latitude && propertyDetail?.longitude },
             { id: 'loans', label: 'Home Loans', ref: loansRef, condition: propertyDetail?.price },
-            { id: 'projectInfo', label: 'Project Info', ref: projectInfoRef, condition: propertyDetail?.connectedWithProject }
+            { id: 'projectInfo', label: 'Project Info', ref: projectInfoRef, condition: propertyDetail?.connectedWithProject },
         ];
 
         return sections.filter(section => section.always || section.condition);
@@ -206,7 +250,7 @@ function SinglePage() {
         ? Math.round(propertyDetail?.price / propertyDetail?.superBuiltupArea)
         : 0;
 
-   
+
     return (
         <div>
             {/* Common Div at the Top */}
@@ -466,9 +510,11 @@ function SinglePage() {
                         </div>
                     </div>
                     {/* Building Viewer */}
-                    <BuildingViewer2 id={propertyDetail?.post_id} viewer="Property" configAvailable={configAvailable}
-                        setConfigAvailable={setConfigAvailable}
-                    />
+                    <div ref={buildingViewRef}>
+                        <BuildingViewer2 id={propertyDetail?.post_id} viewer="Property" configAvailable={configAvailable}
+                            setConfigAvailable={setConfigAvailable}
+                        />
+                    </div>
 
                     <div className='grid grid-cols-12 '>
                         {/* second left div */}

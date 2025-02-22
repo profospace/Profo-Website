@@ -7,7 +7,6 @@ import Home from './pages/Home';
 const PropertiesPage = lazy(() => import('./pages/PropertiesPage'));
 const About = lazy(() => import('./pages/About'));
 const SinglePage = lazy(() => import('./pages/PropertyDetailPage'));
-// const Gallery = lazy(() => import('./pages/Gallery'));
 
 const MainPropertyPage = lazy(() => import('./pages/MainPropertyPage'));
 
@@ -39,6 +38,8 @@ import { Button } from 'antd';
 import Contact from './pages/Contact';
 import Testing from './Testing/Testing';
 import Wishlist from './pages/Wishlist';
+import { getWishlist } from './redux/features/wishlist/wishlistSlice';
+import { Toaster } from 'react-hot-toast';
 
 // import MainPropertyPage from './pages/MainPropertyPage';
 
@@ -95,6 +96,7 @@ function App() {
     () => {
       console.log("HI")
       dispatch(getHomeFeed());
+      dispatch(getWishlist())
 
       if (isOnline) {
         offlineImageSetup()
@@ -117,6 +119,10 @@ function App() {
       <div className=''>
         {/* Custom Floating Button */}
         <BackToTop />
+        <Toaster
+          position="bottom-center"
+          reverseOrder={true}
+        />
         <Routes>
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
@@ -138,8 +144,6 @@ function App() {
             <Route path='/api/details/project/:post_id' element={<ProjectDetailPage />} />{ /* projects detail page */}
             <Route path='/api/details/building/:buildingId' element={<BuildingDetailPage />} /> {/* buildings detail page */}
             <Route path='/api/details/:post_id' element={<SinglePage />} /> {/* properties */}
-            {/* <Route path='/gallery' element={<Gallery />} /> */}
-
 
             <Route path='/terms-conditions' element={<TermsAndConditions />} />
             <Route path='/privacy-policy' element={<PrivacyAndPolicy />} />

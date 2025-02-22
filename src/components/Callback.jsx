@@ -79,14 +79,14 @@ export const Callback = () => {
             {/* Trigger Button */}
             <button
                 onClick={toggleModal}
-                className="px-6 py-3 bg-yellow-400 text-black font-medium rounded-lg hover:bg-yellow-500 transition-colors"
+                className="w-full px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-white hover:text-black hover:ring-2 hover:ring-yellow-[#FFEE58] transition-colors"
             >
                 Callback
             </button>
 
             {/* Modal Overlay */}
             <div
-                className={`text-black fixed inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? 'opacity-100 z-50' : 'opacity-0 pointer-events-none'
+                className={`text-black sticky inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? 'opacity-100 z-50' : 'opacity-0 pointer-events-none z-50'
                     }`}
                 onClick={toggleModal}
             >

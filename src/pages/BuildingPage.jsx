@@ -3,15 +3,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import BuildingCard from '../components/BuildingCard'
 import { getAllBuildings } from '../redux/features/Buildings/buildingsSlice'
 
-function  BuildingPage() {
+function BuildingPage() {
     const { buildings } = useSelector(state => state.buildings)
     const dispatch = useDispatch()
     useEffect(
-        ()=>{
+        () => {
             dispatch(getAllBuildings())
         }
     )
-    
+
     return (
         <div>
 
@@ -36,4 +36,4 @@ function  BuildingPage() {
     )
 }
 
-export default  BuildingPage
+export default BuildingPage

@@ -568,7 +568,7 @@ function BuildingDetailPage() {
             <div className="relative">
                 {/* Header Section */}
                 <div ref={sectionRefs['Home']}>
-                <HeaderSection details={buildingDetail} sectionRefs={sectionRefs} activeSection={activeSection} availableTabs={availableTabs}/>
+                    <HeaderSection details={buildingDetail} sectionRefs={sectionRefs} activeSection={activeSection} availableTabs={availableTabs} />
 
                 </div>
 
@@ -691,7 +691,7 @@ function BuildingDetailPage() {
                                         <EMICalculator />
                                     </div>
 
-                                        <div ref={sectionRefs['Gallery']} className='container'>
+                                    <div ref={sectionRefs['Gallery']} className='container'>
                                         <GalleryList images={buildingDetail?.galleryList} />
                                     </div>
 

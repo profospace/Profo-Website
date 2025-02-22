@@ -14,7 +14,7 @@ function PropertiesPage() {
     const { filteredProperties, currentPage, totalCount, totalPages } = useSelector((state) => state.properties);
     // Determine which list to render
     const propertiesToDisplay = filteredProperties?.length > 0 ? filteredProperties : properties;
-    const [show , setShow] = useState(true) // if map open properties will be hidden and vice-verse
+    const [show, setShow] = useState(true) // if map open properties will be hidden and vice-verse
     console.log(properties)
 
 
@@ -27,7 +27,7 @@ function PropertiesPage() {
         <div className="w-full h-full bg-white">
             <FiltersSection />
             {/* <div><FloatButtonShowMap setShow={setShow}/></div> */}
-            <div><PropertyMap setShow={setShow}/></div>
+            <div><PropertyMap setShow={setShow} /></div>
             {/* <LocationAccessPopup /> */}
             {/* <div className="grid gap-6 p-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4"> */}
             {show && <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 px-6">

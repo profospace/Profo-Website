@@ -282,11 +282,13 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                 {details?.contactList?.[0] &&
                     <button
                         onClick={() => setShowContacts(!showContacts)}
-                        className="w-full bg-yellow-400 hover:bg-yellow-500 py-3 rounded-lg mb-6"
+                        className="w-full bg-yellow-400 hover:bg-yellow-500 py-3 rounded-lg mb-2"
                     >
                         {showContacts ? details.contactList[0] : 'Show contact details'}
                     </button>
+
                 }
+                    <Callback />
 
                 <div className="flex items-center gap-3">
                     {details?.name && <img
@@ -302,7 +304,6 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                             <p className="text-blue-500">{details.website}</p>
                         }
                     </div>}
-                    <Callback />
                 </div>
 
                 <div className="flex items-start gap-3">
