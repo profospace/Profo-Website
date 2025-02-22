@@ -1294,7 +1294,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AlertCircle, Lock } from 'lucide-react';
 
-const Card = ({ children, className = "container" }) => (
+const Card = ({ children, className = "" }) => (
     <div className={`w-full ${className}`}>{children}</div>
 );
 

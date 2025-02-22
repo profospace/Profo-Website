@@ -220,7 +220,7 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
 
                 <div className='flex gap-5 items-center'>
                     <h2 className="text-lg font-semibold">{details?.ownerName}</h2>
-                    
+
                 </div>
 
                 <div className="flex items-center gap-2 mb-4">
@@ -244,11 +244,11 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                     }
                     {details?.statistics?.ongoingProjects &&
                         <span className="capitalize px-3 py-1 bg-gray-100 rounded-full text-sm">
-                            {details?.statistics?.ongoingProjects} {details?.statistics?.ongoingProjects && "ongoing" } 
+                            {details?.statistics?.ongoingProjects} {details?.statistics?.ongoingProjects && "ongoing"}
                         </span>
                     }
-                   
-                   
+
+
                     <div className='flex flex-col items-start gap-2'>
                         {/* Tags Section */}
                         <div className='flex gap-2 flex-wrap'>
@@ -276,7 +276,7 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
 
 
 
-                    
+
 
 
                 {details?.contactList?.[0] &&
@@ -327,7 +327,7 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                     </div>
                 </div>
 
-                
+
 
                 {showContacts && details?.contactList?.length > 1 && (
                     <div className="mt-4 space-y-2">

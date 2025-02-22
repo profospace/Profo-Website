@@ -24,7 +24,7 @@ const ProjectNearbyLocations = ({ nearbyLocations }) => {
         : nearbyLocations?.filter(loc => loc.type === selectedType);
 
     return (
-        <div className="w-full max-w-7xl mx-auto px-4 py-6 bg-white">
+        <div className="w-full max-w-7xl  bg-white">
             <div className="mb-4">
                 {/* <h2 className="text-3xl font-bold text-gray-800 mb-4">
                     Nearby Locations

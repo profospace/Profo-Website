@@ -721,7 +721,7 @@ const ProjectContactCard = ({ info, connectedProperties }) => {
     const stats = getProjectStats();
 
     return (
-        <div className="max-w-2xl w-full space-y-4 mt-4 px-4 ">
+        <div className="max-w-2xl w-full space-y-4">
             {/* Price and Area Range */}
             <div className="space-y-1">
                 <div className="text-3xl font-medium">

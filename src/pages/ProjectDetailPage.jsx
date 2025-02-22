@@ -1523,7 +1523,6 @@ function ProjectDetailPage() {
     'Gallery': useRef(null),
     'LCDParameters': useRef(null),
     'PropertyListing': useRef(null),
-    'EmiCalculator': useRef(null),
     'AskTheDeveloper': useRef(null),
     'ConnectedProperties': useRef(null),
   };
@@ -1532,7 +1531,7 @@ function ProjectDetailPage() {
   const hasSectionData = (sectionKey) => {
     switch (sectionKey) {
       case 'Description':
-        return Boolean(projectDetail?.description);
+        return Boolean(projectDetail);
       case '3D Viewer':
         return Boolean(projectDetail?.projectId && config);
       case 'FloorPlans':
@@ -1553,8 +1552,6 @@ function ProjectDetailPage() {
         return Boolean(projectDetail?.luda || projectDetail?.parkingArea || projectDetail?.frontRoad);
       case 'PropertyListing':
         return Boolean(projectDetail?.totalProperties);
-      case 'EmiCalculator':
-        return true; // Always available as a core feature
       case 'AskTheDeveloper':
         return Boolean(projectDetail?.contacts?.[0]);
       case 'ConnectedProperties':
@@ -1577,97 +1574,166 @@ function ProjectDetailPage() {
     if (projectDetail) {
       // Create an object containing only the refs for sections with data
       const newValidSectionRefs = {};
-      
+
       availableTabs.forEach(tab => {
         newValidSectionRefs[tab] = sectionRefs[tab];
       });
-      
+
       setValidSectionRefs(newValidSectionRefs);
     }
-  }, [projectDetail, availableTabs]);
+  }, [projectDetail]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const offset = 200;
+
+      const currentSection = Object.entries(sectionRefs).find(([_, ref]) => {
+        if (!ref.current) return false;
+        const { top, bottom } = ref.current.getBoundingClientRect();
+        return top <= offset && bottom > offset;
+      });
+
+      if (currentSection) {
+        setActiveSection(currentSection[0]);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Scroll and intersection detection
+  // useEffect(() => {
+  //   let isThrottled = false;
+  //   const throttleTime = 50; // ms
+
+  //   const handleScroll = () => {
+  //     if (isThrottled) return;
+  //     isThrottled = true;
+
+  //     // Clear existing timeout
+  //     if (scrollTimeoutRef.current) {
+  //       clearTimeout(scrollTimeoutRef.current);
+  //     }
+
+  //     setIsScrolling(true);
+
+  //     // Check if user has scrolled by a significant amount
+  //     const currentScrollY = window.scrollY;
+  //     const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
+
+  //     if (scrollDelta > 50) { // Minimum scroll threshold
+  //       const projectOverviewEl = validSectionRefs['ProjectOverview']?.current;
+  //       if (projectOverviewEl) {
+  //         const rect = projectOverviewEl.getBoundingClientRect();
+  //         const viewportHeight = window.innerHeight;
+  //         const threshold = viewportHeight * 0.4; // 40% threshold
+
+  //         setIsBuildingViewerInView(
+  //           rect.top < threshold &&
+  //           rect.bottom > threshold
+  //         );
+  //       }
+  //       lastScrollY.current = currentScrollY;
+  //     }
+
+  //     // Reset scroll state after delay
+  //     scrollTimeoutRef.current = setTimeout(() => {
+  //       setIsScrolling(false);
+  //     }, 150); // Adjust this value to change how quickly after stopping scroll the animation can occur
+
+  //     // Reset throttle
+  //     setTimeout(() => {
+  //       isThrottled = false;
+  //     }, throttleTime);
+  //   };
+
+  //   // Track active section
+  //   const handleActiveSection = () => {
+  //     const scrollPosition = window.scrollY + 200;
+  //     let activeFound = false;
+
+  //     for (const [section, ref] of Object.entries(validSectionRefs)) {
+  //       if (!ref?.current) continue;
+
+  //       const element = ref.current;
+  //       const { top, bottom } = element.getBoundingClientRect();
+  //       const elementTop = top + window.scrollY;
+  //       const elementBottom = bottom + window.scrollY;
+
+  //       if (scrollPosition >= elementTop && scrollPosition <= elementBottom) {
+  //         setActiveSection(section);
+  //         activeFound = true;
+  //         break;
+  //       }
+  //     }
+
+  //     if (!activeFound) {
+  //       setActiveSection(null);
+  //     }
+  //   };
+
+  //   window.addEventListener('scroll', handleScroll, { passive: true });
+  //   window.addEventListener('scroll', handleActiveSection, { passive: true });
+
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //     window.removeEventListener('scroll', handleActiveSection);
+  //     if (scrollTimeoutRef.current) {
+  //       clearTimeout(scrollTimeoutRef.current);
+  //     }
+  //   };
+  // }, [validSectionRefs]);
+
+
+  // Handle building viewer visibility during scroll
   useEffect(() => {
     let isThrottled = false;
-    const throttleTime = 50; // ms
+    const throttleTime = 50;
 
     const handleScroll = () => {
       if (isThrottled) return;
       isThrottled = true;
 
-      // Clear existing timeout
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }
 
       setIsScrolling(true);
 
-      // Check if user has scrolled by a significant amount
       const currentScrollY = window.scrollY;
       const scrollDelta = Math.abs(currentScrollY - lastScrollY.current);
 
-      if (scrollDelta > 50) { // Minimum scroll threshold
-        const projectOverviewEl = validSectionRefs['ProjectOverview']?.current;
-        if (projectOverviewEl) {
-          const rect = projectOverviewEl.getBoundingClientRect();
-          const viewportHeight = window.innerHeight;
-          const threshold = viewportHeight * 0.4; // 40% threshold
+      if (scrollDelta > 50) {
+        const viewportHeight = window.innerHeight;
+        const threshold = viewportHeight * 0.4;
 
-          setIsBuildingViewerInView(
-            rect.top < threshold &&
-            rect.bottom > threshold
-          );
-        }
+        setIsBuildingViewerInView(
+          document.documentElement.scrollTop < threshold
+        );
+
         lastScrollY.current = currentScrollY;
       }
 
-      // Reset scroll state after delay
       scrollTimeoutRef.current = setTimeout(() => {
         setIsScrolling(false);
-      }, 150); // Adjust this value to change how quickly after stopping scroll the animation can occur
+      }, 150);
 
-      // Reset throttle
       setTimeout(() => {
         isThrottled = false;
       }, throttleTime);
     };
 
-    // Track active section
-    const handleActiveSection = () => {
-      const scrollPosition = window.scrollY + 200;
-      let activeFound = false;
-
-      for (const [section, ref] of Object.entries(validSectionRefs)) {
-        if (!ref?.current) continue;
-
-        const element = ref.current;
-        const { top, bottom } = element.getBoundingClientRect();
-        const elementTop = top + window.scrollY;
-        const elementBottom = bottom + window.scrollY;
-
-        if (scrollPosition >= elementTop && scrollPosition <= elementBottom) {
-          setActiveSection(section);
-          activeFound = true;
-          break;
-        }
-      }
-
-      if (!activeFound) {
-        setActiveSection(null);
-      }
-    };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('scroll', handleActiveSection, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('scroll', handleActiveSection);
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }
     };
-  }, [validSectionRefs]);
+  }, []);
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -1701,7 +1767,7 @@ function ProjectDetailPage() {
         <div className="relative">
           <HeaderSection
             details={projectDetail}
-            sectionRefs={validSectionRefs}
+            sectionRefs={sectionRefs}
             activeSection={activeSection}
             availableTabs={availableTabs}
           />
@@ -1710,7 +1776,7 @@ function ProjectDetailPage() {
 
       {config ? (
         <>
-          <div className='grid grid-cols-12 gap-4'>
+          <div className='grid grid-cols-12 gap-2'>
             {/* first left div */}
             <div className='col-span-8 projectContainer'>
               <div className="max-w-4xl mx-auto" ref={sectionRefs['Description']}>
@@ -1840,10 +1906,12 @@ function ProjectDetailPage() {
                     </div>
                   </div>
                 </div>
+
+
               </div>
             </div>
             {/* first right div */}
-            <div className='col-span-4'>
+            <div className='col-span-4 p-5'>
               <div className="sticky top-32">
                 <ProjectContactCard info={projectDetail?.builder} connectedProperties={projectDetail?.connectedProperties} />
                 {/* <DownloadBrochures /> */}
@@ -1854,13 +1922,12 @@ function ProjectDetailPage() {
           <div ref={sectionRefs['3D Viewer']}>
             <BuildingViewer id={projectDetail?.projectId} config={config} viewer="Project" />
           </div>
-          <div className='grid grid-cols-12 '>
+          <div className='grid grid-cols-12'>
             {/* second left div */}
-            <div className='col-span-8 projectContainer'>
+            <div className='col-span-8 projectContainer flex flex-col gap-12'>
               {/* Floor Plans - conditionally render */}
               {projectDetail?.floorPlans?.length > 0 && (
                 <motion.div className="" ref={sectionRefs['FloorPlans']}>
-                  <h1 className="text-3xl font-semibold px-4">Floor Plans</h1>
                   <ProjectFloorPlan floorPlans={projectDetail?.floorPlans} />
                 </motion.div>
               )}
@@ -1889,7 +1956,7 @@ function ProjectDetailPage() {
 
               {/* highlights - conditionally render */}
               {projectDetail?.highlights?.length > 0 && (
-                <div className="" ref={sectionRefs['highlights']}>
+                <div className="" ref={sectionRefs['Highlights']}>
                   <ProjectHighlights highlights={projectDetail?.highlights} />
                 </div>
               )}
@@ -1900,9 +1967,14 @@ function ProjectDetailPage() {
                   <ProjectNearbyLocations nearbyLocations={projectDetail?.nearbyLocations} />
                 </div>
               )}
+
+              {/* Gallery */}
+              <div className="" ref={sectionRefs['Gallery']}>
+                <GalleryGrid gallery={projectDetail?.gallery} />
+              </div>
             </div>
             {/* second right div */}
-            <div className='col-span-4'>
+            <div className='col-span-4 p-5'>
               <div className="sticky top-32">
                 <ProjectContactCard info={projectDetail?.builder} connectedProperties={projectDetail?.connectedProperties} />
                 {/* <DownloadBrochures /> */}
@@ -1914,17 +1986,147 @@ function ProjectDetailPage() {
         <div className='grid grid-cols-12'>
           {/* buildingConfig not available */}
           {/* first left div */}
-          <div className='col-span-8'>
+            <div className='col-span-8 projectContainer flex flex-col gap-10'>
+            <div className="max-w-4xl" ref={sectionRefs['Description']}>
+              {/* Header Section */}
+              <div className="mb-6">
+                {/* New Launch Badge - Only show if availabilityStatus is COMING_SOON */}
+                {projectDetail?.availabilityStatus === "COMING_SOON" && (
+                  <div className="inline-flex items-center gap-2 bg-black text-white rounded-full px-4 py-2 mb-2">
+                    <div className="bg-yellow-500 rounded-full p-1">
+                      <div className="w-4 h-4" />
+                    </div>
+                    <span className="font-semibold">NEW LAUNCH</span>
+                    <span>Project</span>
+                  </div>
+                )}
+                <h1 className="text-5xl font-bold text-gray-900 mb-1">{projectDetail?.name}</h1>
+                {projectDetail?.location?.address && (
+                  <p className="text-gray-500">{projectDetail.location.address}</p>
+                )}
+              </div>
+
+              {/* Status Tags */}
+              <div className="flex flex-wrap gap-2 mb-8">
+                {projectDetail?.reraNumber && projectDetail.reraNumber !== "undefined" && (
+                  <div className="flex items-center bg-gray-700 text-white px-3 py-1 rounded-md">
+                    <svg
+                      className="w-4 h-4 mr-1"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                    </svg>
+                    RERA {projectDetail.reraNumber}
+                  </div>
+                )}
+                <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md">
+                  No Brokerage
+                </div>
+                {(projectDetail?.overview?.totalTowers || projectDetail?.overview?.totalUnits) && (
+                  <div className="bg-gray-100 text-gray-800 px-3 py-1 rounded-md">
+                    {projectDetail?.overview?.totalTowers && `${projectDetail.overview.totalTowers} Towers`}
+                    {projectDetail?.overview?.totalTowers && projectDetail?.overview?.totalUnits && ' | '}
+                    {projectDetail?.overview?.totalUnits && `${projectDetail.overview.totalUnits} Units`}
+                  </div>
+                )}
+              </div>
+
+              {/* Project Overview */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                {projectDetail?.overview?.priceRange?.pricePerSqFt && (
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <p className="text-gray-500 text-sm">Price</p>
+                    <p className="font-semibold">₹{projectDetail.overview.priceRange.pricePerSqFt}/sq.ft.</p>
+                  </div>
+                )}
+                {projectDetail?.overview?.launchDate && (
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <p className="text-gray-500 text-sm">Launch Date</p>
+                    <p className="font-semibold">
+                      {new Date(projectDetail.overview.launchDate).toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </p>
+                  </div>
+                )}
+                {projectDetail?.overview?.possessionDate && (
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <p className="text-gray-500 text-sm">Possession</p>
+                    <p className="font-semibold">
+                      {new Date(projectDetail.overview.possessionDate).toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </p>
+                  </div>
+                )}
+                {projectDetail?.status && (
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <p className="text-gray-500 text-sm">Status</p>
+                    <p className="font-semibold">
+                      {projectDetail.status.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Property Types - Only show if floorPlans exist */}
+              {projectDetail?.floorPlans && projectDetail.floorPlans.length > 0 && (
+                <div className="mb-8">
+                  <h2 className="text-xl font-semibold mb-4">Available Configurations</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {projectDetail.floorPlans.map((plan, index) => (
+                      plan.isActive && (
+                        <div key={index} className="border border-gray-200 rounded-md p-4">
+                          <h3 className="font-semibold mb-1">{plan.name}</h3>
+                          {plan.superArea && <p className="text-gray-500 mb-2">{plan.superArea} sq.ft.</p>}
+                          {plan.price && (
+                            <p className="font-bold">
+                              ₹{(plan.price >= 10000000)
+                                ? `${(plan.price / 10000000).toFixed(2)} Cr`
+                                : `${Math.round(plan.price / 100000)} Lacs`}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Features */}
+              <div className="bg-black text-white rounded-xl p-4 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp size={20} className="text-yellow-500" />
+                    <span>High price appreciation</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Heart size={20} className="text-yellow-500" />
+                    <span>Units of choice</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CircleDollarSign size={20} className="text-yellow-500" />
+                    <span>Easy Payment plans</span>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
             {/* Floor Plans - conditionally render */}
             {projectDetail?.floorPlans?.length > 0 && (
               <motion.div className="" ref={sectionRefs['FloorPlans']}>
-                <h1 className="text-3xl font-semibold px-4">Floor Plans</h1>
                 <ProjectFloorPlan floorPlans={projectDetail?.floorPlans} />
               </motion.div>
             )}
 
             {/* Location Map - conditionally render */}
-            <div className="mb-8 mt-20" ref={sectionRefs['Map']}>
+            <div className="" ref={sectionRefs['Map']}>
               <LocationLatLngMap
                 latitude={projectDetail?.location?.coordinates?.coordinates?.[1]}
                 longitude={projectDetail?.location?.coordinates?.coordinates?.[0]}
@@ -1933,34 +2135,34 @@ function ProjectDetailPage() {
 
             {/* Specifications - conditionally render */}
             {projectDetail?.specification?.length > 0 && (
-              <div className="mb-8" ref={sectionRefs['Specifications']}>
+              <div className="" ref={sectionRefs['Specifications']}>
                 <ProjectSpecificationCard specifications={projectDetail?.specification} />
               </div>
             )}
 
             {/* Amenities - conditionally render */}
             {projectDetail?.amenities?.length > 0 && (
-              <div className="mb-2" ref={sectionRefs['Amenities']}>
+              <div className="" ref={sectionRefs['Amenities']}>
                 <AmenitiesDisplay amenities={projectDetail?.amenities} />
               </div>
             )}
 
             {/* highlights - conditionally render */}
             {projectDetail?.highlights?.length > 0 && (
-              <div className="mb-2" ref={sectionRefs['highlights']}>
+              <div className="" ref={sectionRefs['Highlights']}>
                 <ProjectHighlights highlights={projectDetail?.highlights} />
               </div>
             )}
 
             {/* nearbyLocations - conditionally render */}
             {projectDetail?.nearbyLocations?.length > 0 && (
-              <div className="mb-2" ref={sectionRefs['NearBy']}>
+              <div className="" ref={sectionRefs['NearBy']}>
                 <ProjectNearbyLocations nearbyLocations={projectDetail?.nearbyLocations} />
               </div>
             )}
           </div>
           {/* first right div */}
-          <div className='col-span-4'>
+            <div className='col-span-4 p-5'>
             <div className="sticky top-32">
               <ProjectContactCard info={projectDetail?.builder} connectedProperties={projectDetail?.connectedProperties} />
               {/* <DownloadBrochures /> */}
@@ -1972,9 +2174,9 @@ function ProjectDetailPage() {
 
       {/* Common Bottom div  */}
       {projectDetail?.connectedProperties?.length > 0 && (
-        <div className="" ref={sectionRefs['ConnectedProperties']}>
+        <div className="projectContainer" ref={sectionRefs['ConnectedProperties']}>
           <HeadingCommon title='Properties Under The Project' />
-          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {projectDetail?.connectedProperties?.map((property, index) => (
               <PropertyCard key={index} property={property} />
             ))}

@@ -1291,7 +1291,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection, availableTabs }) =
                     )}
                 </div>
 
-                {availableTabs.length > 0 && (
+                {/* {availableTabs.length > 0 && (
                     <div
                         className={`${isTabsSticky
                             ? 'fixed top-[70px] left-0 z-30 bg-white/40 backdrop-blur-xl shadow-sm'
@@ -1307,6 +1307,30 @@ const HeaderSection = ({ details, sectionRefs, activeSection, availableTabs }) =
                                         className={`whitespace-nowrap transition-colors relative 
                                         ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'} 
                                         ${activeSection === tab ? 'text-red-500 font-semibold border-2 rounded-full px-[25px] py-[1px] border-red-500' : ''}`}
+                                    >
+                                        {tab}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )} */}
+
+                {availableTabs.length > 0 && (
+                    <div className={`${isTabsSticky
+                        ? 'fixed top-[70px] left-0 z-30 bg-white/40 backdrop-blur-xl shadow-sm'
+                        : 'absolute bottom-0 left-0 bg-transparent bg-black/40 backdrop-blur-xl'} 
+          w-full transition-all duration-300`}
+                    >
+                        <div className="max-w-7xl mx-auto text-sm">
+                            <div className={`flex gap-6 px-6 py-4 overflow-x-auto ${isTabsSticky ? 'text-gray-800' : 'text-white'}`}>
+                                {availableTabs.map((tab) => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => scrollToSection(tab)} // Use the passed scrollToSection function
+                                        className={`whitespace-nowrap transition-colors relative 
+                  ${isTabsSticky ? 'hover:text-red-800' : 'hover:text-red-400'} 
+                  ${activeSection === tab ? 'text-red-500 font-semibold border-2 rounded-full px-[25px] py-[1px] border-red-500' : ''}`}
                                     >
                                         {tab}
                                     </button>

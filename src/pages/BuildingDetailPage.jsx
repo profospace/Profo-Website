@@ -482,6 +482,7 @@ function BuildingDetailPage() {
     console.log("buildingDetail", buildingDetail)
 
     const sectionRefs = {
+        'Home': useRef(null),
         'Description': useRef(null),
         '3D Viewer': useRef(null),
         'LCDParameters': useRef(null),
@@ -496,6 +497,8 @@ function BuildingDetailPage() {
     // Function to check if a section has data
     const hasSectionData = (sectionKey) => {
         switch (sectionKey) {
+            case 'Home':
+                return Boolean(false);
             case 'Description':
                 return Boolean(buildingDetail?.description);
             case '3D Viewer':
@@ -564,7 +567,10 @@ function BuildingDetailPage() {
         <div className="">
             <div className="relative">
                 {/* Header Section */}
+                <div ref={sectionRefs['Home']}>
                 <HeaderSection details={buildingDetail} sectionRefs={sectionRefs} activeSection={activeSection} availableTabs={availableTabs}/>
+
+                </div>
 
                 {isTabsSticky && <div className="h-[64px]" />}
 
@@ -599,11 +605,11 @@ function BuildingDetailPage() {
                                     />
                                 </div>
 
-                                <div ref={sectionRefs['EmiCalculator']}>
+                                <div ref={sectionRefs['EmiCalculator']} className='container'>
                                     <EMICalculator />
                                 </div>
 
-                                <div ref={sectionRefs['Gallery']}>
+                                <div ref={sectionRefs['Gallery']} className='container'>
                                     <GalleryList images={buildingDetail?.galleryList} />
                                 </div>
 
@@ -681,11 +687,11 @@ function BuildingDetailPage() {
                                         />
                                     </div>
 
-                                    <div ref={sectionRefs['EmiCalculator']}>
+                                    <div ref={sectionRefs['EmiCalculator']} className='container'>
                                         <EMICalculator />
                                     </div>
 
-                                    <div ref={sectionRefs['Gallery']}>
+                                        <div ref={sectionRefs['Gallery']} className='container'>
                                         <GalleryList images={buildingDetail?.galleryList} />
                                     </div>
 

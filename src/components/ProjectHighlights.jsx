@@ -11,7 +11,7 @@ const ProjectHighlights = ({ highlights }) => {
         : highlights?.slice(0, initialDisplayCount);
 
     return (
-        <div className="w-full max-w-7xl mx-auto px-4 py-12 bg-white">
+        <div className="w-full bg-white">
             {/* <h2 className="text-3xl font-bold mb-6 text-gray-800">
                 Project Highlights
             </h2> */}

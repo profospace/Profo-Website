@@ -92,7 +92,7 @@ export const Callback = () => {
             >
                 {/* Modal Content */}
                 <div
-                    className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-8 w-full max-w-md transition-all duration-300 ${isOpen
+                    className={` fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-8 w-full max-w-md transition-all duration-300 ${isOpen
                         ? 'opacity-100 scale-100 translate-y-[-50%]'
                         : 'opacity-0 scale-95 translate-y-[-45%]'
                         }`}

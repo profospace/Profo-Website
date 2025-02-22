@@ -106,7 +106,7 @@ function App() {
 
   useEffect(
     () => {
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }, [pathname]
   )
 

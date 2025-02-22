@@ -203,7 +203,7 @@ const ProjectSpecificationCard = ({ specifications }) => {
     const visibleSpecs = showAll ? specifications : specifications?.slice(0, 4);
 
     return (
-        <div className="container mx-auto">
+        <div className="">
             {/* <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Specification
             </h2> */}

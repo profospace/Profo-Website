@@ -167,7 +167,7 @@ const AmenitiesDisplay = ({ amenities }) => {
     const hasMoreItems = amenities?.length > visibleItems;
 
     return (
-        <div className="w-full max-w-7xl mx-auto p-4">
+        <div className="w-full max-w-7xl">
             {/* <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Property Amenities
             </h2> */}
