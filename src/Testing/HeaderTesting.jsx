@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 function HeaderTesting() {
   const navigate = useNavigate()
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-10">
+    <header className="bg-white shadow-sm sticky top-0 z-20">
       <div className="testing mx-auto px-4 flex justify-between items-center h-16">
         <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
           <div className="h-11 w-11 rounded-md flex items-center justify-center text-xs text-gray-500"><img src='/assets/logo.png' className='w-full h-full' alt="Logo" /></div>
