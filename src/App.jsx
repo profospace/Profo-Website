@@ -38,8 +38,8 @@ import { Button } from 'antd';
 import Contact from './pages/Contact';
 import Testing from './Testing/Testing';
 import Wishlist from './pages/Wishlist';
-import { getWishlist } from './redux/features/wishlist/wishlistSlice';
 import { Toaster } from 'react-hot-toast';
+import { getWishlist } from './redux/features/Wishlist/wishlistSlice';
 
 // import MainPropertyPage from './pages/MainPropertyPage';
 
