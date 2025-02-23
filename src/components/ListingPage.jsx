@@ -1785,7 +1785,7 @@ const PropertyCard = ({ item, index }) => {
 
     // Check if the current item is in wishlist
     const isWishlisted = useMemo(() => {
-        return wishlist.some(wish => wish.propertyId?.post_id === item?.post_id);
+        return wishlist?.some(wish => wish?.propertyId?.post_id === item?.post_id);
     }, [wishlist, item?.post_id]);
 
     // Set initial state based on wishlist
@@ -1856,10 +1856,10 @@ const PropertyCard = ({ item, index }) => {
             onClick={() => navigate(`/api/details/${item?.post_id}`)}
         >
             <div className="relative aspect-[5/3] overflow-hidden">
-                {item.post_image || item?.galleryList ? (
+                {item?.post_image || item?.galleryList ? (
                     <img
                         src={item?.post_image || item?.galleryList?.[0] || item?.galleryList?.[1]}
-                        alt={item.post_title}
+                        alt={item?.post_title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                 ) : (
@@ -1968,14 +1968,14 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
             const isBuilding = (item) => 'buildingId' in item;
             const getPriceEquivalent = (item) => {
                 if (isBuilding(item)) {
-                    return parseInt(item.numberOfFlatsAvailable || 0);
+                    return parseInt(item?.numberOfFlatsAvailable || 0);
                 }
-                return item.price || item.overview?.priceRange?.min || 0;
+                return item?.price || item?.overview?.priceRange?.min || 0;
             };
 
             const valueA = getPriceEquivalent(a);
             const valueB = getPriceEquivalent(b);
-            const getCreatedAt = (item) => new Date(item.createdAt || 0);
+            const getCreatedAt = (item) => new Date(item?.createdAt || 0);
 
             switch (sortBy) {
                 case 'price-low':
@@ -2011,11 +2011,11 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {filteredItems.map((item, index) => {
                                 if ('buildingId' in item) {
-                                    return <BuildingCard key={item._id} item={item} index={index} />;
+                                    return <BuildingCard key={item?._id} item={item} index={index} />;
                                 } else if ('projectId' in item) {
-                                    return <ProjectCard key={item._id} item={item} index={index} />;
+                                    return <ProjectCard key={item?._id} item={item} index={index} />;
                                 } else {
-                                    return <PropertyCard key={item._id} item={item} index={index} />;
+                                    return <PropertyCard key={item?._id} item={item} index={index} />;
                                 }
                             })}
                         </div>
