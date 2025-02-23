@@ -189,7 +189,7 @@ const Wishlist = () => {
     });
 
     try {
-      const response = await axios.post('http://localhost:5053/api/users/history/like', {
+      const response = await axios.post(`${base_url}/api/users/history/like`, {
         propertyId: post_id
       }, getConfig());
       console.log(response);

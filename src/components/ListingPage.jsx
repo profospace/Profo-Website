@@ -1137,6 +1137,7 @@ import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { getAuthToken, getConfig } from '../utils/config';
+import { base_url } from '../utils/base_url';
 
 // Common utility functions
 const formatPrice = (price) => {
@@ -1827,7 +1828,7 @@ const PropertyCard = ({ item, index }) => {
         });
 
         try {
-            const response = await axios.post('http://localhost:5053/api/users/history/like', {
+            const response = await axios.post(`${base_url}/api/users/history/like`, {
                 propertyId: post_id
             }, getConfig());
             console.log(response);
