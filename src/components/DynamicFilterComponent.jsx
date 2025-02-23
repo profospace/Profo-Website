@@ -2273,33 +2273,33 @@ export const PropertyFilter = ({ setAdvancedFilterOpen }) => {
                     {/* Top box */}
                     <div className="w-full  flex gap-12">
                         {/* Content for top box */}
-                        <FilterSection title={filters.propertyType.label}>
+                        <FilterSection title={filters?.propertyType?.label}>
                             <CheckboxGroup
-                                options={filters.propertyType.values}
+                                options={filters?.propertyType?.values}
                                 value={selectedFilters.propertyType || []}
                                 onChange={(value) => setSelectedFilters(prev => ({ ...prev, propertyType: value }))}
                                 name="propertyType"
                             />
                         </FilterSection>
 
-                        <FilterSection title={filters.purpose.label}>
+                        <FilterSection title={filters?.purpose?.label}>
                             <RadioGroup
-                                options={filters.purpose.values}
-                                value={selectedFilters.purpose}
+                                options={filters?.purpose?.values}
+                                value={selectedFilters?.purpose}
                                 onChange={(value) => setSelectedFilters(prev => ({ ...prev, purpose: value }))}
                                 name="purpose"
                             />
                         </FilterSection>
 
-                        <FilterSection title={filters.bedrooms.label}>
+                        <FilterSection title={filters?.bedrooms?.label}>
                             <div className="space-y-4">
-                                {[...Array(filters.bedrooms.max)].map((_, i) => (
+                                {[...Array(filters?.bedrooms?.max)].map((_, i) => (
                                     <label key={i + 1} className="flex items-center gap-3 cursor-pointer group">
                                         <input
                                             type="radio"
                                             name="bedrooms"
                                             value={i + 1}
-                                            checked={selectedFilters.bedrooms === (i + 1)}
+                                            checked={selectedFilters?.bedrooms === (i + 1)}
                                             onChange={(e) => setSelectedFilters(prev => ({ ...prev, bedrooms: parseInt(e.target.value) }))}
                                             className="form-radio h-4 w-4 border-gray-300 text-red-500 focus:ring-red-500/20 transition-all"
                                         />
@@ -2311,10 +2311,10 @@ export const PropertyFilter = ({ setAdvancedFilterOpen }) => {
                             </div>
                         </FilterSection>
 
-                        <FilterSection title={filters.furnishing.label}>
+                        <FilterSection title={filters?.furnishing?.label}>
                             <CheckboxGroup
-                                options={filters.furnishing.values}
-                                value={selectedFilters.furnishing || []}
+                                options={filters?.furnishing?.values}
+                                value={selectedFilters?.furnishing || []}
                                 onChange={(value) => setSelectedFilters(prev => ({ ...prev, furnishing: value }))}
                                 name="furnishing"
                             />
@@ -2436,37 +2436,37 @@ export const ProjectFilter = ({ setAdvancedFilterOpen }) => {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 px-6">
-            <FilterSection title={filters.projectType.label}>
+            <FilterSection title={filters?.projectType?.label}>
                 <CheckboxGroup
-                    options={filters.projectType.values}
-                    value={selectedFilters.projectType || []}
+                    options={filters?.projectType?.values}
+                    value={selectedFilters?.projectType || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, projectType: value }))}
                     name="projectType"
                 />
             </FilterSection>
 
-            <FilterSection title={filters.projectStatus.label}>
+            <FilterSection title={filters?.projectStatus?.label}>
                 <CheckboxGroup
-                    options={filters.projectStatus.values}
-                    value={selectedFilters.projectStatus || []}
+                    options={filters?.projectStatus?.values}
+                    value={selectedFilters?.projectStatus || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, projectStatus: value }))}
                     name="projectStatus"
                 />
             </FilterSection>
 
-            <FilterSection title={filters.amenities.label}>
+            <FilterSection title={filters?.amenities?.label}>
                 <CheckboxGroup
-                    options={filters.amenities.values}
-                    value={selectedFilters.amenities || []}
+                    options={filters?.amenities?.values}
+                    value={selectedFilters?.amenities || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, amenities: value }))}
                     name="projectAmenities"
                 />
             </FilterSection>
 
-            <FilterSection title={filters.state.label}>
+            <FilterSection title={filters?.state?.label}>
                 <CheckboxGroup
-                    options={filters.state.values}
-                    value={selectedFilters.state || []}
+                    options={filters?.state?.values}
+                    value={selectedFilters?.state || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, state: value }))}
                     name="state"
                 />
@@ -2527,9 +2527,9 @@ export const BuildingFilter = ({ setAdvancedFilterOpen }) => {
 
     // Helper function for increment filters
     const renderIncrementFilter = (key, filterData) => (
-        <FilterSection title={filterData.label}>
+        <FilterSection title={filterData?.label}>
             <div className="space-y-4">
-                {[...Array(parseInt(filterData.max))].map((_, i) => (
+                {[...Array(parseInt(filterData?.max))].map((_, i) => (
                     <label key={i + 1} className="flex items-center gap-3 cursor-pointer group">
                         <input
                             type="radio"
@@ -2554,87 +2554,87 @@ export const BuildingFilter = ({ setAdvancedFilterOpen }) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 px-6">
             {/* Building Type */}
-            <FilterSection title={filters.buildingType.label}>
+            <FilterSection title={filters?.buildingType?.label}>
                 <CheckboxGroup
-                    options={filters.buildingType.values}
-                    value={selectedFilters.buildingType || []}
+                    options={filters?.buildingType?.values}
+                    value={selectedFilters?.buildingType || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, buildingType: value }))}
                     name="buildingType"
                 />
             </FilterSection>
 
             {/* Development Status */}
-            <FilterSection title={filters.developmentStatus.label}>
+            <FilterSection title={filters?.developmentStatus?.label}>
                 <CheckboxGroup
-                    options={filters.developmentStatus.values}
-                    value={selectedFilters.developmentStatus || []}
+                    options={filters?.developmentStatus?.values}
+                    value={selectedFilters?.developmentStatus || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, developmentStatus: value }))}
                     name="developmentStatus"
                 />
             </FilterSection>
 
             {/* Front Road */}
-            <FilterSection title={filters.frontRoad.label}>
+            <FilterSection title={filters?.frontRoad?.label}>
                 <CheckboxGroup
-                    options={filters.frontRoad.values}
-                    value={selectedFilters.frontRoad || []}
+                    options={filters?.frontRoad?.values}
+                    value={selectedFilters?.frontRoad || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, frontRoad: value }))}
                     name="frontRoad"
                 />
             </FilterSection>
 
             {/* Parking Area */}
-            <FilterSection title={filters.parkingArea.label}>
+            <FilterSection title={filters?.parkingArea?.label}>
                 <CheckboxGroup
-                    options={filters.parkingArea.values}
-                    value={selectedFilters.parkingArea || []}
+                    options={filters?.parkingArea?.values}
+                    value={selectedFilters?.parkingArea || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, parkingArea: value }))}
                     name="parkingArea"
                 />
             </FilterSection>
 
             {/* Storey */}
-            <FilterSection title={filters.storey.label}>
+            <FilterSection title={filters?.storey?.label}>
                 <CheckboxGroup
-                    options={filters.storey.values}
-                    value={selectedFilters.storey || []}
+                    options={filters?.storey?.values}
+                    value={selectedFilters?.storey || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, storey: value }))}
                     name="storey"
                 />
             </FilterSection>
 
             {/* Age */}
-            <FilterSection title={filters.age.label}>
+            <FilterSection title={filters?.age?.label}>
                 <CheckboxGroup
-                    options={filters.age.values}
-                    value={selectedFilters.age || []}
+                    options={filters?.age?.values}
+                    value={selectedFilters?.age || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, age: value }))}
                     name="age"
                 />
             </FilterSection>
 
             {/* LUDA */}
-            <FilterSection title={filters.luda.label}>
+            <FilterSection title={filters?.luda?.label}>
                 <CheckboxGroup
-                    options={filters.luda.values}
-                    value={selectedFilters.luda || []}
+                    options={filters?.luda?.values}
+                    value={selectedFilters?.luda || []}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, luda: value }))}
                     name="luda"
                 />
             </FilterSection>
 
             {/* Total Floors */}
-            {filters.totalFloors && renderIncrementFilter('totalFloors', filters.totalFloors)}
+            {filters?.totalFloors && renderIncrementFilter('totalFloors', filters?.totalFloors)}
 
             {/* Number of Flats Available */}
-            {filters.numberOfFlatsAvailable && renderIncrementFilter('numberOfFlatsAvailable', filters.numberOfFlatsAvailable)}
+            {filters?.numberOfFlatsAvailable && renderIncrementFilter('numberOfFlatsAvailable', filters?.numberOfFlatsAvailable)}
 
             {/* Amenities */}
-            {filters.amenities && filters.amenities.values.length > 0 && (
-                <FilterSection title={filters.amenities.label}>
+            {filters?.amenities && filters?.amenities?.values?.length > 0 && (
+                <FilterSection title={filters?.amenities?.label}>
                     <CheckboxGroup
-                        options={filters.amenities.values}
-                        value={selectedFilters.amenities || []}
+                        options={filters?.amenities?.values}
+                        value={selectedFilters?.amenities || []}
                         onChange={(value) => setSelectedFilters(prev => ({ ...prev, amenities: value }))}
                         name="amenities"
                     />
