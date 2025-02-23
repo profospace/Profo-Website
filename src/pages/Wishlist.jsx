@@ -144,11 +144,11 @@ import React, { useState, useEffect } from 'react';
 import { Heart, MapPin, Bed, Bath, Square, Trash2 } from 'lucide-react';
 import { getConfig } from '../utils/config';
 import { base_url } from '../utils/base_url';
-import { getWishlist } from '../redux/features/wishlist/wishlistSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { getWishlist } from '../redux/features/Wishlist/wishlistSlice';
 
 const Wishlist = () => {
   const [error, setError] = useState(null);
