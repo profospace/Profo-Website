@@ -371,7 +371,7 @@ function SinglePage() {
 
             {/* labels click to scroll section */}
             <motion.div
-                className="sticky max-w-full top-[4.5rem] z-10 bg-[#fff]/50 backdrop-blur-lg py-2 px-8"
+                className="sticky max-w-full top-[4.5rem] z-50 bg-[#fff]/50 backdrop-blur-lg py-2 px-8"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
