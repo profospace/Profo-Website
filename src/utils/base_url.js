@@ -35,6 +35,7 @@ export const home_feed_base_url = 'https://propertify.onrender.com/api/search/ne
 export const filter_base_url = 'https://propertify.onrender.com/api/web/properties/filter'
 export const project_upload_url = 'https://propertify.onrender.com'
 export const get_user_wishlist = 'https://propertify.onrender.com/api/users/profile'
+export const testing = ""
 
 
 // Local
