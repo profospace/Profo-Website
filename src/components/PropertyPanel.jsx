@@ -454,7 +454,7 @@ const PropertyPanel = ({ data, type, onClose }) => {
             {isVisible && (
                 <>
                     <motion.div
-                        className="absolute left-0 top-0 z-10 bottom-0 w-96 bg-white p-4 overflow-y-auto"
+                        className="absolute left-0 top-0 z-10 bottom-0 w-[35vw] bg-white p-4 overflow-y-auto shadow-lg"
                         variants={panelVariants}
                         initial="hidden"
                         animate="visible"

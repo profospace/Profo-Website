@@ -1223,7 +1223,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection, availableTabs }) =
     };
 
     return (
-        <header className="relative w-full h-[570px] text-white">
+        <header className="relative w-full h-[632px] text-white">
             <div
                 className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
                 style={{
@@ -1270,7 +1270,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection, availableTabs }) =
 
                 <div className="flex gap-4 mb-6 flex-wrap items-center">
                     <ContactButton />
-                    <Callback />
+                    <Callback builderId={details?.builder?.id}/>
                 </div>
 
                 <div className='min-h-32'>

@@ -1,11 +1,49 @@
 import { useState, useEffect } from "react";
 import { X, ChevronDown, Check } from 'lucide-react';
+import axios from 'axios';
+import { base_url } from "../utils/base_url";
 
-export const Callback = () => {
+export const Callback = ({builderId}) => {
+    console.log("builderId", builderId)
     const [isOpen, setIsOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedTime, setSelectedTime] = useState('As soon as possible');
     const [phoneNumber, setPhoneNumber] = useState('');
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
+
+    
+
+    const handleSubmit = async () => {
+        try {
+            setLoading(true);
+            setError('');
+
+            if (!phoneNumber) {
+                throw new Error('Phone number is required');
+            }
+
+            const response = await axios.post(`${base_url}/api/callback/create-callback`, {
+                builderId,
+                phoneNumber,
+                requestedTime: selectedTime,
+            });
+
+            setSuccess(true);
+            setPhoneNumber('');
+            setTimeout(() => {
+                setIsOpen(false);
+                setSuccess(false);
+            }, 2000);
+
+        } catch (err) {
+            setError(err.message || 'Something went wrong');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Add useEffect to handle body scroll
     useEffect(() => {
@@ -172,9 +210,25 @@ export const Callback = () => {
                             </div>
 
                             {/* Submit button */}
-                            <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-4 rounded-lg transition-colors">
+                            {/* <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-4 rounded-lg transition-colors">
                                 Call me
+                            </button> */}
+                            <button
+                                onClick={handleSubmit}
+                                disabled={loading}
+                                className={`w-full ${loading
+                                        ? 'bg-gray-400'
+                                        : success
+                                            ? 'bg-green-500'
+                                            : 'bg-yellow-400 hover:bg-yellow-500'
+                                    } text-black font-medium py-4 rounded-lg transition-colors`}
+                            >
+                                {loading ? 'Sending...' : success ? 'Request Sent!' : 'Call me'}
                             </button>
+
+                            {error && (
+                                <p className="text-red-500 text-sm mt-2">{error}</p>
+                            )}
 
                             {/* Consent text */}
                             <p className="text-sm text-gray-500">

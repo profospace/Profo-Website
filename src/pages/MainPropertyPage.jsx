@@ -387,15 +387,6 @@ import MapPage from './MapPage';
 import { useDispatch, useSelector } from 'react-redux';
 import ListingPage from '../components/ListingPage';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Map,
-    List,
-    Search,
-} from 'lucide-react';
-import { FiSettings } from 'react-icons/fi';
-import ActiveFiltersDisplay from '../components/ActiveFiltersDisplay';
-import { BuildingFilter, ProjectFilter, PropertyFilter } from '../components/DynamicFilterComponent';
-import SearchSection from '../components/SearchSection';
 import { getWishlist } from '../redux/features/Wishlist/wishlistSlice';
 
 const MainPropertyPage = () => {
@@ -412,18 +403,7 @@ const MainPropertyPage = () => {
     const [sortBy, setSortBy] = useState('');
     const [filterType, setFilterType] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
-    const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const [isFilterVisible, setIsFilterVisible] = useState(false);
-
-    // filter button popup
-    const [modalOpen, setModalOpen] = useState(false);
-    const [projectModalOpen, setProjectModalOpen] = useState(false);
-    const [buildingModalOpen, setBuildingModalOpen] = useState(false);
-    const [activeSection, setActiveSection] = useState('');
-
-    // section section
-    const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
-    const [filterOptionsOpen, setFilterOptionsOpen] = useState(true);
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -459,19 +439,9 @@ const MainPropertyPage = () => {
         exit: { opacity: 0, x: -20 }
     };
 
-    const filterButtonVariants = {
-        hover: { scale: 1.05 },
-        tap: { scale: 0.95 }
-    };
-
-    const searchExpandVariants = {
-        collapsed: { width: 'auto' },
-        expanded: { width: '30rem' }
-    };
-
     useEffect(() => {
         dispatch(getWishlist())
-      }, []);
+    }, []);
 
 
     return (
@@ -479,21 +449,22 @@ const MainPropertyPage = () => {
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
             onLoad={() => setIsScriptLoaded(true)}
         >
+        <div>
             {/* <div className="min-h-screen px-2 overflow-hidden">
                 <div className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'> */}
             <motion.div
-                className="min-h-screen overflow-hidden"
+                className=" overflow-hidden relative w-full bg-[#F7F9FC] pt-16"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
                 <motion.div
-                    className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'
+                    className=' flex flex-col absolute  '
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                    <SearchSection handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy} />
+                    {/* <SearchSection handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy} /> */}
                 </motion.div>
 
                 {/* Main content */}
@@ -512,10 +483,13 @@ const MainPropertyPage = () => {
                                 projects={projects}
                                 buildings={buildings}
                                 isLoading={isLoading}
-                                onViewChange={handleViewChange}
+                                handleViewChange={handleViewChange}
                                 sortBy={sortBy}
                                 filterType={filterType}
                                 searchQuery={searchQuery}
+                                setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy}
+                                view={view}
+
                             />
                         </motion.div>
                     ) : (
@@ -537,12 +511,15 @@ const MainPropertyPage = () => {
                                     buildings={buildings}
                                     isLoading={isLoading}
                                     setIsFilterVisible={setIsFilterVisible}
+
+                                    handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy}
                                 />
                             )}
                         </motion.div>
                     )}
                 </AnimatePresence>
             </motion.div>
+        </div>
         </LoadScript>
     );
 };

@@ -39,7 +39,7 @@ const Footer = () => {
                 <div className="lg:col-span-6">
                   {/* Logo */}
                   <div className="mb-6 flex items-center gap-2">
-                    <img src='/assets/logo.png' className='h-12 w-12' />
+                    <img src='/assets/logo.png' className='h-14 w-14' />
                     <h1 className="text-5xl font-bold tracking-tighter text-white">PROFO</h1>
                   </div>
 

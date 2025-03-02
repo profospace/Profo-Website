@@ -1,18 +1,19 @@
 import React from 'react'
+import { FaHeart } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 function HeaderTesting() {
   const navigate = useNavigate()
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-10">
-      <div className="testing mx-auto px-4 flex justify-between items-center h-16">
+    <header className="bg-white shadow-sm sticky top-0 px-16 z-50 font-poppins font-medium">
+      <div className="testing mx-auto px-4 flex justify-between items-center h-20">
         <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
-          <div className="h-11 w-11 rounded-md flex items-center justify-center text-xs text-gray-500"><img src='/assets/logo.png' className='w-full h-full' alt="Logo" /></div>
-          <div className="text-2xl font-bold">PROFO</div>
+          <div className="h-12 w-12 rounded-md flex items-center justify-center text-xs text-gray-500"><img src='/assets/logo.png' className='w-full h-full' alt="Logo" /></div>
+          <div className="text-3xl font-semibold text-[crimson]">PROFO</div>
         </div>
         <div className="flex gap-4">
           <button onClick={()=>navigate('/wishlist')} className="flex items-center gap-2 px-4 py-2 border border-gray-600 rounded-md text-sm transition hover:bg-gray-100">
-            <i className="text-gray-600">♡</i>
+            <FaHeart />
             Favorites
           </button>
           <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md text-sm transition hover:bg-red-700" onClick={() => navigate('/post-property-for-free')}>

@@ -1129,7 +1129,8 @@ import {
     ArrowUpDown,
     Search,
     SlidersHorizontal,
-    Heart
+    Heart,
+    Star
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -1138,6 +1139,8 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { getAuthToken, getConfig } from '../utils/config';
 import { base_url } from '../utils/base_url';
+import SearchSection from './SearchSection';
+import PropertyShowcase from './testing/PropertyShowcase';
 
 // Common utility functions
 const formatPrice = (price) => {
@@ -1192,247 +1195,10 @@ const cardVariants = {
     }
 };
 
-// Building Card Component
-const BuildingCard = ({ item, index }) => {
-    const navigate = useNavigate();
-    // console.log("item", item)
-
-    return (
-        <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover="hover"
-            transition={{ delay: index * 0.1 }}
-            className="bg-white shadow-md border rounded-xl overflow-hidden cursor-pointer"
-            onClick={() => navigate(`/api/details/building/${item?.buildingId}`)}
-        >
-            <motion.div
-                className="relative aspect-[5/3] overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-            >
-                {item.galleryList?.[0] ? (
-                    <img
-                        src={item.galleryList?.[0]}
-                        alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                        <Building size={48} className="text-gray-400" />
-                    </div>
-                )}
-
-                <div className="absolute top-4 left-4">
-                    <div className="bg-white/90 px-3 py-1.5 rounded-full shadow-md flex items-center">
-                        {getPropertyIcon(item.type)}
-                        <span className="text-sm font-medium text-gray-800 ml-2">
-                            {item.type || 'Property'}
-                        </span>
-                    </div>
-                </div>
-
-                <div className="absolute bottom-4 left-4 flex gap-2">
-                    <div className={`text-white text-xs px-3 py-1 rounded-full ${item.developmentStatus === 'COMPLETED' ? 'bg-green-500' :
-                        item.developmentStatus === 'In Progress' ? 'bg-yellow-500' :
-                            'bg-blue-500'
-                        }`}>
-                        {item.developmentStatus}
-                    </div>
-                    {item.allowPreBooking === "true" && (
-                        <div className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">
-                            Pre-booking
-                        </div>
-                    )}
-                </div>
-
-                <motion.button
-                    className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <Heart size={20} className="text-gray-500 hover:text-red-500 transition-colors" />
-                </motion.button>
-            </motion.div>
-
-            <motion.div
-                className="px-2 py-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-            >
-                <div className="flex justify-between items-start flex-col">
-                    <div className="text-lg font-bold text-black">
-                        {formatPriceRange(item?.connectedProperties)}
-                    </div>
-                    <h3 className="text-md font-semibold text-gray-800">
-                        {item.name}
-                    </h3>
-                </div>
-
-                <div className="flex items-center text-gray-600 mb-3">
-                    <MapPin size={16} className="mr-1" />
-                    <span className="text-sm truncate">
-                        {item.frontRoad || "Location not specified"}
-                    </span>
-                </div>
-
-                <div className="flex gap-4 mb-3 text-xs">
-                    <div className="bg-blue-50 rounded-lg flex gap-1 px-2 py-1">
-                        <div className="font-semibold">Total Floors</div>
-                        <div>{item.totalFloors}</div>
-                    </div>
-                    <div className="bg-green-50 rounded-lg flex gap-1 px-2 py-1">
-                        <div className="font-semibold">Available Flats</div>
-                        <div>{item.numberOfFlatsAvailable}</div>
-                    </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-3">
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div className="flex items-center text-gray-600">
-                            <span className="font-medium">Age:</span>
-                            <span className="ml-1">{item.age} years</span>
-                        </div>
-                        <div className="flex items-center text-gray-600">
-                            <span className="font-medium">Area:</span>
-                            <span className="ml-1">{item.parkingArea} sqft</span>
-                        </div>
-                    </div>
-                </div>
-            </motion.div>
-        </motion.div>
-    );
-};
-
-// Project Card Component
-const ProjectCard = ({ item, index }) => {
-    // console.log(item)
-    const navigate = useNavigate();
-
-    return (
-        <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover="hover"
-            transition={{ delay: index * 0.1 }}
-            className="bg-white shadow-md border rounded-xl overflow-hidden cursor-pointer"
-            onClick={() => navigate(`/api/details/project/${item?.projectId}`)}
-        >
-            <div className="relative aspect-[5/3] overflow-hidden">
-                {item?.gallery ? (
-                    <img
-                        src={item?.gallery?.[0]?.images?.[0] || item?.gallery?.[0]?.images?.[1]}
-                        alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                        <Building size={48} className="text-gray-400" />
-                    </div>
-                )}
-
-                <div className="absolute top-3 left-4">
-                    <div className="flex items-center bg-white/90 rounded-full px-3 py-1 shadow-md">
-                        <Building size={16} className="text-red-500 mr-2" />
-                        <span className="text-sm font-medium text-gray-800">{item?.type || 'Project'}</span>
-                    </div>
-                </div>
-
-                <div className="absolute bottom-2 left-4 flex space-x-2">
-                    <div className="bg-white/90 rounded-full px-3 py-1 shadow-md text-xs font-semibold flex items-center">
-                        <Users size={12} className="mr-1" />
-                        {item?.overview?.totalUnits} Units
-                    </div>
-                    <div className="bg-white/90 rounded-full px-3 py-1 shadow-md text-xs font-semibold flex items-center">
-                        <Building size={12} className="mr-1" />
-                        {item?.overview?.totalTowers} Towers
-                    </div>
-                </div>
-
-                <motion.button
-                    className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <Heart size={20} className="text-gray-500 hover:text-red-500 transition-colors" />
-                </motion.button>
-            </div>
-
-            <div className="pt-2">
-                <div className="px-2">
-                    <div className="flex items-baseline justify-between gap-2">
-                        <div className='flex items-baseline gap-1'>
-                            <div className="flex items-baseline">
-                                <span className="text-xl font-bold text-gray-900">
-                                    {formatPrice(item?.overview?.priceRange?.min)} - {formatPrice(item?.overview?.priceRange?.max)}
-                                </span>
-                            </div>
-                            <span className="text-xs text-gray-600 font-medium"> INR</span>
-                        </div>
-                    </div>
-
-                    <h3 className="capitalize text-md font-semibold text-gray-800 truncate">
-                        {item?.name}
-                    </h3>
-
-                    <div className="flex items-center text-gray-600 space-x-2 mb-2">
-                        <MapPin size={16} />
-                        <span className="text-xs mt-1 truncate max-w-[200px]">
-                            {item?.location?.address || "No Address Available"}
-                        </span>
-                    </div>
-                </div>
-
-                {(item?.overview?.launchDate || item?.overview?.possessionDate) && (
-                    <div className="px-2 flex items-center space-x-4 text-xs text-gray-600 border-t border-gray-200 pt-2">
-                        <div className="flex items-center">
-                            <CalendarClock size={14} className="mr-1" />
-                            <span>
-                                Launch: {new Date(item.overview.launchDate).toLocaleDateString()}
-                            </span>
-                        </div>
-                        <div className="flex items-center">
-                            <CalendarClock size={14} className="mr-1" />
-                            <span>
-                                Possession: {new Date(item.overview.possessionDate).toLocaleDateString()}
-                            </span>
-                        </div>
-                    </div>
-                )}
-
-                <div className="px-2 flex justify-between items-center pt-2 pb-1 border-t border-gray-200">
-                    <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-700">Amenities</span>
-                        <span className="bg-gray-100 text-black text-xs h-5 w-10 grid place-items-center rounded-full">
-                            {item?.amenities?.length}+
-                        </span>
-                    </div>
-                    {item?.status && (
-                        <div className="bg-green-500 text-white text-[10px] px-2 py-1 rounded-full">
-                            {item.status}
-                        </div>
-                    )}
-                </div>
-            </div>
-        </motion.div>
-    );
-};
-
-// Property Card Component
-// const PropertyCard = ({ item, index }) => {
-//     // console.log("item",item)
+// // Building Card Component
+// const BuildingCard = ({ item, index }) => {
 //     const navigate = useNavigate();
-
-
-//     const handleAddToWhislist = (e , post_id)=>{
-//         e.stopPropagation()
-//         console.log(post_id)
-//     }
+//     // console.log("item", item)
 
 //     return (
 //         <motion.div
@@ -1442,13 +1208,128 @@ const ProjectCard = ({ item, index }) => {
 //             whileHover="hover"
 //             transition={{ delay: index * 0.1 }}
 //             className="bg-white shadow-md border rounded-xl overflow-hidden cursor-pointer"
-//             onClick={() => navigate(`/api/details/${item?.post_id}`)}
+//             onClick={() => navigate(`/api/details/building/${item?.buildingId}`)}
+//         >
+//             <motion.div
+//                 className="relative aspect-[5/3] overflow-hidden"
+//                 whileHover={{ scale: 1.05 }}
+//                 transition={{ duration: 0.3 }}
+//             >
+//                 {item.galleryList?.[0] ? (
+//                     <img
+//                         src={item.galleryList?.[0]}
+//                         alt={item.name}
+//                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+//                     />
+//                 ) : (
+//                     <div className="w-full h-full flex items-center justify-center bg-gray-100">
+//                         <Building size={48} className="text-gray-400" />
+//                     </div>
+//                 )}
+
+//                 <div className="absolute top-4 left-4">
+//                     <div className="bg-white/90 px-3 py-1.5 rounded-full shadow-md flex items-center">
+//                         {getPropertyIcon(item.type)}
+//                         <span className="text-sm font-medium text-gray-800 ml-2">
+//                             {item.type || 'Property'}
+//                         </span>
+//                     </div>
+//                 </div>
+
+//                 <div className="absolute bottom-4 left-4 flex gap-2">
+//                     <div className={`text-white text-xs px-3 py-1 rounded-full ${item.developmentStatus === 'COMPLETED' ? 'bg-green-500' :
+//                         item.developmentStatus === 'In Progress' ? 'bg-yellow-500' :
+//                             'bg-blue-500'
+//                         }`}>
+//                         {item.developmentStatus}
+//                     </div>
+//                     {item.allowPreBooking === "true" && (
+//                         <div className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">
+//                             Pre-booking
+//                         </div>
+//                     )}
+//                 </div>
+
+//                 <motion.button
+//                     className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md"
+//                     whileHover={{ scale: 1.1 }}
+//                     whileTap={{ scale: 0.9 }}
+//                     onClick={(e) => e.stopPropagation()}
+//                 >
+//                     <Heart size={20} className="text-gray-500 hover:text-red-500 transition-colors" />
+//                 </motion.button>
+//             </motion.div>
+
+//             <motion.div
+//                 className="px-2 py-2"
+//                 initial={{ opacity: 0 }}
+//                 animate={{ opacity: 1 }}
+//                 transition={{ delay: 0.2 }}
+//             >
+//                 <div className="flex justify-between items-start flex-col">
+//                     <div className="text-lg font-bold text-black">
+//                         {formatPriceRange(item?.connectedProperties)}
+//                     </div>
+//                     <h3 className="text-md font-semibold text-gray-800">
+//                         {item.name}
+//                     </h3>
+//                 </div>
+
+//                 <div className="flex items-center text-gray-600 mb-3">
+//                     <MapPin size={16} className="mr-1" />
+//                     <span className="text-sm truncate">
+//                         {item.frontRoad || "Location not specified"}
+//                     </span>
+//                 </div>
+
+//                 <div className="flex gap-4 mb-3 text-xs">
+//                     <div className="bg-blue-50 rounded-lg flex gap-1 px-2 py-1">
+//                         <div className="font-semibold">Total Floors</div>
+//                         <div>{item.totalFloors}</div>
+//                     </div>
+//                     <div className="bg-green-50 rounded-lg flex gap-1 px-2 py-1">
+//                         <div className="font-semibold">Available Flats</div>
+//                         <div>{item.numberOfFlatsAvailable}</div>
+//                     </div>
+//                 </div>
+
+//                 <div className="border-t border-gray-200 pt-3">
+//                     <div className="grid grid-cols-2 gap-2 text-xs">
+//                         <div className="flex items-center text-gray-600">
+//                             <span className="font-medium">Age:</span>
+//                             <span className="ml-1">{item.age} years</span>
+//                         </div>
+//                         <div className="flex items-center text-gray-600">
+//                             <span className="font-medium">Area:</span>
+//                             <span className="ml-1">{item.parkingArea} sqft</span>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </motion.div>
+//         </motion.div>
+//     );
+// };
+
+// // Project Card Component
+// const ProjectCard = ({ item, index }) => {
+//     // console.log(item)
+//     const navigate = useNavigate();
+
+//     return (
+//         <motion.div
+//             variants={cardVariants}
+//             initial="hidden"
+//             animate="visible"
+//             whileHover="hover"
+//             transition={{ delay: index * 0.1 }}
+//             className="bg-white shadow-md border rounded-xl overflow-hidden cursor-pointer"
+//             onClick={() => navigate(`/api/details/project/${item?.projectId}`)}
 //         >
 //             <div className="relative aspect-[5/3] overflow-hidden">
-//                 {item.post_image || item?.galleryList ? (
+//                 {item?.gallery ? (
 //                     <img
-//                         src={item?.post_image || item?.galleryList?.[0] || item?.galleryList?.[1]}
-//                         alt={item.post_title}
+//                         src={item?.gallery?.[0]?.images?.[0] || item?.gallery?.[0]?.images?.[1]}
+//                         alt={item.name}
 //                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
 //                     />
 //                 ) : (
@@ -1459,8 +1340,19 @@ const ProjectCard = ({ item, index }) => {
 
 //                 <div className="absolute top-3 left-4">
 //                     <div className="flex items-center bg-white/90 rounded-full px-3 py-1 shadow-md">
-//                         {getPropertyIcon(item?.type_name)}
-//                         <span className="text-sm font-medium text-gray-800 ml-2">{item?.type_name}</span>
+//                         <Building size={16} className="text-red-500 mr-2" />
+//                         <span className="text-sm font-medium text-gray-800">{item?.type || 'Project'}</span>
+//                     </div>
+//                 </div>
+
+//                 <div className="absolute bottom-2 left-4 flex space-x-2">
+//                     <div className="bg-white/90 rounded-full px-3 py-1 shadow-md text-xs font-semibold flex items-center">
+//                         <Users size={12} className="mr-1" />
+//                         {item?.overview?.totalUnits} Units
+//                     </div>
+//                     <div className="bg-white/90 rounded-full px-3 py-1 shadow-md text-xs font-semibold flex items-center">
+//                         <Building size={12} className="mr-1" />
+//                         {item?.overview?.totalTowers} Towers
 //                     </div>
 //                 </div>
 
@@ -1468,9 +1360,9 @@ const ProjectCard = ({ item, index }) => {
 //                     className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md"
 //                     whileHover={{ scale: 1.1 }}
 //                     whileTap={{ scale: 0.9 }}
-//                     onClick={(e) => handleAddToWhislist(e , item?.post_id)}
+//                     onClick={(e) => e.stopPropagation()}
 //                 >
-//                     <Heart size={20} className="text-gray-500hover:text-red-500 transition-colors" />
+//                     <Heart size={20} className="text-gray-500 hover:text-red-500 transition-colors" />
 //                 </motion.button>
 //             </div>
 
@@ -1478,24 +1370,43 @@ const ProjectCard = ({ item, index }) => {
 //                 <div className="px-2">
 //                     <div className="flex items-baseline justify-between gap-2">
 //                         <div className='flex items-baseline gap-1'>
-//                             <span className="text-xl font-bold text-gray-900">
-//                                 {item?.price?.toLocaleString("en-IN")}
-//                             </span>
+//                             <div className="flex items-baseline">
+//                                 <span className="text-xl font-bold text-gray-900">
+//                                     {formatPrice(item?.overview?.priceRange?.min)} - {formatPrice(item?.overview?.priceRange?.max)}
+//                                 </span>
+//                             </div>
 //                             <span className="text-xs text-gray-600 font-medium"> INR</span>
 //                         </div>
 //                     </div>
 
 //                     <h3 className="capitalize text-md font-semibold text-gray-800 truncate">
-//                         {item?.post_title}
+//                         {item?.name}
 //                     </h3>
 
 //                     <div className="flex items-center text-gray-600 space-x-2 mb-2">
 //                         <MapPin size={16} />
 //                         <span className="text-xs mt-1 truncate max-w-[200px]">
-//                             {item?.address || "No Address Available"}
+//                             {item?.location?.address || "No Address Available"}
 //                         </span>
 //                     </div>
 //                 </div>
+
+//                 {(item?.overview?.launchDate || item?.overview?.possessionDate) && (
+//                     <div className="px-2 flex items-center space-x-4 text-xs text-gray-600 border-t border-gray-200 pt-2">
+//                         <div className="flex items-center">
+//                             <CalendarClock size={14} className="mr-1" />
+//                             <span>
+//                                 Launch: {new Date(item.overview.launchDate).toLocaleDateString()}
+//                             </span>
+//                         </div>
+//                         <div className="flex items-center">
+//                             <CalendarClock size={14} className="mr-1" />
+//                             <span>
+//                                 Possession: {new Date(item.overview.possessionDate).toLocaleDateString()}
+//                             </span>
+//                         </div>
+//                     </div>
+//                 )}
 
 //                 <div className="px-2 flex justify-between items-center pt-2 pb-1 border-t border-gray-200">
 //                     <div className="flex items-center space-x-2">
@@ -1504,145 +1415,18 @@ const ProjectCard = ({ item, index }) => {
 //                             {item?.amenities?.length}+
 //                         </span>
 //                     </div>
-//                 </div>
-
-//                 {(item?.projectDetails?.name || item?.project?.name || item?.buildingDetails?.name || item?.furnishing) && (
-//                     <div
-//                         className={`text-sm rounded-b-xl text-center py-[6px] mt-1 
-//                         ${item?.projectDetails?.name || item?.project?.name ? 'bg-yellow-400'
-//                                 : item?.buildingDetails?.name ? 'bg-[#C8E6C9]'
-//                                     : 'bg-[#F3F3F6]'}
-//                     `}
-//                     >
-//                         {item?.projectDetails?.name || item?.project?.name
-//                             ? `Under Project ${item?.projectDetails?.name || item?.project?.name}`
-//                             : item?.buildingDetails?.name
-//                                 ? `Building: ${item?.buildingDetails?.name}`
-//                                 : item?.furnishing}
-//                     </div>
-//                 )}
-//             </div>
-//         </motion.div>
-//     );
-// };
-
-// const PropertyCard = ({ item, index }) => {
-//     const navigate = useNavigate();
-//     const { wishlist } = useSelector(state => state.wishlist);
-
-//     // Check if the current item is in wishlist
-//     const isWishlisted = useMemo(() => {
-//         return wishlist.some(wish => wish.propertyId?.post_id === item?.post_id);
-//     }, [wishlist, item?.post_id]);
-
-//     const handleAddToWhislist = async(e, post_id) => {
-//         e.stopPropagation();
-//         console.log(post_id);
-
-//         try {
-//             const response = await axios.post('http://localhost:5053/api/users/history/like', {
-//                 propertyId: post_id
-//             } , getConfig());
-
-//            console.log(response)
-
-//         } catch (error) {
-//             console.log(error)
-//         }
-//     };
-
-
-//     return (
-//         <motion.div
-//             variants={cardVariants}
-//             initial="hidden"
-//             animate="visible"
-//             whileHover="hover"
-//             transition={{ delay: index * 0.1 }}
-//             className="bg-white shadow-md border rounded-xl overflow-hidden cursor-pointer"
-//             onClick={() => navigate(`/api/details/${item?.post_id}`)}
-//         >
-//             <div className="relative aspect-[5/3] overflow-hidden">
-//                 {item.post_image || item?.galleryList ? (
-//                     <img
-//                         src={item?.post_image || item?.galleryList?.[0] || item?.galleryList?.[1]}
-//                         alt={item.post_title}
-//                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-//                     />
-//                 ) : (
-//                     <div className="w-full h-full flex items-center justify-center bg-gray-100">
-//                         <Building size={48} className="text-gray-400" />
-//                     </div>
-//                 )}
-
-//                 <div className="absolute top-3 left-4">
-//                     <div className="flex items-center bg-white/90 rounded-full px-3 py-1 shadow-md">
-//                         {getPropertyIcon(item?.type_name)}
-//                         <span className="text-sm font-medium text-gray-800 ml-2">{item?.type_name}</span>
-//                     </div>
-//                 </div>
-
-
-//                 <button className="absolute top-3 right-4" onClick={(e) => handleAddToWhislist(e, item?.post_id)}>
-//                     {
-//                         isWishlisted ? <img src='https://img.icons8.com/?size=100&id=aId5rVASLwDE&format=png&color=FA5252' className='w-6 h-6' /> : <img src='https://img.icons8.com/?size=100&id=DxIsF9smUsRE&format=png&color=FA5252' className='w-6 h-6' />
-//                     }
-//                 </button>
-//             </div>
-
-//             {/* Rest of the component remains the same */}
-//             <div className="pt-2">
-//                 <div className="px-2">
-//                     <div className="flex items-baseline justify-between gap-2">
-//                         <div className='flex items-baseline gap-1'>
-//                             <span className="text-xl font-bold text-gray-900">
-//                                 {item?.price?.toLocaleString("en-IN")}
-//                             </span>
-//                             <span className="text-xs text-gray-600 font-medium"> INR</span>
+//                     {item?.status && (
+//                         <div className="bg-green-500 text-white text-[10px] px-2 py-1 rounded-full">
+//                             {item.status}
 //                         </div>
-//                     </div>
-
-//                     <h3 className="capitalize text-md font-semibold text-gray-800 truncate">
-//                         {item?.post_title}
-//                     </h3>
-
-//                     <div className="flex items-center text-gray-600 space-x-2 mb-2">
-//                         <MapPin size={16} />
-//                         <span className="text-xs mt-1 truncate max-w-[200px]">
-//                             {item?.address || "No Address Available"}
-//                         </span>
-//                     </div>
+//                     )}
 //                 </div>
-
-//                 <div className="px-2 flex justify-between items-center pt-2 pb-1 border-t border-gray-200">
-//                     <div className="flex items-center space-x-2">
-//                         <span className="text-sm text-gray-700">Amenities</span>
-//                         <span className="bg-gray-100 text-black text-xs h-5 w-10 grid place-items-center rounded-full">
-//                             {item?.amenities?.length}+
-//                         </span>
-//                     </div>
-//                 </div>
-
-//                 {(item?.projectDetails?.name || item?.project?.name || item?.buildingDetails?.name || item?.furnishing) && (
-//                     <div
-//                         className={`text-sm rounded-b-xl text-center py-[6px] mt-1 
-//                         ${item?.projectDetails?.name || item?.project?.name ? 'bg-yellow-400'
-//                                 : item?.buildingDetails?.name ? 'bg-[#C8E6C9]'
-//                                     : 'bg-[#F3F3F6]'}
-//                     `}
-//                     >
-//                         {item?.projectDetails?.name || item?.project?.name
-//                             ? `Under Project ${item?.projectDetails?.name || item?.project?.name}`
-//                             : item?.buildingDetails?.name
-//                                 ? `Building: ${item?.buildingDetails?.name}`
-//                                 : item?.furnishing}
-//                     </div>
-//                 )}
 //             </div>
 //         </motion.div>
 //     );
 // };
 
+// // Property Card Component
 // const PropertyCard = ({ item, index }) => {
 //     const navigate = useNavigate();
 //     const { wishlist } = useSelector(state => state.wishlist);
@@ -1650,7 +1434,7 @@ const ProjectCard = ({ item, index }) => {
 
 //     // Check if the current item is in wishlist
 //     const isWishlisted = useMemo(() => {
-//         return wishlist.some(wish => wish.propertyId?.post_id === item?.post_id);
+//         return wishlist?.some(wish => wish?.propertyId?.post_id === item?.post_id);
 //     }, [wishlist, item?.post_id]);
 
 //     // Set initial state based on wishlist
@@ -1660,19 +1444,52 @@ const ProjectCard = ({ item, index }) => {
 
 //     const handleAddToWhislist = async (e, post_id) => {
 //         e.stopPropagation();
+//         if(getAuthToken() === null){
+//             navigate('/signup')
+//             toast.error("SignIn Required", {
+//                 // icon: isLocalWishlisted ? '💔' : '❤️',
+//                 style: {
+//                     borderRadius: '10px',
+//                     background: '#333',
+//                     color: '#fff',
+//                 },
+//             });
+
+//             return;
+//         }
+        
 //         console.log(post_id);
 
 //         // Toggle local state immediately for instant UI feedback
 //         setIsLocalWishlisted(!isLocalWishlisted);
 
+//         // Show appropriate toast message
+//         const toastMessage = isLocalWishlisted ? 'Removed from Wishlist' : 'Added to Wishlist';
+
+//         toast(toastMessage, {
+//             icon: isLocalWishlisted ? '💔' : '❤️',
+//             style: {
+//                 borderRadius: '10px',
+//                 background: '#333',
+//                 color: '#fff',
+//             },
+//         });
+
 //         try {
-//             const response = await axios.post('http://localhost:5053/api/users/history/like', {
+//             const response = await axios.post(`${base_url}/api/users/history/like`, {
 //                 propertyId: post_id
 //             }, getConfig());
 //             console.log(response);
 //         } catch (error) {
 //             // Revert local state if API call fails
 //             setIsLocalWishlisted(isLocalWishlisted);
+//             toast.error('Failed to update wishlist', {
+//                 style: {
+//                     borderRadius: '10px',
+//                     background: '#333',
+//                     color: '#fff',
+//                 },
+//             });
 //             console.log(error);
 //         }
 //     };
@@ -1688,10 +1505,10 @@ const ProjectCard = ({ item, index }) => {
 //             onClick={() => navigate(`/api/details/${item?.post_id}`)}
 //         >
 //             <div className="relative aspect-[5/3] overflow-hidden">
-//                 {item.post_image || item?.galleryList ? (
+//                 {item?.post_image || item?.galleryList ? (
 //                     <img
 //                         src={item?.post_image || item?.galleryList?.[0] || item?.galleryList?.[1]}
-//                         alt={item.post_title}
+//                         alt={item?.post_title}
 //                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
 //                     />
 //                 ) : (
@@ -1779,6 +1596,228 @@ const ProjectCard = ({ item, index }) => {
 //     );
 // };
 
+// Building Card Component
+const BuildingCard = ({ item, index }) => {
+    const navigate = useNavigate();
+
+    return (
+        <motion.div
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            transition={{ delay: index * 0.1 }}
+            className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            onClick={() => navigate(`/api/details/building/${item?.buildingId}`)}
+        >
+            <div className="relative">
+                {item.galleryList?.[0] ? (
+                    <img
+                        src={item.galleryList?.[0]}
+                        alt={item.name}
+                        className="w-full h-48 object-cover"
+                    />
+                ) : (
+                    <div className="w-full h-48 flex items-center justify-center bg-gray-100">
+                        <Building size={48} className="text-gray-400" />
+                    </div>
+                )}
+
+                <motion.button
+                    className="absolute top-3 right-3 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100"
+                    whileTap={{ scale: 0.9 }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Heart
+                        size={20}
+                        className="text-gray-500 hover:text-red-500 transition-colors"
+                    />
+                </motion.button>
+
+                <div className="absolute top-3 left-3 flex space-x-2">
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-md flex items-center">
+                        {getPropertyIcon(item.type)}
+                        <span className="ml-1">{item.type || 'Property'}</span>
+                    </span>
+
+                    {item.developmentStatus && (
+                        <span className={`text-xs font-medium px-2.5 py-1 rounded-md
+                            ${item.developmentStatus === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                                item.developmentStatus === 'In Progress' ? 'bg-amber-100 text-amber-800' :
+                                    'bg-blue-100 text-blue-800'}`}>
+                            {item.developmentStatus}
+                        </span>
+                    )}
+
+                    {item.allowPreBooking === "true" && (
+                        <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-md flex items-center">
+                            Pre-booking
+                        </span>
+                    )}
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                    <div className="text-white font-bold text-lg">
+                        {formatPriceRange(item?.connectedProperties)}
+                    </div>
+                </div>
+            </div>
+
+            <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                    {item.name}
+                </h3>
+
+                <div className="flex items-start mb-3">
+                    <MapPin size={16} className="text-gray-500 mt-0.5 mr-1 flex-shrink-0" />
+                    <p className="text-gray-600 text-sm">{item.frontRoad || "Location not specified"}</p>
+                </div>
+
+                <div className="flex space-x-3 mb-3">
+                    <div className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded-md">
+                        <span className="font-semibold mr-1">Total Floors:</span>
+                        {item.totalFloors}
+                    </div>
+                    <div className="bg-green-50 text-green-800 text-xs px-2 py-1 rounded-md">
+                        <span className="font-semibold mr-1">Available Flats:</span>
+                        {item.numberOfFlatsAvailable}
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-2">
+                    <div className="flex items-center">
+                        <span className="text-gray-800 font-medium">{item.parkingArea} sqft</span>
+                    </div>
+                    <div className="flex items-center">
+                        <span className="text-sm text-gray-500">{item.age} years old</span>
+                    </div>
+                </div>
+
+                <div className="mt-4 flex space-x-2">
+                    <button className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-md py-2 text-sm">
+                        Contact Agent
+                    </button>
+                    <button className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
+// Project Card Component
+const ProjectCard = ({ item, index }) => {
+    const navigate = useNavigate();
+
+    return (
+        <motion.div
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            transition={{ delay: index * 0.1 }}
+            className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            onClick={() => navigate(`/api/details/project/${item?.projectId}`)}
+        >
+            <div className="relative">
+                {item?.gallery ? (
+                    <img
+                        src={item?.gallery?.[0]?.images?.[0] || item?.gallery?.[0]?.images?.[1]}
+                        alt={item.name}
+                        className="w-full h-48 object-cover"
+                    />
+                ) : (
+                    <div className="w-full h-48 flex items-center justify-center bg-gray-100">
+                        <Building size={48} className="text-gray-400" />
+                    </div>
+                )}
+
+                <motion.button
+                    className="absolute top-3 right-3 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100"
+                    whileTap={{ scale: 0.9 }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Heart
+                        size={20}
+                        className="text-gray-500 hover:text-red-500 transition-colors"
+                    />
+                </motion.button>
+
+                <div className="absolute top-3 left-3 flex space-x-2">
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-md flex items-center">
+                        <Building size={14} className="mr-1" />
+                        {item?.type || 'Project'}
+                    </span>
+
+                    {item?.status && (
+                        <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-md">
+                            {item.status}
+                        </span>
+                    )}
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                    <div className="text-white font-bold text-lg">
+                        {formatPrice(item?.overview?.priceRange?.min)} - {formatPrice(item?.overview?.priceRange?.max)} INR
+                    </div>
+                </div>
+            </div>
+
+            <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-800 capitalize mb-1">
+                    {item?.name}
+                </h3>
+
+                <div className="flex items-start mb-3">
+                    <MapPin size={16} className="text-gray-500 mt-0.5 mr-1 flex-shrink-0" />
+                    <p className="text-gray-600 text-sm truncate">{item?.location?.address || "No Address Available"}</p>
+                </div>
+
+                <div className="flex space-x-3 mb-3">
+                    <div className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded-md flex items-center">
+                        <Users size={12} className="mr-1" />
+                        {item?.overview?.totalUnits} Units
+                    </div>
+                    <div className="bg-green-50 text-green-800 text-xs px-2 py-1 rounded-md flex items-center">
+                        <Building size={12} className="mr-1" />
+                        {item?.overview?.totalTowers} Towers
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-2">
+                    <div className="flex items-center">
+                        <span className="text-sm text-gray-500 mr-2">Amenities</span>
+                        <span className="bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full">
+                            {item?.amenities?.length}+
+                        </span>
+                    </div>
+
+                    {(item?.overview?.launchDate || item?.overview?.possessionDate) && (
+                        <div className="text-xs text-gray-500">
+                            Possession: {new Date(item?.overview?.possessionDate).toLocaleDateString()}
+                        </div>
+                    )}
+                </div>
+
+                <div className="mt-4 flex space-x-2">
+                    <button className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-md py-2 text-sm">
+                        Contact Agent
+                    </button>
+                    <button className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
+// Property Card Component
 const PropertyCard = ({ item, index }) => {
     const navigate = useNavigate();
     const { wishlist } = useSelector(state => state.wishlist);
@@ -1796,10 +1835,9 @@ const PropertyCard = ({ item, index }) => {
 
     const handleAddToWhislist = async (e, post_id) => {
         e.stopPropagation();
-        if(getAuthToken() === null){
+        if (getAuthToken() === null) {
             navigate('/signup')
             toast.error("SignIn Required", {
-                // icon: isLocalWishlisted ? '💔' : '❤️',
                 style: {
                     borderRadius: '10px',
                     background: '#333',
@@ -1809,7 +1847,7 @@ const PropertyCard = ({ item, index }) => {
 
             return;
         }
-        
+
         console.log(post_id);
 
         // Toggle local state immediately for instant UI feedback
@@ -1853,94 +1891,103 @@ const PropertyCard = ({ item, index }) => {
             animate="visible"
             whileHover="hover"
             transition={{ delay: index * 0.1 }}
-            className="bg-white shadow-md border rounded-xl overflow-hidden cursor-pointer"
+            className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             onClick={() => navigate(`/api/details/${item?.post_id}`)}
         >
-            <div className="relative aspect-[5/3] overflow-hidden">
+            <div className="relative">
                 {item?.post_image || item?.galleryList ? (
                     <img
                         src={item?.post_image || item?.galleryList?.[0] || item?.galleryList?.[1]}
                         alt={item?.post_title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-48 object-cover"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="w-full h-48 flex items-center justify-center bg-gray-100">
                         <Building size={48} className="text-gray-400" />
                     </div>
                 )}
 
-                <div className="absolute top-3 left-4">
-                    <div className="flex items-center bg-white/90 rounded-full px-3 py-1 shadow-md">
-                        {getPropertyIcon(item?.type_name)}
-                        <span className="text-sm font-medium text-gray-800 ml-2">{item?.type_name}</span>
-                    </div>
-                </div>
-
                 <button
-                    className="absolute top-3 right-4"
+                    className="absolute top-3 right-3 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100"
                     onClick={(e) => handleAddToWhislist(e, item?.post_id)}
                 >
-                    {isLocalWishlisted ?
-                        <img
-                            src='https://img.icons8.com/?size=100&id=aId5rVASLwDE&format=png&color=FA5252'
-                            className='w-6 h-6'
-                            alt="Filled heart"
-                        /> :
-                        <img
-                            src='https://img.icons8.com/?size=100&id=DxIsF9smUsRE&format=png&color=FA5252'
-                            className='w-6 h-6'
-                            alt="Empty heart"
+                    {isLocalWishlisted ? (
+                        <Heart
+                            size={20}
+                            className="text-red-500 fill-red-500"
                         />
-                    }
+                    ) : (
+                        <Heart
+                            size={20}
+                            className="text-gray-400"
+                        />
+                    )}
                 </button>
+
+                <div className="absolute top-3 left-3 flex space-x-2">
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-md flex items-center">
+                        {getPropertyIcon(item?.type_name)}
+                        <span className="ml-1">{item?.type_name}</span>
+                    </span>
+
+                    {(item?.projectDetails?.name || item?.project?.name) && (
+                        <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-md flex items-center">
+                            <Star size={12} className="mr-1" />
+                            Project
+                        </span>
+                    )}
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                    <div className="text-white font-bold text-lg">
+                        {item?.price?.toLocaleString("en-IN")} INR
+                    </div>
+                </div>
             </div>
 
-            {/* Rest of the component remains unchanged */}
-            <div className="pt-2">
-                <div className="px-2">
-                    <div className="flex items-baseline justify-between gap-2">
-                        <div className='flex items-baseline gap-1'>
-                            <span className="text-xl font-bold text-gray-900">
-                                {item?.price?.toLocaleString("en-IN")}
-                            </span>
-                            <span className="text-xs text-gray-600 font-medium"> INR</span>
-                        </div>
-                    </div>
+            <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-800 capitalize mb-1">
+                    {item?.post_title}
+                </h3>
 
-                    <h3 className="capitalize text-md font-semibold text-gray-800 truncate">
-                        {item?.post_title}
-                    </h3>
+                <div className="flex items-start mb-3">
+                    <MapPin size={16} className="text-gray-500 mt-0.5 mr-1 flex-shrink-0" />
+                    <p className="text-gray-600 text-sm truncate">{item?.address || "No Address Available"}</p>
+                </div>
 
-                    <div className="flex items-center text-gray-600 space-x-2 mb-2">
-                        <MapPin size={16} />
-                        <span className="text-xs mt-1 truncate max-w-[200px]">
-                            {item?.address || "No Address Available"}
+                <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-2">
+                    <div className="flex items-center">
+                        <span className="text-gray-800 font-medium">
+                            {item?.furnishing ? item?.furnishing : 'Not specified'}
                         </span>
+                    </div>
+                    <div className="flex items-center">
+                        <span className="text-sm text-gray-500 mr-2">{item?.amenities?.length}+ amenities</span>
                     </div>
                 </div>
 
-                <div className="px-2 flex justify-between items-center pt-2 pb-1 border-t border-gray-200">
-                    <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-700">Amenities</span>
-                        <span className="bg-gray-100 text-black text-xs h-5 w-10 grid place-items-center rounded-full">
-                            {item?.amenities?.length}+
-                        </span>
-                    </div>
+                <div className="mt-4 flex space-x-2">
+                    <button className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-md py-2 text-sm">
+                        Contact Agent
+                    </button>
+                    <button className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                        </svg>
+                    </button>
                 </div>
 
-                {(item?.projectDetails?.name || item?.project?.name || item?.buildingDetails?.name || item?.furnishing) && (
-                    <div
-                        className={`text-sm rounded-b-xl text-center py-[6px] mt-1 
-                        ${item?.projectDetails?.name || item?.project?.name ? 'bg-yellow-400'
-                                : item?.buildingDetails?.name ? 'bg-[#C8E6C9]'
-                                    : 'bg-[#F3F3F6]'}
-                    `}
-                    >
-                        {item?.projectDetails?.name || item?.project?.name
-                            ? `Under Project ${item?.projectDetails?.name || item?.project?.name}`
-                            : item?.buildingDetails?.name
-                                ? `Building: ${item?.buildingDetails?.name}`
-                                : item?.furnishing}
+                {(item?.projectDetails?.name || item?.project?.name || item?.buildingDetails?.name) && (
+                    <div className="mt-3 border-t border-gray-100 pt-3">
+                        {item?.projectDetails?.name || item?.project?.name ? (
+                            <div className="text-sm text-amber-800 bg-amber-50 px-3 py-2 rounded-md">
+                                Under Project: {item?.projectDetails?.name || item?.project?.name}
+                            </div>
+                        ) : item?.buildingDetails?.name ? (
+                            <div className="text-sm text-green-800 bg-green-50 px-3 py-2 rounded-md">
+                                Building: {item?.buildingDetails?.name}
+                            </div>
+                        ) : null}
                     </div>
                 )}
             </div>
@@ -1949,7 +1996,7 @@ const PropertyCard = ({ item, index }) => {
 };
 
 // Main ListingPage Component
-const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading = false, sortBy, filterType, searchQuery }) => {
+const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading = false, sortBy, filterType, searchQuery, setSearchQuery, setFilterType, setSortBy, handleViewChange , view }) => {
     const [viewType, setViewType] = useState('list');
 
     // Filter and sort items
@@ -1994,12 +2041,13 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
 
     return (
         <motion.div
-            className="min-h-screen bg-white p-4"
+            className="min-h-screen  px-16 font-poppins font-medium"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
         >
+            <SearchSection handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy} />
             <AnimatePresence>
                 {viewType === 'list' && (
                     <motion.div
@@ -2009,7 +2057,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredItems.map((item, index) => {
                                 if ('buildingId' in item) {
                                     return <BuildingCard key={item?._id} item={item} index={index} />;
@@ -2019,7 +2067,9 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                                     return <PropertyCard key={item?._id} item={item} index={index} />;
                                 }
                             })}
-                        </div>
+                        </div> */}
+
+                        <PropertyShowcase properties={properties} projects={projects} buildings={buildings} />
 
                         <AnimatePresence>
                             {filteredItems?.length === 0 && !isLoading && (

@@ -16,12 +16,11 @@ const BuildingViewer2 = ({ id, viewer, configAvailable, setConfigAvailable }) =>
         const fetchConfig = async () => {
             try {
                 const response = await fetch(`https://propertify.onrender.com/api/export-config/${id}`);
-                console.log("response", response?.status)
-                console.log("BuildingViewer", response)
+                // console.log("response", response?.status)
                 if (response?.status != 404) {
                     setConfigAvailable(true)
                     const data = await response.json();
-                    console.log(data?.status)
+                    console.log(data?.data)
                     setConfig(data?.data);
                 } else {
 

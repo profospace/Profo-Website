@@ -277,7 +277,7 @@ function SinglePage() {
                         exit={{ y: -100, opacity: 0 }}
                         transition={{ duration: 0.3, ease: "easeOut" }}
                         // className="fixed top-0 left-0 right-0 bg-[#FFDE5A]  shadow-md z-50 py-3 px-8"
-                        className="fixed top-0 left-0 right-0 bg-[#000]/80 text-white shadow-md z-10 py-4 px-8 backdrop-blur-lg"
+                        className="fixed top-0 left-0 right-0 bg-[#000]/80 text-white shadow-md z-40 py-4 px-8 backdrop-blur-lg"
 
                     >
                         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -820,7 +820,7 @@ function SinglePage() {
                                     region: propertyDetail?.region || ['City view', 'Hold'],
                                     tags: propertyDetail?.tags?.length > 0 ? propertyDetail?.tags : ['Newly Added', 'Diwali Offer'],
                                     ownerName: propertyDetail?.ownerName || "Ankit Kumar Singh",
-                                    createdAt: propertyDetail?.createdAt
+                                    createdAt: propertyDetail?.createdAt,
 
                                 }}
                             />

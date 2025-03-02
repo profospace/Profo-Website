@@ -15,7 +15,14 @@ const withMT = require("@material-tailwind/react/utils/withMT");
 module.exports = withMT({
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
+        helvetica: ['Helvetica', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+      }
+    },
     testing: {
       center: true,
       padding: '20px',

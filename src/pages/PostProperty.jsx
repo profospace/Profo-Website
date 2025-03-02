@@ -638,7 +638,6 @@ import React, { useRef, useState } from 'react';
 import { FaAngleDown } from "react-icons/fa6";
 import { toast } from 'react-hot-toast';
 import { Coins, Home, Upload } from 'lucide-react';
-import { base_url } from '../utils/base_url';
 
 const PostProperty = () => {
     const formSectionRef = useRef(null);
@@ -707,7 +706,7 @@ const PostProperty = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${base_url}/property-lead/api/leads`, {
+            const response = await fetch(`http://localhost:5053/property-lead/api/leads`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

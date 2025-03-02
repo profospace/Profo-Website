@@ -1028,6 +1028,56 @@
 // export default ActiveFiltersDisplay;
 
 
+// import React from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { X } from "lucide-react";
+// import { applyFilter } from "../redux/features/Map/mapSlice";
+
+// const ActiveFiltersDisplay = () => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
+
+//     console.log("appliedFilters", appliedFilters)
+
+//     console.log(Object.entries(appliedFilters))
+
+//     const formatFilterValue = (key, value) => {
+//         return Array.isArray(value) ? value.join(", ") : value.toString();
+//     };
+
+//     const handleRemoveFilter = (filterKey) => {
+//         const newFilters = { ...appliedFilters };
+//         delete newFilters[filterKey];
+//         dispatch(applyFilter(newFilters));
+//     };
+
+//     return (
+//         Object.entries(appliedFilters).length > 0 && <div className="flex flex-wrap gap-2 mb-2">
+//             {Object.entries(appliedFilters || {}).map(([key, value]) => (
+//                 <div
+//                     key={key}
+//                     className="flex items-center gap-1 bg-white shadow-lg border border-gray-300 capitalize text-gray-900 rounded-full px-3 py-1 text-sm whitespace-nowrap"
+//                 >
+//                     <span className="font-medium">
+//                         {key.replace(/([A-Z])/g, " $1").trim()}: {formatFilterValue(key, value)}
+//                     </span>
+//                     <button
+//                         onClick={() => handleRemoveFilter(key)}
+//                         className="hover:bg-blue-100 rounded-full py-1 px-2 ml-1 flex items-center justify-center"
+//                         aria-label={`Remove ${key} filter`}
+//                     >
+//                         <X className="w-3 h-3" />
+//                     </button>
+//                 </div>
+//             ))}
+
+           
+//         </div>
+//     );
+// };
+
+// export default ActiveFiltersDisplay;
+
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { X } from "lucide-react";
@@ -1037,59 +1087,58 @@ const ActiveFiltersDisplay = () => {
     const dispatch = useDispatch();
     const { appliedFilters } = useSelector((state) => state.map);
 
-    console.log(Object.entries(appliedFilters))
+    console.log("appliedFilters", appliedFilters);
 
+    // Format filter values correctly
     const formatFilterValue = (key, value) => {
+        if (key === "price" && typeof value === "object") {
+            return `$${value.min} - $${value.max}`;
+        }
         return Array.isArray(value) ? value.join(", ") : value.toString();
     };
 
+    // Remove individual filter
     const handleRemoveFilter = (filterKey) => {
         const newFilters = { ...appliedFilters };
         delete newFilters[filterKey];
         dispatch(applyFilter(newFilters));
     };
 
-    return (
-        Object.entries(appliedFilters).length > 0 && <div className="flex flex-wrap gap-2 mt-2">
-            {Object.entries(appliedFilters || {}).map(([key, value]) => (
-                <div
-                    key={key}
-                    className="flex items-center gap-1 bg-[#F5F7FA] border border-gray-300 capitalize text-gray-900 rounded-full px-3 py-1 text-sm whitespace-nowrap"
-                >
-                    <span className="font-medium">
-                        {key.replace(/([A-Z])/g, " $1").trim()}: {formatFilterValue(key, value)}
-                    </span>
-                    <button
-                        onClick={() => handleRemoveFilter(key)}
-                        className="hover:bg-blue-100 rounded-full py-1 px-2 ml-1 flex items-center justify-center"
-                        aria-label={`Remove ${key} filter`}
-                    >
-                        <X className="w-3 h-3" />
-                    </button>
-                </div>
-            ))}
+    // Clear all filters
+    const handleClearAll = () => {
+        dispatch(applyFilter({})); // Reset filters
+    };
 
-            {/* For static demo if needed */}
-            {/* {Object.keys(appliedFilters || {}).length === 0 && (
-                <>
-                    {["Apartment", "Buy", "3 BHK", "Arya Nagar", "₹50L - ₹3Cr"].map((tag, index) => (
-                        <div
-                            key={index}
-                            className="flex items-center gap-1 bg-blue-50 border border-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm whitespace-nowrap"
+    return (
+        Object.keys(appliedFilters).length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+                {Object.entries(appliedFilters).map(([key, value]) => (
+                    <div
+                        key={key}
+                        className="flex items-center gap-1 bg-white shadow-lg border border-gray-300 capitalize text-gray-900 rounded-full px-3 py-1 text-sm whitespace-nowrap"
+                    >
+                        <span className="font-medium">
+                            {key.replace(/([A-Z])/g, " $1").trim()}: {formatFilterValue(key, value)}
+                        </span>
+                        <button
+                            onClick={() => handleRemoveFilter(key)}
+                            className="hover:bg-blue-100 rounded-full py-1 px-2 ml-1 flex items-center justify-center"
+                            aria-label={`Remove ${key} filter`}
                         >
-                            <span className="font-medium">{tag}</span>
-                            <button
-                                onClick={() => console.log(`Removed ${tag}`)}
-                                className="hover:bg-blue-100 rounded-full p-1 ml-1 flex items-center justify-center"
-                                aria-label={`Remove ${tag} filter`}
-                            >
-                                <X className="w-3 h-3" />
-                            </button>
-                        </div>
-                    ))}
-                </>
-            )} */}
-        </div>
+                            <X className="w-3 h-3" />
+                        </button>
+                    </div>
+                ))}
+
+                {/* Clear All Filters Button */}
+                <button
+                    onClick={handleClearAll}
+                    className="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 rounded-full text-sm shadow-lg"
+                >
+                    Clear All
+                </button>
+            </div>
+        )
     );
 };
 

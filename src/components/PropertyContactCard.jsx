@@ -288,7 +288,8 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                     </button>
 
                 }
-                    <Callback />
+                                    {/* builderId: propertyDetail?.builder?.id */}
+                    <Callback builderId={details?.id}/>
 
                 <div className="flex items-center gap-3">
                     {details?.name && <img
