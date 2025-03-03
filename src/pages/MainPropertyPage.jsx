@@ -453,7 +453,7 @@ const MainPropertyPage = () => {
             {/* <div className="min-h-screen px-2 overflow-hidden">
                 <div className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'> */}
             <motion.div
-                className=" overflow-hidden relative w-full bg-[#F7F9FC] pt-16"
+                className=" overflow-hidden relative w-full bg-[#F7F9FC]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}

@@ -529,7 +529,7 @@ const ActiveIndicator = ({ isActive }) => {
     <AnimatePresence>
       {isActive && (
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full"
+          className="absolute bottom-0 left-0 right-0 h-0.5 bg-[crimson] rounded-full"
           initial={{ width: 0, opacity: 0, left: "50%", right: "50%" }}
           animate={{ width: "100%", opacity: 1, left: 0, right: 0 }}
           exit={{ width: 0, opacity: 0, left: "50%", right: "50%" }}
@@ -551,6 +551,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     return scrollY.onChange(() => {
       setIsScrolled(scrollY.get() > 10);
+      setActiveDropdown(null)
     });
   }, [scrollY]);
 
@@ -565,6 +566,7 @@ const Navbar: React.FC = () => {
 
   // Handle menu item click from dropdown
   const handleMenuItemClick = (filterParams: any) => {
+    console.log(filterParams)
     // Dispatch the filter action with the provided parameters
     dispatch(applyFilter(filterParams));
 
@@ -764,18 +766,6 @@ const Navbar: React.FC = () => {
         title: "Projects in New-Delhi",
         params: { vanilla: 'project', city: 'New-Delhi' }
       },
-      {
-        title: "Investment Hotspot",
-        params: { vanilla: 'property', purpose: 'Rent', propertyType: ['Investment'] }
-      },
-      {
-        title: "Find an Agent",
-        navigate: '/agents'
-      },
-      {
-        title: "Home Interiors in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Rent', city: 'New-Delhi', category: 'HomeInteriors' }
-      }
     ],
     buyingTools: [
       {
@@ -786,14 +776,7 @@ const Navbar: React.FC = () => {
         title: "Rates & Trends",
         navigate: '/tools/rates'
       },
-      {
-        title: "Buy vs Rent",
-        navigate: '/tools/buyvrent'
-      },
-      {
-        title: "Tips and Guides",
-        navigate: '/guides'
-      }
+      
     ]
     // Other categories would follow the same pattern
   };
@@ -814,22 +797,19 @@ const Navbar: React.FC = () => {
             }
           }}
         >
-          {item.title}
+          <span className='hover:text-[crimson] text-md'>{item.title}</span>
           {item.badge && <span className="text-xs text-red-500 ml-1">{item.badge}</span>}
         </a>
       </li>
     ));
   };
 
-  // Tab animation variants
-  const tabContentVariants = {
-    hidden: { opacity: 0, y: -10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
-    exit: { opacity: 0, y: 10, transition: { duration: 0.2, ease: "easeIn" } }
-  };
+  
+
+ 
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled || activeDropdown ? 'bg-white shadow-md py-3' : 'bg-gradient-to-b from-black/50 to-transparent py-4'
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled || activeDropdown ? 'bg-white shadow-md py-4' : 'bg-gradient-to-b from-black/50 to-transparent py-4'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
@@ -865,7 +845,7 @@ const Navbar: React.FC = () => {
                   transition={{ duration: 0.3 }}
                   className="ml-1"
                 >
-                  <ChevronDown className="h-4 w-4" />
+                  {/* <ChevronDown className="h-4 w-4" /> */}
                 </motion.span>
                 <ActiveIndicator isActive={activeDropdown === 'buy'} />
               </motion.button>
@@ -886,7 +866,7 @@ const Navbar: React.FC = () => {
                   transition={{ duration: 0.3 }}
                   className="ml-1"
                 >
-                  <ChevronDown className="h-4 w-4" />
+                  {/* <ChevronDown className="h-4 w-4" /> */}
                 </motion.span>
                 <ActiveIndicator isActive={activeDropdown === 'rent'} />
               </motion.button>
@@ -907,7 +887,7 @@ const Navbar: React.FC = () => {
                   transition={{ duration: 0.3 }}
                   className="ml-1"
                 >
-                  <ChevronDown className="h-4 w-4" />
+                  {/* <ChevronDown className="h-4 w-4" /> */}
                 </motion.span>
                 <ActiveIndicator isActive={activeDropdown === 'mb-advice'} />
               </motion.button>
@@ -928,7 +908,7 @@ const Navbar: React.FC = () => {
                   transition={{ duration: 0.3 }}
                   className="ml-1"
                 >
-                  <ChevronDown className="h-4 w-4" />
+                  {/* <ChevronDown className="h-4 w-4" /> */}
                 </motion.span>
                 <ActiveIndicator isActive={activeDropdown === 'help'} />
               </motion.button>

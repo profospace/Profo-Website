@@ -1,110 +1,128 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin } from 'lucide-react';
+import { Heart, MapPin, Phone } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { formatPrice } from '../../lib/utils';
 
-interface Destination {
-  id: number;
-  name: string;
-  properties: number;
-  image: string;
-}
-
-const destinations: Destination[] = [
-  {
-    id: 1,
-    name: "New York",
-    properties: 1245,
-    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-  },
-  {
-    id: 2,
-    name: "Los Angeles",
-    properties: 873,
-    image: "https://images.unsplash.com/photo-1580655653885-65763b2597d0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-  },
-  {
-    id: 3,
-    name: "Miami",
-    properties: 692,
-    image: "https://images.unsplash.com/photo-1535498730771-e735b998cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-  },
-  {
-    id: 4,
-    name: "Chicago",
-    properties: 541,
-    image: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-  },
-  {
-    id: 5,
-    name: "San Francisco",
-    properties: 402,
-    image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80"
-  },
-  {
-    id: 6,
-    name: "Seattle",
-    properties: 321,
-    image: "https://images.unsplash.com/photo-1438401171849-74ac270044ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1536&q=80"
-  }
-];
 
 const PopularDestinations: React.FC = () => {
-  const {projects} = useSelector(state => state.homeFeed)
+  const { projects } = useSelector(state => state.homeFeed)
   console.log(projects)
 
   const navigate = useNavigate()
 
+  
+
+
 
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
           <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Popular Projects</h2>
           <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
             Explore our most sought-after locations with thousands of properties available
           </p>
         </motion.div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects?.map((destination, index) => (
-            <motion.div
-              key={destination.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="group relative rounded-xl overflow-hidden shadow-lg h-64"
-              onClick={() => navigate(`/api/details/project/${destination?.projectId}`)}
+            <div
+              key={index}
+              className="group relative w-full rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+              onClick={() => navigation && navigate(`/api/details/project/${destination?.projectId}`)}
             >
-              <img 
-                src={destination?.gallery?.[0]?.images?.[0]} 
-                alt={destination.name} 
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold text-white">{destination.name}</h3>
-                <div className="flex items-center mt-2">
-                  <MapPin className="h-4 w-4 text-emerald-400 mr-1" />
-                  <span className="text-sm text-emerald-200">{destination.properties} properties</span>
+              {/* Image Container */}
+              <div className="relative h-72 w-full overflow-hidden">
+                <img
+                  src={destination?.gallery?.[0]?.images?.[0]}
+                  alt={destination?.name}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-125"
+                />
+
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Type Badge */}
+                <div className="absolute top-4 left-4 bg-white/50 backdrop-blur-xl px-4 py-[2px] rounded-full text-sm font-medium shadow-sm">
+                  {destination?.type}
+                </div>
+
+                {/* Heart Button */}
+                {/* <button
+                    className="absolute top-4 right-4 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white group/heart transition-transform duration-300 hover:scale-110 active:scale-95"
+                > */}
+                <button
+                  className="absolute top-4 right-4 backdrop-blur-sm shadow-sm group/heart transition-transform duration-300 hover:scale-110 active:scale-95"
+                >
+                  <Heart className="w-5 h-5 text-gray-600 group-hover/heart:text-red-500 transition-colors" />
+                </button>
+
+                {/* Content Container */}
+                <div className="absolute bottom-0 left-0 right-0 px-4 py-4 transform translate-y-12 group-hover:translate-y-0 transition-transform duration-300  bg-black/20 backdrop-blur-sm">
+                  <div className="space-y-3">
+                    {/* Price and Label Container */}
+                    <div className="text-white">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-md font-semibold line-clamp-1">{destination?.name}</h3>
+                        {/* <span className="text-md font-semibold">{bedrooms} BHK</span> */}
+                      </div>
+                      {/* <div className='text-xs text-gray-500'>{address}</div> */}
+                      <div className='flex justify-between items-center'>
+                        <div className='text-md text-white'>
+                          {destination?.overview?.priceRange?.min && destination?.overview?.priceRange?.max
+                            ? `₹ ${formatPrice(destination.overview.priceRange.min)} to ₹ ${formatPrice(destination.overview.priceRange.max)}`
+                            : destination?.overview?.priceRange?.min
+                              ? `Starts from ₹ ${formatPrice(destination.overview.priceRange.min)}`
+                              : destination?.overview?.priceRange?.max
+                                ? `Up to ₹ ${formatPrice(destination.overview.priceRange.max)}`
+                                : "Price On Request"}
+                        </div>
+
+                        <div className='flex gap-2 items-center'>
+                          <h1 className='text-xs'>Amenities</h1>
+                          <div className='rounded-full bg-black text-[10px] px-2 py-[1px]'>
+                            {destination?.amenities?.length}+
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div className='min-h-8'>
+                      {destination?.connectedProperties?.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {[...new Set(destination.connectedProperties.map((ele) => ele.bedrooms))].map((bedroom, index) => (
+                            <span
+                              key={index}
+                              className="px-2 py-1 text-xs rounded-full text-white bg-gray-900 border-gradient-to-r from-blue-500 to-purple-500 shadow-md"
+                            >
+                              {bedroom} BHK
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+
+
+
+                  </div>
                 </div>
               </div>
-              <div className="absolute inset-0 bg-emerald-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </motion.div>
+            </div>
           ))}
         </div>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -115,6 +133,7 @@ const PopularDestinations: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#059669] hover:bg-emerald-700 shadow-md"
+            onClick={() => navigate('/main')}
           >
             View All Destinations
           </motion.button>
@@ -125,3 +144,6 @@ const PopularDestinations: React.FC = () => {
 };
 
 export default PopularDestinations;
+
+
+{/* <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div> */ }

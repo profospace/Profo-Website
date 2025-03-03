@@ -3,7 +3,8 @@ import wishlistService from './wishlistService';
 
 
 const initialState = {
-  wishlist: [],
+  viewedProperties: [],
+  likedProperties: [],
   // isLoading: false,
   // isError: false,
   // isSuccess: false,
@@ -32,13 +33,14 @@ const wishlistSlice = createSlice({
       })
       .addCase(getWishlist.fulfilled, (state, action) => {
         console.log("payload" , action.payload)
-        state.wishlist = action?.payload?.likedProperties
+        state.likedProperties = action?.payload?.likedProperties
+        state.viewedProperties = action?.payload?.viewedProperties
         // state.isLoading = false
         // state.isSuccess = true
         // state.message = action.payload.message
       })
       .addCase(getWishlist.rejected, (state, action) => {
-        state.wishlist = []
+        // state.wishlist = []
         // state.isLoading = false
         // state.isError = true
         // state.isSuccess = false

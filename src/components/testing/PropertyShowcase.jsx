@@ -1437,7 +1437,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Heart, MapPin, Home, Building, CheckSquare, ArrowRight, Plus, LayoutGrid, List, Settings } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, MapPin, Home, Building, CheckSquare, ArrowRight, Plus, LayoutGrid, List, Settings, ChevronDown, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const PropertyShowcase = ({ properties, projects, buildings }) => {
@@ -1492,6 +1492,642 @@ const PropertyShowcase = ({ properties, projects, buildings }) => {
     };
 
     // Card renderer that adapts to the grid type
+    // const renderCard = (item, index) => {
+    //     const isProperty = activeTab === 'properties';
+    //     const isProject = activeTab === 'projects';
+    //     const isBuilding = activeTab === 'buildings';
+
+    //     // Determine image gallery source based on item type
+    //     const getImageGallery = () => {
+    //         if (isProperty && item.galleryList) return item.galleryList;
+    //         if (isProject && item.gallery && item.gallery.length > 0 && item.gallery[0].images) return item.gallery[0].images;
+    //         if (isBuilding && item.galleryList) return item.galleryList;
+    //         return [];
+    //     };
+
+    //     const images = getImageGallery();
+    //     const cardTitle = isProperty ? item.post_title : item.name;
+    //     const location = isProperty ? item.address :
+    //         isProject ? (item.location?.address || 'Location unavailable') :
+    //             (item.location?.coordinates ? `${item.location.coordinates[0]}, ${item.location.coordinates[1]}` : 'Location unavailable');
+
+    //     // Get current slide for this specific card
+    //     const currentSlide = slideStates[item._id] || 0;
+
+    //     // Apply different classes based on grid type and visual style
+    //     const cardClasses = `group overflow-hidden transition-all duration-500 transform hover:-translate-y-1 ${visualStyle === 'glassmorphism'
+    //         ? 'bg-white/30 backdrop-blur-md border border-white/20 shadow-lg'
+    //         : 'bg-white shadow-md hover:shadow-xl'
+    //         } ${gridType === 'list' ? 'flex flex-col md:flex-row w-full' : 'rounded-xl'
+    //         }`;
+
+    //     return (
+    //         <div
+    //             key={item._id}
+    //             className={`${cardClasses} cursor-pointer`}
+    //             onClick={() => navigate(
+    //                 isProperty ? `/api/details/${item._id}` :
+    //                     isProject ? `/api/details/project/${item._id}` :
+    //                         `/api/details/building/${item._id}`
+    //             )}
+    //         >
+    //             {/* Image Carousel */}
+    //             <div className={`relative overflow-hidden ${gridType === 'list' ? 'md:w-1/3 h-64 md:h-auto' : 'h-64'
+    //                 }`}>
+    //                 {images && images.length > 0 ? (
+    //                     <>
+    //                         <div className="h-full max-h-72 w-full flex transition-transform duration-500" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+    //                             {images.map((image, i) => (
+    //                                 <img
+    //                                     key={i}
+    //                                     src={image}
+    //                                     alt={cardTitle}
+    //                                     className="h-full w-full object-cover flex-shrink-0"
+    //                                 />
+    //                             ))}
+    //                         </div>
+    //                         {images.length > 1 && (
+    //                             <>
+    //                                 <button
+    //                                     onClick={(e) => {
+    //                                         e.stopPropagation(); // Prevent card navigation
+    //                                         prevSlide(item._id, images.length);
+    //                                     }}
+    //                                     className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 text-gray-800 hover:bg-opacity-100 transition-all opacity-0 group-hover:opacity-100"
+    //                                 >
+    //                                     <ChevronLeft size={20} />
+    //                                 </button>
+    //                                 <button
+    //                                     onClick={(e) => {
+    //                                         e.stopPropagation(); // Prevent card navigation
+    //                                         nextSlide(item._id, images.length);
+    //                                     }}
+    //                                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 text-gray-800 hover:bg-opacity-100 transition-all opacity-0 group-hover:opacity-100"
+    //                                 >
+    //                                     <ChevronRight size={20} />
+    //                                 </button>
+    //                             </>
+    //                         )}
+    //                     </>
+    //                 ) : (
+    //                     <div className="h-full w-full bg-gray-200 flex items-center justify-center text-gray-400">
+    //                         <Building size={48} />
+    //                     </div>
+    //                 )}
+
+    //                 {/* Favorite Button */}
+    //                 <button
+    //                     onClick={(e) => {
+    //                         e.stopPropagation(); // Prevent card navigation
+    //                         toggleFavorite(item._id);
+    //                     }}
+    //                     className="absolute top-3 right-3 bg-white bg-opacity-80 rounded-full p-2 transition-all"
+    //                 >
+    //                     <Heart size={20} fill={favorites.includes(item._id) ? '#ef4444' : 'none'} className={favorites.includes(item._id) ? 'text-red-500' : 'text-gray-600'} />
+    //                 </button>
+
+    //                 {/* Type/Status Badge */}
+    //                 <div className={`absolute bottom-3 left-3 text-white text-xs font-semibold px-3 py-1 rounded-full ${isProperty ? 'bg-blue-600' :
+    //                     isProject && item.status === 'COMPLETED' ? 'bg-green-600' :
+    //                         isProject && item.status === 'UNDER_CONSTRUCTION' ? 'bg-amber-600' : 'bg-blue-600'
+    //                     }`}>
+    //                     {isProperty ? item.type_name :
+    //                         isProject ? (item.status?.replace('_', ' ') || 'Project') : 'Building'}
+    //                 </div>
+    //             </div>
+
+    //             {/* Content */}
+    //             <div className={`p-5 ${gridType === 'list' ? 'md:w-2/3' : ''}`}>
+    //                 <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{cardTitle}</h3>
+
+    //                 <div className="flex items-center text-gray-600 mb-4">
+    //                     <MapPin size={16} className="mr-1" />
+    //                     <p className="text-sm line-clamp-1">{location}</p>
+    //                 </div>
+
+    //                 <div className="flex flex-wrap gap-2 mb-4">
+    //                     {isProperty && (
+    //                         <>
+    //                             {item.bedrooms && (
+    //                                 <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                     {item.bedrooms} BHK
+    //                                 </div>
+    //                             )}
+    //                             {item.bathrooms && (
+    //                                 <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                     {item.bathrooms} Bath
+    //                                 </div>
+    //                             )}
+    //                             {item.area && (
+    //                                 <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                     {item.area} {item.areaUnit}
+    //                                 </div>
+    //                             )}
+    //                             {item.furnishing && (
+    //                                 <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                     {item.furnishing}
+    //                                 </div>
+    //                             )}
+    //                         </>
+    //                     )}
+    //                     {isProject && (
+    //                         <>
+    //                             <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                 {item.type || 'N/A'}
+    //                             </div>
+    //                             {item.overview?.totalUnits && (
+    //                                 <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                     {item.overview.totalUnits} Units
+    //                                 </div>
+    //                             )}
+    //                             {item.overview?.totalTowers && (
+    //                                 <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                     {item.overview.totalTowers} Towers
+    //                                 </div>
+    //                             )}
+    //                         </>
+    //                     )}
+    //                     {isBuilding && (
+    //                         <>
+    //                             <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                 {item.totalFloors} {item.totalFloors > 1 ? 'Floors' : 'Floor'}
+    //                             </div>
+    //                             <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                 {item.totalProperties} Properties
+    //                             </div>
+    //                             <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                 {item.numberOfFlatsAvailable} Available
+    //                             </div>
+    //                         </>
+    //                     )}
+    //                 </div>
+
+    //                 {/* Conditional sections based on item type */}
+    //                 {isProperty && item.amenities && item.amenities.length > 0 && (
+    //                     <div className="mb-4">
+    //                         <h4 className="text-sm font-semibold text-gray-700 mb-2">Amenities</h4>
+    //                         <div className="flex flex-wrap gap-2">
+    //                             {[...new Set(item.amenities)].slice(0, 3).map((amenity, i) => (
+    //                                 <div key={i} className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+    //                                     {amenity.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+    //                                 </div>
+    //                             ))}
+    //                             {item.amenities.length > 3 && (
+    //                                 <div className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+    //                                     +{[...new Set(item.amenities)].length - 3} more
+    //                                 </div>
+    //                             )}
+    //                         </div>
+    //                     </div>
+    //                 )}
+
+    //                 {isProject && item.floorPlans && item.floorPlans.length > 0 && (
+    //                     <div className="mb-4">
+    //                         <h4 className="text-sm font-semibold text-gray-700 mb-2">Available Floor Plans</h4>
+    //                         <div className="flex flex-wrap gap-2">
+    //                             {item.floorPlans.slice(0, 3).map((plan, i) => (
+    //                                 <div key={i} className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+    //                                     {plan.name}
+    //                                 </div>
+    //                             ))}
+    //                             {item.floorPlans.length > 3 && (
+    //                                 <div className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+    //                                     +{item.floorPlans.length - 3} more
+    //                                 </div>
+    //                             )}
+    //                         </div>
+    //                     </div>
+    //                 )}
+
+    //                 {isBuilding && item.flatsDetails && item.flatsDetails.length > 0 && (
+    //                     <div className="mb-4">
+    //                         <h4 className="text-sm font-semibold text-gray-700 mb-2">Floor Details</h4>
+    //                         <div className="grid grid-cols-1 gap-2">
+    //                             {item.flatsDetails.slice(0, gridType === 'list' ? 3 : 2).map((floor, i) => (
+    //                                 <div key={i} className="bg-blue-50 p-2 rounded-lg text-xs">
+    //                                     <div className="flex justify-between">
+    //                                         <span className="font-medium text-blue-700">Floor {floor.floorNumber}</span>
+    //                                         <span className="font-medium text-blue-700">{floor.availableFlats}/{floor.flatsOnFloor} Available</span>
+    //                                     </div>
+    //                                 </div>
+    //                             ))}
+    //                             {item.flatsDetails.length > (gridType === 'list' ? 3 : 2) && (
+    //                                 <div className="text-xs text-blue-700 font-medium">
+    //                                     +{item.flatsDetails.length - (gridType === 'list' ? 3 : 2)} more floors
+    //                                 </div>
+    //                             )}
+    //                         </div>
+    //                     </div>
+    //                 )}
+
+    //                 {/* Price, Properties, or Links section */}
+    //                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+    //                     <div>
+    //                         {isProperty && (
+    //                             <>
+    //                                 <p className="text-xs text-gray-500">Price</p>
+    //                                 <p className="text-xl font-bold text-blue-600">{formatPrice(item.price)}</p>
+    //                             </>
+    //                         )}
+    //                         {isProject && (
+    //                             <>
+    //                                 <p className="text-xs text-gray-500">Properties</p>
+    //                                 <p className="text-xl font-bold text-blue-600">{item.connectedProperties?.length || 0}</p>
+    //                             </>
+    //                         )}
+    //                         {isBuilding && (
+    //                             <div className="flex gap-2">
+    //                                 {item.brochureLink && (
+    //                                     <a href={item.brochureLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+    //                                         Brochure
+    //                                     </a>
+    //                                 )}
+    //                                 {item.mapLink && (
+    //                                     <a href={item.mapLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+    //                                         Map
+    //                                     </a>
+    //                                 )}
+    //                             </div>
+    //                         )}
+    //                     </div>
+    //                     <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
+    //                         View {isProperty ? 'Details' : isProject ? 'Project' : 'Building'}
+    //                         <ArrowRight size={16} className="ml-2" />
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     );
+    // };
+
+    // This modification focuses only on the renderCard function's list view styling
+
+    // const renderCard = (item, index) => {
+    //     const isProperty = activeTab === 'properties';
+    //     const isProject = activeTab === 'projects';
+    //     const isBuilding = activeTab === 'buildings';
+
+    //     // Determine image gallery source based on item type
+    //     const getImageGallery = () => {
+    //         if (isProperty && item.galleryList) return item.galleryList;
+    //         if (isProject && item.gallery && item.gallery.length > 0 && item.gallery[0].images) return item.gallery[0].images;
+    //         if (isBuilding && item.galleryList) return item.galleryList;
+    //         return [];
+    //     };
+
+    //     const images = getImageGallery();
+    //     const cardTitle = isProperty ? item.post_title : item.name;
+    //     const location = isProperty ? item.address :
+    //         isProject ? (item.location?.address || 'Location unavailable') :
+    //             (item.location?.coordinates ? `${item.location.coordinates[0]}, ${item.location.coordinates[1]}` : 'Location unavailable');
+
+    //     // Get current slide for this specific card
+    //     const currentSlide = slideStates[item._id] || 0;
+
+    //     // Apply different classes based on grid type and visual style
+    //     const cardClasses = `group overflow-hidden transition-all duration-500 transform hover:-translate-y-1 ${visualStyle === 'glassmorphism'
+    //         ? 'bg-white/30 backdrop-blur-md border border-white/20 shadow-lg'
+    //         : 'bg-white shadow-md hover:shadow-xl'
+    //         } ${gridType === 'list' ? 'flex flex-col md:flex-row w-full' : 'rounded-xl'
+    //         }`;
+
+    //     return (
+    //         <div
+    //             key={item._id}
+    //             className={`${cardClasses} cursor-pointer`}
+    //             onClick={() => navigate(
+    //                 isProperty ? `/api/details/${item._id}` :
+    //                     isProject ? `/api/details/project/${item._id}` :
+    //                         `/api/details/building/${item._id}`
+    //             )}
+    //         >
+    //             {/* Image Carousel */}
+    //             <div className={`relative overflow-hidden ${gridType === 'list' ? 'md:w-1/3 h-64 md:h-auto' : 'h-64'
+    //                 }`}>
+    //                 {/* Status badges - positioned at the top for list view */}
+    //                 {gridType === 'list' && (
+    //                     <div className="absolute top-3 left-3 z-10 flex gap-2">
+    //                         <div className="bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+    //                             {isProperty ? 'FEATURED' :
+    //                                 isProject ? 'PROJECT' : 'BUILDING'}
+    //                         </div>
+    //                         <div className="bg-gray-800 text-white text-xs font-medium px-3 py-1 rounded-full">
+    //                             SEEN
+    //                         </div>
+    //                     </div>
+    //                 )}
+
+    //                 {images && images.length > 0 ? (
+    //                     <>
+    //                         <div className="h-full max-h-72 w-full flex transition-transform duration-500" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+    //                             {images.map((image, i) => (
+    //                                 <img
+    //                                     key={i}
+    //                                     src={image}
+    //                                     alt={cardTitle}
+    //                                     className="h-full w-full object-cover flex-shrink-0"
+    //                                 />
+    //                             ))}
+    //                         </div>
+    //                         {images.length > 1 && (
+    //                             <>
+    //                                 <button
+    //                                     onClick={(e) => {
+    //                                         e.stopPropagation(); // Prevent card navigation
+    //                                         prevSlide(item._id, images.length);
+    //                                     }}
+    //                                     className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 text-gray-800 hover:bg-opacity-100 transition-all opacity-0 group-hover:opacity-100"
+    //                                 >
+    //                                     <ChevronLeft size={20} />
+    //                                 </button>
+    //                                 <button
+    //                                     onClick={(e) => {
+    //                                         e.stopPropagation(); // Prevent card navigation
+    //                                         nextSlide(item._id, images.length);
+    //                                     }}
+    //                                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 text-gray-800 hover:bg-opacity-100 transition-all opacity-0 group-hover:opacity-100"
+    //                                 >
+    //                                     <ChevronRight size={20} />
+    //                                 </button>
+    //                             </>
+    //                         )}
+    //                     </>
+    //                 ) : (
+    //                     <div className="h-full w-full bg-gray-200 flex items-center justify-center text-gray-400">
+    //                         <Building size={48} />
+    //                     </div>
+    //                 )}
+
+    //                 {/* Favorite Button */}
+    //                 <button
+    //                     onClick={(e) => {
+    //                         e.stopPropagation(); // Prevent card navigation
+    //                         toggleFavorite(item._id);
+    //                     }}
+    //                     className="absolute top-3 right-3 bg-white bg-opacity-80 rounded-full p-2 transition-all"
+    //                 >
+    //                     <Heart size={20} fill={favorites.includes(item._id) ? '#ef4444' : 'none'} className={favorites.includes(item._id) ? 'text-red-500' : 'text-gray-600'} />
+    //                 </button>
+
+    //                 {/* Type/Status Badge - Only show in grid view */}
+    //                 {gridType !== 'list' && (
+    //                     <div className={`absolute bottom-3 left-3 text-white text-xs font-semibold px-3 py-1 rounded-full ${isProperty ? 'bg-blue-600' :
+    //                         isProject && item.status === 'COMPLETED' ? 'bg-green-600' :
+    //                             isProject && item.status === 'UNDER_CONSTRUCTION' ? 'bg-amber-600' : 'bg-blue-600'
+    //                         }`}>
+    //                         {isProperty ? item.type_name :
+    //                             isProject ? (item.status?.replace('_', ' ') || 'Project') : 'Building'}
+    //                     </div>
+    //                 )}
+    //             </div>
+
+    //             {/* Content */}
+    //             <div className={`p-5 ${gridType === 'list' ? 'md:w-2/3 flex flex-col' : ''}`}>
+    //                 {/* Property details section */}
+    //                 <div className={`${gridType === 'list' ? 'mb-auto' : ''}`}>
+    //                     {/* Location section - styled to match the image */}
+    //                     {gridType === 'list' && (
+    //                         <div className="mb-2">
+    //                             <div className="text-gray-700 uppercase font-bold text-lg mb-1">{item.location?.city || 'PANDUNAGAR'}</div>
+    //                             <h3 className="text-xl font-bold text-gray-900 mb-2">{cardTitle || '4 BHK Flat'} in {location || 'Pandu Nagar, Kanpur'}</h3>
+    //                         </div>
+    //                     )}
+
+    //                     {gridType !== 'list' && (
+    //                         <>
+    //                             <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{cardTitle}</h3>
+    //                             <div className="flex items-center text-gray-600 mb-4">
+    //                                 <MapPin size={16} className="mr-1" />
+    //                                 <p className="text-sm line-clamp-1">{location}</p>
+    //                             </div>
+    //                         </>
+    //                     )}
+
+    //                     {/* Price section for list view - styled to match image */}
+    //                     {isProperty && gridType === 'list' && (
+    //                         <div className="flex items-center mb-4">
+    //                             <div className="mr-6">
+    //                                 <div className="text-3xl font-bold text-gray-900">{formatPrice(item.price) || '₹3.05 Cr'}</div>
+    //                                 <div className="text-gray-600 text-sm">{item.price && item.area ? `₹${Math.round(item.price / item.area).toLocaleString()} /sqft` : '₹8,472 /sqft'}</div>
+    //                             </div>
+
+    //                             <div className="border-l border-gray-200 pl-6">
+    //                                 <div className="flex items-baseline">
+    //                                     <span className="text-xl font-bold text-gray-900">{item.area || '3,600'} {item.areaUnit || 'sqft'}</span>
+    //                                     <span className="text-gray-500 text-sm ml-2">({Math.round(item.area * 0.093) || '334'} sqm)</span>
+    //                                 </div>
+    //                                 <div className="text-gray-600 text-sm">Carpet Area</div>
+    //                             </div>
+
+    //                             <div className="border-l border-gray-200 pl-6 ml-6">
+    //                                 <div className="text-xl font-bold text-gray-900">{item.bedrooms || '4'} BHK</div>
+    //                                 <div className="text-gray-600 text-sm">({item.bathrooms || '3'} Baths)</div>
+    //                             </div>
+
+    //                             <div className="border-l border-gray-200 pl-6 ml-6">
+    //                                 <div className="text-lg font-semibold text-gray-900">{isProperty && item.furnishing ? item.furnishing : 'Under Construction'}</div>
+    //                             </div>
+    //                         </div>
+    //                     )}
+
+    //                     {/* Tags and features section for non-list view */}
+    //                     {gridType !== 'list' && (
+    //                         <div className="flex flex-wrap gap-2 mb-4">
+    //                             {isProperty && (
+    //                                 <>
+    //                                     {item.bedrooms && (
+    //                                         <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                             {item.bedrooms} BHK
+    //                                         </div>
+    //                                     )}
+    //                                     {item.bathrooms && (
+    //                                         <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                             {item.bathrooms} Bath
+    //                                         </div>
+    //                                     )}
+    //                                     {item.area && (
+    //                                         <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                             {item.area} {item.areaUnit}
+    //                                         </div>
+    //                                     )}
+    //                                     {item.furnishing && (
+    //                                         <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                             {item.furnishing}
+    //                                         </div>
+    //                                     )}
+    //                                 </>
+    //                             )}
+    //                             {/* Project and Building details remain unchanged */}
+    //                             {isProject && (
+    //                                 <>
+    //                                     <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                         {item.type || 'N/A'}
+    //                                     </div>
+    //                                     {item.overview?.totalUnits && (
+    //                                         <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                             {item.overview.totalUnits} Units
+    //                                         </div>
+    //                                     )}
+    //                                     {item.overview?.totalTowers && (
+    //                                         <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                             {item.overview.totalTowers} Towers
+    //                                         </div>
+    //                                     )}
+    //                                 </>
+    //                             )}
+    //                             {isBuilding && (
+    //                                 <>
+    //                                     <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                         {item.totalFloors} {item.totalFloors > 1 ? 'Floors' : 'Floor'}
+    //                                     </div>
+    //                                     <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                         {item.totalProperties} Properties
+    //                                     </div>
+    //                                     <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+    //                                         {item.numberOfFlatsAvailable} Available
+    //                                     </div>
+    //                                 </>
+    //                             )}
+    //                         </div>
+    //                     )}
+
+    //                     {/* Highlights section for list view */}
+    //                     {gridType === 'list' && (
+    //                         <div className="mb-2">
+    //                             <div className="flex items-center">
+    //                                 <div className="text-gray-700 font-semibold mr-2">Highlights : </div>
+    //                                 <div className="font-medium">Power Back-up</div>
+    //                             </div>
+    //                             <div className="text-gray-700 mt-2">
+    //                                 {item.description || "Beatiful elevation. Heart of city. Very spacious."}
+    //                             </div>
+    //                         </div>
+    //                     )}
+
+    //                     {/* Conditional sections based on item type - keep existing code */}
+    //                     {isProperty && item.amenities && item.amenities.length > 0 && gridType !== 'list' && (
+    //                         <div className="mb-4">
+    //                             <h4 className="text-sm font-semibold text-gray-700 mb-2">Amenities</h4>
+    //                             <div className="flex flex-wrap gap-2">
+    //                                 {[...new Set(item.amenities)].slice(0, 3).map((amenity, i) => (
+    //                                     <div key={i} className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+    //                                         {amenity.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+    //                                     </div>
+    //                                 ))}
+    //                                 {item.amenities.length > 3 && (
+    //                                     <div className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+    //                                         +{[...new Set(item.amenities)].length - 3} more
+    //                                     </div>
+    //                                 )}
+    //                             </div>
+    //                         </div>
+    //                     )}
+
+    //                     {isProject && item.floorPlans && item.floorPlans.length > 0 && gridType !== 'list' && (
+    //                         <div className="mb-4">
+    //                             <h4 className="text-sm font-semibold text-gray-700 mb-2">Available Floor Plans</h4>
+    //                             <div className="flex flex-wrap gap-2">
+    //                                 {item.floorPlans.slice(0, 3).map((plan, i) => (
+    //                                     <div key={i} className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+    //                                         {plan.name}
+    //                                     </div>
+    //                                 ))}
+    //                                 {item.floorPlans.length > 3 && (
+    //                                     <div className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+    //                                         +{item.floorPlans.length - 3} more
+    //                                     </div>
+    //                                 )}
+    //                             </div>
+    //                         </div>
+    //                     )}
+
+    //                     {isBuilding && item.flatsDetails && item.flatsDetails.length > 0 && gridType !== 'list' && (
+    //                         <div className="mb-4">
+    //                             <h4 className="text-sm font-semibold text-gray-700 mb-2">Floor Details</h4>
+    //                             <div className="grid grid-cols-1 gap-2">
+    //                                 {item.flatsDetails.slice(0, gridType === 'list' ? 3 : 2).map((floor, i) => (
+    //                                     <div key={i} className="bg-blue-50 p-2 rounded-lg text-xs">
+    //                                         <div className="flex justify-between">
+    //                                             <span className="font-medium text-blue-700">Floor {floor.floorNumber}</span>
+    //                                             <span className="font-medium text-blue-700">{floor.availableFlats}/{floor.flatsOnFloor} Available</span>
+    //                                         </div>
+    //                                     </div>
+    //                                 ))}
+    //                                 {item.flatsDetails.length > (gridType === 'list' ? 3 : 2) && (
+    //                                     <div className="text-xs text-blue-700 font-medium">
+    //                                         +{item.flatsDetails.length - (gridType === 'list' ? 3 : 2)} more floors
+    //                                     </div>
+    //                                 )}
+    //                             </div>
+    //                         </div>
+    //                     )}
+    //                 </div>
+
+    //                 {/* Footer section */}
+    //                 <div className={`${gridType === 'list' ? 'mt-4 pt-4 border-t border-gray-100 flex justify-between items-center' : 'flex items-center justify-between pt-4 border-t border-gray-100'}`}>
+    //                     {/* Dealer info for list view */}
+    //                     {gridType === 'list' && (
+    //                         <div className="flex items-center">
+    //                             <div className="mr-1 text-gray-600">Dealer · </div>
+    //                             <div className="mr-1 text-gray-600">1w ago</div>
+    //                             <div className="ml-2 font-medium">PASSION INFRA DEV...</div>
+    //                         </div>
+    //                     )}
+
+    //                     {/* Show price only in grid view */}
+    //                     {gridType !== 'list' && isProperty && (
+    //                         <div>
+    //                             <p className="text-xs text-gray-500">Price</p>
+    //                             <p className="text-xl font-bold text-blue-600">{formatPrice(item.price)}</p>
+    //                         </div>
+    //                     )}
+    //                     {gridType !== 'list' && isProject && (
+    //                         <div>
+    //                             <p className="text-xs text-gray-500">Properties</p>
+    //                             <p className="text-xl font-bold text-blue-600">{item.connectedProperties?.length || 0}</p>
+    //                         </div>
+    //                     )}
+    //                     {gridType !== 'list' && isBuilding && (
+    //                         <div className="flex gap-2">
+    //                             {item.brochureLink && (
+    //                                 <a href={item.brochureLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+    //                                     Brochure
+    //                                 </a>
+    //                             )}
+    //                             {item.mapLink && (
+    //                                 <a href={item.mapLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+    //                                     Map
+    //                                 </a>
+    //                             )}
+    //                         </div>
+    //                     )}
+
+    //                     {/* Action buttons - made to match the image */}
+    //                     <div className="flex items-center gap-2">
+    //                         {gridType === 'list' && (
+    //                             <button className="bg-white border border-blue-600 text-blue-600 px-6 py-2 rounded-lg hover:bg-blue-50">
+    //                                 View Number
+    //                             </button>
+    //                         )}
+    //                         <button className={`${gridType === 'list' ? 'bg-blue-600 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'} px-6 py-2 rounded-lg flex items-center transition-colors`}>
+    //                             {gridType === 'list' ? 'Contact' : `View ${isProperty ? 'Details' : isProject ? 'Project' : 'Building'}`}
+    //                             {gridType !== 'list' && <ArrowRight size={16} className="ml-2" />}
+    //                         </button>
+    //                     </div>
+    //                 </div>
+
+    //                 {/* View count badge for list view */}
+    //                 {gridType === 'list' && (
+    //                     <div className="absolute bottom-3 left-3 bg-white/70 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium text-gray-700 flex items-center">
+    //                         <span className="text-yellow-500 mr-1">★</span>
+    //                         27 people viewed this property since last week
+    //                     </div>
+    //                 )}
+    //             </div>
+    //         </div>
+    //     );
+    // };
+
     const renderCard = (item, index) => {
         const isProperty = activeTab === 'properties';
         const isProject = activeTab === 'projects';
@@ -1534,6 +2170,26 @@ const PropertyShowcase = ({ properties, projects, buildings }) => {
                 {/* Image Carousel */}
                 <div className={`relative overflow-hidden ${gridType === 'list' ? 'md:w-1/3 h-64 md:h-auto' : 'h-64'
                     }`}>
+                    {/* Status badges - positioned at the top for list view */}
+                    {gridType === 'list' && (
+                        <div className="absolute top-3 left-3 z-10 flex gap-2">
+                            <div className="bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+                                {isProperty ? 'FEATURED' :
+                                    isProject ? 'PROJECT' : 'BUILDING'}
+                            </div>
+                            <div className="bg-gray-800 text-white text-xs font-medium px-3 py-1 rounded-full">
+                                SEEN
+                            </div>
+                        </div>
+                    )}
+
+                    {/* RESALE badge - Added to match the image */}
+                    {isProperty && item.listingType === 'RESALE' && (
+                        <div className="absolute top-3 right-3 z-10 bg-white text-gray-800 text-xs font-bold px-3 py-1 rounded">
+                            RESALE
+                        </div>
+                    )}
+
                     {images && images.length > 0 ? (
                         <>
                             <div className="h-full max-h-72 w-full flex transition-transform duration-500" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
@@ -1575,7 +2231,7 @@ const PropertyShowcase = ({ properties, projects, buildings }) => {
                         </div>
                     )}
 
-                    {/* Favorite Button */}
+                    {/* Favorite Button - Adjusted to show unfilled by default */}
                     <button
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent card navigation
@@ -1583,177 +2239,272 @@ const PropertyShowcase = ({ properties, projects, buildings }) => {
                         }}
                         className="absolute top-3 right-3 bg-white bg-opacity-80 rounded-full p-2 transition-all"
                     >
-                        <Heart size={20} fill={favorites.includes(item._id) ? '#ef4444' : 'none'} className={favorites.includes(item._id) ? 'text-red-500' : 'text-gray-600'} />
+                        <Heart size={20} fill={favorites.includes(item._id) ? '#ef4444' : 'none'} className={favorites.includes(item._id) ? 'text-red-500' : 'text-gray-500'} />
                     </button>
 
-                    {/* Type/Status Badge */}
-                    <div className={`absolute bottom-3 left-3 text-white text-xs font-semibold px-3 py-1 rounded-full ${isProperty ? 'bg-blue-600' :
-                        isProject && item.status === 'COMPLETED' ? 'bg-green-600' :
-                            isProject && item.status === 'UNDER_CONSTRUCTION' ? 'bg-amber-600' : 'bg-blue-600'
-                        }`}>
-                        {isProperty ? item.type_name :
-                            isProject ? (item.status?.replace('_', ' ') || 'Project') : 'Building'}
-                    </div>
+                    {/* Type/Status Badge - Only show in grid view */}
+                    {gridType !== 'list' && (
+                        <div className={`absolute bottom-3 left-3 text-white text-xs font-semibold px-3 py-1 rounded-full ${isProperty ? 'bg-blue-600' :
+                            isProject && item.status === 'COMPLETED' ? 'bg-green-600' :
+                                isProject && item.status === 'UNDER_CONSTRUCTION' ? 'bg-amber-600' : 'bg-blue-600'
+                            }`}>
+                            {isProperty ? item.type_name :
+                                isProject ? (item.status?.replace('_', ' ') || 'Project') : 'Building'}
+                        </div>
+                    )}
+
+                    {/* View count badge for list view - Updated with star icon */}
+                    {gridType === 'list' && (
+                        <div className="absolute bottom-3 left-3 bg-white/70 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium text-gray-700 flex items-center">
+                            <span className="text-yellow-500 mr-1">★</span>
+                            27 people viewed this property since last week
+                        </div>
+                    )}
                 </div>
 
                 {/* Content */}
-                <div className={`p-5 ${gridType === 'list' ? 'md:w-2/3' : ''}`}>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{cardTitle}</h3>
-
-                    <div className="flex items-center text-gray-600 mb-4">
-                        <MapPin size={16} className="mr-1" />
-                        <p className="text-sm line-clamp-1">{location}</p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {isProperty && (
-                            <>
-                                {item.bedrooms && (
-                                    <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                        {item.bedrooms} BHK
-                                    </div>
-                                )}
-                                {item.bathrooms && (
-                                    <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                        {item.bathrooms} Bath
-                                    </div>
-                                )}
-                                {item.area && (
-                                    <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                        {item.area} {item.areaUnit}
-                                    </div>
-                                )}
-                                {item.furnishing && (
-                                    <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                        {item.furnishing}
-                                    </div>
-                                )}
-                            </>
-                        )}
-                        {isProject && (
-                            <>
-                                <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    {item.type || 'N/A'}
-                                </div>
-                                {item.overview?.totalUnits && (
-                                    <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                        {item.overview.totalUnits} Units
-                                    </div>
-                                )}
-                                {item.overview?.totalTowers && (
-                                    <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                        {item.overview.totalTowers} Towers
-                                    </div>
-                                )}
-                            </>
-                        )}
-                        {isBuilding && (
-                            <>
-                                <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    {item.totalFloors} {item.totalFloors > 1 ? 'Floors' : 'Floor'}
-                                </div>
-                                <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    {item.totalProperties} Properties
-                                </div>
-                                <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    {item.numberOfFlatsAvailable} Available
-                                </div>
-                            </>
-                        )}
-                    </div>
-
-                    {/* Conditional sections based on item type */}
-                    {isProperty && item.amenities && item.amenities.length > 0 && (
-                        <div className="mb-4">
-                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Amenities</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {[...new Set(item.amenities)].slice(0, 3).map((amenity, i) => (
-                                    <div key={i} className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
-                                        {amenity.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                                    </div>
-                                ))}
-                                {item.amenities.length > 3 && (
-                                    <div className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
-                                        +{[...new Set(item.amenities)].length - 3} more
-                                    </div>
-                                )}
+                <div className={`p-5 ${gridType === 'list' ? 'md:w-2/3 flex flex-col' : ''}`}>
+                    {/* Property details section */}
+                    <div className={`${gridType === 'list' ? 'mb-auto' : ''}`}>
+                        {/* Location section - styled to match the image */}
+                        {gridType === 'list' && (
+                            <div className="mb-2">
+                                <div className="text-gray-700 uppercase font-bold text-lg mb-1">{item.location?.city || 'PANDUNAGAR'}</div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">{cardTitle || '4 BHK Flat'} in {location || 'Pandu Nagar, Kanpur'}</h3>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {isProject && item.floorPlans && item.floorPlans.length > 0 && (
-                        <div className="mb-4">
-                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Available Floor Plans</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {item.floorPlans.slice(0, 3).map((plan, i) => (
-                                    <div key={i} className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
-                                        {plan.name}
+                        {gridType !== 'list' && (
+                            <>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{cardTitle}</h3>
+                                <div className="flex items-center text-gray-600 mb-4">
+                                    <MapPin size={16} className="mr-1" />
+                                    <p className="text-sm line-clamp-1">{location}</p>
+                                </div>
+                            </>
+                        )}
+
+                        {/* Price section for list view - styled to match image exactly */}
+                        {isProperty && gridType === 'list' && (
+                            <div className="flex items-center mb-4">
+                                <div className="mr-6">
+                                    <div className="text-3xl font-bold text-gray-900">{formatPrice(item.price) || '₹3.05 Cr'}</div>
+                                    <div className="text-gray-600 text-sm">{item.price && item.area ? `₹${Math.round(item.price / item.area).toLocaleString()} /sqft` : '₹8,472 /sqft'}</div>
+                                </div>
+
+                                <div className="border-l border-gray-200 pl-6">
+                                    <div className="flex items-baseline">
+                                        <span className="text-xl font-bold text-gray-900">{item.area || '3,600'} {item.areaUnit || 'sqft'}</span>
+                                        <span className="text-gray-500 text-sm ml-2">({Math.round(item.area * 0.093) || '334'} sqm)</span>
+                                        {/* Added dropdown chevron icon */}
+                                        <ChevronDown size={14} className="ml-1 text-gray-500" />
                                     </div>
-                                ))}
-                                {item.floorPlans.length > 3 && (
-                                    <div className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
-                                        +{item.floorPlans.length - 3} more
-                                    </div>
-                                )}
+                                    <div className="text-gray-600 text-sm">Carpet Area</div>
+                                </div>
+
+                                <div className="border-l border-gray-200 pl-6 ml-6">
+                                    <div className="text-xl font-bold text-gray-900">{item.bedrooms || '4'} BHK</div>
+                                    <div className="text-gray-600 text-sm">({item.bathrooms || '3'} Baths)</div>
+                                </div>
+
+                                <div className="border-l border-gray-200 pl-6 ml-6">
+                                    <div className="text-lg font-semibold text-gray-900">{item.furnishing || 'Under Construction'}</div>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {isBuilding && item.flatsDetails && item.flatsDetails.length > 0 && (
-                        <div className="mb-4">
-                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Floor Details</h4>
-                            <div className="grid grid-cols-1 gap-2">
-                                {item.flatsDetails.slice(0, gridType === 'list' ? 3 : 2).map((floor, i) => (
-                                    <div key={i} className="bg-blue-50 p-2 rounded-lg text-xs">
-                                        <div className="flex justify-between">
-                                            <span className="font-medium text-blue-700">Floor {floor.floorNumber}</span>
-                                            <span className="font-medium text-blue-700">{floor.availableFlats}/{floor.flatsOnFloor} Available</span>
+                        {/* Tags and features section for non-list view */}
+                        {gridType !== 'list' && (
+                            <div className="flex flex-wrap gap-2 mb-4">
+                                {isProperty && (
+                                    <>
+                                        {item.bedrooms && (
+                                            <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                                {item.bedrooms} BHK
+                                            </div>
+                                        )}
+                                        {item.bathrooms && (
+                                            <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                                {item.bathrooms} Bath
+                                            </div>
+                                        )}
+                                        {item.area && (
+                                            <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                                {item.area} {item.areaUnit}
+                                            </div>
+                                        )}
+                                        {item.furnishing && (
+                                            <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                                {item.furnishing}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                                {/* Project and Building details remain unchanged */}
+                                {isProject && (
+                                    <>
+                                        <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                            {item.type || 'N/A'}
                                         </div>
-                                    </div>
-                                ))}
-                                {item.flatsDetails.length > (gridType === 'list' ? 3 : 2) && (
-                                    <div className="text-xs text-blue-700 font-medium">
-                                        +{item.flatsDetails.length - (gridType === 'list' ? 3 : 2)} more floors
-                                    </div>
+                                        {item.overview?.totalUnits && (
+                                            <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                                {item.overview.totalUnits} Units
+                                            </div>
+                                        )}
+                                        {item.overview?.totalTowers && (
+                                            <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                                {item.overview.totalTowers} Towers
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                                {isBuilding && (
+                                    <>
+                                        <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                            {item.totalFloors} {item.totalFloors > 1 ? 'Floors' : 'Floor'}
+                                        </div>
+                                        <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                            {item.totalProperties} Properties
+                                        </div>
+                                        <div className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                            {item.numberOfFlatsAvailable} Available
+                                        </div>
+                                    </>
                                 )}
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {/* Price, Properties, or Links section */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div>
-                            {isProperty && (
-                                <>
-                                    <p className="text-xs text-gray-500">Price</p>
-                                    <p className="text-xl font-bold text-blue-600">{formatPrice(item.price)}</p>
-                                </>
-                            )}
-                            {isProject && (
-                                <>
-                                    <p className="text-xs text-gray-500">Properties</p>
-                                    <p className="text-xl font-bold text-blue-600">{item.connectedProperties?.length || 0}</p>
-                                </>
-                            )}
-                            {isBuilding && (
-                                <div className="flex gap-2">
-                                    {item.brochureLink && (
-                                        <a href={item.brochureLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                            Brochure
-                                        </a>
-                                    )}
-                                    {item.mapLink && (
-                                        <a href={item.mapLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                            Map
-                                        </a>
+                        {/* Highlights section for list view - updated styling for match */}
+                        {gridType === 'list' && (
+                            <div className="mb-2">
+                                <div className="flex items-center">
+                                    <div className="text-gray-700 font-semibold mr-2">Highlights : </div>
+                                    <div className="font-medium">Power Back-up</div>
+                                </div>
+                                <div className="text-gray-700 mt-2">
+                                    {item.description || "Beatiful elevation. Heart of city. Very spacious."}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Conditional sections based on item type - keep existing code */}
+                        {isProperty && item.amenities && item.amenities.length > 0 && gridType !== 'list' && (
+                            <div className="mb-4">
+                                <h4 className="text-sm font-semibold text-gray-700 mb-2">Amenities</h4>
+                                <div className="flex flex-wrap gap-2">
+                                    {[...new Set(item.amenities)].slice(0, 3).map((amenity, i) => (
+                                        <div key={i} className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+                                            {amenity.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                        </div>
+                                    ))}
+                                    {item.amenities.length > 3 && (
+                                        <div className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+                                            +{[...new Set(item.amenities)].length - 3} more
+                                        </div>
                                     )}
                                 </div>
+                            </div>
+                        )}
+
+                        {isProject && item.floorPlans && item.floorPlans.length > 0 && gridType !== 'list' && (
+                            <div className="mb-4">
+                                <h4 className="text-sm font-semibold text-gray-700 mb-2">Available Floor Plans</h4>
+                                <div className="flex flex-wrap gap-2">
+                                    {item.floorPlans.slice(0, 3).map((plan, i) => (
+                                        <div key={i} className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+                                            {plan.name}
+                                        </div>
+                                    ))}
+                                    {item.floorPlans.length > 3 && (
+                                        <div className="bg-blue-50 px-3 py-1 rounded-full text-xs font-medium text-blue-700">
+                                            +{item.floorPlans.length - 3} more
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {isBuilding && item.flatsDetails && item.flatsDetails.length > 0 && gridType !== 'list' && (
+                            <div className="mb-4">
+                                <h4 className="text-sm font-semibold text-gray-700 mb-2">Floor Details</h4>
+                                <div className="grid grid-cols-1 gap-2">
+                                    {item.flatsDetails.slice(0, gridType === 'list' ? 3 : 2).map((floor, i) => (
+                                        <div key={i} className="bg-blue-50 p-2 rounded-lg text-xs">
+                                            <div className="flex justify-between">
+                                                <span className="font-medium text-blue-700">Floor {floor.floorNumber}</span>
+                                                <span className="font-medium text-blue-700">{floor.availableFlats}/{floor.flatsOnFloor} Available</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {item.flatsDetails.length > (gridType === 'list' ? 3 : 2) && (
+                                        <div className="text-xs text-blue-700 font-medium">
+                                            +{item.flatsDetails.length - (gridType === 'list' ? 3 : 2)} more floors
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Footer section - updated to match design */}
+                    <div className={`${gridType === 'list' ? 'mt-4 pt-4 border-t border-gray-100 flex justify-between items-center' : 'flex items-center justify-between pt-4 border-t border-gray-100'}`}>
+                        {/* Dealer info for list view */}
+                        {gridType === 'list' && (
+                            <div className="flex items-center">
+                                <div className="text-gray-600">Dealer · 1w ago</div>
+                                <div className="ml-2 font-medium">PASSION INFRA DEV...</div>
+                            </div>
+                        )}
+
+                        {/* Show price only in grid view */}
+                        {gridType !== 'list' && isProperty && (
+                            <div>
+                                <p className="text-xs text-gray-500">Price</p>
+                                <p className="text-xl font-bold text-blue-600">{formatPrice(item.price)}</p>
+                            </div>
+                        )}
+                        {gridType !== 'list' && isProject && (
+                            <div>
+                                <p className="text-xs text-gray-500">Properties</p>
+                                <p className="text-xl font-bold text-blue-600">{item.connectedProperties?.length || 0}</p>
+                            </div>
+                        )}
+                        {gridType !== 'list' && isBuilding && (
+                            <div className="flex gap-2">
+                                {item.brochureLink && (
+                                    <a href={item.brochureLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                        Brochure
+                                    </a>
+                                )}
+                                {item.mapLink && (
+                                    <a href={item.mapLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                        Map
+                                    </a>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Action buttons - updated to match the image exactly */}
+                        <div className="flex items-center gap-2">
+                            {gridType === 'list' && (
+                                <button className="bg-white border border-blue-600 text-blue-600 px-6 py-2 rounded-lg hover:bg-blue-50 font-medium">
+                                    View Number
+                                </button>
                             )}
+                            <button className={`${gridType === 'list' ? 'bg-blue-600 text-white font-medium' : 'bg-blue-600 hover:bg-blue-700 text-white'} px-6 py-2 rounded-lg flex items-center transition-colors`}>
+                                {gridType === 'list' ? (
+                                    <>
+                                        <Phone size={16} className="mr-2" />
+                                        Contact
+                                    </>
+                                ) : (
+                                    <>
+                                        View {isProperty ? 'Details' : isProject ? 'Project' : 'Building'}
+                                        <ArrowRight size={16} className="ml-2" />
+                                    </>
+                                )}
+                            </button>
                         </div>
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
-                            View {isProperty ? 'Details' : isProject ? 'Project' : 'Building'}
-                            <ArrowRight size={16} className="ml-2" />
-                        </button>
                     </div>
                 </div>
             </div>

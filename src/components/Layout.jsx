@@ -1,9 +1,10 @@
 import React, { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+// import Footer from '../components/Footer'
 import LoadingPage from './LoadingPage'
 import HeaderTesting from '../Testing/HeaderTesting'
+import Footer from '../bolt/components/Footer'
 
 
 function Layout() {
@@ -13,11 +14,8 @@ function Layout() {
             <Navbar />
             {/* <HeaderTesting /> */}
             <Suspense fallback={<LoadingPage />}>
-            <div className=''>
                 <Outlet />
-
-            </div>
-            <Footer />
+                <Footer />
             </Suspense>
         </>
 

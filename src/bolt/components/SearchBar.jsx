@@ -739,6 +739,48 @@ const SearchBar = () => {
   const [priceRange, setPriceRange] = useState('Any Price');
   const dispatch = useDispatch()
 
+  // Custom hook for typing animation
+  const useTypingPlaceholder = () => {
+    const phrases = ["Search Location", "Search City", "Search Address"];
+    const [currentPlaceholder, setCurrentPlaceholder] = useState("");
+    const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+    const [isTyping, setIsTyping] = useState(true);
+
+    useEffect(() => {
+      let timer;
+
+      if (isTyping) {
+        const currentPhrase = phrases[currentPhraseIndex];
+        if (currentPlaceholder.length < currentPhrase.length) {
+          timer = setTimeout(() => {
+            setCurrentPlaceholder(currentPhrase.substring(0, currentPlaceholder.length + 1));
+          }, 100); // Typing speed
+        } else {
+          // Pause at the end of typing before starting to delete
+          timer = setTimeout(() => {
+            setIsTyping(false);
+          }, 1500); // Pause time
+        }
+      } else {
+        if (currentPlaceholder.length > 0) {
+          timer = setTimeout(() => {
+            setCurrentPlaceholder(currentPlaceholder.substring(0, currentPlaceholder.length - 1));
+          }, 50); // Deleting speed (faster than typing)
+        } else {
+          // Move to next phrase
+          setCurrentPhraseIndex((currentPhraseIndex + 1) % phrases.length);
+          setIsTyping(true);
+        }
+      }
+
+      return () => clearTimeout(timer);
+    }, [currentPlaceholder, currentPhraseIndex, isTyping]);
+
+    return currentPlaceholder;
+  };
+
+  const placeholder = useTypingPlaceholder();
+
 
   // Enhanced filter state
   const [filters, setFilters] = useState({
@@ -981,8 +1023,8 @@ const SearchBar = () => {
   };
 
   return (
-    <section className="relative z-20 bg-white shadow-lg rounded-lg mx-4 sm:mx-8 lg:mx-auto max-w-6xl -mt-16">
-      <div className="p-4">
+    <section className="relative z-20 bg-white shadow-lg rounded-lg mx-4 sm:mx-8 lg:mx-auto max-w-6xl -mt-20">
+      <div className="px-6 py-2">
         {/* Tabs */}
         <div className="flex border-b border-gray-200 mb-6">
           <button
@@ -997,7 +1039,7 @@ const SearchBar = () => {
           <button
             onClick={() => setActiveTab('rent')}
             className={`px-6 py-3 text-sm font-medium ${activeTab === 'rent'
-              ? 'text-emerald-600 border-b-2 border-emerald-600'
+              ? 'text-[#059669] border-b-2 border-[#059669]'
               : 'text-gray-500 hover:text-gray-700'
               }`}
           >
@@ -1008,16 +1050,25 @@ const SearchBar = () => {
         {/* Search form */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="md:col-span-2 relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+            {/* <label className="block text-sm font-medium text-gray-700 mb-1">Location</label> */}
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              {/* <input
+                ref={searchInputRef}
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onFocus={() => setShowSuggestions(suggestions.length > 0)}
+                placeholder="Location, City, neighborhood, or address"
+                className="pl-10 w-full rounded-lg border border-gray-300 py-3 focus:ring-emerald-500 focus:border-emerald-500"
+              /> */}
               <input
                 ref={searchInputRef}
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onFocus={() => setShowSuggestions(suggestions.length > 0)}
-                placeholder="City, neighborhood, or address"
+                placeholder={placeholder}
                 className="pl-10 w-full rounded-lg border border-gray-300 py-3 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
@@ -1065,7 +1116,7 @@ const SearchBar = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
+            {/* <label className="block text-sm font-medium text-gray-700 mb-1">Property Type</label> */}
             <div className="relative">
               <HomeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <select
@@ -1073,7 +1124,7 @@ const SearchBar = () => {
                 value={propertyType}
                 onChange={handlePropertyTypeChange}
               >
-                <option>Any Type</option>
+                <option>Property Type</option>
                 <option>House</option>
                 <option>Apartment</option>
                 <option>Condo</option>
@@ -1084,7 +1135,7 @@ const SearchBar = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
+            {/* <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label> */}
             <div className="relative">
               <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <select
@@ -1092,7 +1143,7 @@ const SearchBar = () => {
                 value={priceRange}
                 onChange={handlePriceRangeChange}
               >
-                <option>Any Price</option>
+                <option>Price Range</option>
                 <option>₹5L - ₹50L</option>
                 <option>₹50L - ₹1Cr</option>
                 <option>₹1Cr - ₹2Cr</option>
@@ -1101,8 +1152,8 @@ const SearchBar = () => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
+          <div className='mb-4'>
+            {/* <label className="block text-sm font-medium text-gray-700 mb-1">Search</label> */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -1115,20 +1166,7 @@ const SearchBar = () => {
           </div>
         </div>
 
-        {/* Advanced filters */}
-        <div className="mt-4 flex flex-wrap gap-4 items-center">
-          <div className="flex items-center">
-            <Calendar className="h-4 w-4 text-gray-500 mr-2" />
-            <span className="text-sm text-gray-700">Move-in Date</span>
-          </div>
-          <div className="flex items-center">
-            <Users className="h-4 w-4 text-gray-500 mr-2" />
-            <span className="text-sm text-gray-700">Family Size</span>
-          </div>
-          <button className="ml-auto text-sm text-emerald-600 hover:text-emerald-700 font-medium">
-            More Filters
-          </button>
-        </div>
+        
       </div>
     </section>
   );

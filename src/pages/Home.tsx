@@ -475,12 +475,12 @@ function Home() {
             <Navbar />
             <AdCarousel />
             <SearchBar />
-            <PopularDestinations /> {/* homefeed - projects */}
             <FeaturedProperties /> {/* homefeed - properties */}
+            <PopularDestinations /> {/* homefeed - projects */}
             <Features />
             <Testimonials />
             <CallToAction />
-            <Footer />
+            {/* <Footer /> */}
 
             {/* Scroll to top button */}
             <motion.button

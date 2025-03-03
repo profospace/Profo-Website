@@ -1141,6 +1141,7 @@ import { getAuthToken, getConfig } from '../utils/config';
 import { base_url } from '../utils/base_url';
 import SearchSection from './SearchSection';
 import PropertyShowcase from './testing/PropertyShowcase';
+import DummyTestCard from '../bolt/components/DummyTestCard';
 
 // Common utility functions
 const formatPrice = (price) => {
@@ -2068,7 +2069,7 @@ const ListingPage = ({ properties = [], projects = [], buildings = [], isLoading
                                 }
                             })}
                         </div> */}
-
+                        {/* <DummyTestCard /> */}
                         <PropertyShowcase properties={properties} projects={projects} buildings={buildings} />
 
                         <AnimatePresence>

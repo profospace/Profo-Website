@@ -588,7 +588,7 @@ const AdCarousel: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative h-[600px] flex flex-col justify-end overflow-hidden">
+    <div className="relative h-[500px] flex flex-col justify-end overflow-hidden">
       {/* Background image layer - always visible */}
       <div className="absolute inset-0">
         {ads.map((ad, index) => (
@@ -607,6 +607,7 @@ const AdCarousel: React.FC = () => {
       </div>
 
       {/* Animated content - Positioned at bottom */}
+      {/* Animated content - Positioned on the right side */}
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={currentIndex}
@@ -619,30 +620,21 @@ const AdCarousel: React.FC = () => {
             x: { type: "spring", stiffness: 300, damping: 30 },
             opacity: { duration: 0.2 }
           }}
-          className="relative mb-16 z-10 px-4 sm:px-6 lg:px-8"
+          className="absolute right-0 top-0 bottom-0 z-10 w-full sm:w-1/2 lg:w-2/5 flex items-center justify-center" // Changed positioning here
         >
-          <div className="flex flex-col items-center text-center">
-            <div className="backdrop-blur-sm bg-black/20 p-6 rounded-lg max-w-3xl">
+          <div className="flex flex-col px-4 sm:px-6 lg:px-8 py-6 text-center backdrop-blur-sm bg-black/20  rounded-lg">
               <h2 className="text-3xl sm:text-4xl md:text-3xl font-bold text-white mb-2">
                 {ads[currentIndex].title}
               </h2>
               <p className="text-xl text-white mb-4">
                 {ads[currentIndex].description}
               </p>
-              {/* <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow-md"
-              >
-                Learn More
-              </motion.button> */}
-            </div>
           </div>
         </motion.div>
       </AnimatePresence>
 
       {/* Navigation buttons */}
-      <button
+      {/* <button
         onClick={handlePrevious}
         className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/30 backdrop-blur-sm text-white hover:bg-white/50 transition-colors z-10"
       >
@@ -653,7 +645,7 @@ const AdCarousel: React.FC = () => {
         className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/30 backdrop-blur-sm text-white hover:bg-white/50 transition-colors z-10"
       >
         <ChevronRight className="h-6 w-6" />
-      </button>
+      </button> */}
 
       {/* Indicators at the bottom */}
       <div className="relative bottom-4 flex justify-center space-x-2 z-10 mb-4">

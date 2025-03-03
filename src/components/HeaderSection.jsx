@@ -1223,7 +1223,7 @@ const HeaderSection = ({ details, sectionRefs, activeSection, availableTabs }) =
     };
 
     return (
-        <header className="relative w-full h-[632px] text-white">
+        <header className="relative w-full h-[568px] text-white">
             <div
                 className={`absolute inset-0 transition-all duration-300 ${hasBackground ? 'bg-black/10' : ''}`}
                 style={{

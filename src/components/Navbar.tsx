@@ -340,7 +340,7 @@ const Navbar: React.FC = () => {
 
     if(pathname !== '/'){
         return (
-            <nav className="fixed w-full z-30 bg-white py-2">
+            <nav className="sticky top-0 w-full z-30 bg-white py-2">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center">
