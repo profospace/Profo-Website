@@ -40,6 +40,7 @@ import Testing from './Testing/Testing';
 import Wishlist from './pages/Wishlist';
 import { Toaster } from 'react-hot-toast';
 import { getWishlist } from './redux/features/Wishlist/wishlistSlice';
+import ProfoAdvice from './pages/ProfoAdvice';
 
 // import MainPropertyPage from './pages/MainPropertyPage';
 
@@ -154,6 +155,7 @@ function App() {
             <Route path='/privacy-policy' element={<PrivacyAndPolicy />} />
             <Route path='/project-3d' element={<BuildingManager />} /> {/* testing */}
             <Route path='/contact-us' element={<Contact />} />
+            <Route path='/profo-advice' element={<ProfoAdvice />} />
 
             <Route path="*" element={<Error />} />
           </Route>

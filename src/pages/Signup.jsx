@@ -454,7 +454,7 @@
 //                     0% { transform: translateY(0); }
 //                     100% { transform: translateY(-33.33%); }
 //                 }
-                
+
 //                 @keyframes scrollUp {
 //                     0% { transform: translateY(-33.33%); }
 //                     100% { transform: translateY(0); }
@@ -881,11 +881,64 @@ const Signup = () => {
         }
     };
 
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        setLoaded(true);
+    }, []);
+
+    // Letter animation variants
+    const letterVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: (i) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: 0.2 + i * 0.1,
+                duration: 0.6,
+                type: "spring",
+                stiffness: 100,
+                damping: 10
+            }
+        })
+    };
+
+    // Logo bounce animation variants
+    const logoVariants = {
+        hidden: { scale: 0, rotate: -10 },
+        visible: {
+            scale: 1,
+            rotate: 0,
+            transition: {
+                duration: 0.5,
+                type: "spring",
+                stiffness: 200,
+                damping: 10
+            }
+        }
+    };
+
+    // Full container scale and fade in
+    const containerVariants2 = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                duration: 0.3,
+                when: "beforeChildren",
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    // Individual letters of "PROFO"
+    const letters = "PROFO".split("");
+
     return (
         <motion.div
             initial="hidden"
             animate="visible"
-            variants={containerVariants}
+            variants={containerVariants2}
             className="flex h-screen w-full overflow-hidden bg-gradient-to-r from-gray-50 via-white to-white"
         >
             {/* Left Section - Animated Image Carousels */}
@@ -930,7 +983,7 @@ const Signup = () => {
             {/* Right Section - Enhanced Animated Form */}
             <motion.div
                 variants={itemVariants}
-                className="relative text-center flex-1 flex items-center justify-center p-12 bg-white"
+                className="relative text-center flex-1 flex items-center justify-center p-12"
             >
                 <motion.div
                     variants={containerVariants}
@@ -940,33 +993,55 @@ const Signup = () => {
                         variants={itemVariants}
                         className="mb-8"
                     >
-                        <motion.div
-                            className="flex items-center gap-2 mb-2"
-                            whileHover={{ scale: 1 }}
-                        >
-                            <motion.span
-                                className="text-[#F9464C] text-7xl flex justify-center font-bold w-full"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 0.2 }}
+                            <motion.div
+                                className="flex items-center justify-center rounded-xl"
+                                initial="hidden"
+                                animate={loaded ? "visible" : "hidden"}
+                                variants={containerVariants}
                             >
-                                <div className='bg-red text-center'>
-                                    <img src='assets/output-onlinegiftool.gif' alt="PROFO" className='w-auto h-20' />
+                                <motion.div
+                                    className="flex items-center justify-center w-24 h-24"
+                                    variants={logoVariants}
+                                >
+                                    <motion.img
+                                        className="w-24 h-24"
+                                        src="assets/logo.png"
+                                        initial={{ scale: 0, rotate: -180 }}
+                                        animate={{ scale: 1, rotate: 0 }}
+                                        transition={{
+                                            delay: 0.3,
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
+                                        }}
+                                    />
+                                </motion.div>
+
+                                <div className="flex items-center">
+                                    {letters.map((letter, i) => (
+                                        <motion.span
+                                            key={i}
+                                            custom={i}
+                                            variants={letterVariants}
+                                            className="text-7xl font-bold text-[#F9464C] tracking-tighter"
+                                        >
+                                            {letter}
+                                        </motion.span>
+                                    ))}
                                 </div>
-                            </motion.span>
-                        </motion.div>
+                            </motion.div>
                         <motion.h1
                             className="text-4xl font-bold mb-2"
                             variants={itemVariants}
                         >
                             join the <span className="text-[#F9464C]">waitlist</span>
                         </motion.h1>
-                        <motion.p
+                        {/* <motion.p
                             className="text-gray-600"
                             variants={itemVariants}
                         >
                             skip the queue and get access to your personal shopper
-                        </motion.p>
+                        </motion.p> */}
                     </motion.div>
 
                     {/* Step Indicator */}

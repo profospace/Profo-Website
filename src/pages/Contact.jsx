@@ -61,7 +61,7 @@ function Contact() {
         </div>
         <div className="flex items-center gap-5">
           <MdEmail size={25}/>
-          <a href="mailto:anuragsonkar053@gmail.com" className="text-blue-800">anuragsonkar053@gmail.com</a> 
+          <a href="mailto:anurag7053@gmail.com" className="text-blue-800">anurags003@gmail.com</a> 
         </div>
         <div className="flex items-center gap-5">
           <FaInfo size={25}/>

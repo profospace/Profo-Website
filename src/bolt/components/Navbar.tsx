@@ -804,7 +804,7 @@ const Navbar: React.FC = () => {
     ));
   };
 
-  
+
 
  
 
@@ -900,7 +900,7 @@ const Navbar: React.FC = () => {
                     ? 'text-gray-700 hover:text-emerald-600'
                     : 'text-white hover:text-emerald-300'
                   } transition-colors ${activeDropdown === 'help' ? 'text-emerald-600 font-semibold' : ''}`}
-                onClick={() => handleDropdownToggle('help')}
+                onClick={() => navigate('/contact-us')}
               >
                 Help
                 <motion.span

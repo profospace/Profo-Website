@@ -1023,7 +1023,7 @@ const SearchBar = () => {
   };
 
   return (
-    <section className="relative z-20 bg-white shadow-lg rounded-lg mx-4 sm:mx-8 lg:mx-auto max-w-6xl -mt-20">
+    <section className="absolute left-[8%] z-20 bg-white shadow-lg rounded-lg mx-4 sm:mx-8 lg:mx-auto max-w-6xl -mt-20">
       <div className="px-6 py-2">
         {/* Tabs */}
         <div className="flex border-b border-gray-200 mb-6">
