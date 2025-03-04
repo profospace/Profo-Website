@@ -781,6 +781,26 @@ const Navbar: React.FC = () => {
     // Other categories would follow the same pattern
   };
 
+  const profoAdviceItems = {
+    services:[
+      {
+        title: "Property Valuation",
+        navigate: '/profo-advice' 
+      }
+    ],
+    tools : [
+      {
+        title: "Area Convertor",
+        navigate: '/profo-advice' 
+      },
+      {
+        title: "Rates & Trends",
+        navigate: '/profo-advice' 
+      },
+
+    ]
+  }
+
   // Render menu items for a specific category
   const renderMenuItems = (items: any[]) => {
     return items.map((item, index) => (
@@ -878,18 +898,18 @@ const Navbar: React.FC = () => {
                 className={`flex items-center px-3 py-2 text-sm font-medium relative ${isScrolled || activeDropdown
                     ? 'text-gray-700 hover:text-emerald-600'
                     : 'text-white hover:text-emerald-300'
-                  } transition-colors ${activeDropdown === 'mb-advice' ? 'text-emerald-600 font-semibold' : ''}`}
-                onClick={() => handleDropdownToggle('mb-advice')}
+                  } transition-colors ${activeDropdown === 'profo-advice' ? 'text-emerald-600 font-semibold' : ''}`}
+                onClick={() => handleDropdownToggle('profo-advice')}
               >
                 Profo Advice <span className="ml-1 text-xs bg-yellow-500 text-black px-1 rounded">NEW</span>
                 <motion.span
-                  animate={{ rotate: activeDropdown === 'mb-advice' ? 180 : 0 }}
+                  animate={{ rotate: activeDropdown === 'profo-advice' ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                   className="ml-1"
                 >
                   {/* <ChevronDown className="h-4 w-4" /> */}
                 </motion.span>
-                <ActiveIndicator isActive={activeDropdown === 'mb-advice'} />
+                <ActiveIndicator isActive={activeDropdown === 'profo-advice'} />
               </motion.button>
             </div>
 
@@ -1047,6 +1067,36 @@ const Navbar: React.FC = () => {
                     {renderMenuItems(rentMenuItems.buyingTools)}
                   </ul>
                 </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+
+        {/* Profo Advice - new */}
+        {activeDropdown === 'profo-advice' && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="absolute left-0 w-full bg-white shadow-lg mt-1 z-50"
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+              <div className="grid grid-cols-5 gap-8">
+                <div>
+                  <h3 className="text-base font-medium text-gray-900 mb-4">Services</h3>
+                  <ul className="space-y-3">
+                    {renderMenuItems(profoAdviceItems.services)}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-base font-medium text-gray-900 mb-4">Tools</h3>
+                  <ul className="space-y-3">
+                    {renderMenuItems(profoAdviceItems.tools)}
+                  </ul>
+                </div>
+               
               </div>
             </div>
           </motion.div>
