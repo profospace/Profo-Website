@@ -142,6 +142,8 @@ const PropertyCard: React.FC<{ property: Property; index: number }> = ({ propert
 
 const FeaturedProperties: React.FC = ({ currentCity }) => {
   const { properties } = useSelector(state => state.homeFeed)
+  const navigate = useNavigate()
+
   console.log(properties)
   return (
     <section className="py-16 bg-gray-50 pt-32">
