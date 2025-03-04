@@ -1768,7 +1768,7 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
                 <img src='/assets/logo.png' className='w-full h-full' alt="Logo" />
               </div>
               <div className='flex items-baseline gap-2'>
-                <div className={`text-3xl font-medium ${isScrolled || activeDropdown ? 'text-gray-900' : 'text-white'}`}>PROFO</div>
+                <div className={`text-3xl font-semibold tracking-tighter ${isScrolled || activeDropdown ? 'text-gray-900' : 'text-white'}`}>PROFO</div>
                 <CityNameLoading
                   loading={loading}
                   currentCity={currentCity}
