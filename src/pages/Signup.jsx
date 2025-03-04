@@ -1004,8 +1004,8 @@ const Signup = () => {
                                     variants={logoVariants}
                                 >
                                     <motion.img
-                                        className="w-24 h-24"
-                                        src="assets/logo.png"
+                                        className="w-24 h-28"
+                                        src="assets/profo_logo.png"
                                         initial={{ scale: 0, rotate: -180 }}
                                         animate={{ scale: 1, rotate: 0 }}
                                         transition={{

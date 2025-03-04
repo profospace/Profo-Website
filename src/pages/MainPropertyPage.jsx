@@ -381,12 +381,158 @@
 // export default MainPropertyPage;
 
 
+// import React, { useState, useEffect } from 'react';
+// import { LoadScript } from '@react-google-maps/api';
+// import MapPage from './MapPage';
+// import { useDispatch, useSelector } from 'react-redux';
+// import ListingPage from '../components/ListingPage';
+// import { motion, AnimatePresence } from 'framer-motion';
+// import { getWishlist } from '../redux/features/Wishlist/wishlistSlice';
+
+// const MainPropertyPage = () => {
+//     const dispatch = useDispatch();
+//     // Add default value for appliedFilters
+//     const { properties = [], projects = [], buildings = [], appliedFilters = { filterType: null }, isLoading = false }
+//         = useSelector(state => state.map || {});
+
+//     const [view, setView] = useState('list');
+//     const [center, setCenter] = useState(null);
+//     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+
+//     // State for filters and search
+//     const [sortBy, setSortBy] = useState('');
+//     const [filterType, setFilterType] = useState('all');
+//     const [searchQuery, setSearchQuery] = useState('');
+//     const [isFilterVisible, setIsFilterVisible] = useState(false);
+
+//     useEffect(() => {
+//         if (navigator.geolocation) {
+//             navigator.geolocation.getCurrentPosition(
+//                 (position) => {
+//                     setCenter({
+//                         lat: position.coords.latitude,
+//                         lng: position.coords.longitude
+//                     });
+//                 },
+//                 (error) => {
+//                     console.error("Error getting location:", error);
+//                     setCenter({
+//                         lat: 26.4735846,
+//                         lng: 80.2855738
+//                     });
+//                 }
+//             );
+//         }
+//     }, []);
+
+//     const handleViewChange = (newView) => {
+//         setView(newView);
+//     };
+
+//     // Add a safe check for the filter type
+//     const isPropertyFilter = appliedFilters?.filterType === "property";
+
+//     // Animation variants
+//     const pageTransition = {
+//         initial: { opacity: 0, x: 20 },
+//         animate: { opacity: 1, x: 0 },
+//         exit: { opacity: 0, x: -20 }
+//     };
+
+//     useEffect(() => {
+//         dispatch(getWishlist())
+//     }, []);
+
+//     const isGoogleAPILoaded = window.google && window.google.maps;
+
+
+
+//     return (
+//         // <LoadScript
+//         //     googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
+//         //     onLoad={() => setIsScriptLoaded(true)}
+//         // >
+//         <div>
+//             {/* <div className="min-h-screen px-2 overflow-hidden">
+//                 <div className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'> */}
+//             <motion.div
+//                 className=" overflow-hidden relative w-full bg-[#F7F9FC]"
+//                 initial={{ opacity: 0 }}
+//                 animate={{ opacity: 1 }}
+//                 transition={{ duration: 0.5 }}
+//             >
+//                 <motion.div
+//                     className=' flex flex-col absolute  '
+//                     initial={{ y: -20 }}
+//                     animate={{ y: 0 }}
+//                     transition={{ duration: 0.5, delay: 0.2 }}
+//                 >
+//                     {/* <SearchSection handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy} /> */}
+//                 </motion.div>
+
+//                 {/* Main content */}
+//                 <AnimatePresence mode="wait">
+//                     {view === 'list' ? (
+//                         <motion.div
+//                             key="list"
+//                             variants={pageTransition}
+//                             initial="initial"
+//                             animate="animate"
+//                             exit="exit"
+//                             transition={{ duration: 0.3 }}
+//                         >
+//                             <ListingPage
+//                                 properties={properties}
+//                                 projects={projects}
+//                                 buildings={buildings}
+//                                 isLoading={isLoading}
+//                                 handleViewChange={handleViewChange}
+//                                 sortBy={sortBy}
+//                                 filterType={filterType}
+//                                 searchQuery={searchQuery}
+//                                 setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy}
+//                                 view={view}
+
+//                             />
+//                         </motion.div>
+//                     ) : (
+//                         <motion.div
+//                             key="map"
+//                             variants={pageTransition}
+//                             initial="initial"
+//                             animate="animate"
+//                             exit="exit"
+//                             transition={{ duration: 0.3 }}
+//                         >
+//                                 {isGoogleAPILoaded && (
+//                                 <MapPage
+//                                     onViewChange={handleViewChange}
+//                                     center={center}
+//                                     setCenter={setCenter}
+//                                     properties={properties}
+//                                     projects={projects}
+//                                     buildings={buildings}
+//                                     isLoading={isLoading}
+//                                     setIsFilterVisible={setIsFilterVisible}
+
+//                                     handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy}
+//                                 />
+//                             )}
+//                         </motion.div>
+//                     )}
+//                 </AnimatePresence>
+//             </motion.div>
+//         </div>
+//         // </LoadScript>
+//     );
+// };
+
+// export default MainPropertyPage;
+
 import React, { useState, useEffect } from 'react';
-import { LoadScript } from '@react-google-maps/api';
-import MapPage from './MapPage';
 import { useDispatch, useSelector } from 'react-redux';
+import MapPage from './MapPage';
 import ListingPage from '../components/ListingPage';
-import { motion, AnimatePresence } from 'framer-motion';
 import { getWishlist } from '../redux/features/Wishlist/wishlistSlice';
 
 const MainPropertyPage = () => {
@@ -397,7 +543,6 @@ const MainPropertyPage = () => {
 
     const [view, setView] = useState('list');
     const [center, setCenter] = useState(null);
-    const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
     // State for filters and search
     const [sortBy, setSortBy] = useState('');
@@ -432,95 +577,60 @@ const MainPropertyPage = () => {
     // Add a safe check for the filter type
     const isPropertyFilter = appliedFilters?.filterType === "property";
 
-    // Animation variants
-    const pageTransition = {
-        initial: { opacity: 0, x: 20 },
-        animate: { opacity: 1, x: 0 },
-        exit: { opacity: 0, x: -20 }
-    };
-
     useEffect(() => {
         dispatch(getWishlist())
     }, []);
 
+    const isGoogleAPILoaded = window.google && window.google.maps;
 
     return (
-        <LoadScript
-            googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
-            onLoad={() => setIsScriptLoaded(true)}
-        >
         <div>
-            {/* <div className="min-h-screen px-2 overflow-hidden">
-                <div className='max-w-7xl mx-auto px-2 flex flex-col shadow-2xl rounded-md'> */}
-            <motion.div
-                className=" overflow-hidden relative w-full bg-[#F7F9FC]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-            >
-                <motion.div
-                    className=' flex flex-col absolute  '
-                    initial={{ y: -20 }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                >
+            <div className="overflow-hidden relative w-full bg-[#F7F9FC]">
+                <div className="flex flex-col absolute">
                     {/* <SearchSection handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy} /> */}
-                </motion.div>
+                </div>
 
                 {/* Main content */}
-                <AnimatePresence mode="wait">
-                    {view === 'list' ? (
-                        <motion.div
-                            key="list"
-                            variants={pageTransition}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            transition={{ duration: 0.3 }}
-                        >
-                            <ListingPage
+                {view === 'list' ? (
+                    <div>
+                        <ListingPage
+                            properties={properties}
+                            projects={projects}
+                            buildings={buildings}
+                            isLoading={isLoading}
+                            handleViewChange={handleViewChange}
+                            sortBy={sortBy}
+                            filterType={filterType}
+                            searchQuery={searchQuery}
+                            setSearchQuery={setSearchQuery}
+                            setFilterType={setFilterType}
+                            setSortBy={setSortBy}
+                            view={view}
+                        />
+                    </div>
+                ) : (
+                    <div>
+                        {isGoogleAPILoaded && (
+                            <MapPage
+                                onViewChange={handleViewChange}
+                                center={center}
+                                setCenter={setCenter}
                                 properties={properties}
                                 projects={projects}
                                 buildings={buildings}
                                 isLoading={isLoading}
+                                setIsFilterVisible={setIsFilterVisible}
                                 handleViewChange={handleViewChange}
-                                sortBy={sortBy}
-                                filterType={filterType}
-                                searchQuery={searchQuery}
-                                setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy}
                                 view={view}
-
+                                setSearchQuery={setSearchQuery}
+                                setFilterType={setFilterType}
+                                setSortBy={setSortBy}
                             />
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="map"
-                            variants={pageTransition}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            transition={{ duration: 0.3 }}
-                        >
-                            {isScriptLoaded && (
-                                <MapPage
-                                    onViewChange={handleViewChange}
-                                    center={center}
-                                    setCenter={setCenter}
-                                    properties={properties}
-                                    projects={projects}
-                                    buildings={buildings}
-                                    isLoading={isLoading}
-                                    setIsFilterVisible={setIsFilterVisible}
-
-                                    handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy}
-                                />
-                            )}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </motion.div>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
-        </LoadScript>
     );
 };
 

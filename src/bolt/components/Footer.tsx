@@ -119,17 +119,17 @@ const dispatch = useDispatch()
           <div>
             <h3 className="text-lg font-semibold mb-6">Contact Us</h3>
             <ul className="space-y-4">
-              <li className="flex items-start">
+              {/* <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-emerald-500 mr-3 mt-1" />
                 <span className="text-gray-400">123 Real Estate Avenue, New York, NY 10001</span>
-              </li>
+              </li> */}
               <li className="flex items-center">
                 <Phone className="h-5 w-5 text-emerald-500 mr-3" />
-                <span className="text-gray-400">(123) 456-7890</span>
+                <span className="text-gray-400">+91 8090555050</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-emerald-500 mr-3" />
-                <span className="text-gray-400">info@luxestate.com</span>
+                <span className="text-gray-400">admin@profospace.com</span>
               </li>
             </ul>
           </div>

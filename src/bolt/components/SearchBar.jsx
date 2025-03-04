@@ -709,21 +709,21 @@ import { useDispatch } from 'react-redux';
 import { applyFilter } from '../../redux/features/Map/mapSlice';
 
 // Google Places API script loader
-const loadGooglePlacesScript = (callback) => {
-  // Check if script is already loaded
-  if (typeof window.google !== 'undefined' && typeof window.google.maps !== 'undefined') {
-    callback();
-    return;
-  }
+// const loadGooglePlacesScript = (callback) => {
+//   // Check if script is already loaded
+//   if (typeof window.google !== 'undefined' && typeof window.google.maps !== 'undefined') {
+//     callback();
+//     return;
+//   }
 
-  // Create script element
-  const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_API_KEY}&libraries=places`;
-  script.async = true;
-  script.defer = true;
-  script.onload = callback;
-  document.head.appendChild(script);
-};
+//   // Create script element
+//   const script = document.createElement('script');
+//   script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_API_KEY}&libraries=places`;
+//   script.async = true;
+//   script.defer = true;
+//   script.onload = callback;
+//   document.head.appendChild(script);
+// };
 
 
 
@@ -799,14 +799,14 @@ const SearchBar = () => {
   const searchInputRef = useRef(null);
 
   // Load Google Places API
-  useEffect(() => {
-    loadGooglePlacesScript(() => {
-      if (window.google && window.google.maps && window.google.maps.places) {
-        autocompleteService.current = new window.google.maps.places.AutocompleteService();
-        setPlacesServiceLoaded(true);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   loadGooglePlacesScript(() => {
+  //     if (window.google && window.google.maps && window.google.maps.places) {
+  //       autocompleteService.current = new window.google.maps.places.AutocompleteService();
+  //       setPlacesServiceLoaded(true);
+  //     }
+  //   });
+  // }, []);
 
   // Fetch suggestions when input changes
   useEffect(() => {

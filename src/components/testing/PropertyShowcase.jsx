@@ -2512,10 +2512,7 @@ const PropertyShowcase = ({ properties, projects, buildings }) => {
     };
 
     return (
-        <div className={`min-h-screen ${visualStyle === 'glassmorphism'
-            ? 'bg-gradient-to-br from-indigo-500/30 via-purple-500/30 to-pink-500/30'
-            : 'bg-gradient-to-br from-gray-50 to-gray-100'
-            }`}>
+        <div >
             <div className="max-w-6xl mx-auto ">
                 {/* Navigation Tabs */}
                 <div className="flex justify-between items-center mb-4">

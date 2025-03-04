@@ -424,7 +424,7 @@
 
 // export default Home
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import Navbar from '../bolt/components/Navbar';
 import AdCarousel from '../bolt/components/AdCarousel';
@@ -435,14 +435,20 @@ import PopularDestinations from '../bolt/components/PopularDestinations';
 import Testimonials from '../bolt/components/Testimonials';
 import CallToAction from '../bolt/components/CallToAction';
 import Footer from '../bolt/components/Footer';
+import SearchBarDemo from '../bolt/components/SearchBarDemo';
 
 function Home() {
+    const [currentCity, setCurrentCity] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
         damping: 30,
         restDelta: 0.001
     });
+
+    console.log("currentCity", currentCity)
 
     // Smooth scroll to section when clicking on navigation links
     useEffect(() => {
@@ -464,6 +470,83 @@ function Home() {
         return () => document.removeEventListener('click', handleAnchorClick);
     }, []);
 
+
+    useEffect(() => {
+        // Function to get the current location and then fetch the city name
+        const fetchCurrentCity = () => {
+            setLoading(true);
+
+            // Check if geolocation is available in the browser
+            if (!navigator.geolocation) {
+                setError('Geolocation is not supported by your browser');
+                setLoading(false);
+                return;
+            }
+
+            // Get current position
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    try {
+                        const { latitude, longitude } = position.coords;
+
+                        // Using Google Maps Geocoding API to get the city
+                        // Note: You would need a valid API key in a real application
+                        const response = await fetch(
+                            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`
+                        );
+
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch location data');
+                        }
+
+                        const data = await response.json();
+
+                        if (data.status === 'OK') {
+                            // Extract city from address components
+                            let city = '';
+                            for (let component of data.results[0].address_components) {
+                                if (component.types.includes('locality')) {
+                                    city = component.long_name;
+                                    break;
+                                }
+                            }
+
+                            setCurrentCity(city || 'Unknown City');
+                        } else {
+                            throw new Error('Geocoding API error: ' + data.status);
+                        }
+
+                        setLoading(false);
+                    } catch (err) {
+                        setError(err.message);
+                        setLoading(false);
+                    }
+                },
+                (error) => {
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            setError('User denied the request for geolocation');
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            setError('Location information is unavailable');
+                            break;
+                        case error.TIMEOUT:
+                            setError('The request to get user location timed out');
+                            break;
+                        default:
+                            setError('An unknown error occurred');
+                    }
+                    setLoading(false);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+            );
+        };
+
+        // Call the function to fetch the current city
+        fetchCurrentCity();
+
+    // No cleanup function needed as we're not subscribing to any eve
+    }, []); // Empty dependency array means this runs once on mount
     return (
         <div className="">
             {/* Progress bar */}
@@ -472,11 +555,12 @@ function Home() {
                 style={{ scaleX }}
             /> */}
 
-            <Navbar />
+            <Navbar currentCity={currentCity} loading={loading}/>
             <AdCarousel />
-            <SearchBar />
-            <FeaturedProperties /> {/* homefeed - properties */}
-            <PopularDestinations /> {/* homefeed - projects */}
+            {/* <SearchBar /> */}
+            <SearchBarDemo />
+            <FeaturedProperties currentCity={currentCity} /> {/* homefeed - properties */}
+            <PopularDestinations currentCity={currentCity} /> {/* homefeed - projects */}
             <Features />
             <Testimonials />
             <CallToAction />

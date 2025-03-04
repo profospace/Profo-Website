@@ -8,7 +8,7 @@ const PropertiesPage = lazy(() => import('./pages/PropertiesPage'));
 const About = lazy(() => import('./pages/About'));
 const SinglePage = lazy(() => import('./pages/PropertyDetailPage'));
 
-const MainPropertyPage = lazy(() => import('./pages/MainPropertyPage'));
+// const MainPropertyPage = lazy(() => import('./pages/MainPropertyPage'));
 
 /* Layout Component */
 import Layout from './components/Layout';
@@ -41,6 +41,8 @@ import Wishlist from './pages/Wishlist';
 import { Toaster } from 'react-hot-toast';
 import { getWishlist } from './redux/features/Wishlist/wishlistSlice';
 import ProfoAdvice from './pages/ProfoAdvice';
+import { LoadScript } from "@react-google-maps/api";
+import MainPropertyPage from './pages/MainPropertyPage';
 
 // import MainPropertyPage from './pages/MainPropertyPage';
 
@@ -115,13 +117,16 @@ function App() {
 
 
 
-  console.log("2025-02-27T06:02:57.451Z")
-  console.log("Date", new Date('2025-02-27T06:02:57.451Z').toLocaleString())
+  // console.log("2025-02-27T06:02:57.451Z")
+  // console.log("Date", new Date('2025-02-27T06:02:57.451Z').toLocaleString())
 
+  const GOOGLE_MAPS_API_KEY = "AIzaSyDRTXePRjHx-5L6AwhWeDPLxU0fgVZQB3g";
 
 
   if (isOnline) {
     return (
+      <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
+
       <div className=''>
         {/* Custom Floating Button */}
         <BackToTop />
@@ -161,6 +166,8 @@ function App() {
           </Route>
         </Routes>
       </div>
+      </LoadScript>
+
     );
   } else {
     return (

@@ -720,41 +720,53 @@ const AdCarousel = () => {
           >
             {/* Geometric shapes as background elements */}
             <motion.div
-              className="absolute top-0 right-0 w-20 h-20 rounded-full bg-indigo-300 opacity-30"
+              className="absolute top-0 right-0 w-20 h-20 rounded-full bg-[#FFEB3B] opacity-60"
               initial={{ y: -80, x: 20 }}
               animate={{ y: -30, x: 40 }}
               transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
             />
             <motion.div
-              className="absolute top-0 left-0 w-24 h-24 rounded-full bg-indigo-300 opacity-30"
+              className="absolute top-0 left-0 w-24 h-24 rounded-full bg-[#FFEB3B] opacity-60"
               initial={{ y: -80, x: 20 }}
               animate={{ y: -1, x: 60 }}
               transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
             />
             <motion.div
-              className="absolute bottom-0 left-0 w-16 h-16 bg-indigo-400 opacity-30 rotate-45"
+              className="absolute bottom-0 left-0 w-20 h-20 rounded-full bg-[#FFEB3B] opacity-60"
+              initial={{ y: 80, x: 20 }}
+              animate={{ y: 30, x: 40 }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+            />
+            <motion.div
+              className="absolute bottom-0 right-0 w-24 h-24 rounded-full bg-[#FFEB3B] opacity-60"
+              initial={{ y: 80, x: 20 }}
+              animate={{ y: 1, x: 60 }}
+              transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
+            />
+            {/* <motion.div
+              className="absolute bottom-0 left-0 w-16 h-16 bg-[#FFEB3B] opacity-60 rotate-45"
               initial={{ y: 60, x: -20 }}
               animate={{ y: 30, x: -10 }}
               transition={{ duration: 2.5, repeat: Infinity, repeatType: "reverse" }}
             />
             <motion.div
-              className="absolute top-1/2 left-4 w-24 h-24 rounded-md bg-indigo-500 opacity-20 -rotate-12"
+              className="absolute top-1/2 left-4 w-24 h-24 rounded-md bg-[#FFEB3B] opacity-70 -rotate-12"
               initial={{ rotate: -12 }}
               animate={{ rotate: 10 }}
               transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
             />
             <motion.div
-              className="absolute bottom-0 right-0 w-16 h-16 bg-indigo-400 opacity-20 rotate-45"
+              className="absolute bottom-0 right-0 w-16 h-16 bg-[#FFEB3B] opacity-60 rotate-45"
               initial={{ y: 60, x: -20 }}
               animate={{ y: 30, x: -10 }}
               transition={{ duration: 2.5, repeat: Infinity, repeatType: "reverse" }}
             />
             <motion.div
-              className="absolute top-1/2 right-4 w-24 h-24 rounded-md bg-indigo-500 opacity-20 -rotate-12"
+              className="absolute top-1/2 right-4 w-24 h-24 rounded-md bg-[#FFEB3B] opacity-60 -rotate-12"
               initial={{ rotate: -12 }}
               animate={{ rotate: -10 }}
               transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-            />
+            /> */}
 
             {/* Stylized Content */}
             <motion.h2

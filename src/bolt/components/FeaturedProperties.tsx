@@ -140,7 +140,7 @@ const PropertyCard: React.FC<{ property: Property; index: number }> = ({ propert
   );
 };
 
-const FeaturedProperties: React.FC = () => {
+const FeaturedProperties: React.FC = ({ currentCity }) => {
   const { properties } = useSelector(state => state.homeFeed)
   console.log(properties)
   return (
@@ -153,7 +153,7 @@ const FeaturedProperties: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Featured Properties</h2>
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Featured Properties In {currentCity}</h2>
           <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
             Discover our handpicked selection of exceptional properties from around the world.
           </p>

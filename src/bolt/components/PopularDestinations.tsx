@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { formatPrice } from '../../lib/utils';
 
 
-const PopularDestinations: React.FC = () => {
+const PopularDestinations: React.FC = ({ currentCity }) => {
   const { projects } = useSelector(state => state.homeFeed)
   console.log(projects)
 
@@ -27,7 +27,7 @@ const PopularDestinations: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Popular Projects</h2>
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Popular Projects In {currentCity}</h2>
           <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
             Explore our most sought-after locations with thousands of properties available
           </p>
