@@ -2162,9 +2162,9 @@ const PropertyShowcase = ({ properties, projects, buildings }) => {
                 key={item._id}
                 className={`${cardClasses} cursor-pointer`}
                 onClick={() => navigate(
-                    isProperty ? `/api/details/${item._id}` :
-                        isProject ? `/api/details/project/${item._id}` :
-                            `/api/details/building/${item._id}`
+                    isProperty ? `/api/details/${item.post_id}` :
+                        isProject ? `/api/details/project/${item.projectId}` :
+                            `/api/details/building/${item.buildingId}`
                 )}
             >
                 {/* Image Carousel */}
