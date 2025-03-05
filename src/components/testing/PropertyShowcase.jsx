@@ -1477,7 +1477,7 @@ const PropertyShowcase = ({ properties, projects, buildings }) => {
         } else if (price >= 100000) {
             return `₹${(price / 100000).toFixed(2)} Lac`;
         } else {
-            return `₹${price.toLocaleString()}`;
+            return `₹${price}`;
         }
     };
 
