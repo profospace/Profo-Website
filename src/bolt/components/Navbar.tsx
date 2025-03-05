@@ -1742,21 +1742,6 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            {/* <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex-shrink-0 flex items-center"
-              onClick={() => navigate('/')}
-            >
-              <div className="h-10 w-10 rounded-md flex items-center justify-center text-xs text-gray-500">
-                <img src='/assets/profo_logo.png' className='w-full h-full' alt="Logo" />
-              </div>
-              <div className='flex items-baseline gap-2'>
-                <div className={`text-3xl font-medium ${isScrolled || activeDropdown ? 'text-gray-900' : 'text-white'}`}>PROFO</div>
-                <span className='text-white'>{loading ? "loading..." : currentCity}</span>
-              </div>
-            </motion.div> */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}

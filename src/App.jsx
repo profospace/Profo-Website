@@ -43,6 +43,7 @@ import { getWishlist } from './redux/features/Wishlist/wishlistSlice';
 import ProfoAdvice from './pages/ProfoAdvice';
 import { LoadScript } from "@react-google-maps/api";
 import MainPropertyPage from './pages/MainPropertyPage';
+import { getConfig } from './utils/config';
 
 // import MainPropertyPage from './pages/MainPropertyPage';
 
@@ -99,7 +100,15 @@ function App() {
     () => {
       console.log("HI")
       dispatch(getHomeFeed());
-      dispatch(getWishlist())
+
+
+      // console.log(getConfig()?.headers?.Authorization?.split(' ')?.[1])
+      const token = getConfig()?.headers?.Authorization?.split(' ')?.[1];
+
+      if (token) {
+        dispatch(getWishlist());
+      }
+
 
       if (isOnline) {
         offlineImageSetup()

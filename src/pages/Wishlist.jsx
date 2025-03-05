@@ -37,7 +37,7 @@
 // //     );
 // //   }
 
- 
+
 
 // //   return (
 // //     <div className="min-h-screen">
@@ -882,8 +882,12 @@ const Wishlist = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getWishlist());
-  }, [dispatch]);
+    const token = getConfig()?.headers?.Authorization?.split(' ')?.[1];
+
+    if (token) {
+      dispatch(getWishlist());
+    }
+  }, []);
 
   useEffect(() => {
     if (likedProperties) {
@@ -1031,7 +1035,7 @@ const Wishlist = () => {
       console.log(error);
     }
   };
-  
+
   const getEntitiesByType = (items, type) => {
     return items.filter(item => item.entityType === type);
   };

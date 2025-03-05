@@ -534,6 +534,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MapPage from './MapPage';
 import ListingPage from '../components/ListingPage';
 import { getWishlist } from '../redux/features/Wishlist/wishlistSlice';
+import { getConfig } from '../utils/config';
 
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
@@ -578,7 +579,11 @@ const MainPropertyPage = () => {
     const isPropertyFilter = appliedFilters?.filterType === "property";
 
     useEffect(() => {
-        dispatch(getWishlist())
+        const token = getConfig()?.headers?.Authorization?.split(' ')?.[1];
+        
+              if (token) {
+                dispatch(getWishlist());
+              }
     }, []);
 
     const isGoogleAPILoaded = window.google && window.google.maps;
