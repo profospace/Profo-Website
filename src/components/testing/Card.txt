@@ -1,0 +1,256 @@
+const PropertyCard = () => {
+    // Images for carousel
+    const images = [
+        "https://images.bayut.com/thumbnails/761297891-800x600.webp",
+        "https://images.bayut.com/thumbnails/761297894-1066x800.webp",
+        "https://images.bayut.com/thumbnails/761297895-1066x800.webp",
+        "https://images.bayut.com/thumbnails/761297896-1066x800.webp",
+        "https://images.bayut.com/thumbnails/760667991-800x600.webp"
+    ];
+
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [isHovering, setIsHovering] = useState(false);
+
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    };
+
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
+    };
+
+    const handleEmailClick = () => {
+        window.location.href = "mailto:agent@example.com";
+    };
+
+    const handleCallClick = () => {
+        window.location.href = "tel:+971500000000";
+    };
+
+    const handleWhatsAppClick = () => {
+        window.location.href = "https://wa.me/971500000000";
+    };
+
+    return (
+        <div
+            className="flex mb-8 flex-col md:flex-row rounded-lg overflow-hidden shadow-lg max-w-6xl mx-auto bg-white max-h-80 border border-[#DEDEDE] "
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+        >
+            {/* Left side - Image Carousel */}
+            <div className="relative w-full md:w-1/2 h-80 md:h-auto overflow-hidden">
+                {/* Carousel images */}
+                <AnimatePresence initial={false} mode="wait">
+                    <motion.img
+                        key={currentSlide}
+                        src={images[currentSlide]}
+                        alt={`Property view ${currentSlide + 1}`}
+                        className="w-full h-full object-cover"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                    />
+                </AnimatePresence>
+
+                {/* TruCheck badge */}
+                <div className="absolute top-3 left-3 bg-white rounded-full px-3 py-1 flex items-center space-x-1 shadow">
+                    <svg className="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                    </svg>
+                    <span className="text-xs font-bold">TruCheck™</span>
+                </div>
+
+                {/* Navigation arrows - only visible on hover */}
+                <AnimatePresence>
+                    {isHovering && (
+                        <>
+                            <motion.button
+                                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 rounded-full p-2 text-white z-20"
+                                onClick={prevSlide}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </motion.button>
+                            <motion.button
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 rounded-full p-2 text-white z-20"
+                                onClick={nextSlide}
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 10 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </motion.button>
+                        </>
+                    )}
+                </AnimatePresence>
+
+                {/* TruBroker badge */}
+                <div className="absolute bottom-12 left-4 flex items-center space-x-2 z-10">
+                    <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-white bg-gray-300">
+                        <img src="/api/placeholder/40/40" alt="Agent" className="w-full h-full object-cover" />
+                    </div>
+                    <span className="text-xs font-bold text-white">TruBroker™</span>
+                </div>
+
+                {/* BlackBrick watermark */}
+                <div className="absolute bottom-6 right-4 z-10">
+                    <div className="text-white text-xl font-bold opacity-90">BlackBrick.</div>
+                </div>
+
+                {/* Carousel dots indicator */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                    {images.map((_, index) => (
+                        <motion.button
+                            key={index}
+                            onClick={() => goToSlide(index)}
+                            className={`w-2 h-2 rounded-full ${index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'}`}
+                            whileHover={{ scale: 1.5 }}
+                            transition={{ duration: 0.2 }}
+                        ></motion.button>
+                    ))}
+                </div>
+
+                {/* Dark overlay at bottom of carousel */}
+                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/70 to-transparent"></div>
+
+                {/* Favorite button */}
+                <motion.button
+                    onClick={() => setIsFavorite(!isFavorite)}
+                    className="absolute top-4 right-4 z-10"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                >
+                    <Heart
+                        size={24}
+                        className={`${isFavorite ? "fill-white text-white" : "text-white"}`}
+                    />
+                </motion.button>
+            </div>
+
+            {/* Right side - Property details */}
+            <div className="w-full md:w-1/2 p-5 flex flex-col">
+                {/* Price */}
+                <div className="flex gap-2 mb-2 items-baseline">
+                    <div className="text-xl md:text-xl text-gray-800">INR</div>
+                    <div className="text-xl md:text-2xl font-semibold text-gray-800">7,500,000</div>
+                </div>
+
+                {/* Property type and specs */}
+                <div className="flex items-center space-x-6 mb-2 text-sm">
+                    <span className="font-semibold text-gray-800">Villa</span>
+                    <div className="flex items-center space-x-1">
+                        <IoBedSharp />
+                        <span className="text-gray-700">4</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                        <MdOutlineBathtub />
+                        <span className="text-gray-700">6</span>
+                    </div>
+                    <div className="flex items-center">
+                        <span className="text-gray-700">Area: 6,599 sqft</span>
+                    </div>
+                </div>
+
+
+                {/* Location */}
+                <div className="flex items-start space-x-2 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span className="text-gray-700 text-sm">
+                        Esmeralda, Victory Heights, Dubai Sports City, Dubai
+                    </span>
+                </div>
+
+                {/* Open house tag */}
+                <div className="mb-2">
+                    <TagsCarousal />
+                </div>
+
+
+                {/* Amenities tag */}
+                <div className="">
+                    <div className="flex flex-wrap gap-2">
+                        {[
+                            { name: "Swimming Pool" },
+                            { name: "Gym" },
+                            { name: "Pet Friendly" },
+                            { name: "Gym" },
+                        ].map((amenity, index) => (
+                            <div
+                                key={index}
+                                className="flex items-center gap-1 px-3 py-1 bg-green-50 text-green-500 rounded-full text-xs border border-green-500 hover:bg-gray-200 transition-colors"
+                            >
+                                <span>{amenity.name}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+
+               
+
+                {/* Contact buttons */}
+                <div className="flex space-x-4 mt-2 mb-2">
+                    <motion.button
+                        onClick={handleCallClick}
+                        className="flex-1 flex items-center justify-center space-x-2 bg-[#FED42B] hover:bg-gray-200 text-teal-800 py-2 px-4 rounded-md transition-colors"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <Phone size={20} />
+                        <span className="font-medium">Connect</span>
+                    </motion.button>
+                    <motion.button
+                        onClick={handleEmailClick}
+                        className="flex-1 flex items-center justify-center space-x-2 bg-[#E5EFF0] hover:bg-gray-200 text-teal-800 py-2 px-4 rounded-md transition-colors"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <Map size={20} />
+                        <span className="font-medium">Map</span>
+                    </motion.button>
+                    <motion.button
+                        onClick={handleEmailClick}
+                        className=" flex items-center justify-center bg-transparent hover:bg-gray-200 text-black py-2 rounded-md transition-colors"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <HiOutlineDotsVertical  size={20}/> 
+                    </motion.button>
+                    
+                </div>
+
+
+                {/* Last visited note */}
+                <div className="flex items-center space-x-2 mb-4 text-xs text-blue-800 bg-blue-50 p-2 rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Agent last visited this property on 7th of March</span>
+                </div>
+
+                {/* BlackBrick logo */}
+                {/* <div className="mt-4 flex justify-end">
+                    <div className="text-black text-lg font-bold">BlackBrick.</div>
+                </div> */}
+            </div>
+        </div>
+    );
+};

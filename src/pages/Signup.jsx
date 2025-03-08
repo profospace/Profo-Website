@@ -471,6 +471,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base_url } from '../utils/base_url';
+import OTPInput from '../components/OTPInput';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -841,7 +842,7 @@ const Signup = () => {
                         </motion.div>
 
                         <motion.form className="space-y-4 mb-8" variants={containerVariants}>
-                            <motion.div variants={itemVariants} className="relative">
+                            {/* <motion.div variants={itemVariants} className="relative">
                                 <motion.input
                                     whileFocus={{ scale: 1.02 }}
                                     type="number"
@@ -850,7 +851,8 @@ const Signup = () => {
                                     placeholder="enter OTP"
                                     className="w-full p-4 pr-12 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500"
                                 />
-                            </motion.div>
+                            </motion.div> */}
+                            <OTPInput setOtp={setOtp} />
 
                             <motion.button
                                 whileHover={{ scale: 1.05 }}

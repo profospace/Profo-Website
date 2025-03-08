@@ -44,6 +44,7 @@ import ProfoAdvice from './pages/ProfoAdvice';
 import { LoadScript } from "@react-google-maps/api";
 import MainPropertyPage from './pages/MainPropertyPage';
 import { getConfig } from './utils/config';
+import PriceHistogramSlider from './Testing/PriceHistogramSlider';
 
 // import MainPropertyPage from './pages/MainPropertyPage';
 
@@ -126,6 +127,8 @@ function App() {
 
 
 
+
+
   // console.log("2025-02-27T06:02:57.451Z")
   // console.log("Date", new Date('2025-02-27T06:02:57.451Z').toLocaleString())
 
@@ -135,45 +138,46 @@ function App() {
     return (
       <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
 
-      <div className=''>
-        {/* Custom Floating Button */}
-        <BackToTop />
-        <Toaster
-          position="bottom-center"
-          reverseOrder={true}
-        />
-        <Routes>
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/testing' element={<Testing />} />
+        <div className=''>
+          {/* Custom Floating Button */}
+          <BackToTop />
+          <Toaster
+            position="bottom-center"
+            reverseOrder={true}
+          />
+          <Routes>
+            <Route path='/signup' element={<Signup />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/testing' element={<Testing />} />
+            <Route path='/hist' element={<PriceHistogramSlider latitude="26.4735213" longitude="80.2855935" />} />
 
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path='/about' element={<About />} />
-            <Route path='/services' element={<Services />} />
-            <Route path='/all-in-one-page' element={<AllInOnePage />} />
-            <Route path='/properties' element={<PropertiesPage />} />
-            <Route path='/projects' element={<ProjectPage />} />
-            <Route path='/buildings' element={<BuildingPage />} />
-            <Route path='/main' element={<MainPropertyPage />} />
-            <Route path='/post-property-for-free' element={<PostProperty />} />
-            <Route path='/wishlist' element={<Wishlist />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path='/about' element={<About />} />
+              <Route path='/services' element={<Services />} />
+              <Route path='/all-in-one-page' element={<AllInOnePage />} />
+              <Route path='/properties' element={<PropertiesPage />} />
+              <Route path='/projects' element={<ProjectPage />} />
+              <Route path='/buildings' element={<BuildingPage />} />
+              <Route path='/main' element={<MainPropertyPage />} />
+              <Route path='/post-property-for-free' element={<PostProperty />} />
+              <Route path='/wishlist' element={<Wishlist />} />
 
 
-            <Route path='/api/details/project/:post_id' element={<ProjectDetailPage />} />{ /* projects detail page */}
-            <Route path='/api/details/building/:buildingId' element={<BuildingDetailPage />} /> {/* buildings detail page */}
-            <Route path='/api/details/:post_id' element={<SinglePage />} /> {/* properties */}
+              <Route path='/api/details/project/:post_id' element={<ProjectDetailPage />} />{ /* projects detail page */}
+              <Route path='/api/details/building/:buildingId' element={<BuildingDetailPage />} /> {/* buildings detail page */}
+              <Route path='/api/details/:post_id' element={<SinglePage />} /> {/* properties */}
 
-            <Route path='/terms-conditions' element={<TermsAndConditions />} />
-            <Route path='/privacy-policy' element={<PrivacyAndPolicy />} />
-            <Route path='/project-3d' element={<BuildingManager />} /> {/* testing */}
-            <Route path='/contact-us' element={<Contact />} />
-            <Route path='/profo-advice' element={<ProfoAdvice />} />
+              <Route path='/terms-conditions' element={<TermsAndConditions />} />
+              <Route path='/privacy-policy' element={<PrivacyAndPolicy />} />
+              <Route path='/project-3d' element={<BuildingManager />} /> {/* testing */}
+              <Route path='/contact-us' element={<Contact />} />
+              <Route path='/profo-advice' element={<ProfoAdvice />} />
 
-            <Route path="*" element={<Error />} />
-          </Route>
-        </Routes>
-      </div>
+              <Route path="*" element={<Error />} />
+            </Route>
+          </Routes>
+        </div>
       </LoadScript>
 
     );

@@ -147,6 +147,15 @@ select {
 }
 
 
+select {
+  width: 96px;
+}
+
+select option {
+  width: 200px;
+  white-space: normal;
+}
+
 
 
 

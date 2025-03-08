@@ -21,6 +21,8 @@ module.exports = withMT({
         roboto: ['Roboto', 'sans-serif'],
         helvetica: ['Helvetica', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+        lato: ['Lato', 'sans-serif'],
       }
     },
     testing: {

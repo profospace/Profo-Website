@@ -1,557 +1,261 @@
-// import React, { useState } from 'react';
+// import React, { useState, useEffect, useRef, useCallback } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import {
+//     applyFilter,
+//     setSearchResults,
+//     getAllProperties,
+//     getAllProjects,
+//     getAllBuildings
+// } from '../redux/features/Map/mapSlice';
+// import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
+// import { FcFilledFilter } from "react-icons/fc";
+// import axios from 'axios';
+// import {
+//     Map,
+//     List,
+//     ChevronDown,
+//     Search,
+//     X,
+//     Loader2
+// } from 'lucide-react';
+// import ResetFilterButton from './ResetFilterButton';
+// import { base_url } from '../utils/base_url';
 
-// const SearchSection = () => {
-//     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
-//     const [filterOptionsOpen, setFilterOptionsOpen] = useState(true);
-//     const [activeFilterTab, setActiveFilterTab] = useState('property');
-
-//     const tabStyle = "min-w-[120px] text-center";
-
-//     return (
-//         <section className="bg-white border-b border-gray-100 py-2">
-//             <div className="mx-auto px-2">
-//                 <div className="flex flex-wrap items-center gap-3">
-//                     <div className="relative w-1/3 md:w-1/4">
-//                         <i className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600">🔍</i>
-//                         <input
-//                             type="text"
-//                             placeholder="Search properties..."
-//                             className="w-full py-3 pl-10 pr-3 border border-gray-100 rounded-md bg-gray-50"
-//                         />
-//                     </div>
-
-//                     <div className="relative">
-//                         <select className="appearance-none py-3 pl-3 pr-10 border border-gray-100 rounded-md bg-gray-50 cursor-pointer">
-//                             <option>All Types</option>
-//                             <option>Apartment</option>
-//                             <option>House</option>
-//                             <option>Commercial</option>
-//                         </select>
-//                         <i className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none">▼</i>
-//                     </div>
-
-//                     <div className="relative">
-//                         <select className="appearance-none py-3 pl-3 pr-10 border border-gray-100 rounded-md bg-gray-50 cursor-pointer">
-//                             <option>Sort</option>
-//                             <option>Price: Low to High</option>
-//                             <option>Price: High to Low</option>
-//                             <option>Newest First</option>
-//                         </select>
-//                         <i className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none">▼</i>
-//                     </div>
-
-//                     {/* Advanced Filter Button */}
-//                     <button
-//                         className="flex items-center gap-2 py-3 px-4 bg-gray-50 border border-gray-100 rounded-md font-medium transition hover:bg-gray-100"
-//                         onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
-//                     >
-//                         <i className="text-gray-600">⊞</i>
-//                         Advanced Filters
-//                     </button>
-//                 </div>
-
-//                 {/* Advanced Filter Panel with Tabs */}
-//                 {advancedFilterOpen && (
-//                     <div className="mt-2 bg-white rounded-lg shadow-md overflow-hidden transition-all">
-//                         {/* Tabs Container with center alignment */}
-//                         <div className="flex justify-start border-b border-gray-100">
-//                             <div role="tablist" className="tabs tabs-lifted">
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab ${tabStyle} ${activeFilterTab === 'property' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('property')}
-//                                 >
-//                                     Property
-//                                 </a>
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab ${tabStyle} ${activeFilterTab === 'project' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('project')}
-//                                 >
-//                                     Project
-//                                 </a>
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab ${tabStyle} ${activeFilterTab === 'building' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('building')}
-//                                 >
-//                                     Building
-//                                 </a>
-//                             </div>
-//                         </div>
-
-//                         {/* Tab Content */}
-//                         <div className="p-5">
-//                             {activeFilterTab === 'property' && (
-//                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-//                                     {/* Property Type Filter */}
-//                                     <div>
-//                                         <h4 className="text-sm text-gray-600 mb-3">Property Type</h4>
-//                                         <div className="space-y-2">
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" name="property_type" value="apartment" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Apartment</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" name="property_type" value="house" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">House</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" name="property_type" value="villa" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Villa</span>
-//                                             </label>
-//                                         </div>
-//                                     </div>
-
-//                                     {/* Bedrooms Filter */}
-//                                     <div>
-//                                         <h4 className="text-sm text-gray-600 mb-3">Bedrooms</h4>
-//                                         <div className="space-y-2">
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" name="bedrooms" value="1" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">1 BHK</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" name="bedrooms" value="2" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">2 BHK</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" name="bedrooms" value="3" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">3 BHK</span>
-//                                             </label>
-//                                         </div>
-//                                     </div>
-//                                 </div>
-//                             )}
-
-//                             {activeFilterTab === 'project' && (
-//                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-//                                     {/* Project Status */}
-//                                     <div>
-//                                         <h4 className="text-sm text-gray-600 mb-3">Project Status</h4>
-//                                         <div className="space-y-2">
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Under Construction</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Ready to Move</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Upcoming</span>
-//                                             </label>
-//                                         </div>
-//                                     </div>
-
-//                                     {/* Project Amenities */}
-//                                     <div>
-//                                         <h4 className="text-sm text-gray-600 mb-3">Amenities</h4>
-//                                         <div className="space-y-2">
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Swimming Pool</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Gym</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Club House</span>
-//                                             </label>
-//                                         </div>
-//                                     </div>
-//                                 </div>
-//                             )}
-
-//                             {activeFilterTab === 'building' && (
-//                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-//                                     {/* Building Type */}
-//                                     <div>
-//                                         <h4 className="text-sm text-gray-600 mb-3">Building Type</h4>
-//                                         <div className="space-y-2">
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Residential</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Commercial</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">Mixed Use</span>
-//                                             </label>
-//                                         </div>
-//                                     </div>
-
-//                                     {/* Building Age */}
-//                                     <div>
-//                                         <h4 className="text-sm text-gray-600 mb-3">Building Age</h4>
-//                                         <div className="space-y-2">
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">0-5 years</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">5-10 years</span>
-//                                             </label>
-//                                             <label className="flex items-center gap-2 cursor-pointer">
-//                                                 <input type="checkbox" className="accent-red-600 w-4 h-4" />
-//                                                 <span className="text-sm">10+ years</span>
-//                                             </label>
-//                                         </div>
-//                                     </div>
-//                                 </div>
-//                             )}
-//                         </div>
-
-//                         {/* Footer Buttons */}
-//                         <div className="flex justify-end gap-3 p-4 border-t border-gray-100">
-//                             <button className="px-4 py-2 border border-gray-600 rounded font-medium transition hover:bg-gray-100">
-//                                 Reset Filters
-//                             </button>
-//                             <button className="px-4 py-2 bg-red-600 text-white rounded font-medium transition hover:bg-red-700">
-//                                 Apply Filters
-//                             </button>
-//                         </div>
-//                     </div>
-//                 )}
-
-//                 {/* Applied Filters Tags */}
-//                 <div className="flex flex-wrap gap-2 mt-2">
-//                     {["Apartment", "Buy", "3 BHK", "Arya Nagar", "₹50L - ₹3Cr"].map((tag, index) => (
-//                         <div key={index} className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-sm">
-//                             <span>{tag}</span>
-//                             <i className="text-gray-600 cursor-pointer hover:text-red-600">✕</i>
-//                         </div>
-//                     ))}
-//                 </div>
-//             </div>
-//         </section>
-//     );
-// };
-
-// export default SearchSection;
-
-
-import React, { useState } from 'react';
-import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
-import ActiveFiltersDisplay from './ActiveFiltersDisplay';
-import { LiaSearchengin } from "react-icons/lia";
-import { GoChevronDown } from "react-icons/go";
-import { FcFilledFilter } from "react-icons/fc";
-import {
-    Map,
-    List,
-} from 'lucide-react';
-
-
-// const SearchSection = ({ handleViewChange, view, setSearchQuery, setFilterType, setSortBy }) => {
+// const SearchSection = ({
+//     handleViewChange,
+//     view,
+//     searchQuery,
+//     setSearchQuery,
+//     resetAllFilters,
+//     activeFiltersCount = 0,
+//     variant = 'default',
+//     className = '',
+//     showFilterDisplay = true
+// }) => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
 //     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
 //     const [activeFilterTab, setActiveFilterTab] = useState('property');
-//     const [priceRange, setPriceRange] = useState([1000000, 50000000]); // 10 Lakh to 5 Crore
-//     const [areaRange, setAreaRange] = useState([500, 10000]); // 500 to 10,000 sq ft
+//     const [isFocused, setIsFocused] = useState(false);
+//     const [isLoading, setIsLoading] = useState(false);
 
-//     const tabStyle = "min-w-[160px] text-center";
+//     // Search-related states
+//     const [searchInput, setSearchInput] = useState('');
+//     const inputRef = useRef(null);
+
+//     // State for local filters
+//     const [bhkFilter, setBhkFilter] = useState(appliedFilters?.bedrooms || "");
+//     const [propertyType, setPropertyType] = useState(appliedFilters?.propertyType || "all");
+//     const [purpose, setPurpose] = useState(appliedFilters?.purpose || "");
+
+//     // Function to determine active state for BHK buttons
+//     const getBhkButtonClass = (value) => {
+//         if (bhkFilter === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Handler for BHK filter
+//     const handleBhkFilter = (value) => {
+//         const newValue = bhkFilter === value ? "" : value;
+//         setBhkFilter(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             bedrooms: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Handler for Property Type change
+//     const handlePropertyTypeChange = (value) => {
+//         setPropertyType(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             propertyType: value === "all" ? undefined : [value],
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Handler for Purpose change
+//     const handlePurposeChange = (value) => {
+//         setPurpose(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             purpose: value === "" ? undefined : value,
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Reset local filters
+//     const handleResetFilters = () => {
+//         setBhkFilter("");
+//         setPropertyType("all");
+//         setPurpose("");
+//         setSearchInput("");
+//         resetAllFilters();
+//     };
+
+//     // Debounce function for search
+//     const debounce = (func, delay) => {
+//         let timeoutId;
+//         return function (...args) {
+//             clearTimeout(timeoutId);
+//             timeoutId = setTimeout(() => {
+//                 func.apply(this, args);
+//             }, delay);
+//         };
+//     };
+
+//     // Handle search input change with debounce
+//     const handleSearchInputChange = (e) => {
+//         const value = e.target.value;
+//         setSearchInput(value);
+//         debouncedSearch(value);
+//     };
+
+//     // Function to handle search
+//     const handleSearch = async (value) => {
+//         if (!value || value.trim() === '') {
+//             // When search is empty, fetch all data
+//             dispatch(getAllProperties());
+//             dispatch(getAllProjects());
+//             dispatch(getAllBuildings());
+//             return;
+//         }
+
+//         setIsLoading(true);
+//         try {
+//             const response = await axios.get(`${base_url}/api/web-search/unified-search`, {
+//                 params: {
+//                     searchTerm: value.trim(),
+//                     // entityType: activeFilterTab !== 'property' ? activeFilterTab : undefined,
+//                     // limit: 10
+//                 }
+//             });
+
+//             if (response.data.success) {
+//                 // Log results to console as requested
+//                 console.log('Search Results:', response.data.results);
+//                 dispatch(setSearchResults(response.data.results));
+//             } else {
+//                 console.error('Search failed:', response.data.message);
+//             }
+//         } catch (error) {
+//             console.error('Error performing search:', error.response?.data?.message || error.message);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     // Create debounced search function with useCallback to maintain reference
+//     const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+//     // Clear search input
+//     const clearSearchInput = () => {
+//         setSearchInput('');
+//         // Immediately fetch all data when search is cleared
+//         dispatch(getAllProperties());
+//         dispatch(getAllProjects());
+//         dispatch(getAllBuildings());
+//         inputRef.current?.focus();
+//     };
+
+//     // Auto-focus the search input when view changes to 'list'
+//     useEffect(() => {
+//         if (view === 'list' && inputRef.current) {
+//             inputRef.current.focus();
+//         }
+//     }, [view]);
+
+//     // Initial data load
+//     // useEffect(() => {
+//     //     if (!searchInput || searchInput.trim() === '') {
+//     //         dispatch(getAllProperties());
+//     //         dispatch(getAllProjects());
+//     //         dispatch(getAllBuildings());
+//     //     }
+//     // }, [dispatch]);
 
 //     return (
-//         <section className="bg-transparent z-50  py-5  font-helvetica font-medium">
-//             <div className="mx-auto px-2">
-//                 <div className={`flex items-center gap-48 ${view === "list" ? ' justify-between' : 'justify-end'} `}>
-//                     <div className="flex flex-wrap items-center gap-3">
-//                        {
-//                             view === "list" && <div className="relative w-1/2 md:w-1/4">
-//                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600"><LiaSearchengin size={25} /></span>
+//         <section className={`bg-transparent px-6 py-1 mb-2 ${className}`}>
+//             <div className="flex items-center justify-between w-full gap-4">
+//                 <div className="flex items-center gap-3 flex-wrap">
+//                     {/* Search input replacing Easy search button */}
+//                     {view === 'list' && (
+//                         <div className="flex items-center">
+//                             <div className={`flex items-center bg-white border ${isFocused
+//                                 ? "border-gray-400 ring-2 ring-gray-100"
+//                                 : "border-gray-200"
+//                                 } rounded-lg w-64 md:w-64 transition-all duration-200`}>
+//                                 <Search className="h-5 w-5 text-gray-400 ml-3" />
 //                                 <input
-//                                     onChange={(e) => setSearchQuery(e.target.value)}
+//                                     ref={inputRef}
 //                                     type="text"
-//                                     placeholder="Search properties..."
-//                                     className="w-full py-2 pl-10 pr-3 border border-gray-100 rounded-md bg-white shadow-lg"
+//                                     placeholder="Search properties, projects..."
+//                                     className="flex-1 py-2.5 px-2 bg-transparent focus:outline-none text-sm"
+//                                     value={searchInput}
+//                                     onChange={handleSearchInputChange}
+//                                     onFocus={() => setIsFocused(true)}
+//                                     onBlur={() => setIsFocused(false)}
 //                                 />
+//                                 {isLoading ? (
+//                                     <Loader2 className="h-5 w-5 text-gray-400 mr-3 animate-spin" />
+//                                 ) : searchInput ? (
+//                                     <button
+//                                         type="button"
+//                                         onClick={clearSearchInput}
+//                                         className="h-5 w-5 text-gray-400 mr-3 hover:text-gray-600"
+//                                     >
+//                                         <X className="h-5 w-5" />
+//                                     </button>
+//                                 ) : null}
 //                             </div>
-//                        }
-
-//                         <div className="relative">
-//                             <select onChange={(e) => setFilterType(e.target.value)} className="appearance-none py-2 pl-3 pr-10 border border-gray-300 rounded-md bg-white cursor-pointer shadow-lg">
-//                                 <option value="all">All Types</option>
-//                                 <option value="apartment">Apartments</option>
-//                                 <option value="house">Houses</option>
-//                                 <option value="office">Offices</option>
-//                                 <option value="residential">Buildings</option>
-//                             </select>
-//                             <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none">
-//                                 <GoChevronDown size={18} />
-
-//                             </span>
-
 //                         </div>
+//                     )}
 
-//                         <div className="relative  ">
-//                             <select className="appearance-none shadow-lg py-2 pl-3 pr-10 border border-gray-300 rounded-md bg-white  cursor-pointer" onChange={(e) => setSortBy(e.target.value)}>
-//                                 <option value="">Sort</option>
-//                                 <option value="price-low">Low to High</option>
-//                                 <option value="price-high">High to Low</option>
-//                                 <option value="new-old">Latest to Old</option>
-//                                 <option value="old-new">Old to Latest</option>
-//                             </select>
-//                             <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none">
-//                                 <GoChevronDown size={18} />
-
-//                             </span>
-//                         </div>
-
-//                         {/* Advanced Filter Button */}
+//                     {/* Property Type Selector (BHK) */}
+//                     <div className="flex items-center gap-1 border border-gray-200 px-4 py-2 rounded-lg bg-white">
+//                         <span className="text-sm font-medium mr-2">BHK</span>
 //                         <button
-//                             className="flex items-center gap-2 py-2 px-4 bg-white border border-gray-300 rounded-md font-medium transition hover:bg-gray-100  shadow-lg"
-//                             onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
+//                             className={getBhkButtonClass("1")}
+//                             onClick={() => handleBhkFilter("1")}
 //                         >
-//                             <FcFilledFilter />
-//                             Advanced Filters
+//                             1
 //                         </button>
-
-
-//                     </div>
-//                     <div>
 //                         <button
-
-//                             onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
-//                             className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-blue-100 text-white bg-[#3B82F6] "
+//                             className={getBhkButtonClass("2")}
+//                             onClick={() => handleBhkFilter("2")}
 //                         >
-//                             {view === 'list' ? <List size={20} /> : <Map size={20} />}
-//                             <span className=''>{view === 'list' ? 'List View' : 'Map View'}</span>
+//                             2
+//                         </button>
+//                         <button
+//                             className={getBhkButtonClass("3")}
+//                             onClick={() => handleBhkFilter("3")}
+//                         >
+//                             3
+//                         </button>
+//                         <button
+//                             className={getBhkButtonClass("4")}
+//                             onClick={() => handleBhkFilter("4")}
+//                         >
+//                             4
 //                         </button>
 //                     </div>
-//                 </div>
 
-//                 {/* Advanced Filter Panel with Tabs */}
-//                 {advancedFilterOpen && (
-//                     <div className="mt-2 min-h-screen bg-white rounded-lg shadow-md overflow-hidden transition-all">
-//                         <div className="flex justify-start items-center justify-between border-b border-gray-100">
-//                             <div role="tablist" className="tabs font-semibold  tabs-lifted tabs-lg">
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'property' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('property')}
-//                                 >
-//                                     Property
-//                                 </a>
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'project' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('project')}
-//                                 >
-//                                     Project
-//                                 </a>
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'building' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('building')}
-//                                 >
-//                                     Building
-//                                 </a>
-//                             </div>
-
-//                             <div className="col-span-full flex justify-end gap-4 mr-2">
-//                                 <button className="px-4 py-2 border border-gray-600 rounded font-medium transition hover:bg-gray-100">
-//                                     Reset Filters
-//                                 </button>
-//                                 <button  className="px-4 py-2 bg-red-600 text-white rounded font-medium transition hover:bg-red-700">
-//                                     Apply Filters
-//                                 </button>
-//                             </div>
-//                         </div>
-
-
-//                         {/* Tab Content */}
-//                         {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
-//                         {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
-//                         {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
-//                     </div>
-//                 )}
-
-//                 {/* Applied Filters Tags */}
-//                 <ActiveFiltersDisplay />
-//                 {/* <div className="flex flex-wrap gap-2 mt-2">
-//                     {["Apartment", "Buy", "3 BHK", "Arya Nagar", "₹50L - ₹3Cr"].map((tag, index) => (
-//                         <div key={index} className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-sm">
-//                             <span>{tag}</span>
-//                             <i className="text-gray-600 cursor-pointer hover:text-red-600">✕</i>
-//                         </div>
-//                     ))}
-//                 </div> */}
-//             </div>
-//         </section>
-//     );
-// };
-
-
-const SearchSection = ({ handleViewChange, view, setSearchQuery, setFilterType, setSortBy }) => {
-    const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
-    const [activeFilterTab, setActiveFilterTab] = useState('property');
-    const [priceRange, setPriceRange] = useState([1000000, 50000000]); // 10 Lakh to 5 Crore
-    const [areaRange, setAreaRange] = useState([500, 10000]); // 500 to 10,000 sq ft
-
-    const tabStyle = "min-w-[160px] text-center";
-
-    return (
-        <section className={`bg-transparent z-50 ${view === "list" ? "py-5" : "py-2"}  font-helvetica font-medium`}>
-            <div className="px-2">
-                <div className={`flex items-center ${view === "list" ? 'justify-between' : 'justify-end gap-36'}`}>
-                    <div className="flex items-center gap-3">
-                        {
-                            view === "list" && <div className="relative min-w-96">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600"><LiaSearchengin size={25} /></span>
-                                <input
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    type="text"
-                                    placeholder="Search properties..."
-                                    className="w-full py-2 pl-10 pr-3 border border-gray-100 rounded-full bg-white shadow-lg"
-                                />
-                            </div>
-                        }
-
-                        <div className="">
-                            <select onChange={(e) => setFilterType(e.target.value)} className="appearance-none py-2 pl-3 pr-10 border border-gray-300 rounded-full bg-white cursor-pointer shadow-lg">
-                                <option value="all">All Types</option>
-                                <option value="apartment">Apartments</option>
-                                <option value="house">Houses</option>
-                                <option value="office">Offices</option>
-                                <option value="residential">Buildings</option>
-                            </select>
-                            <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none">
-                                <GoChevronDown size={18} />
-                            </span>
-                        </div>
-
-                        <div className="">
-                            <select className="appearance-none shadow-lg py-2 pl-3 pr-10 border border-gray-300 rounded-full bg-white cursor-pointer" onChange={(e) => setSortBy(e.target.value)}>
-                                <option value="">Sort</option>
-                                <option value="price-low">Low to High</option>
-                                <option value="price-high">High to Low</option>
-                                <option value="new-old">Latest to Old</option>
-                                <option value="old-new">Old to Latest</option>
-                            </select>
-                            <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none">
-                                <GoChevronDown size={18} />
-                            </span>
-                        </div>
-
-                        {/* Advanced Filter Button */}
-                        <button
-                            className="flex items-center gap-2 py-2 px-4 bg-white border border-gray-300 rounded-full font-medium transition hover:bg-gray-100 shadow-lg min-w-48"
-                            onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
-                        >
-                            <FcFilledFilter />
-                            Advanced Filters
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
-                            className="py-2 px-4 rounded-full flex items-center gap-2 hover:bg-blue-100 text-white bg-[#3B82F6]"
-                        >
-                            {view === 'list' ? <List size={20} /> : <Map size={20} />}
-                            <span className=''>{view === 'list' ? 'List View' : 'Map View'}</span>
-                        </button>
-                    </div>
-                </div>
-
-                {/* Advanced Filter Panel with Tabs - Now fixed position overlay */}
-                {advancedFilterOpen && (
-                    <div className="fixed  overflow-hidden inset-0 bg-transparent bg-opacity-30 z-50 flex items-start justify-center pt-44">
-                        <div className="w-full max-w-screen-xl min-h-screen bg-white rounded-lg shadow-xl">
-                            <div className="flex justify-between items-center border-b border-gray-100">
-                                <div role="tablist" className="tabs font-semibold tabs-lifted tabs-lg ">
-                                    <a
-                                        role="tab"
-                                        className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'property' ? 'tab-active' : ''}`}
-                                        onClick={() => setActiveFilterTab('property')}
-                                    >
-                                        Property
-                                    </a>
-                                    <a
-                                        role="tab"
-                                        className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'project' ? 'tab-active' : ''}`}
-                                        onClick={() => setActiveFilterTab('project')}
-                                    >
-                                        Project
-                                    </a>
-                                    <a
-                                        role="tab"
-                                        className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'building' ? 'tab-active' : ''}`}
-                                        onClick={() => setActiveFilterTab('building')}
-                                    >
-                                        Building
-                                    </a>
-                                </div>
-
-                                <div className="flex justify-end gap-4 mr-4">
-                                    <button
-                                        className="px-4 py-2 border border-gray-600 rounded font-medium transition hover:bg-gray-100"
-                                        onClick={() => setAdvancedFilterOpen(false)}
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        className="px-4 py-2 border border-gray-600 rounded font-medium transition hover:bg-gray-100"
-                                    >
-                                        Reset Filters
-                                    </button>
-                                    <button
-                                        className="px-4 py-2 bg-red-600 text-white rounded font-medium transition hover:bg-red-700"
-                                        onClick={() => setAdvancedFilterOpen(false)}
-                                    >
-                                        Apply Filters
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Tab Content with fixed height and scrollable */}
-                            <div className="h-[calc(80vh-100px)] overflow-y-auto p-4">
-                                {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
-                                {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
-                                {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Applied Filters Tags */}
-                {view === "list" && <div className='mt-2'><ActiveFiltersDisplay /></div>}
-            </div>
-        </section>
-    );
-};
-// const SearchSection = ({ handleViewChange, view, setSearchQuery, setFilterType, setSortBy }) => {
-//     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
-//     const [activeFilterTab, setActiveFilterTab] = useState('property');
-//     const [priceRange, setPriceRange] = useState([1000000, 50000000]); // 10 Lakh to 5 Crore
-//     const [areaRange, setAreaRange] = useState([500, 10000]); // 500 to 10,000 sq ft
-
-//     const tabStyle = "min-w-[160px] text-center";
-
-//     return (
-//         <section className="bg-[#F7F9FC] py-8 font-poppins font-medium px-24">
-//             <div className="px-2">
-//                 <div className="flex flex-wrap items-center gap-3">
-//                     <div className="relative w-1/3 shadow-md rounded-md">
-//                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600"><LiaSearchengin size={25} /></span>
-//                         <input
-//                             onChange={(e) => setSearchQuery(e.target.value)}
-//                             type="text"
-//                             placeholder="Search properties..."
-//                             className="w-full py-2 pl-10 pr-3 border border-gray-100 rounded-md bg-gray-50"
-//                         />
-//                     </div>
-
-//                     <div className="relative group">
+//                     {/* Property Type Dropdown */}
+//                     <div className="relative">
 //                         <select
-//                             onChange={(e) => setFilterType(e.target.value)}
-//                             className="appearance-none py-2 pl-3 pr-10 border-2 border-gray-200 rounded-lg bg-white cursor-pointer shadow-sm transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent hover:border-blue-300"
+//                             className="appearance-none min-w-28 text-sm py-2.5 pl-4 pr-10 rounded-lg bg-white border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-transparent"
+//                             onChange={(e) => handlePropertyTypeChange(e.target.value)}
+//                             value={propertyType}
 //                         >
 //                             <option value="all">All Types</option>
 //                             <option value="apartment">Apartments</option>
@@ -559,138 +263,3920 @@ const SearchSection = ({ handleViewChange, view, setSearchQuery, setFilterType, 
 //                             <option value="office">Offices</option>
 //                             <option value="residential">Buildings</option>
 //                         </select>
-//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 group-hover:text-blue-500 transition-colors duration-300 pointer-events-none">
-//                             <GoChevronDown size={18} className="group-hover:animate-bounce" />
+//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+//                             <ChevronDown size={16} />
 //                         </span>
-//                         <div className="absolute inset-0 border-2 border-transparent rounded-lg pointer-events-none group-hover:border-blue-300 transition-all duration-300"></div>
 //                     </div>
 
-//                     <div className="relative group">
+//                     {/* Purpose */}
+//                     <div className="relative">
 //                         <select
-//                             className="appearance-none py-2 pl-3 pr-10 border-2 border-gray-200 rounded-lg bg-white cursor-pointer shadow-sm transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-purple-400 focus:border-transparent hover:border-purple-300"
-//                             onChange={(e) => setSortBy(e.target.value)}
+//                             className="appearance-none min-w-32 text-sm py-2.5 pl-4 pr-10 rounded-lg bg-white border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-transparent"
+//                             onChange={(e) => handlePurposeChange(e.target.value)}
+//                             value={purpose}
 //                         >
-//                             <option value="">Sort</option>
-//                             <option value="price-low">Low to High</option>
-//                             <option value="price-high">High to Low</option>
-//                             <option value="new-old">Latest to Old</option>
-//                             <option value="old-new">Old to Latest</option>
+//                             <option value="" hidden>Purpose</option>
+//                             <option value="buy">Buy</option>
+//                             <option value="rent">Rent</option>
 //                         </select>
-//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 group-hover:text-purple-500 transition-colors duration-300 pointer-events-none">
-//                             <GoChevronDown size={18} className="group-hover:animate-bounce" />
+//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+//                             <ChevronDown size={16} />
 //                         </span>
-//                         <div className="absolute inset-0 border-2 border-transparent rounded-lg pointer-events-none group-hover:border-purple-300 transition-all duration-300"></div>
 //                     </div>
 
-//                     <style jsx>{`
-//     select:focus {
-//         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-//     }
-    
-//     select option {
-//         padding: 10px;
-//         background-color: white;
-//         color: #333;
-//         font-weight: 500;
-//     }
-    
-//     select option:hover {
-//         background-color: #f3f4f6;
-//     }
-    
-//     select option:checked {
-//         background-color: #e0f2fe;
-//         color: #1e40af;
-//         font-weight: 600;
-//     }
-    
-//     @keyframes subtle-pulse {
-//         0% { opacity: 0.8; }
-//         50% { opacity: 1; }
-//         100% { opacity: 0.8; }
-//     }
-    
-//     select:focus + span svg {
-//         animation: subtle-pulse 1.5s infinite;
-//         color: #3b82f6;
-//     }
-// `}</style>
-
-//                     {/* Enhanced Advanced Filter Button */}
+//                     {/* Filters button with count */}
 //                     <button
-//                         className="flex items-center gap-2 py-2 px-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-md font-medium transition transform hover:scale-105 hover:shadow-lg"
+//                         className="flex items-center gap-2 bg-white border hover:bg-gray-200 rounded-lg py-2.5 px-4 transition-colors duration-200"
 //                         onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
 //                     >
-//                         <FcFilledFilter className="bg-white rounded-full p-1" />
-//                         <span>Advanced Filters</span>
-//                     </button>
-
-//                     {/* Enhanced View Toggle Button */}
-//                     <button
-//                         onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
-//                         className={`py-2 px-4 rounded-md flex items-center gap-2 transition transform hover:scale-105 hover:shadow-lg ${view === 'list'
-//                             ? 'bg-gradient-to-r from-blue-400 to-blue-600 text-white'
-//                             : 'bg-gradient-to-r from-green-400 to-green-600 text-white'
-//                             }`}
-//                     >
-//                         {view === 'list'
-//                             ? <List size={20} className="animate-pulse" />
-//                             : <Map size={20} className="animate-pulse" />
-//                         }
-//                         <span className="font-medium">{view === 'list' ? 'List View' : 'Map View'}</span>
+//                         <FcFilledFilter size={18} />
+//                         <span className="font-medium">More Filters</span>
+//                         {Object.keys(appliedFilters).length > 0 && (
+//                             <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+//                                 {Object.keys(appliedFilters).length}
+//                             </span>
+//                         )}
 //                     </button>
 //                 </div>
 
-//                 {/* Advanced Filter Panel with Tabs */}
-//                 {advancedFilterOpen && (
-//                     <div className="mt-2 min-h-screen bg-white rounded-lg shadow-md overflow-hidden transition-all">
-//                         <div className="flex justify-start items-center justify-between border-b border-gray-100">
-//                             <div role="tablist" className="tabs font-semibold tabs-lifted tabs-lg">
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'property' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('property')}
-//                                 >
-//                                     Property
-//                                 </a>
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'project' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('project')}
-//                                 >
-//                                     Project
-//                                 </a>
-//                                 <a
-//                                     role="tab"
-//                                     className={`tab text-lg text-gray-900 ${tabStyle} ${activeFilterTab === 'building' ? 'tab-active' : ''}`}
-//                                     onClick={() => setActiveFilterTab('building')}
-//                                 >
-//                                     Building
-//                                 </a>
+//                 <div className='flex items-center gap-2'>
+//                     <ResetFilterButton onClick={handleResetFilters} />
+//                     {/* View toggle button */}
+//                     <button
+//                         onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+//                         className="py-2.5 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-800 text-white bg-gray-900 transition-colors duration-200"
+//                     >
+//                         {view === 'list' ? <Map size={18} /> : <List size={18} />}
+//                         <span className="font-medium text-sm">{view === 'list' ? 'Map View' : 'List View'}</span>
+//                     </button>
+//                 </div>
+//             </div>
+
+//             {/* Advanced Filter Panel with Tabs */}
+//             {advancedFilterOpen && (
+//                 <>
+//                     {/* Apply overflow-hidden to body when filter is open */}
+//                     <style jsx global>{`
+//                         body {
+//                             overflow: hidden;
+//                         }
+//                     `}</style>
+
+//                     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+//                         <div className="w-full max-w-7xl bg-white rounded-xl shadow-2xl flex flex-col h-auto max-h-[95vh]">
+//                             <div className="flex justify-between items-center border-b border-gray-100 px-6 py-4 flex-shrink-0">
+//                                 <div role="tablist" className="flex gap-2 font-medium">
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'property'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('property')}
+//                                     >
+//                                         Property
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'project'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('project')}
+//                                     >
+//                                         Project
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'building'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('building')}
+//                                     >
+//                                         Building
+//                                     </button>
+//                                 </div>
+
+//                                 <div className="flex gap-3">
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Cancel
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={resetAllFilters}
+//                                     >
+//                                         Reset Filters
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition hover:bg-red-700"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Apply Filters
+//                                     </button>
+//                                 </div>
 //                             </div>
 
-//                             <div className="col-span-full flex justify-end gap-4 mr-2">
-//                                 <button className="px-4 py-2 border border-gray-600 rounded font-medium transition hover:bg-gray-100">
-//                                     Reset Filters
-//                                 </button>
-//                                 <button className="px-4 py-2 bg-red-600 text-white rounded font-medium transition hover:bg-red-700">
-//                                     Apply Filters
-//                                 </button>
+//                             {/* Tab Content with auto height and scrollable */}
+//                             <div className="p-6 overflow-y-auto ">
+//                                 {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
 //                             </div>
 //                         </div>
-
-//                         {/* Tab Content */}
-//                         {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
-//                         {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
-//                         {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
 //                     </div>
-//                 )}
-
-//                 {/* Applied Filters Tags */}
-//                 <ActiveFiltersDisplay />
-//             </div>
+//                 </>
+//             )}
 //         </section>
 //     );
 // };
 
+// export default SearchSection;
+
+
+
+
+
+// import React, { useState, useEffect, useRef, useCallback } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import {
+//     applyFilter,
+//     setSearchResults,
+//     getAllProperties,
+//     getAllProjects,
+//     getAllBuildings
+// } from '../redux/features/Map/mapSlice';
+// import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
+// import { FcFilledFilter } from "react-icons/fc";
+// import axios from 'axios';
+// import {
+//     Map,
+//     List,
+//     ChevronDown,
+//     Search,
+//     X,
+//     Loader2
+// } from 'lucide-react';
+// import ResetFilterButton from './ResetFilterButton';
+// import { base_url } from '../utils/base_url';
+
+// const SearchSection = ({
+//     handleViewChange,
+//     view,
+//     searchQuery,
+//     setSearchQuery,
+//     resetAllFilters,
+//     activeFiltersCount = 0,
+//     variant = 'default',
+//     className = '',
+//     showFilterDisplay = true
+// }) => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
+//     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
+//     const [activeFilterTab, setActiveFilterTab] = useState('property');
+//     const [isFocused, setIsFocused] = useState(false);
+//     const [isLoading, setIsLoading] = useState(false);
+
+//     // Search-related states
+//     const [searchInput, setSearchInput] = useState('');
+//     const inputRef = useRef(null);
+
+//     // State for local filters
+//     const [bedrooms, setBedrooms] = useState(appliedFilters?.bedrooms || "");
+//     const [propertyType, setPropertyType] = useState(appliedFilters?.propertyType || "all");
+//     const [purpose, setPurpose] = useState(appliedFilters?.purpose || "");
+
+//     // Function to determine active state for BHK buttons
+//     const getBhkButtonClass = (value) => {
+//         if (bedrooms === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Handler for BHK filter
+//     const handleBhkFilter = (value) => {
+//         const newValue = bedrooms === value ? "" : value;
+//         setBedrooms(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             bedrooms: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Handler for Property Type change
+//     const handlePropertyTypeChange = (value) => {
+//         setPropertyType(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             propertyType: value === "all" ? undefined : [value],
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Handler for Purpose change
+//     const handlePurposeChange = (value) => {
+//         setPurpose(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             purpose: value === "" ? undefined : value,
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Reset local filters
+//     const handleResetFilters = () => {
+//         setBedrooms("");
+//         setPropertyType("all");
+//         setPurpose("");
+//         setSearchInput("");
+//         resetAllFilters();
+//     };
+
+//     // Debounce function for search
+//     const debounce = (func, delay) => {
+//         let timeoutId;
+//         return function (...args) {
+//             clearTimeout(timeoutId);
+//             timeoutId = setTimeout(() => {
+//                 func.apply(this, args);
+//             }, delay);
+//         };
+//     };
+
+//     // Handle search input change with debounce
+//     const handleSearchInputChange = (e) => {
+//         const value = e.target.value;
+//         setSearchInput(value);
+//         debouncedSearch(value);
+//     };
+
+//     // Function to handle search
+//     const handleSearch = async (value) => {
+//         if (!value || value.trim() === '') {
+//             // When search is empty, fetch all data
+//             dispatch(getAllProperties());
+//             dispatch(getAllProjects());
+//             dispatch(getAllBuildings());
+//             return;
+//         }
+
+//         setIsLoading(true);
+//         try {
+//             const response = await axios.get(`${base_url}/api/web-search/unified-search`, {
+//                 params: {
+//                     searchTerm: value.trim(),
+//                     // entityType: activeFilterTab !== 'property' ? activeFilterTab : undefined,
+//                     // limit: 10
+//                 }
+//             });
+
+//             if (response.data.success) {
+//                 // Log results to console as requested
+//                 console.log('Search Results:', response.data.results);
+//                 dispatch(setSearchResults(response.data.results));
+//             } else {
+//                 console.error('Search failed:', response.data.message);
+//             }
+//         } catch (error) {
+//             console.error('Error performing search:', error.response?.data?.message || error.message);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     // Create debounced search function with useCallback to maintain reference
+//     const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+//     // Clear search input
+//     const clearSearchInput = () => {
+//         setSearchInput('');
+//         // Immediately fetch all data when search is cleared
+//         dispatch(getAllProperties());
+//         dispatch(getAllProjects());
+//         dispatch(getAllBuildings());
+//         inputRef.current?.focus();
+//     };
+
+//     // Auto-focus the search input when view changes to 'list'
+//     useEffect(() => {
+//         if (view === 'list' && inputRef.current) {
+//             inputRef.current.focus();
+//         }
+//     }, [view]);
+
+//     // Initial data load
+//     // useEffect(() => {
+//     //     if (!searchInput || searchInput.trim() === '') {
+//     //         dispatch(getAllProperties());
+//     //         dispatch(getAllProjects());
+//     //         dispatch(getAllBuildings());
+//     //     }
+//     // }, [dispatch]);
+
+//     return (
+//         <section className={`bg-transparent px-6 py-1 mb-2 ${className}`}>
+//             <div className="flex items-center justify-between w-full gap-4">
+//                 <div className="flex items-center gap-3 flex-wrap">
+//                     {/* Search input replacing Easy search button */}
+//                     {view === 'list' && (
+//                         <div className="flex items-center">
+//                             <div className={`flex items-center bg-white border ${isFocused
+//                                 ? "border-gray-400 ring-2 ring-gray-100"
+//                                 : "border-gray-200"
+//                                 } rounded-lg w-64 md:w-64 transition-all duration-200`}>
+//                                 <Search className="h-5 w-5 text-gray-400 ml-3" />
+//                                 <input
+//                                     ref={inputRef}
+//                                     type="text"
+//                                     placeholder="Search properties, projects..."
+//                                     className="flex-1 py-2.5 px-2 bg-transparent focus:outline-none text-sm"
+//                                     value={searchInput}
+//                                     onChange={handleSearchInputChange}
+//                                     onFocus={() => setIsFocused(true)}
+//                                     onBlur={() => setIsFocused(false)}
+//                                 />
+//                                 {isLoading ? (
+//                                     <Loader2 className="h-5 w-5 text-gray-400 mr-3 animate-spin" />
+//                                 ) : searchInput ? (
+//                                     <button
+//                                         type="button"
+//                                         onClick={clearSearchInput}
+//                                         className="h-5 w-5 text-gray-400 mr-3 hover:text-gray-600"
+//                                     >
+//                                         <X className="h-5 w-5" />
+//                                     </button>
+//                                 ) : null}
+//                             </div>
+//                         </div>
+//                     )}
+
+//                     {/* Property Type Selector (BHK) */}
+//                     <div className="flex items-center gap-1 border border-gray-200 px-4 py-2 rounded-lg bg-white">
+//                         <span className="text-sm font-medium mr-2">BHK</span>
+//                         <button
+//                             className={getBhkButtonClass("1")}
+//                             onClick={() => handleBhkFilter("1")}
+//                         >
+//                             1
+//                         </button>
+//                         <button
+//                             className={getBhkButtonClass("2")}
+//                             onClick={() => handleBhkFilter("2")}
+//                         >
+//                             2
+//                         </button>
+//                         <button
+//                             className={getBhkButtonClass("3")}
+//                             onClick={() => handleBhkFilter("3")}
+//                         >
+//                             3
+//                         </button>
+//                         <button
+//                             className={getBhkButtonClass("4")}
+//                             onClick={() => handleBhkFilter("4")}
+//                         >
+//                             4
+//                         </button>
+//                     </div>
+
+//                     {/* Property Type Dropdown */}
+//                     <div className="relative">
+//                         <select
+//                             className="appearance-none min-w-28 text-sm py-2.5 pl-4 pr-10 rounded-lg bg-white border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-transparent"
+//                             onChange={(e) => handlePropertyTypeChange(e.target.value)}
+//                             value={propertyType}
+//                         >
+//                             <option value="all">All Types</option>
+//                             <option value="apartment">Apartments</option>
+//                             <option value="house">Houses</option>
+//                             <option value="office">Offices</option>
+//                             <option value="residential">Buildings</option>
+//                         </select>
+//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+//                             <ChevronDown size={16} />
+//                         </span>
+//                     </div>
+
+//                     {/* Purpose */}
+//                     <div className="relative">
+//                         <select
+//                             className="appearance-none min-w-32 text-sm py-2.5 pl-4 pr-10 rounded-lg bg-white border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-transparent"
+//                             onChange={(e) => handlePurposeChange(e.target.value)}
+//                             value={purpose}
+//                         >
+//                             <option value="" hidden>Purpose</option>
+//                             <option value="buy">Buy</option>
+//                             <option value="rent">Rent</option>
+//                         </select>
+//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+//                             <ChevronDown size={16} />
+//                         </span>
+//                     </div>
+
+//                     {/* Filters button with count */}
+//                     <button
+//                         className="flex items-center gap-2 bg-white border hover:bg-gray-200 rounded-lg py-2.5 px-4 transition-colors duration-200"
+//                         onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
+//                     >
+//                         <FcFilledFilter size={18} />
+//                         <span className="font-medium">More Filters</span>
+//                         {Object.keys(appliedFilters).length > 0 && (
+//                             <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+//                                 {Object.keys(appliedFilters).length}
+//                             </span>
+//                         )}
+//                     </button>
+//                 </div>
+
+//                 <div className='flex items-center gap-2'>
+//                     <ResetFilterButton onClick={handleResetFilters} />
+//                     {/* View toggle button */}
+//                     <button
+//                         onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+//                         className="py-2.5 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-800 text-white bg-gray-900 transition-colors duration-200"
+//                     >
+//                         {view === 'list' ? <Map size={18} /> : <List size={18} />}
+//                         <span className="font-medium text-sm">{view === 'list' ? 'Map View' : 'List View'}</span>
+//                     </button>
+//                 </div>
+//             </div>
+
+//             {/* Advanced Filter Panel with Tabs */}
+//             {advancedFilterOpen && (
+//                 <>
+//                     {/* Apply overflow-hidden to body when filter is open */}
+//                     <style jsx global>{`
+//                         body {
+//                             overflow: hidden;
+//                         }
+//                     `}</style>
+
+//                     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+//                         <div className="w-full max-w-7xl bg-white rounded-xl shadow-2xl flex flex-col h-auto max-h-[95vh]">
+//                             <div className="flex justify-between items-center border-b border-gray-100 px-6 py-4 flex-shrink-0">
+//                                 <div role="tablist" className="flex gap-2 font-medium">
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'property'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('property')}
+//                                     >
+//                                         Property
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'project'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('project')}
+//                                     >
+//                                         Project
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'building'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('building')}
+//                                     >
+//                                         Building
+//                                     </button>
+//                                 </div>
+
+//                                 <div className="flex gap-3">
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Cancel
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={resetAllFilters}
+//                                     >
+//                                         Reset Filters
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition hover:bg-red-700"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Apply Filters
+//                                     </button>
+//                                 </div>
+//                             </div>
+
+//                             {/* Tab Content with auto height and scrollable */}
+//                             <div className="p-6 overflow-y-auto ">
+//                                 {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </>
+//             )}
+//         </section>
+//     );
+// };
+
+// export default SearchSection;
+
+
+// import React, { useState, useEffect, useRef, useCallback } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import {
+//     applyFilter,
+//     setSearchResults,
+//     getAllProperties,
+//     getAllProjects,
+//     getAllBuildings
+// } from '../redux/features/Map/mapSlice';
+// import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
+// import { FcFilledFilter } from "react-icons/fc";
+// import axios from 'axios';
+// import {
+//     Map,
+//     List,
+//     ChevronDown,
+//     Search,
+//     X,
+//     Loader2
+// } from 'lucide-react';
+// import ResetFilterButton from './ResetFilterButton';
+// import { base_url } from '../utils/base_url';
+
+// const SearchSection = ({
+//     handleViewChange,
+//     view,
+//     searchQuery,
+//     setSearchQuery,
+//     resetAllFilters,
+//     activeFiltersCount = 0,
+//     variant = 'default',
+//     className = '',
+//     showFilterDisplay = true
+// }) => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
+//     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
+//     const [activeFilterTab, setActiveFilterTab] = useState('property');
+//     const [isFocused, setIsFocused] = useState(false);
+//     const [isLoading, setIsLoading] = useState(false);
+
+//     // Search-related states
+//     const [searchInput, setSearchInput] = useState('');
+//     const inputRef = useRef(null);
+
+//     // State for local filters
+//     const [bedrooms, setBedrooms] = useState(appliedFilters?.bedrooms || "");
+//     const [propertyType, setPropertyType] = useState(appliedFilters?.propertyType || "all");
+//     const [purpose, setPurpose] = useState(appliedFilters?.purpose || "");
+
+//     // New state for BHK popup
+//     const [bhkPopupOpen, setBhkPopupOpen] = useState(false);
+//     const bhkButtonRef = useRef(null);
+
+//     // Function to determine active state for BHK buttons
+//     const getBhkButtonClass = (value) => {
+//         if (bedrooms === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Handler for BHK filter
+//     const handleBhkFilter = (value) => {
+//         const newValue = bedrooms === value ? "" : value;
+//         setBedrooms(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             bedrooms: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBhkPopupOpen(false);
+//     };
+
+//     // Handle clicking outside the BHK popup
+//     useEffect(() => {
+//         const handleClickOutside = (event) => {
+//             if (bhkButtonRef.current && !bhkButtonRef.current.contains(event.target)) {
+//                 setBhkPopupOpen(false);
+//             }
+//         };
+
+//         document.addEventListener("mousedown", handleClickOutside);
+//         return () => {
+//             document.removeEventListener("mousedown", handleClickOutside);
+//         };
+//     }, []);
+
+//     // Handler for Property Type change
+//     const handlePropertyTypeChange = (value) => {
+//         setPropertyType(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             propertyType: value === "all" ? undefined : [value],
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Handler for Purpose change
+//     const handlePurposeChange = (value) => {
+//         setPurpose(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             purpose: value === "" ? undefined : value,
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Reset local filters
+//     const handleResetFilters = () => {
+//         setBedrooms("");
+//         setPropertyType("all");
+//         setPurpose("");
+//         setSearchInput("");
+//         resetAllFilters();
+//     };
+
+//     // Debounce function for search
+//     const debounce = (func, delay) => {
+//         let timeoutId;
+//         return function (...args) {
+//             clearTimeout(timeoutId);
+//             timeoutId = setTimeout(() => {
+//                 func.apply(this, args);
+//             }, delay);
+//         };
+//     };
+
+//     // Handle search input change with debounce
+//     const handleSearchInputChange = (e) => {
+//         const value = e.target.value;
+//         setSearchInput(value);
+//         debouncedSearch(value);
+//     };
+
+//     // Function to handle search
+//     const handleSearch = async (value) => {
+//         if (!value || value.trim() === '') {
+//             // When search is empty, fetch all data
+//             dispatch(getAllProperties());
+//             dispatch(getAllProjects());
+//             dispatch(getAllBuildings());
+//             return;
+//         }
+
+//         setIsLoading(true);
+//         try {
+//             const response = await axios.get(`${base_url}/api/web-search/unified-search`, {
+//                 params: {
+//                     searchTerm: value.trim(),
+//                     // entityType: activeFilterTab !== 'property' ? activeFilterTab : undefined,
+//                     // limit: 10
+//                 }
+//             });
+
+//             if (response.data.success) {
+//                 // Log results to console as requested
+//                 console.log('Search Results:', response.data.results);
+//                 dispatch(setSearchResults(response.data.results));
+//             } else {
+//                 console.error('Search failed:', response.data.message);
+//             }
+//         } catch (error) {
+//             console.error('Error performing search:', error.response?.data?.message || error.message);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     // Create debounced search function with useCallback to maintain reference
+//     const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+//     // Clear search input
+//     const clearSearchInput = () => {
+//         setSearchInput('');
+//         // Immediately fetch all data when search is cleared
+//         dispatch(getAllProperties());
+//         dispatch(getAllProjects());
+//         dispatch(getAllBuildings());
+//         inputRef.current?.focus();
+//     };
+
+//     // Auto-focus the search input when view changes to 'list'
+//     useEffect(() => {
+//         if (view === 'list' && inputRef.current) {
+//             inputRef.current.focus();
+//         }
+//     }, [view]);
+
+//     return (
+//         <section className={`bg-transparent px-6 py-1 mb-2 ${className}`}>
+//             <div className="flex items-center justify-between w-full gap-4">
+//                 <div className="flex items-center gap-3 flex-wrap">
+//                     {/* Search input replacing Easy search button */}
+//                     {view === 'list' && (
+//                         <div className="flex items-center">
+//                             <div className={`flex items-center bg-white border ${isFocused
+//                                 ? "border-gray-400 ring-2 ring-gray-100"
+//                                 : "border-gray-200"
+//                                 } rounded-lg w-64 md:w-64 transition-all duration-200`}>
+//                                 <Search className="h-5 w-5 text-gray-400 ml-3" />
+//                                 <input
+//                                     ref={inputRef}
+//                                     type="text"
+//                                     placeholder="Search properties, projects..."
+//                                     className="flex-1 py-2.5 px-2 bg-transparent focus:outline-none text-sm"
+//                                     value={searchInput}
+//                                     onChange={handleSearchInputChange}
+//                                     onFocus={() => setIsFocused(true)}
+//                                     onBlur={() => setIsFocused(false)}
+//                                 />
+//                                 {isLoading ? (
+//                                     <Loader2 className="h-5 w-5 text-gray-400 mr-3 animate-spin" />
+//                                 ) : searchInput ? (
+//                                     <button
+//                                         type="button"
+//                                         onClick={clearSearchInput}
+//                                         className="h-5 w-5 text-gray-400 mr-3 hover:text-gray-600"
+//                                     >
+//                                         <X className="h-5 w-5" />
+//                                     </button>
+//                                 ) : null}
+//                             </div>
+//                         </div>
+//                     )}
+
+//                     {/* Custom Bedrooms Button with Popup */}
+//                     <div className="relative" ref={bhkButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors"
+//                             onClick={() => setBhkPopupOpen(!bhkPopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {bedrooms ? `${bedrooms} Bedrooms` : "Bedrooms"}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bhkPopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* BHK Selection Popup */}
+//                         {bhkPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-64">
+//                                 <div className="flex flex-col gap-2">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bedrooms</h3>
+//                                     <div className="flex items-center gap-2">
+//                                         <button
+//                                             className={getBhkButtonClass("1")}
+//                                             onClick={() => handleBhkFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("2")}
+//                                             onClick={() => handleBhkFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("3")}
+//                                             onClick={() => handleBhkFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("4")}
+//                                             onClick={() => handleBhkFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("5")}
+//                                             onClick={() => handleBhkFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("6")}
+//                                             onClick={() => handleBhkFilter("6")}
+//                                         >
+//                                             6
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Property Type Dropdown */}
+//                     <div className="relative">
+//                         <select
+//                             className="appearance-none min-w-28 text-sm py-2.5 pl-4 pr-10 rounded-lg bg-white border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-transparent"
+//                             onChange={(e) => handlePropertyTypeChange(e.target.value)}
+//                             value={propertyType}
+//                         >
+//                             <option value="all">All Types</option>
+//                             <option value="apartment">Apartments</option>
+//                             <option value="house">Houses</option>
+//                             <option value="office">Offices</option>
+//                             <option value="residential">Buildings</option>
+//                         </select>
+//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+//                             <ChevronDown size={16} />
+//                         </span>
+//                     </div>
+
+//                     {/* Purpose */}
+//                     <div className="relative">
+//                         <select
+//                             className="appearance-none min-w-32 text-sm py-2.5 pl-4 pr-10 rounded-lg bg-white border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-transparent"
+//                             onChange={(e) => handlePurposeChange(e.target.value)}
+//                             value={purpose}
+//                         >
+//                             <option value="" hidden>Purpose</option>
+//                             <option value="buy">Buy</option>
+//                             <option value="rent">Rent</option>
+//                         </select>
+//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+//                             <ChevronDown size={16} />
+//                         </span>
+//                     </div>
+
+//                     {/* Filters button with count */}
+//                     <button
+//                         className="flex items-center gap-2 bg-white border hover:bg-gray-200 rounded-lg py-2.5 px-4 transition-colors duration-200"
+//                         onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
+//                     >
+//                         <FcFilledFilter size={18} />
+//                         <span className="font-medium">More Filters</span>
+//                         {Object.keys(appliedFilters).length > 0 && (
+//                             <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+//                                 {Object.keys(appliedFilters).length}
+//                             </span>
+//                         )}
+//                     </button>
+//                 </div>
+
+//                 <div className='flex items-center gap-2'>
+//                     <ResetFilterButton onClick={handleResetFilters} />
+//                     {/* View toggle button */}
+//                     <button
+//                         onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+//                         className="py-2.5 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-800 text-white bg-gray-900 transition-colors duration-200"
+//                     >
+//                         {view === 'list' ? <Map size={18} /> : <List size={18} />}
+//                         <span className="font-medium text-sm">{view === 'list' ? 'Map View' : 'List View'}</span>
+//                     </button>
+//                 </div>
+//             </div>
+
+//             {/* Advanced Filter Panel with Tabs */}
+//             {advancedFilterOpen && (
+//                 <>
+//                     {/* Apply overflow-hidden to body when filter is open */}
+//                     <style jsx global>{`
+//                         body {
+//                             overflow: hidden;
+//                         }
+//                     `}</style>
+
+//                     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+//                         <div className="w-full max-w-7xl bg-white rounded-xl shadow-2xl flex flex-col h-auto max-h-[95vh]">
+//                             <div className="flex justify-between items-center border-b border-gray-100 px-6 py-4 flex-shrink-0">
+//                                 <div role="tablist" className="flex gap-2 font-medium">
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'property'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('property')}
+//                                     >
+//                                         Property
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'project'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('project')}
+//                                     >
+//                                         Project
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'building'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('building')}
+//                                     >
+//                                         Building
+//                                     </button>
+//                                 </div>
+
+//                                 <div className="flex gap-3">
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Cancel
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={resetAllFilters}
+//                                     >
+//                                         Reset Filters
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition hover:bg-red-700"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Apply Filters
+//                                     </button>
+//                                 </div>
+//                             </div>
+
+//                             {/* Tab Content with auto height and scrollable */}
+//                             <div className="p-6 overflow-y-auto ">
+//                                 {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </>
+//             )}
+//         </section>
+//     );
+// };
+
+// export default SearchSection;
+
+
+// import React, { useState, useEffect, useRef, useCallback } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import {
+//     applyFilter,
+//     setSearchResults,
+//     getAllProperties,
+//     getAllProjects,
+//     getAllBuildings
+// } from '../redux/features/Map/mapSlice';
+// import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
+// import { FcFilledFilter } from "react-icons/fc";
+// import axios from 'axios';
+// import {
+//     Map,
+//     List,
+//     ChevronDown,
+//     Search,
+//     X,
+//     Loader2
+// } from 'lucide-react';
+// import ResetFilterButton from './ResetFilterButton';
+// import { base_url } from '../utils/base_url';
+
+// const SearchSection = ({
+//     handleViewChange,
+//     view,
+//     searchQuery,
+//     setSearchQuery,
+//     resetAllFilters,
+//     activeFiltersCount = 0,
+//     variant = 'default',
+//     className = '',
+//     showFilterDisplay = true
+// }) => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
+//     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
+//     const [activeFilterTab, setActiveFilterTab] = useState('property');
+//     const [isFocused, setIsFocused] = useState(false);
+//     const [isLoading, setIsLoading] = useState(false);
+
+//     // Search-related states
+//     const [searchInput, setSearchInput] = useState('');
+//     const inputRef = useRef(null);
+
+//     // State for local filters
+//     const [bedrooms, setBedrooms] = useState(appliedFilters?.bedrooms || "");
+//     const [baths, setBaths] = useState(appliedFilters?.baths || "");
+//     const [propertyType, setPropertyType] = useState(appliedFilters?.propertyType || "all");
+//     const [purpose, setPurpose] = useState(appliedFilters?.purpose || "");
+
+//     // States for popups
+//     const [bhkPopupOpen, setBhkPopupOpen] = useState(false);
+//     const [bathsPopupOpen, setBathsPopupOpen] = useState(false);
+
+//     // Refs for popup handling
+//     const bhkButtonRef = useRef(null);
+//     const bathsButtonRef = useRef(null);
+
+//     // Function to determine active state for BHK buttons
+//     const getBhkButtonClass = (value) => {
+//         if (bedrooms === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Function to determine active state for Bathroom buttons
+//     const getBathButtonClass = (value) => {
+//         if (baths === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Handler for BHK filter
+//     const handleBhkFilter = (value) => {
+//         const newValue = bedrooms === value ? "" : value;
+//         setBedrooms(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             bedrooms: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBhkPopupOpen(false);
+//     };
+
+//     // Handler for Bathrooms filter
+//     const handleBathFilter = (value) => {
+//         const newValue = baths === value ? "" : value;
+//         setBaths(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             baths: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBathsPopupOpen(false);
+//     };
+
+//     // Handle clicking outside the popups
+//     useEffect(() => {
+//         const handleClickOutside = (event) => {
+//             if (bhkButtonRef.current && !bhkButtonRef.current.contains(event.target)) {
+//                 setBhkPopupOpen(false);
+//             }
+//             if (bathsButtonRef.current && !bathsButtonRef.current.contains(event.target)) {
+//                 setBathsPopupOpen(false);
+//             }
+//         };
+
+//         document.addEventListener("mousedown", handleClickOutside);
+//         return () => {
+//             document.removeEventListener("mousedown", handleClickOutside);
+//         };
+//     }, []);
+
+//     // Handler for Property Type change
+//     const handlePropertyTypeChange = (value) => {
+//         setPropertyType(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             propertyType: value === "all" ? undefined : [value],
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Handler for Purpose change
+//     const handlePurposeChange = (value) => {
+//         setPurpose(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             purpose: value === "" ? undefined : value,
+//             filterType: 'property'
+//         }));
+//     };
+
+//     // Reset local filters
+//     const handleResetFilters = () => {
+//         setBedrooms("");
+//         setBaths("");
+//         setPropertyType("all");
+//         setPurpose("");
+//         setSearchInput("");
+//         resetAllFilters();
+//     };
+
+//     // Debounce function for search
+//     const debounce = (func, delay) => {
+//         let timeoutId;
+//         return function (...args) {
+//             clearTimeout(timeoutId);
+//             timeoutId = setTimeout(() => {
+//                 func.apply(this, args);
+//             }, delay);
+//         };
+//     };
+
+//     // Handle search input change with debounce
+//     const handleSearchInputChange = (e) => {
+//         const value = e.target.value;
+//         setSearchInput(value);
+//         debouncedSearch(value);
+//     };
+
+//     // Function to handle search
+//     const handleSearch = async (value) => {
+//         if (!value || value.trim() === '') {
+//             // When search is empty, fetch all data
+//             dispatch(getAllProperties());
+//             dispatch(getAllProjects());
+//             dispatch(getAllBuildings());
+//             return;
+//         }
+
+//         setIsLoading(true);
+//         try {
+//             const response = await axios.get(`${base_url}/api/web-search/unified-search`, {
+//                 params: {
+//                     searchTerm: value.trim(),
+//                     // entityType: activeFilterTab !== 'property' ? activeFilterTab : undefined,
+//                     // limit: 10
+//                 }
+//             });
+
+//             if (response.data.success) {
+//                 // Log results to console as requested
+//                 console.log('Search Results:', response.data.results);
+//                 dispatch(setSearchResults(response.data.results));
+//             } else {
+//                 console.error('Search failed:', response.data.message);
+//             }
+//         } catch (error) {
+//             console.error('Error performing search:', error.response?.data?.message || error.message);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     // Create debounced search function with useCallback to maintain reference
+//     const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+//     // Clear search input
+//     const clearSearchInput = () => {
+//         setSearchInput('');
+//         // Immediately fetch all data when search is cleared
+//         dispatch(getAllProperties());
+//         dispatch(getAllProjects());
+//         dispatch(getAllBuildings());
+//         inputRef.current?.focus();
+//     };
+
+//     // Auto-focus the search input when view changes to 'list'
+//     useEffect(() => {
+//         if (view === 'list' && inputRef.current) {
+//             inputRef.current.focus();
+//         }
+//     }, [view]);
+
+//     return (
+//         <section className={`bg-transparent px-6 py-1 mb-2 ${className}`}>
+//             <div className="flex items-center justify-between w-full gap-4">
+//                 <div className="flex items-center gap-3 flex-wrap">
+//                     {/* Search input replacing Easy search button */}
+//                     {view === 'list' && (
+//                         <div className="flex items-center">
+//                             <div className={`flex items-center bg-white border ${isFocused
+//                                 ? "border-gray-400 ring-2 ring-gray-100"
+//                                 : "border-gray-200"
+//                                 } rounded-lg w-64 md:w-64 transition-all duration-200`}>
+//                                 <Search className="h-5 w-5 text-gray-400 ml-3" />
+//                                 <input
+//                                     ref={inputRef}
+//                                     type="text"
+//                                     placeholder="Search properties, projects..."
+//                                     className="flex-1 py-2.5 px-2 bg-transparent focus:outline-none text-sm"
+//                                     value={searchInput}
+//                                     onChange={handleSearchInputChange}
+//                                     onFocus={() => setIsFocused(true)}
+//                                     onBlur={() => setIsFocused(false)}
+//                                 />
+//                                 {isLoading ? (
+//                                     <Loader2 className="h-5 w-5 text-gray-400 mr-3 animate-spin" />
+//                                 ) : searchInput ? (
+//                                     <button
+//                                         type="button"
+//                                         onClick={clearSearchInput}
+//                                         className="h-5 w-5 text-gray-400 mr-3 hover:text-gray-600"
+//                                     >
+//                                         <X className="h-5 w-5" />
+//                                     </button>
+//                                 ) : null}
+//                             </div>
+//                         </div>
+//                     )}
+
+//                     {/* Custom Bedrooms Button with Popup */}
+//                     <div className="relative" ref={bhkButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors"
+//                             onClick={() => setBhkPopupOpen(!bhkPopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {bedrooms ? `${bedrooms} Beds` : "Beds"}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bhkPopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* BHK Selection Popup */}
+//                         {bhkPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+//                                 <div className="flex flex-col gap-2">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bedrooms</h3>
+//                                     <div className="flex items-center gap-2 flex-wrap">
+//                                         <button
+//                                             className={getBhkButtonClass("1")}
+//                                             onClick={() => handleBhkFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("2")}
+//                                             onClick={() => handleBhkFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("3")}
+//                                             onClick={() => handleBhkFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("4")}
+//                                             onClick={() => handleBhkFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("5")}
+//                                             onClick={() => handleBhkFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+                                        
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Bathrooms Button with Popup */}
+//                     <div className="relative" ref={bathsButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors"
+//                             onClick={() => setBathsPopupOpen(!bathsPopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {baths ? `${baths} Baths` : "Baths"}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bathsPopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* Bathrooms Selection Popup */}
+//                         {bathsPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-64">
+//                                 <div className="flex flex-col gap-2">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bathrooms</h3>
+//                                     <div className="flex items-center gap-2 flex-wrap">
+//                                         <button
+//                                             className={getBathButtonClass("1")}
+//                                             onClick={() => handleBathFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("2")}
+//                                             onClick={() => handleBathFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("3")}
+//                                             onClick={() => handleBathFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("4")}
+//                                             onClick={() => handleBathFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("5")}
+//                                             onClick={() => handleBathFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Property Type Dropdown */}
+//                     <div className="relative">
+//                         <select
+//                             className="appearance-none min-w-28 text-sm py-2.5 pl-4 pr-10 rounded-lg bg-white border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-transparent"
+//                             onChange={(e) => handlePropertyTypeChange(e.target.value)}
+//                             value={propertyType}
+//                         >
+//                             <option value="all">All Types</option>
+//                             <option value="apartment">Apartments</option>
+//                             <option value="house">Houses</option>
+//                             <option value="office">Offices</option>
+//                             <option value="residential">Buildings</option>
+//                         </select>
+//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+//                             <ChevronDown size={16} />
+//                         </span>
+//                     </div>
+
+//                     {/* Purpose */}
+//                     <div className="relative">
+//                         <select
+//                             className="appearance-none min-w-32 text-sm py-2.5 pl-4 pr-10 rounded-lg bg-white border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-transparent"
+//                             onChange={(e) => handlePurposeChange(e.target.value)}
+//                             value={purpose}
+//                         >
+//                             <option value="" hidden>Purpose</option>
+//                             <option value="buy">Buy</option>
+//                             <option value="rent">Rent</option>
+//                         </select>
+//                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+//                             <ChevronDown size={16} />
+//                         </span>
+//                     </div>
+
+//                     {/* Filters button with count */}
+//                     <button
+//                         className="flex items-center gap-2 bg-white border hover:bg-gray-200 rounded-lg py-2.5 px-4 transition-colors duration-200"
+//                         onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
+//                     >
+//                         <FcFilledFilter size={18} />
+//                         <span className="font-medium">More Filters</span>
+//                         {Object.keys(appliedFilters).length > 0 && (
+//                             <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+//                                 {Object.keys(appliedFilters).length}
+//                             </span>
+//                         )}
+//                     </button>
+//                 </div>
+
+//                 <div className='flex items-center gap-2'>
+//                     <ResetFilterButton onClick={handleResetFilters} />
+//                     {/* View toggle button */}
+//                     <button
+//                         onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+//                         className="py-2.5 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-800 text-white bg-gray-900 transition-colors duration-200"
+//                     >
+//                         {view === 'list' ? <Map size={18} /> : <List size={18} />}
+//                         <span className="font-medium text-sm">{view === 'list' ? 'Map View' : 'List View'}</span>
+//                     </button>
+//                 </div>
+//             </div>
+
+//             {/* Advanced Filter Panel with Tabs */}
+//             {advancedFilterOpen && (
+//                 <>
+//                     {/* Apply overflow-hidden to body when filter is open */}
+//                     <style jsx global>{`
+//                         body {
+//                             overflow: hidden;
+//                         }
+//                     `}</style>
+
+//                     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+//                         <div className="w-full max-w-7xl bg-white rounded-xl shadow-2xl flex flex-col h-auto max-h-[95vh]">
+//                             <div className="flex justify-between items-center border-b border-gray-100 px-6 py-4 flex-shrink-0">
+//                                 <div role="tablist" className="flex gap-2 font-medium">
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'property'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('property')}
+//                                     >
+//                                         Property
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'project'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('project')}
+//                                     >
+//                                         Project
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'building'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('building')}
+//                                     >
+//                                         Building
+//                                     </button>
+//                                 </div>
+
+//                                 <div className="flex gap-3">
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Cancel
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={resetAllFilters}
+//                                     >
+//                                         Reset Filters
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition hover:bg-red-700"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Apply Filters
+//                                     </button>
+//                                 </div>
+//                             </div>
+
+//                             {/* Tab Content with auto height and scrollable */}
+//                             <div className="p-6 overflow-y-auto ">
+//                                 {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </>
+//             )}
+//         </section>
+//     );
+// };
+
+// export default SearchSection;
+
+
+// import React, { useState, useEffect, useRef, useCallback } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import {
+//     applyFilter,
+//     setSearchResults,
+//     getAllProperties,
+//     getAllProjects,
+//     getAllBuildings
+// } from '../redux/features/Map/mapSlice';
+// import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
+// import { FcFilledFilter } from "react-icons/fc";
+// import axios from 'axios';
+// import {
+//     Map,
+//     List,
+//     ChevronDown,
+//     Search,
+//     X,
+//     Loader2
+// } from 'lucide-react';
+// import ResetFilterButton from './ResetFilterButton';
+// import { base_url } from '../utils/base_url';
+
+// const SearchSection = ({
+//     handleViewChange,
+//     view,
+//     searchQuery,
+//     setSearchQuery,
+//     resetAllFilters,
+//     activeFiltersCount = 0,
+//     variant = 'default',
+//     className = '',
+//     showFilterDisplay = true
+// }) => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
+//     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
+//     const [activeFilterTab, setActiveFilterTab] = useState('property');
+//     const [isFocused, setIsFocused] = useState(false);
+//     const [isLoading, setIsLoading] = useState(false);
+
+//     // Search-related states
+//     const [searchInput, setSearchInput] = useState('');
+//     const inputRef = useRef(null);
+
+//     // State for local filters
+//     const [bedrooms, setBedrooms] = useState(appliedFilters?.bedrooms || "");
+//     const [baths, setBaths] = useState(appliedFilters?.baths || "");
+//     const [propertyType, setPropertyType] = useState(appliedFilters?.propertyType || "all");
+//     const [purpose, setPurpose] = useState(appliedFilters?.purpose || "");
+
+//     // States for popups
+//     const [bhkPopupOpen, setBhkPopupOpen] = useState(false);
+//     const [bathsPopupOpen, setBathsPopupOpen] = useState(false);
+//     const [propertyTypePopupOpen, setPropertyTypePopupOpen] = useState(false);
+//     const [purposePopupOpen, setPurposePopupOpen] = useState(false);
+
+//     // Refs for popup handling
+//     const bhkButtonRef = useRef(null);
+//     const bathsButtonRef = useRef(null);
+//     const propertyTypeButtonRef = useRef(null);
+//     const purposeButtonRef = useRef(null);
+
+//     // Property type options
+//     const propertyTypeOptions = [
+//         { value: "all", label: "All Types" },
+//         { value: "apartment", label: "Apartments" },
+//         { value: "house", label: "Houses" },
+//         { value: "office", label: "Offices" },
+//         { value: "residential", label: "Buildings" }
+//     ];
+
+//     // Purpose options
+//     const purposeOptions = [
+//         { value: "buy", label: "Buy" },
+//         { value: "rent", label: "Rent" }
+//     ];
+
+//     // Function to determine active state for BHK buttons
+//     const getBhkButtonClass = (value) => {
+//         if (bedrooms === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Function to determine active state for Bathroom buttons
+//     const getBathButtonClass = (value) => {
+//         if (baths === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Function for option item styles
+//     const getOptionItemClass = (optionValue, selectedValue) => {
+//         if (optionValue === selectedValue) {
+//             return "px-4 py-2 text-sm text-white bg-gray-900 rounded-md cursor-pointer hover:bg-gray-800 transition-colors";
+//         }
+//         return "px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer transition-colors";
+//     };
+
+//     // Handler for BHK filter
+//     const handleBhkFilter = (value) => {
+//         const newValue = bedrooms === value ? "" : value;
+//         setBedrooms(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             bedrooms: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBhkPopupOpen(false);
+//     };
+
+//     // Handler for Bathrooms filter
+//     const handleBathFilter = (value) => {
+//         const newValue = baths === value ? "" : value;
+//         setBaths(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             baths: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBathsPopupOpen(false);
+//     };
+
+//     // Handler for Property Type change
+//     const handlePropertyTypeChange = (value) => {
+//         setPropertyType(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             propertyType: value === "all" ? undefined : [value],
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup
+//         setPropertyTypePopupOpen(false);
+//     };
+
+//     // Handler for Purpose change
+//     const handlePurposeChange = (value) => {
+//         setPurpose(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             purpose: value === "" ? undefined : value,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup
+//         setPurposePopupOpen(false);
+//     };
+
+//     // Handle clicking outside the popups
+//     useEffect(() => {
+//         const handleClickOutside = (event) => {
+//             if (bhkButtonRef.current && !bhkButtonRef.current.contains(event.target)) {
+//                 setBhkPopupOpen(false);
+//             }
+//             if (bathsButtonRef.current && !bathsButtonRef.current.contains(event.target)) {
+//                 setBathsPopupOpen(false);
+//             }
+//             if (propertyTypeButtonRef.current && !propertyTypeButtonRef.current.contains(event.target)) {
+//                 setPropertyTypePopupOpen(false);
+//             }
+//             if (purposeButtonRef.current && !purposeButtonRef.current.contains(event.target)) {
+//                 setPurposePopupOpen(false);
+//             }
+//         };
+
+//         document.addEventListener("mousedown", handleClickOutside);
+//         return () => {
+//             document.removeEventListener("mousedown", handleClickOutside);
+//         };
+//     }, []);
+
+//     // Reset local filters
+//     const handleResetFilters = () => {
+//         setBedrooms("");
+//         setBaths("");
+//         setPropertyType("all");
+//         setPurpose("");
+//         setSearchInput("");
+//         resetAllFilters();
+//     };
+
+//     // Debounce function for search
+//     const debounce = (func, delay) => {
+//         let timeoutId;
+//         return function (...args) {
+//             clearTimeout(timeoutId);
+//             timeoutId = setTimeout(() => {
+//                 func.apply(this, args);
+//             }, delay);
+//         };
+//     };
+
+//     // Handle search input change with debounce
+//     const handleSearchInputChange = (e) => {
+//         const value = e.target.value;
+//         setSearchInput(value);
+//         debouncedSearch(value);
+//     };
+
+//     // Function to handle search
+//     const handleSearch = async (value) => {
+//         if (!value || value.trim() === '') {
+//             // When search is empty, fetch all data
+//             dispatch(getAllProperties());
+//             dispatch(getAllProjects());
+//             dispatch(getAllBuildings());
+//             return;
+//         }
+
+//         setIsLoading(true);
+//         try {
+//             const response = await axios.get(`${base_url}/api/web-search/unified-search`, {
+//                 params: {
+//                     searchTerm: value.trim(),
+//                     // entityType: activeFilterTab !== 'property' ? activeFilterTab : undefined,
+//                     // limit: 10
+//                 }
+//             });
+
+//             if (response.data.success) {
+//                 // Log results to console as requested
+//                 console.log('Search Results:', response.data.results);
+//                 dispatch(setSearchResults(response.data.results));
+//             } else {
+//                 console.error('Search failed:', response.data.message);
+//             }
+//         } catch (error) {
+//             console.error('Error performing search:', error.response?.data?.message || error.message);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     // Create debounced search function with useCallback to maintain reference
+//     const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+//     // Clear search input
+//     const clearSearchInput = () => {
+//         setSearchInput('');
+//         // Immediately fetch all data when search is cleared
+//         dispatch(getAllProperties());
+//         dispatch(getAllProjects());
+//         dispatch(getAllBuildings());
+//         inputRef.current?.focus();
+//     };
+
+//     // Auto-focus the search input when view changes to 'list'
+//     useEffect(() => {
+//         if (view === 'list' && inputRef.current) {
+//             inputRef.current.focus();
+//         }
+//     }, [view]);
+
+//     // Get property type label from value
+//     const getPropertyTypeLabel = (value) => {
+//         const option = propertyTypeOptions.find(opt => opt.value === value);
+//         return option ? option.label : "All Types";
+//     };
+
+//     // Get purpose label from value
+//     const getPurposeLabel = (value) => {
+//         const option = purposeOptions.find(opt => opt.value === value);
+//         return option ? option.label : "Purpose";
+//     };
+
+//     return (
+//         <section className={`bg-transparent px-6 py-1 mb-2 ${className}`}>
+//             <div className="flex items-center justify-between w-full gap-4">
+//                 <div className="flex items-center gap-3 flex-wrap">
+//                     {/* Search input replacing Easy search button */}
+//                     {view === 'list' && (
+//                         <div className="flex items-center">
+//                             <div className={`flex items-center bg-white border ${isFocused
+//                                 ? "border-gray-400 ring-2 ring-gray-100"
+//                                 : "border-gray-200"
+//                                 } rounded-lg w-64 md:w-64 transition-all duration-200`}>
+//                                 <Search className="h-5 w-5 text-gray-400 ml-3" />
+//                                 <input
+//                                     ref={inputRef}
+//                                     type="text"
+//                                     placeholder="Search properties, projects..."
+//                                     className="flex-1 py-2.5 px-2 bg-transparent focus:outline-none text-sm"
+//                                     value={searchInput}
+//                                     onChange={handleSearchInputChange}
+//                                     onFocus={() => setIsFocused(true)}
+//                                     onBlur={() => setIsFocused(false)}
+//                                 />
+//                                 {isLoading ? (
+//                                     <Loader2 className="h-5 w-5 text-gray-400 mr-3 animate-spin" />
+//                                 ) : searchInput ? (
+//                                     <button
+//                                         type="button"
+//                                         onClick={clearSearchInput}
+//                                         className="h-5 w-5 text-gray-400 mr-3 hover:text-gray-600"
+//                                     >
+//                                         <X className="h-5 w-5" />
+//                                     </button>
+//                                 ) : null}
+//                             </div>
+//                         </div>
+//                     )}
+
+//                     {/* Custom Bedrooms Button with Popup */}
+//                     <div className="relative" ref={bhkButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors"
+//                             onClick={() => setBhkPopupOpen(!bhkPopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {bedrooms ? `${bedrooms} Beds` : "Beds"}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bhkPopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* BHK Selection Popup */}
+//                         {bhkPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+//                                 <div className="flex flex-col gap-2">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bedrooms</h3>
+//                                     <div className="flex items-center gap-2 flex-wrap">
+//                                         <button
+//                                             className={getBhkButtonClass("1")}
+//                                             onClick={() => handleBhkFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("2")}
+//                                             onClick={() => handleBhkFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("3")}
+//                                             onClick={() => handleBhkFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("4")}
+//                                             onClick={() => handleBhkFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("5")}
+//                                             onClick={() => handleBhkFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Bathrooms Button with Popup */}
+//                     <div className="relative" ref={bathsButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors"
+//                             onClick={() => setBathsPopupOpen(!bathsPopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {baths ? `${baths} Baths` : "Baths"}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bathsPopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* Bathrooms Selection Popup */}
+//                         {bathsPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+//                                 <div className="flex flex-col gap-2">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bathrooms</h3>
+//                                     <div className="flex items-center gap-2 flex-wrap">
+//                                         <button
+//                                             className={getBathButtonClass("1")}
+//                                             onClick={() => handleBathFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("2")}
+//                                             onClick={() => handleBathFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("3")}
+//                                             onClick={() => handleBathFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("4")}
+//                                             onClick={() => handleBathFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("5")}
+//                                             onClick={() => handleBathFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Property Type Dropdown */}
+//                     <div className="relative" ref={propertyTypeButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors min-w-28"
+//                             onClick={() => setPropertyTypePopupOpen(!propertyTypePopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {getPropertyTypeLabel(propertyType)}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${propertyTypePopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* Property Type Selection Popup */}
+//                         {propertyTypePopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-48">
+//                                 <div className="flex flex-col gap-1">
+//                                     {propertyTypeOptions.map((option) => (
+//                                         <div
+//                                             key={option.value}
+//                                             className={getOptionItemClass(option.value, propertyType)}
+//                                             onClick={() => handlePropertyTypeChange(option.value)}
+//                                         >
+//                                             {option.label}
+//                                         </div>
+//                                     ))}
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Purpose Dropdown */}
+//                     <div className="relative" ref={purposeButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors min-w-20"
+//                             onClick={() => setPurposePopupOpen(!purposePopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {purpose ? getPurposeLabel(purpose) : "Purpose"}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${purposePopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* Purpose Selection Popup */}
+//                         {purposePopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-40">
+//                                 <div className="flex flex-col gap-1">
+//                                     {purposeOptions.map((option) => (
+//                                         <div
+//                                             key={option.value}
+//                                             className={getOptionItemClass(option.value, purpose)}
+//                                             onClick={() => handlePurposeChange(option.value)}
+//                                         >
+//                                             {option.label}
+//                                         </div>
+//                                     ))}
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Filters button with count */}
+//                     <button
+//                         className="flex items-center gap-2 bg-white border hover:bg-gray-200 rounded-lg py-2.5 px-4 transition-colors duration-200"
+//                         onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
+//                     >
+//                         <FcFilledFilter size={18} />
+//                         <span className="font-medium">More Filters</span>
+//                         {Object.keys(appliedFilters).length > 0 && (
+//                             <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+//                                 {Object.keys(appliedFilters).length}
+//                             </span>
+//                         )}
+//                     </button>
+//                 </div>
+
+//                 <div className='flex items-center gap-2'>
+//                     <ResetFilterButton onClick={handleResetFilters} />
+//                     {/* View toggle button */}
+//                     <button
+//                         onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+//                         className="py-2.5 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-800 text-white bg-gray-900 transition-colors duration-200"
+//                     >
+//                         {view === 'list' ? <Map size={18} /> : <List size={18} />}
+//                         <span className="font-medium text-sm">{view === 'list' ? 'Map View' : 'List View'}</span>
+//                     </button>
+//                 </div>
+//             </div>
+
+//             {/* Advanced Filter Panel with Tabs */}
+//             {advancedFilterOpen && (
+//                 <>
+//                     {/* Apply overflow-hidden to body when filter is open */}
+//                     <style jsx global>{`
+//                         body {
+//                             overflow: hidden;
+//                         }
+//                     `}</style>
+
+//                     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+//                         <div className="w-full max-w-7xl bg-white rounded-xl shadow-2xl flex flex-col h-auto max-h-[95vh]">
+//                             <div className="flex justify-between items-center border-b border-gray-100 px-6 py-4 flex-shrink-0">
+//                                 <div role="tablist" className="flex gap-2 font-medium">
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'property'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('property')}
+//                                     >
+//                                         Property
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'project'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('project')}
+//                                     >
+//                                         Project
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'building'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('building')}
+//                                     >
+//                                         Building
+//                                     </button>
+//                                 </div>
+
+//                                 <div className="flex gap-3">
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Cancel
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={resetAllFilters}
+//                                     >
+//                                         Reset Filters
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition hover:bg-red-700"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Apply Filters
+//                                     </button>
+//                                 </div>
+//                             </div>
+
+//                             {/* Tab Content with auto height and scrollable */}
+//                             <div className="p-6 overflow-y-auto ">
+//                                 {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </>
+//             )}
+//         </section>
+//     );
+// };
+
+// export default SearchSection;
+
+
+
+// import React, { useState, useEffect, useRef, useCallback } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import {
+//     applyFilter,
+//     setSearchResults,
+//     getAllProperties,
+//     getAllProjects,
+//     getAllBuildings
+// } from '../redux/features/Map/mapSlice';
+// import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
+// import { FcFilledFilter } from "react-icons/fc";
+// import axios from 'axios';
+// import {
+//     Map,
+//     List,
+//     ChevronDown,
+//     Search,
+//     X,
+//     Loader2
+// } from 'lucide-react';
+// import { Badge } from 'antd';
+// import ResetFilterButton from './ResetFilterButton';
+// import { base_url } from '../utils/base_url';
+
+// const SearchSection = ({
+//     handleViewChange,
+//     view,
+//     searchQuery,
+//     setSearchQuery,
+//     resetAllFilters,
+//     activeFiltersCount = 0,
+//     variant = 'default',
+//     className = '',
+//     showFilterDisplay = true
+// }) => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
+//     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
+//     const [activeFilterTab, setActiveFilterTab] = useState('property');
+//     const [isFocused, setIsFocused] = useState(false);
+//     const [isLoading, setIsLoading] = useState(false);
+
+//     // Search-related states
+//     const [searchInput, setSearchInput] = useState('');
+//     const inputRef = useRef(null);
+
+//     // State for local filters
+//     const [bedrooms, setBedrooms] = useState(appliedFilters?.bedrooms || "");
+//     const [baths, setBaths] = useState(appliedFilters?.baths || "");
+//     const [propertyType, setPropertyType] = useState(appliedFilters?.propertyType || "all");
+//     const [purpose, setPurpose] = useState(appliedFilters?.purpose || "");
+
+//     // States for popups
+//     const [bhkPopupOpen, setBhkPopupOpen] = useState(false);
+//     const [bathsPopupOpen, setBathsPopupOpen] = useState(false);
+//     const [propertyTypePopupOpen, setPropertyTypePopupOpen] = useState(false);
+//     const [purposePopupOpen, setPurposePopupOpen] = useState(false);
+
+//     // Refs for popup handling
+//     const bhkButtonRef = useRef(null);
+//     const bathsButtonRef = useRef(null);
+//     const propertyTypeButtonRef = useRef(null);
+//     const purposeButtonRef = useRef(null);
+
+//     // Property type options
+//     const propertyTypeOptions = [
+//         { value: "all", label: "All Types" },
+//         { value: "apartment", label: "Apartments" },
+//         { value: "house", label: "Houses" },
+//         { value: "office", label: "Offices" },
+//         { value: "residential", label: "Buildings" }
+//     ];
+
+//     // Purpose options
+//     const purposeOptions = [
+//         { value: "buy", label: "Buy" },
+//         { value: "rent", label: "Rent" }
+//     ];
+
+//     // Function to determine active state for BHK buttons
+//     const getBhkButtonClass = (value) => {
+//         if (bedrooms === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Function to determine active state for Bathroom buttons
+//     const getBathButtonClass = (value) => {
+//         if (baths === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Function for option item styles
+//     const getOptionItemClass = (optionValue, selectedValue) => {
+//         if (optionValue === selectedValue) {
+//             return "px-4 py-2 text-sm text-white bg-gray-900 rounded-md cursor-pointer hover:bg-gray-800 transition-colors";
+//         }
+//         return "px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer transition-colors";
+//     };
+
+//     // Handler for BHK filter
+//     const handleBhkFilter = (value) => {
+//         const newValue = bedrooms === value ? "" : value;
+//         setBedrooms(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             bedrooms: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBhkPopupOpen(false);
+//     };
+
+//     // Handler for Bathrooms filter
+//     const handleBathFilter = (value) => {
+//         const newValue = baths === value ? "" : value;
+//         setBaths(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             baths: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBathsPopupOpen(false);
+//     };
+
+//     // Handler for Property Type change
+//     const handlePropertyTypeChange = (value) => {
+//         setPropertyType(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             propertyType: value === "all" ? undefined : [value],
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup
+//         setPropertyTypePopupOpen(false);
+//     };
+
+//     // Handler for Purpose change
+//     const handlePurposeChange = (value) => {
+//         setPurpose(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             purpose: value === "" ? undefined : value,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup
+//         setPurposePopupOpen(false);
+//     };
+
+//     // Handle clicking outside the popups
+//     useEffect(() => {
+//         const handleClickOutside = (event) => {
+//             if (bhkButtonRef.current && !bhkButtonRef.current.contains(event.target)) {
+//                 setBhkPopupOpen(false);
+//             }
+//             if (bathsButtonRef.current && !bathsButtonRef.current.contains(event.target)) {
+//                 setBathsPopupOpen(false);
+//             }
+//             if (propertyTypeButtonRef.current && !propertyTypeButtonRef.current.contains(event.target)) {
+//                 setPropertyTypePopupOpen(false);
+//             }
+//             if (purposeButtonRef.current && !purposeButtonRef.current.contains(event.target)) {
+//                 setPurposePopupOpen(false);
+//             }
+//         };
+
+//         document.addEventListener("mousedown", handleClickOutside);
+//         return () => {
+//             document.removeEventListener("mousedown", handleClickOutside);
+//         };
+//     }, []);
+
+//     // Reset local filters
+//     const handleResetFilters = () => {
+//         setBedrooms("");
+//         setBaths("");
+//         setPropertyType("all");
+//         setPurpose("");
+//         setSearchInput("");
+//         resetAllFilters();
+//     };
+
+//     // Debounce function for search
+//     const debounce = (func, delay) => {
+//         let timeoutId;
+//         return function (...args) {
+//             clearTimeout(timeoutId);
+//             timeoutId = setTimeout(() => {
+//                 func.apply(this, args);
+//             }, delay);
+//         };
+//     };
+
+//     // Handle search input change with debounce
+//     const handleSearchInputChange = (e) => {
+//         const value = e.target.value;
+//         setSearchInput(value);
+//         debouncedSearch(value);
+//     };
+
+//     // Function to handle search
+//     const handleSearch = async (value) => {
+//         if (!value || value.trim() === '') {
+//             // When search is empty, fetch all data
+//             dispatch(getAllProperties());
+//             dispatch(getAllProjects());
+//             dispatch(getAllBuildings());
+//             return;
+//         }
+
+//         setIsLoading(true);
+//         try {
+//             const response = await axios.get(`${base_url}/api/web-search/unified-search`, {
+//                 params: {
+//                     searchTerm: value.trim(),
+//                     // entityType: activeFilterTab !== 'property' ? activeFilterTab : undefined,
+//                     // limit: 10
+//                 }
+//             });
+
+//             if (response.data.success) {
+//                 // Log results to console as requested
+//                 console.log('Search Results:', response.data.results);
+//                 dispatch(setSearchResults(response.data.results));
+//             } else {
+//                 console.error('Search failed:', response.data.message);
+//             }
+//         } catch (error) {
+//             console.error('Error performing search:', error.response?.data?.message || error.message);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     // Create debounced search function with useCallback to maintain reference
+//     const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+//     // Clear search input
+//     const clearSearchInput = () => {
+//         setSearchInput('');
+//         // Immediately fetch all data when search is cleared
+//         dispatch(getAllProperties());
+//         dispatch(getAllProjects());
+//         dispatch(getAllBuildings());
+//         inputRef.current?.focus();
+//     };
+
+//     // Auto-focus the search input when view changes to 'list'
+//     useEffect(() => {
+//         if (view === 'list' && inputRef.current) {
+//             inputRef.current.focus();
+//         }
+//     }, [view]);
+
+//     // Get property type label from value
+//     const getPropertyTypeLabel = (value) => {
+//         const option = propertyTypeOptions.find(opt => opt.value === value);
+//         return option ? option.label : "All Types";
+//     };
+
+//     // Get purpose label from value
+//     const getPurposeLabel = (value) => {
+//         const option = purposeOptions.find(opt => opt.value === value);
+//         return option ? option.label : "Purpose";
+//     };
+
+//     return (
+//         <section className={`bg-transparent px-6 py-2 mb-2 ${className}`}>
+//             <div className="flex items-center justify-between w-full gap-4">
+//                 <div className="flex items-center gap-3 flex-wrap">
+//                     {/* Search input replacing Easy search button */}
+//                     {view === 'list' && (
+//                         <div className="flex items-center">
+//                             <div className={`flex items-center bg-white border ${isFocused
+//                                 ? "border-gray-400 ring-2 ring-gray-100"
+//                                 : "border-gray-200"
+//                                 } rounded-lg w-64 md:w-64 transition-all duration-200`}>
+//                                 <Search className="h-5 w-5 text-gray-400 ml-3" />
+//                                 <input
+//                                     ref={inputRef}
+//                                     type="text"
+//                                     placeholder="Search properties, projects..."
+//                                     className="flex-1 py-2.5 px-2 bg-transparent focus:outline-none text-sm"
+//                                     value={searchInput}
+//                                     onChange={handleSearchInputChange}
+//                                     onFocus={() => setIsFocused(true)}
+//                                     onBlur={() => setIsFocused(false)}
+//                                 />
+//                                 {isLoading ? (
+//                                     <Loader2 className="h-5 w-5 text-gray-400 mr-3 animate-spin" />
+//                                 ) : searchInput ? (
+//                                     <button
+//                                         type="button"
+//                                         onClick={clearSearchInput}
+//                                         className="h-5 w-5 text-gray-400 mr-3 hover:text-gray-600"
+//                                     >
+//                                         <X className="h-5 w-5" />
+//                                     </button>
+//                                 ) : null}
+//                             </div>
+//                         </div>
+//                     )}
+
+//                     {/* Custom Bedrooms Button with Popup */}
+//                     <div className="relative" ref={bhkButtonRef}>
+//                         <Badge count={bedrooms ? bedrooms : 0}  size="large" style={{
+//                             backgroundColor: 'crimson',
+//                         }}>
+//                             <button
+//                                 className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors"
+//                                 onClick={() => setBhkPopupOpen(!bhkPopupOpen)}
+//                             >
+//                                 <span className="text-sm font-medium">
+//                                     Beds
+//                                 </span>
+//                                 <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bhkPopupOpen ? 'rotate-180' : ''}`} />
+//                             </button>
+//                         </Badge>
+
+//                         {/* BHK Selection Popup */}
+//                         {bhkPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+//                                 <div className="flex flex-col gap-2">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bedrooms</h3>
+//                                     <div className="flex items-center gap-2 flex-wrap">
+//                                         <button
+//                                             className={getBhkButtonClass("1")}
+//                                             onClick={() => handleBhkFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("2")}
+//                                             onClick={() => handleBhkFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("3")}
+//                                             onClick={() => handleBhkFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("4")}
+//                                             onClick={() => handleBhkFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("5")}
+//                                             onClick={() => handleBhkFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Bathrooms Button with Popup */}
+//                     <div className="relative" ref={bathsButtonRef}>
+//                         <Badge count={baths ? baths : 0}  size="large" style={{
+//                             backgroundColor: 'crimson',
+//                         }}  >
+//                             <button
+//                                 className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors"
+//                                 onClick={() => setBathsPopupOpen(!bathsPopupOpen)}
+//                             >
+//                                 <span className="text-sm font-medium">
+//                                     Baths
+//                                 </span>
+//                                 <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bathsPopupOpen ? 'rotate-180' : ''}`} />
+//                             </button>
+//                         </Badge>
+
+//                         {/* Bathrooms Selection Popup */}
+//                         {bathsPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+//                                 <div className="flex flex-col gap-2">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bathrooms</h3>
+//                                     <div className="flex items-center gap-2 flex-wrap">
+//                                         <button
+//                                             className={getBathButtonClass("1")}
+//                                             onClick={() => handleBathFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("2")}
+//                                             onClick={() => handleBathFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("3")}
+//                                             onClick={() => handleBathFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("4")}
+//                                             onClick={() => handleBathFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("5")}
+//                                             onClick={() => handleBathFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Property Type Dropdown */}
+//                     <div className="relative" ref={propertyTypeButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors min-w-28"
+//                             onClick={() => setPropertyTypePopupOpen(!propertyTypePopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {getPropertyTypeLabel(propertyType)}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${propertyTypePopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* Property Type Selection Popup */}
+//                         {propertyTypePopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-48">
+//                                 <div className="flex flex-col gap-1">
+//                                     {propertyTypeOptions.map((option) => (
+//                                         <div
+//                                             key={option.value}
+//                                             className={getOptionItemClass(option.value, propertyType)}
+//                                             onClick={() => handlePropertyTypeChange(option.value)}
+//                                         >
+//                                             {option.label}
+//                                         </div>
+//                                     ))}
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Purpose Dropdown */}
+//                     <div className="relative" ref={purposeButtonRef}>
+//                         <button
+//                             className="flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors min-w-20"
+//                             onClick={() => setPurposePopupOpen(!purposePopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {purpose ? getPurposeLabel(purpose) : "Purpose"}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${purposePopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* Purpose Selection Popup */}
+//                         {purposePopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-40">
+//                                 <div className="flex flex-col gap-1">
+//                                     {purposeOptions.map((option) => (
+//                                         <div
+//                                             key={option.value}
+//                                             className={getOptionItemClass(option.value, purpose)}
+//                                             onClick={() => handlePurposeChange(option.value)}
+//                                         >
+//                                             {option.label}
+//                                         </div>
+//                                     ))}
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Filters button with count */}
+//                     <button
+//                         className="flex items-center gap-2 bg-white border hover:bg-gray-200 rounded-lg py-2.5 px-4 transition-colors duration-200"
+//                         onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
+//                     >
+//                         <FcFilledFilter size={18} />
+//                         <span className="font-medium">More Filters</span>
+//                         {Object.keys(appliedFilters).length > 0 && (
+//                             <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+//                                 {Object.keys(appliedFilters).length}
+//                             </span>
+//                         )}
+//                     </button>
+//                 </div>
+
+//                 <div className='flex items-center gap-2'>
+//                     <ResetFilterButton onClick={handleResetFilters} />
+//                     {/* View toggle button */}
+//                     <button
+//                         onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+//                         className="py-2.5 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-800 text-white bg-gray-900 transition-colors duration-200"
+//                     >
+//                         {view === 'list' ? <Map size={18} /> : <List size={18} />}
+//                         <span className="font-medium text-sm">{view === 'list' ? 'Map View' : 'List View'}</span>
+//                     </button>
+//                 </div>
+//             </div>
+
+//             {/* Advanced Filter Panel with Tabs */}
+//             {advancedFilterOpen && (
+//                 <>
+//                     {/* Apply overflow-hidden to body when filter is open */}
+//                     <style jsx global>{`
+//                         body {
+//                             overflow: hidden;
+//                         }
+//                     `}</style>
+
+//                     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+//                         <div className="w-full max-w-7xl bg-white rounded-xl shadow-2xl flex flex-col h-auto max-h-[95vh]">
+//                             <div className="flex justify-between items-center border-b border-gray-100 px-6 py-4 flex-shrink-0">
+//                                 <div role="tablist" className="flex gap-2 font-medium">
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'property'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('property')}
+//                                     >
+//                                         Property
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'project'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('project')}
+//                                     >
+//                                         Project
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'building'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('building')}
+//                                     >
+//                                         Building
+//                                     </button>
+//                                 </div>
+
+//                                 <div className="flex gap-3">
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Cancel
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={resetAllFilters}
+//                                     >
+//                                         Reset Filters
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition hover:bg-red-700"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Apply Filters
+//                                     </button>
+//                                 </div>
+//                             </div>
+
+//                             {/* Tab Content with auto height and scrollable */}
+//                             <div className="p-6 overflow-y-auto ">
+//                                 {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </>
+//             )}
+//         </section>
+//     );
+// };
+
+// export default SearchSection;
+
+// import React, { useState, useEffect, useRef, useCallback } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import {
+//     applyFilter,
+//     setSearchResults,
+//     getAllProperties,
+//     getAllProjects,
+//     getAllBuildings
+// } from '../redux/features/Map/mapSlice';
+// import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
+// import { FcFilledFilter } from "react-icons/fc";
+// import axios from 'axios';
+// import {
+//     Map,
+//     List,
+//     ChevronDown,
+//     Search,
+//     X,
+//     Loader2
+// } from 'lucide-react';
+// import { Badge } from 'antd';
+// import ResetFilterButton from './ResetFilterButton';
+// import { base_url } from '../utils/base_url';
+
+// const SearchSection = ({
+//     handleViewChange,
+//     view,
+//     searchQuery,
+//     setSearchQuery,
+//     resetAllFilters,
+//     activeFiltersCount = 0,
+//     variant = 'default',
+//     className = '',
+//     showFilterDisplay = true
+// }) => {
+//     const dispatch = useDispatch();
+//     const { appliedFilters } = useSelector((state) => state.map);
+//     const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
+//     const [activeFilterTab, setActiveFilterTab] = useState('property');
+//     const [isFocused, setIsFocused] = useState(false);
+//     const [isLoading, setIsLoading] = useState(false);
+
+//     // Search-related states
+//     const [searchInput, setSearchInput] = useState('');
+//     const inputRef = useRef(null);
+
+//     // State for local filters
+//     const [bedrooms, setBedrooms] = useState(appliedFilters?.bedrooms || "");
+//     const [bathrooms, setBathrooms] = useState(appliedFilters?.bathrooms || "");
+//     const [propertyType, setPropertyType] = useState(appliedFilters?.propertyType || "all");
+//     const [purpose, setPurpose] = useState(appliedFilters?.purpose || "");
+
+//     // States for popups
+//     const [bhkPopupOpen, setBhkPopupOpen] = useState(false);
+//     const [bathroomsPopupOpen, setBathroomsPopupOpen] = useState(false);
+//     const [propertyTypePopupOpen, setPropertyTypePopupOpen] = useState(false);
+//     const [purposePopupOpen, setPurposePopupOpen] = useState(false);
+
+//     // Refs for popup handling
+//     const bhkButtonRef = useRef(null);
+//     const bathroomsButtonRef = useRef(null);
+//     const propertyTypeButtonRef = useRef(null);
+//     const purposeButtonRef = useRef(null);
+
+//     // Property type options
+//     const propertyTypeOptions = [
+//         { value: "all", label: "All Types" },
+//         { value: "apartment", label: "Apartments" },
+//         { value: "house", label: "Houses" },
+//         { value: "office", label: "Offices" },
+//         { value: "residential", label: "Buildings" }
+//     ];
+
+//     // Purpose options
+//     const purposeOptions = [
+//         { value: "buy", label: "Buy" },
+//         { value: "rent", label: "Rent" }
+//     ];
+
+//     // Function to determine active state for BHK buttons
+//     const getBhkButtonClass = (value) => {
+//         if (bedrooms === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Function to determine active state for Bathroom buttons
+//     const getBathButtonClass = (value) => {
+//         if (bathrooms === value) {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+//         } else {
+//             return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+//         }
+//     };
+
+//     // Function for option item styles
+//     const getOptionItemClass = (optionValue, selectedValue) => {
+//         if (optionValue === selectedValue) {
+//             return "px-4 py-2 text-sm text-white bg-gray-900 rounded-md cursor-pointer hover:bg-gray-800 transition-colors";
+//         }
+//         return "px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer transition-colors";
+//     };
+
+//     // Handler for BHK filter
+//     const handleBhkFilter = (value) => {
+//         const newValue = bedrooms === value ? "" : value;
+//         setBedrooms(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             bedrooms: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBhkPopupOpen(false);
+//     };
+
+//     // Handler for Bathrooms filter
+//     const handleBathFilter = (value) => {
+//         const newValue = bathrooms === value ? "" : value;
+//         setBathrooms(newValue);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             bathrooms: newValue === "" ? undefined : newValue,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup after selection
+//         setBathroomsPopupOpen(false);
+//     };
+
+//     // Handler for Property Type change
+//     const handlePropertyTypeChange = (value) => {
+//         setPropertyType(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             propertyType: value === "all" ? undefined : [value],
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup
+//         setPropertyTypePopupOpen(false);
+//     };
+
+//     // Handler for Purpose change
+//     const handlePurposeChange = (value) => {
+//         setPurpose(value);
+
+//         // Dispatch the filter action
+//         dispatch(applyFilter({
+//             ...appliedFilters,
+//             purpose: value === "" ? undefined : value,
+//             filterType: 'property'
+//         }));
+
+//         // Close the popup
+//         setPurposePopupOpen(false);
+//     };
+
+//     // Handle clicking outside the popups
+//     useEffect(() => {
+//         const handleClickOutside = (event) => {
+//             if (bhkButtonRef.current && !bhkButtonRef.current.contains(event.target)) {
+//                 setBhkPopupOpen(false);
+//             }
+//             if (bathroomsButtonRef.current && !bathroomsButtonRef.current.contains(event.target)) {
+//                 setBathroomsPopupOpen(false);
+//             }
+//             if (propertyTypeButtonRef.current && !propertyTypeButtonRef.current.contains(event.target)) {
+//                 setPropertyTypePopupOpen(false);
+//             }
+//             if (purposeButtonRef.current && !purposeButtonRef.current.contains(event.target)) {
+//                 setPurposePopupOpen(false);
+//             }
+//         };
+
+//         document.addEventListener("mousedown", handleClickOutside);
+//         return () => {
+//             document.removeEventListener("mousedown", handleClickOutside);
+//         };
+//     }, []);
+
+//     // Reset local filters
+//     const handleResetFilters = () => {
+//         setBedrooms("");
+//         setBathrooms("");
+//         setPropertyType("all");
+//         setPurpose("");
+//         setSearchInput("");
+//         resetAllFilters();
+//     };
+
+//     // Debounce function for search
+//     const debounce = (func, delay) => {
+//         let timeoutId;
+//         return function (...args) {
+//             clearTimeout(timeoutId);
+//             timeoutId = setTimeout(() => {
+//                 func.apply(this, args);
+//             }, delay);
+//         };
+//     };
+
+//     // Handle search input change with debounce
+//     const handleSearchInputChange = (e) => {
+//         const value = e.target.value;
+//         setSearchInput(value);
+//         debouncedSearch(value);
+//     };
+
+//     // Function to handle search
+//     const handleSearch = async (value) => {
+//         if (!value || value.trim() === '') {
+//             // When search is empty, fetch all data
+//             dispatch(getAllProperties());
+//             dispatch(getAllProjects());
+//             dispatch(getAllBuildings());
+//             return;
+//         }
+
+//         setIsLoading(true);
+//         try {
+//             const response = await axios.get(`${base_url}/api/web-search/unified-search`, {
+//                 params: {
+//                     searchTerm: value.trim(),
+//                     // entityType: activeFilterTab !== 'property' ? activeFilterTab : undefined,
+//                     // limit: 10
+//                 }
+//             });
+
+//             if (response.data.success) {
+//                 // Log results to console as requested
+//                 console.log('Search Results:', response.data.results);
+//                 dispatch(setSearchResults(response.data.results));
+//             } else {
+//                 console.error('Search failed:', response.data.message);
+//             }
+//         } catch (error) {
+//             console.error('Error performing search:', error.response?.data?.message || error.message);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     // Create debounced search function with useCallback to maintain reference
+//     const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+//     // Clear search input
+//     const clearSearchInput = () => {
+//         setSearchInput('');
+//         // Immediately fetch all data when search is cleared
+//         dispatch(getAllProperties());
+//         dispatch(getAllProjects());
+//         dispatch(getAllBuildings());
+//         inputRef.current?.focus();
+//     };
+
+//     // Auto-focus the search input when view changes to 'list'
+//     useEffect(() => {
+//         if (view === 'list' && inputRef.current) {
+//             inputRef.current.focus();
+//         }
+//     }, [view]);
+
+//     // Get property type label from value
+//     const getPropertyTypeLabel = (value) => {
+//         const option = propertyTypeOptions.find(opt => opt.value === value);
+//         return option ? option.label : "All Types";
+//     };
+
+//     // Get purpose label from value
+//     const getPurposeLabel = (value) => {
+//         const option = purposeOptions.find(opt => opt.value === value);
+//         return option ? option.label : "Purpose";
+//     };
+
+//     return (
+//         <section className={`bg-transparent px-6 py-2 mb-2 ${className}`}>
+//             <div className="flex items-center justify-between w-full gap-4">
+//                 <div className="flex items-center gap-3 flex-wrap">
+//                     {/* Search input replacing Easy search button */}
+//                     {view === 'list' && (
+//                         <div className="flex items-center">
+//                             <div className={`flex items-center bg-white border ${isFocused
+//                                 ? "border-gray-400 ring-2 ring-gray-100"
+//                                 : "border-gray-200"
+//                                 } rounded-lg w-64 md:w-64 transition-all duration-200`}>
+//                                 <Search className="h-5 w-5 text-gray-400 ml-3" />
+//                                 <input
+//                                     ref={inputRef}
+//                                     type="text"
+//                                     placeholder="Search properties, projects..."
+//                                     className="flex-1 py-2.5 px-2 bg-transparent focus:outline-none text-sm"
+//                                     value={searchInput}
+//                                     onChange={handleSearchInputChange}
+//                                     onFocus={() => setIsFocused(true)}
+//                                     onBlur={() => setIsFocused(false)}
+//                                 />
+//                                 {isLoading ? (
+//                                     <Loader2 className="h-5 w-5 text-gray-400 mr-3 animate-spin" />
+//                                 ) : searchInput ? (
+//                                     <button
+//                                         type="button"
+//                                         onClick={clearSearchInput}
+//                                         className="h-5 w-5 text-gray-400 mr-3 hover:text-gray-600"
+//                                     >
+//                                         <X className="h-5 w-5" />
+//                                     </button>
+//                                 ) : null}
+//                             </div>
+//                         </div>
+//                     )}
+
+//                     {/* Custom Bedrooms Button with Popup */}
+//                     <div className="relative" ref={bhkButtonRef} >
+//                         <Badge count={bedrooms ? bedrooms : 0} size="large" style={{
+//                             backgroundColor: 'crimson',
+//                         }}>
+//                             <button
+//                                 className={`${view == 'map' && 'shadow-xl'} flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors`}
+//                                 onClick={() => setBhkPopupOpen(!bhkPopupOpen)}
+//                             >
+//                                 <span className="text-sm font-medium">
+//                                     Beds
+//                                 </span>
+//                                 <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bhkPopupOpen ? 'rotate-180' : ''}`} />
+//                             </button>
+//                         </Badge>
+
+//                         {/* BHK Selection Popup */}
+//                         {bhkPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+//                                 <div className="flex flex-col gap-2 ">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bedrooms</h3>
+//                                     <div className="flex items-center gap-2 flex-wrap">
+//                                         <button
+//                                             className={getBhkButtonClass("1")}
+//                                             onClick={() => handleBhkFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("2")}
+//                                             onClick={() => handleBhkFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("3")}
+//                                             onClick={() => handleBhkFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("4")}
+//                                             onClick={() => handleBhkFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBhkButtonClass("5")}
+//                                             onClick={() => handleBhkFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Bathrooms Button with Popup */}
+//                     <div className="relative" ref={bathroomsButtonRef}>
+//                         <Badge count={bathrooms ? bathrooms : 0} size="large" style={{
+//                             backgroundColor: 'crimson',
+//                         }}>
+//                             <button
+//                                 className={`${view == 'map' && 'shadow-xl'} flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors`}
+//                                 onClick={() => setBathroomsPopupOpen(!bathroomsPopupOpen)}
+//                             >
+//                                 <span className="text-sm font-medium">
+//                                     Baths
+//                                 </span>
+//                                 <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bathroomsPopupOpen ? 'rotate-180' : ''}`} />
+//                             </button>
+//                         </Badge>
+
+//                         {/* Bathrooms Selection Popup */}
+//                         {bathroomsPopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+//                                 <div className="flex flex-col gap-2">
+//                                     <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bathrooms</h3>
+//                                     <div className="flex items-center gap-2 flex-wrap">
+//                                         <button
+//                                             className={getBathButtonClass("1")}
+//                                             onClick={() => handleBathFilter("1")}
+//                                         >
+//                                             1
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("2")}
+//                                             onClick={() => handleBathFilter("2")}
+//                                         >
+//                                             2
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("3")}
+//                                             onClick={() => handleBathFilter("3")}
+//                                         >
+//                                             3
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("4")}
+//                                             onClick={() => handleBathFilter("4")}
+//                                         >
+//                                             4
+//                                         </button>
+//                                         <button
+//                                             className={getBathButtonClass("5")}
+//                                             onClick={() => handleBathFilter("5")}
+//                                         >
+//                                             5
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Property Type Dropdown */}
+//                     <div className="relative" ref={propertyTypeButtonRef}>
+//                         <button
+//                             className={` ${view == 'map' && 'shadow-xl'} flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors min-w-28`}
+//                             onClick={() => setPropertyTypePopupOpen(!propertyTypePopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {getPropertyTypeLabel(propertyType)}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${propertyTypePopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* Property Type Selection Popup */}
+//                         {propertyTypePopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-48">
+//                                 <div className="flex flex-col gap-1">
+//                                     {propertyTypeOptions.map((option) => (
+//                                         <div
+//                                             key={option.value}
+//                                             className={getOptionItemClass(option.value, propertyType)}
+//                                             onClick={() => handlePropertyTypeChange(option.value)}
+//                                         >
+//                                             {option.label}
+//                                         </div>
+//                                     ))}
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Custom Purpose Dropdown */}
+//                     <div className="relative" ref={purposeButtonRef}>
+//                         <button
+//                             className={` ${view == 'map' && 'shadow-xl'} flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors min-w-20 `}
+//                             onClick={() => setPurposePopupOpen(!purposePopupOpen)}
+//                         >
+//                             <span className="text-sm font-medium">
+//                                 {purpose ? getPurposeLabel(purpose) : "Purpose"}
+//                             </span>
+//                             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${purposePopupOpen ? 'rotate-180' : ''}`} />
+//                         </button>
+
+//                         {/* Purpose Selection Popup */}
+//                         {purposePopupOpen && (
+//                             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-40">
+//                                 <div className="flex flex-col gap-1">
+//                                     {purposeOptions.map((option) => (
+//                                         <div
+//                                             key={option.value}
+//                                             className={getOptionItemClass(option.value, purpose)}
+//                                             onClick={() => handlePurposeChange(option.value)}
+//                                         >
+//                                             {option.label}
+//                                         </div>
+//                                     ))}
+//                                 </div>
+//                             </div>
+//                         )}
+//                     </div>
+
+//                     {/* Filters button with count */}
+//                     <button
+//                         className= {`${view == 'map' && 'shadow-xl'} flex items-center gap-2 bg-white border hover:bg-gray-200 rounded-lg py-2.5 px-4 transition-colors duration-200 `}
+//                         onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
+//                     >
+//                         <FcFilledFilter size={18} />
+//                         <span className="font-medium">More Filters</span>
+//                         {Object.keys(appliedFilters).length > 0 && (
+//                             <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+//                                 {Object.keys(appliedFilters).length}
+//                             </span>
+//                         )}
+//                     </button>
+//                 </div>
+
+//                 <div className='flex items-center gap-2'>
+//                     {view == "list" && <ResetFilterButton onClick={handleResetFilters} />}
+//                     {/* View toggle button */}
+//                     <button
+//                         onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+//                         className={`py-2.5 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-800 text-white bg-gray-900 transition-colors duration-200 ${view == 'map' && 'shadow-xl'} `}
+//                     >
+//                         {view === 'list' ? <Map size={18} /> : <List size={18} />}
+//                         <span className="font-medium text-sm">{view === 'list' ? 'Map View' : 'List View'}</span>
+//                     </button>
+//                 </div>
+//             </div>
+
+//             {/* Advanced Filter Panel with Tabs */}
+//             {advancedFilterOpen && (
+//                 <>
+//                     {/* Apply overflow-hidden to body when filter is open */}
+//                     <style jsx global>{`
+//                         body {
+//                             overflow: hidden;
+//                         }
+//                     `}</style>
+
+//                     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+//                         <div className="w-full max-w-7xl bg-white rounded-xl shadow-2xl flex flex-col h-auto max-h-[95vh]">
+//                             <div className="flex justify-between items-center border-b border-gray-100 px-6 py-4 flex-shrink-0">
+//                                 <div role="tablist" className="flex gap-2 font-medium">
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'property'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('property')}
+//                                     >
+//                                         Property
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'project'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('project')}
+//                                     >
+//                                         Project
+//                                     </button>
+//                                     <button
+//                                         role="tab"
+//                                         className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'building'
+//                                             ? 'bg-gray-900 text-white'
+//                                             : 'text-gray-700 hover:bg-gray-100'}`}
+//                                         onClick={() => setActiveFilterTab('building')}
+//                                     >
+//                                         Building
+//                                     </button>
+//                                 </div>
+
+//                                 <div className="flex gap-3">
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Cancel
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+//                                         onClick={resetAllFilters}
+//                                     >
+//                                         Reset Filters
+//                                     </button>
+//                                     <button
+//                                         className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition hover:bg-red-700"
+//                                         onClick={() => setAdvancedFilterOpen(false)}
+//                                     >
+//                                         Apply Filters
+//                                     </button>
+//                                 </div>
+//                             </div>
+
+//                             {/* Tab Content with auto height and scrollable */}
+//                             <div className="p-6 overflow-y-auto ">
+//                                 {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                                 {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </>
+//             )}
+//         </section>
+//     );
+// };
+
+// export default SearchSection;
+
+
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    applyFilter,
+    setSearchResults,
+    getAllProperties,
+    getAllProjects,
+    getAllBuildings
+} from '../redux/features/Map/mapSlice';
+import { BuildingFilter, ProjectFilter, PropertyFilter } from './DynamicFilterComponent';
+import { FcFilledFilter } from "react-icons/fc";
+import axios from 'axios';
+import {
+    Map,
+    List,
+    ChevronDown,
+    Search,
+    X,
+    Loader2
+} from 'lucide-react';
+import { Badge } from 'antd';
+import ResetFilterButton from './ResetFilterButton';
+import { base_url } from '../utils/base_url';
+
+const SearchSection = ({
+    handleViewChange,
+    view,
+    searchQuery,
+    setSearchQuery,
+    resetAllFilters,
+    activeFiltersCount = 0,
+    variant = 'default',
+    className = '',
+    showFilterDisplay = true
+}) => {
+    const dispatch = useDispatch();
+    const { appliedFilters } = useSelector((state) => state.map);
+    const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
+    const [activeFilterTab, setActiveFilterTab] = useState('property');
+    const [isFocused, setIsFocused] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Search-related states
+    const [searchInput, setSearchInput] = useState('');
+    const inputRef = useRef(null);
+
+    // State for local filters
+    const [bedrooms, setBedrooms] = useState(appliedFilters?.bedrooms || "");
+    const [bathrooms, setBathrooms] = useState(appliedFilters?.bathrooms || "");
+    const [propertyType, setPropertyType] = useState(appliedFilters?.propertyType || "all");
+    const [purpose, setPurpose] = useState(appliedFilters?.purpose || "");
+
+    // States for popups
+    const [bhkPopupOpen, setBhkPopupOpen] = useState(false);
+    const [bathroomsPopupOpen, setBathroomsPopupOpen] = useState(false);
+    const [propertyTypePopupOpen, setPropertyTypePopupOpen] = useState(false);
+    const [purposePopupOpen, setPurposePopupOpen] = useState(false);
+
+    // Refs for popup handling
+    const bhkButtonRef = useRef(null);
+    const bathroomsButtonRef = useRef(null);
+    const propertyTypeButtonRef = useRef(null);
+    const purposeButtonRef = useRef(null);
+
+    // Property type options
+    const propertyTypeOptions = [
+        { value: "all", label: "All Types" },
+        { value: "apartment", label: "Apartments" },
+        { value: "house", label: "Houses" },
+        { value: "office", label: "Offices" },
+        { value: "residential", label: "Buildings" }
+    ];
+
+    // Purpose options
+    const purposeOptions = [
+        { value: "buy", label: "Buy" },
+        { value: "rent", label: "Rent" }
+    ];
+
+    // Update local state when appliedFilters change
+    useEffect(() => {
+        setBedrooms(appliedFilters?.bedrooms || "");
+        setBathrooms(appliedFilters?.bathrooms || "");
+        setPropertyType(appliedFilters?.propertyType ? appliedFilters.propertyType[0] : "all");
+        setPurpose(appliedFilters?.purpose || "");
+    }, [appliedFilters]);
+
+    // Function to determine active state for BHK buttons
+    const getBhkButtonClass = (value) => {
+        if (bedrooms === value) {
+            return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+        } else {
+            return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+        }
+    };
+
+    // Function to determine active state for Bathroom buttons
+    const getBathButtonClass = (value) => {
+        if (bathrooms === value) {
+            return "rounded-full py-1 px-3 text-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors";
+        } else {
+            return "rounded-full py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 transition-colors";
+        }
+    };
+
+    // Function for option item styles
+    const getOptionItemClass = (optionValue, selectedValue) => {
+        if (optionValue === selectedValue) {
+            return "px-4 py-2 text-sm text-white bg-gray-900 rounded-md cursor-pointer hover:bg-gray-800 transition-colors";
+        }
+        return "px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer transition-colors";
+    };
+
+    // Handler for BHK filter
+    const handleBhkFilter = (value) => {
+        const newValue = bedrooms === value ? "" : value;
+        setBedrooms(newValue);
+
+        // Dispatch the filter action
+        dispatch(applyFilter({
+            ...appliedFilters,
+            bedrooms: newValue === "" ? undefined : newValue,
+            filterType: 'property'
+        }));
+
+        // Close the popup after selection
+        setBhkPopupOpen(false);
+    };
+
+    // Handler for Bathrooms filter
+    const handleBathFilter = (value) => {
+        const newValue = bathrooms === value ? "" : value;
+        setBathrooms(newValue);
+
+        // Dispatch the filter action
+        dispatch(applyFilter({
+            ...appliedFilters,
+            bathrooms: newValue === "" ? undefined : newValue,
+            filterType: 'property'
+        }));
+
+        // Close the popup after selection
+        setBathroomsPopupOpen(false);
+    };
+
+    // Handler for Property Type change
+    const handlePropertyTypeChange = (value) => {
+        setPropertyType(value);
+
+        // Dispatch the filter action
+        dispatch(applyFilter({
+            ...appliedFilters,
+            propertyType: value === "all" ? undefined : [value],
+            filterType: 'property'
+        }));
+
+        // Close the popup
+        setPropertyTypePopupOpen(false);
+    };
+
+    // Handler for Purpose change
+    const handlePurposeChange = (value) => {
+        setPurpose(value);
+
+        // Dispatch the filter action
+        dispatch(applyFilter({
+            ...appliedFilters,
+            purpose: value === "" ? undefined : value,
+            filterType: 'property'
+        }));
+
+        // Close the popup
+        setPurposePopupOpen(false);
+    };
+
+    // Handle clicking outside the popups
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (bhkButtonRef.current && !bhkButtonRef.current.contains(event.target)) {
+                setBhkPopupOpen(false);
+            }
+            if (bathroomsButtonRef.current && !bathroomsButtonRef.current.contains(event.target)) {
+                setBathroomsPopupOpen(false);
+            }
+            if (propertyTypeButtonRef.current && !propertyTypeButtonRef.current.contains(event.target)) {
+                setPropertyTypePopupOpen(false);
+            }
+            if (purposeButtonRef.current && !purposeButtonRef.current.contains(event.target)) {
+                setPurposePopupOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    // Reset local filters
+    const handleResetFilters = () => {
+        setBedrooms("");
+        setBathrooms("");
+        setPropertyType("all");
+        setPurpose("");
+        setSearchInput("");
+        resetAllFilters();
+    };
+
+    // Debounce function for search
+    const debounce = (func, delay) => {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    };
+
+    // Handle search input change with debounce
+    const handleSearchInputChange = (e) => {
+        const value = e.target.value;
+        setSearchInput(value);
+        debouncedSearch(value);
+    };
+
+    // Function to handle search
+    const handleSearch = async (value) => {
+        if (!value || value.trim() === '') {
+            // When search is empty, fetch all data
+            dispatch(getAllProperties());
+            dispatch(getAllProjects());
+            dispatch(getAllBuildings());
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const response = await axios.get(`${base_url}/api/web-search/unified-search`, {
+                params: {
+                    searchTerm: value.trim(),
+                    // entityType: activeFilterTab !== 'property' ? activeFilterTab : undefined,
+                    // limit: 10
+                }
+            });
+
+            if (response.data.success) {
+                // Log results to console as requested
+                console.log('Search Results:', response.data.results);
+                dispatch(setSearchResults(response.data.results));
+            } else {
+                console.error('Search failed:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error performing search:', error.response?.data?.message || error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Create debounced search function with useCallback to maintain reference
+    const debouncedSearch = useCallback(debounce(handleSearch, 500), []);
+
+    // Clear search input
+    const clearSearchInput = () => {
+        setSearchInput('');
+        // Immediately fetch all data when search is cleared
+        dispatch(getAllProperties());
+        dispatch(getAllProjects());
+        dispatch(getAllBuildings());
+        inputRef.current?.focus();
+    };
+
+    // Auto-focus the search input when view changes to 'list'
+    useEffect(() => {
+        if (view === 'list' && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [view]);
+
+    // Get property type label from value
+    const getPropertyTypeLabel = (value) => {
+        const option = propertyTypeOptions.find(opt => opt.value === value);
+        return option ? option.label : "All Types";
+    };
+
+    // Get purpose label from value
+    const getPurposeLabel = (value) => {
+        const option = purposeOptions.find(opt => opt.value === value);
+        return option ? option.label : "Purpose";
+    };
+
+    return (
+        <section className={`bg-transparent px-6 py-2 mb-2 ${className} font-roboto`}>
+            <div className="flex items-center justify-between w-full gap-4">
+                <div className="flex items-center gap-3 flex-wrap">
+                    {/* Search input replacing Easy search button */}
+                    {view === 'list' && (
+                        <div className="flex items-center">
+                            <div className={`flex items-center bg-white border ${isFocused
+                                ? "border-gray-400 ring-2 ring-gray-100"
+                                : "border-gray-200"
+                                } rounded-lg w-64 md:w-64 transition-all duration-200`}>
+                                <Search className="h-5 w-5 text-gray-400 ml-3" />
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    placeholder="Search properties, projects..."
+                                    className="flex-1 py-2.5 px-2 bg-transparent focus:outline-none text-sm"
+                                    value={searchInput}
+                                    onChange={handleSearchInputChange}
+                                    onFocus={() => setIsFocused(true)}
+                                    onBlur={() => setIsFocused(false)}
+                                />
+                                {isLoading ? (
+                                    <Loader2 className="h-5 w-5 text-gray-400 mr-3 animate-spin" />
+                                ) : searchInput ? (
+                                    <button
+                                        type="button"
+                                        onClick={clearSearchInput}
+                                        className="h-5 w-5 text-gray-400 mr-3 hover:text-gray-600"
+                                    >
+                                        <X className="h-5 w-5" />
+                                    </button>
+                                ) : null}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Custom Bedrooms Button with Popup */}
+                    <div className="relative" ref={bhkButtonRef} >
+                        <Badge count={appliedFilters?.bedrooms ? appliedFilters.bedrooms : 0} showZero={false} size="large" style={{
+                            backgroundColor: 'crimson',
+                        }}>
+                            <button
+                                className={`${view == 'map' && 'shadow-xl'} flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors`}
+                                onClick={() => setBhkPopupOpen(!bhkPopupOpen)}
+                            >
+                                <span className="text-sm font-medium">
+                                    Beds
+                                </span>
+                                <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bhkPopupOpen ? 'rotate-180' : ''}`} />
+                            </button>
+                        </Badge>
+
+                        {/* BHK Selection Popup */}
+                        {bhkPopupOpen && (
+                            <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+                                <div className="flex flex-col gap-2 ">
+                                    <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bedrooms</h3>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <button
+                                            className={getBhkButtonClass("1")}
+                                            onClick={() => handleBhkFilter("1")}
+                                        >
+                                            1
+                                        </button>
+                                        <button
+                                            className={getBhkButtonClass("2")}
+                                            onClick={() => handleBhkFilter("2")}
+                                        >
+                                            2
+                                        </button>
+                                        <button
+                                            className={getBhkButtonClass("3")}
+                                            onClick={() => handleBhkFilter("3")}
+                                        >
+                                            3
+                                        </button>
+                                        <button
+                                            className={getBhkButtonClass("4")}
+                                            onClick={() => handleBhkFilter("4")}
+                                        >
+                                            4
+                                        </button>
+                                        <button
+                                            className={getBhkButtonClass("5")}
+                                            onClick={() => handleBhkFilter("5")}
+                                        >
+                                            5
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Custom Bathrooms Button with Popup */}
+                    <div className="relative" ref={bathroomsButtonRef}>
+                        <Badge count={appliedFilters?.bathrooms ? appliedFilters.bathrooms : 0} showZero={false} size="large" style={{
+                            backgroundColor: 'crimson',
+                        }}>
+                            <button
+                                className={`${view == 'map' && 'shadow-xl'} flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors`}
+                                onClick={() => setBathroomsPopupOpen(!bathroomsPopupOpen)}
+                            >
+                                <span className="text-sm font-medium">
+                                    Baths
+                                </span>
+                                <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${bathroomsPopupOpen ? 'rotate-180' : ''}`} />
+                            </button>
+                        </Badge>
+
+                        {/* Bathrooms Selection Popup */}
+                        {bathroomsPopupOpen && (
+                            <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-56">
+                                <div className="flex flex-col gap-2">
+                                    <h3 className="text-sm font-medium text-gray-700 mb-1">Select Bathrooms</h3>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <button
+                                            className={getBathButtonClass("1")}
+                                            onClick={() => handleBathFilter("1")}
+                                        >
+                                            1
+                                        </button>
+                                        <button
+                                            className={getBathButtonClass("2")}
+                                            onClick={() => handleBathFilter("2")}
+                                        >
+                                            2
+                                        </button>
+                                        <button
+                                            className={getBathButtonClass("3")}
+                                            onClick={() => handleBathFilter("3")}
+                                        >
+                                            3
+                                        </button>
+                                        <button
+                                            className={getBathButtonClass("4")}
+                                            onClick={() => handleBathFilter("4")}
+                                        >
+                                            4
+                                        </button>
+                                        <button
+                                            className={getBathButtonClass("5")}
+                                            onClick={() => handleBathFilter("5")}
+                                        >
+                                            5
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Custom Property Type Dropdown */}
+                    <div className="relative" ref={propertyTypeButtonRef}>
+                        <button
+                            className={` ${view == 'map' && 'shadow-xl'} flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors min-w-28`}
+                            onClick={() => setPropertyTypePopupOpen(!propertyTypePopupOpen)}
+                        >
+                            <span className="text-sm font-medium">
+                                {getPropertyTypeLabel(propertyType)}
+                            </span>
+                            <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${propertyTypePopupOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Property Type Selection Popup */}
+                        {propertyTypePopupOpen && (
+                            <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-48">
+                                <div className="flex flex-col gap-1">
+                                    {propertyTypeOptions.map((option) => (
+                                        <div
+                                            key={option.value}
+                                            className={getOptionItemClass(option.value, propertyType)}
+                                            onClick={() => handlePropertyTypeChange(option.value)}
+                                        >
+                                            {option.label}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Custom Purpose Dropdown */}
+                    <div className="relative" ref={purposeButtonRef}>
+                        <button
+                            className={` ${view == 'map' && 'shadow-xl'} flex items-center gap-2 border border-gray-200 bg-white px-4 py-2.5 rounded-lg hover:border-gray-300 transition-colors min-w-20 `}
+                            onClick={() => setPurposePopupOpen(!purposePopupOpen)}
+                        >
+                            <span className="text-sm font-medium">
+                                {purpose ? getPurposeLabel(purpose) : "Purpose"}
+                            </span>
+                            <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${purposePopupOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Purpose Selection Popup */}
+                        {purposePopupOpen && (
+                            <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-2 w-40">
+                                <div className="flex flex-col gap-1">
+                                    {purposeOptions.map((option) => (
+                                        <div
+                                            key={option.value}
+                                            className={getOptionItemClass(option.value, purpose)}
+                                            onClick={() => handlePurposeChange(option.value)}
+                                        >
+                                            {option.label}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Filters button with count */}
+                    <button
+                        className={`${view == 'map' && 'shadow-xl'} flex items-center gap-2 bg-white border hover:bg-gray-200 rounded-lg py-2.5 px-4 transition-colors duration-200 `}
+                        onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
+                    >
+                        <FcFilledFilter size={18} />
+                        <span className="font-medium">More Filters</span>
+                        {/* {Object.keys(appliedFilters).length > 0 && (
+                            <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+                                {Object.keys(appliedFilters).length}
+                            </span>
+                        )} */}
+                    </button>
+                </div>
+
+                <div className='flex items-center gap-2'>
+                    {view == "list" && <ResetFilterButton onClick={handleResetFilters} />}
+                    {/* View toggle button */}
+                    <button
+                        onClick={() => handleViewChange(view === 'list' ? 'map' : 'list')}
+                        className={`py-2.5 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-800 text-white bg-gray-900 transition-colors duration-200 ${view == 'map' && 'shadow-xl'} `}
+                    >
+                        {view === 'list' ? <Map size={18} /> : <List size={18} />}
+                        <span className="font-medium text-sm">{view === 'list' ? 'Map View' : 'List View'}</span>
+                    </button>
+                </div>
+            </div>
+
+            {/* Advanced Filter Panel with Tabs */}
+            {advancedFilterOpen && (
+                <>
+                    {/* Apply overflow-hidden to body when filter is open */}
+                    <style jsx global>{`
+                        body {
+                            overflow: hidden;
+                        }
+                    `}</style>
+
+                    <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+                        <div className="w-full max-w-7xl bg-white rounded-xl shadow-2xl flex flex-col h-auto max-h-[95vh]">
+                            <div className="flex justify-between items-center border-b border-gray-100 px-6 py-4 flex-shrink-0">
+                                <div role="tablist" className="flex gap-2 font-medium">
+                                    <button
+                                        role="tab"
+                                        className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'property'
+                                            ? 'bg-gray-900 text-white'
+                                            : 'text-gray-700 hover:bg-gray-100'}`}
+                                        onClick={() => setActiveFilterTab('property')}
+                                    >
+                                        Property
+                                    </button>
+                                    <button
+                                        role="tab"
+                                        className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'project'
+                                            ? 'bg-gray-900 text-white'
+                                            : 'text-gray-700 hover:bg-gray-100'}`}
+                                        onClick={() => setActiveFilterTab('project')}
+                                    >
+                                        Project
+                                    </button>
+                                    <button
+                                        role="tab"
+                                        className={`px-6 py-3 rounded-lg text-base transition-colors ${activeFilterTab === 'building'
+                                            ? 'bg-gray-900 text-white'
+                                            : 'text-gray-700 hover:bg-gray-100'}`}
+                                        onClick={() => setActiveFilterTab('building')}
+                                    >
+                                        Building
+                                    </button>
+                                </div>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+                                        onClick={() => setAdvancedFilterOpen(false)}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50"
+                                        onClick={resetAllFilters}
+                                    >
+                                        Reset Filters
+                                    </button>
+                                    <button
+                                        className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition hover:bg-red-700"
+                                        onClick={() => setAdvancedFilterOpen(false)}
+                                    >
+                                        Apply Filters
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Tab Content with auto height and scrollable */}
+                            <div className="p-6 overflow-y-auto ">
+                                {activeFilterTab === 'property' && <PropertyFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+                                {activeFilterTab === 'project' && <ProjectFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+                                {activeFilterTab === 'building' && <BuildingFilter setAdvancedFilterOpen={setAdvancedFilterOpen} />}
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+        </section>
+    );
+};
+
 export default SearchSection;
+

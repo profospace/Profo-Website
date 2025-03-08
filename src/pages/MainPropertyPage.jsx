@@ -529,6 +529,118 @@
 
 // export default MainPropertyPage;
 
+// import React, { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import MapPage from './MapPage';
+// import ListingPage from '../components/ListingPage';
+// import { getWishlist } from '../redux/features/Wishlist/wishlistSlice';
+// import { getConfig } from '../utils/config';
+
+// const MainPropertyPage = () => {
+//     const dispatch = useDispatch();
+//     // Add default value for appliedFilters
+//     const { properties = [], projects = [], buildings = [], appliedFilters = { filterType: null }, isLoading = false }
+//         = useSelector(state => state.map || {});
+
+//     const [view, setView] = useState('list');
+//     const [center, setCenter] = useState(null);
+
+//     // State for filters and search
+//     const [sortBy, setSortBy] = useState('');
+//     const [filterType, setFilterType] = useState('all');
+//     const [searchQuery, setSearchQuery] = useState('');
+//     const [isFilterVisible, setIsFilterVisible] = useState(false);
+
+//     useEffect(() => {
+//         if (navigator.geolocation) {
+//             navigator.geolocation.getCurrentPosition(
+//                 (position) => {
+//                     setCenter({
+//                         lat: position.coords.latitude,
+//                         lng: position.coords.longitude
+//                     });
+//                 },
+//                 (error) => {
+//                     console.error("Error getting location:", error);
+//                     setCenter({
+//                         lat: 26.4735846,
+//                         lng: 80.2855738
+//                     });
+//                 }
+//             );
+//         }
+//     }, []);
+
+//     const handleViewChange = (newView) => {
+//         setView(newView);
+//     };
+
+//     // Add a safe check for the filter type
+//     const isPropertyFilter = appliedFilters?.filterType === "property";
+
+//     useEffect(() => {
+//         const token = getConfig()?.headers?.Authorization?.split(' ')?.[1];
+        
+//               if (token) {
+//                 dispatch(getWishlist());
+//               }
+//     }, []);
+
+//     const isGoogleAPILoaded = window.google && window.google.maps;
+
+//     return (
+//         <div>
+//             <div className="overflow-hidden relative w-full">
+//                 <div className="flex flex-col absolute">
+//                     {/* <SearchSection handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy} /> */}
+//                 </div>
+
+//                 {/* Main content */}
+//                 {view === 'list' ? (
+//                     <div>
+//                         <ListingPage
+//                             properties={properties}
+//                             projects={projects}
+//                             buildings={buildings}
+//                             isLoading={isLoading}
+//                             handleViewChange={handleViewChange}
+//                             filterType={filterType}
+//                             searchQuery={searchQuery}
+//                             setSearchQuery={setSearchQuery}
+//                             setFilterType={setFilterType}
+//                             sortBy={sortBy}
+//                             setSortBy={setSortBy}
+//                             view={view}
+//                         />
+//                     </div>
+//                 ) : (
+//                     <div>
+//                         {isGoogleAPILoaded && (
+//                             <MapPage
+//                                 onViewChange={handleViewChange}
+//                                 center={center}
+//                                 setCenter={setCenter}
+//                                 properties={properties}
+//                                 projects={projects}
+//                                 buildings={buildings}
+//                                 isLoading={isLoading}
+//                                 setIsFilterVisible={setIsFilterVisible}
+//                                 handleViewChange={handleViewChange}
+//                                 view={view}
+//                                 setSearchQuery={setSearchQuery}
+//                                 setFilterType={setFilterType}
+//                                 setSortBy={setSortBy}
+//                             />
+//                         )}
+//                     </div>
+//                 )}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default MainPropertyPage;
+
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MapPage from './MapPage';
@@ -539,8 +651,13 @@ import { getConfig } from '../utils/config';
 const MainPropertyPage = () => {
     const dispatch = useDispatch();
     // Add default value for appliedFilters
-    const { properties = [], projects = [], buildings = [], appliedFilters = { filterType: null }, isLoading = false }
+    const { properties: initialProperties = [], projects: initialProjects = [], buildings: initialBuildings = [], appliedFilters = { filterType: null }, isLoading = false }
         = useSelector(state => state.map || {});
+
+    // Create state variables for sorted data
+    const [properties, setProperties] = useState(initialProperties);
+    const [projects, setProjects] = useState(initialProjects);
+    const [buildings, setBuildings] = useState(initialBuildings);
 
     const [view, setView] = useState('list');
     const [center, setCenter] = useState(null);
@@ -550,6 +667,90 @@ const MainPropertyPage = () => {
     const [filterType, setFilterType] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [isFilterVisible, setIsFilterVisible] = useState(false);
+
+    // Update local state when Redux state changes
+    useEffect(() => {
+        setProperties(initialProperties);
+        setProjects(initialProjects);
+        setBuildings(initialBuildings);
+    }, [initialProperties, initialProjects, initialBuildings]);
+
+    // Sorting function for all data types
+    useEffect(() => {
+        // Make copies of the arrays to avoid mutating props
+        const sortedProperties = [...properties];
+        const sortedProjects = [...projects];
+        const sortedBuildings = [...buildings];
+
+        // Define sort functions for different entity types
+        const sortProperties = (items, sortType) => {
+            return items.sort((a, b) => {
+                const getPrice = (item) => item?.price || 0;
+                const getCreatedAt = (item) => new Date(item?.createdAt || 0);
+                
+                switch (sortType) {
+                    case 'price-low':
+                        return getPrice(a) - getPrice(b);
+                    case 'price-high':
+                        return getPrice(b) - getPrice(a);
+                    case 'new-old':
+                        return getCreatedAt(b) - getCreatedAt(a);
+                    case 'old-new':
+                        return getCreatedAt(a) - getCreatedAt(b);
+                    default:
+                        return 0;
+                }
+            });
+        };
+
+        const sortProjects = (items, sortType) => {
+            return items.sort((a, b) => {
+                const getPrice = (item) => item?.overview?.priceRange?.min || 0;
+                const getCreatedAt = (item) => new Date(item?.createdAt || 0);
+                
+                switch (sortType) {
+                    case 'price-low':
+                        return getPrice(a) - getPrice(b);
+                    case 'price-high':
+                        return getPrice(b) - getPrice(a);
+                    case 'new-old':
+                        return getCreatedAt(b) - getCreatedAt(a);
+                    case 'old-new':
+                        return getCreatedAt(a) - getCreatedAt(b);
+                    default:
+                        return 0;
+                }
+            });
+        };
+
+        const sortBuildings = (items, sortType) => {
+            return items.sort((a, b) => {
+                const getAvailableFlats = (item) => parseInt(item?.numberOfFlatsAvailable || 0);
+                const getCreatedAt = (item) => new Date(item?.createdAt || 0);
+                
+                switch (sortType) {
+                    case 'price-low':
+                        // For buildings, sort by number of available flats
+                        return getAvailableFlats(a) - getAvailableFlats(b);
+                    case 'price-high':
+                        return getAvailableFlats(b) - getAvailableFlats(a);
+                    case 'new-old':
+                        return getCreatedAt(b) - getCreatedAt(a);
+                    case 'old-new':
+                        return getCreatedAt(a) - getCreatedAt(b);
+                    default:
+                        return 0;
+                }
+            });
+        };
+
+        // Apply sorting if a sort option is selected
+        if (sortBy) {
+            setProperties(sortProperties(sortedProperties, sortBy));
+            setProjects(sortProjects(sortedProjects, sortBy));
+            setBuildings(sortBuildings(sortedBuildings, sortBy));
+        }
+    }, [sortBy, initialProperties, initialProjects, initialBuildings]);
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -590,11 +791,7 @@ const MainPropertyPage = () => {
 
     return (
         <div>
-            <div className="overflow-hidden relative w-full bg-[#F7F9FC]">
-                <div className="flex flex-col absolute">
-                    {/* <SearchSection handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy} /> */}
-                </div>
-
+            <div className="overflow-hidden relative w-full">
                 {/* Main content */}
                 {view === 'list' ? (
                     <div>
@@ -604,11 +801,11 @@ const MainPropertyPage = () => {
                             buildings={buildings}
                             isLoading={isLoading}
                             handleViewChange={handleViewChange}
-                            sortBy={sortBy}
                             filterType={filterType}
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery}
                             setFilterType={setFilterType}
+                            sortBy={sortBy}
                             setSortBy={setSortBy}
                             view={view}
                         />
@@ -640,3 +837,4 @@ const MainPropertyPage = () => {
 };
 
 export default MainPropertyPage;
+

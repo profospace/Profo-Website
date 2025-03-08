@@ -1222,7 +1222,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Heart, User, Menu, X, ChevronDown } from 'lucide-react';
+import { Heart, User, Menu, X, ChevronDown, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { applyFilter } from '../../redux/features/Map/mapSlice';
@@ -1354,6 +1354,8 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  console.log("cur", currentCity)
+
   
 
   useEffect(() => {
@@ -1379,7 +1381,7 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
     dispatch(applyFilter(filterParams));
 
     // Close dropdown
-    setActiveDropdown(null);
+    setActiveDropdown(false);
 
     // Navigate to main results page
     navigate("/main");
@@ -1587,112 +1589,6 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
     ]
   };
 
-  // Menu data structure for Property dropdown (new addition)
-  const propertyMenuItems = {
-    popularChoices: [
-      {
-        title: "Residential Properties",
-        params: { vanilla: 'property', category: 'Residential' }
-      },
-      {
-        title: "Commercial Properties",
-        params: { vanilla: 'property', category: 'Commercial' }
-      },
-      {
-        title: "New Constructions",
-        params: { vanilla: 'property', constructionStatus: 'New' }
-      },
-      {
-        title: "Featured Properties",
-        params: { vanilla: 'property', featured: true }
-      },
-      {
-        title: "Premium Properties",
-        params: { vanilla: 'property', premium: true },
-        badge: "trending"
-      }
-    ],
-    propertyTypes: [
-      {
-        title: "Apartments",
-        params: { vanilla: 'property', propertyType: ['Apartment'] }
-      },
-      {
-        title: "Independent Houses",
-        params: { vanilla: 'property', propertyType: ['Independent House'] }
-      },
-      {
-        title: "Villas",
-        params: { vanilla: 'property', propertyType: ['Villa'] }
-      },
-      {
-        title: "Builder Floors",
-        params: { vanilla: 'property', propertyType: ['Builder Floor'] }
-      },
-      {
-        title: "Penthouses",
-        params: { vanilla: 'property', propertyType: ['Penthouse'] }
-      },
-      {
-        title: "Farm Houses",
-        params: { vanilla: 'property', propertyType: ['Farm House'] }
-      }
-    ],
-    locations: [
-      {
-        title: "New Delhi",
-        params: { vanilla: 'property', city: 'New-Delhi' }
-      },
-      {
-        title: "Mumbai",
-        params: { vanilla: 'property', city: 'Mumbai' }
-      },
-      {
-        title: "Bangalore",
-        params: { vanilla: 'property', city: 'Bangalore' }
-      },
-      {
-        title: "Pune",
-        params: { vanilla: 'property', city: 'Pune' }
-      }
-    ],
-    explore: [
-      {
-        title: "Top Rated Properties",
-        params: { vanilla: 'property', rating: { min: 4 } }
-      },
-      {
-        title: "Recently Listed",
-        params: { vanilla: 'property', sortBy: 'newest' }
-      },
-      {
-        title: "Upcoming Projects",
-        params: { vanilla: 'project', status: 'Upcoming' }
-      },
-      {
-        title: "Exclusive Listings",
-        params: { vanilla: 'property', exclusive: true }
-      }
-    ],
-    propertyTools: [
-      {
-        title: "Property Valuation",
-        navigate: '/tools/valuation'
-      },
-      {
-        title: "EMI Calculator",
-        navigate: '/tools/emi-calculator'
-      },
-      {
-        title: "Legal Documentation",
-        navigate: '/tools/legal-docs'
-      },
-      {
-        title: "Property Inspection",
-        navigate: '/tools/inspection'
-      }
-    ]
-  };
 
   const profoAdviceItems = {
     services: [
@@ -1808,28 +1704,6 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
               </motion.button>
             </div>
 
-            {/* New Property Tab */}
-            <div className="relative">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                className={`flex items-center px-3 py-2 text-sm font-medium relative ${isScrolled || activeDropdown
-                  ? 'text-gray-700 hover:text-emerald-600'
-                  : 'text-white hover:text-emerald-300'
-                  } transition-colors ${activeDropdown === 'property' ? 'text-emerald-600 font-semibold' : ''}`}
-                onClick={() => handleDropdownToggle('property')}
-              >
-                Property
-                <motion.span
-                  animate={{ rotate: activeDropdown === 'property' ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="ml-1"
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </motion.span>
-                <ActiveIndicator isActive={activeDropdown === 'property'} />
-              </motion.button>
-            </div>
-
             <div className="relative">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -1874,6 +1748,15 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`p-2 rounded-full ${isScrolled || activeDropdown ? 'text-gray-500 hover:text-emerald-600 hover:bg-gray-100' : 'text-white hover:text-emerald-300 hover:bg-white/10'
+                }`}
+              onClick={() => navigate('/main')}
+            >
+              <Search className="h-5 w-5" />
+            </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -2010,51 +1893,6 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
           </motion.div>
         )}
 
-        {/* Property Mega Menu with AnimatePresence */}
-        {activeDropdown === 'property' && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute left-0 w-full bg-white shadow-lg mt-1 z-50"
-          >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-              <div className="grid grid-cols-5 gap-8">
-                <div>
-                  <h3 className="text-base font-medium text-gray-900 mb-4">Popular Choices</h3>
-                  <ul className="space-y-3">
-                    {renderMenuItems(propertyMenuItems.popularChoices)}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-base font-medium text-gray-900 mb-4">Property Types</h3>
-                  <ul className="space-y-3">
-                    {renderMenuItems(propertyMenuItems.propertyTypes)}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-base font-medium text-gray-900 mb-4">Locations</h3>
-                  <ul className="space-y-3">
-                    {renderMenuItems(propertyMenuItems.locations)}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-base font-medium text-gray-900 mb-4">Explore</h3>
-                  <ul className="space-y-3">
-                    {renderMenuItems(propertyMenuItems.explore)}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-base font-medium text-gray-900 mb-4">Property Tools</h3>
-                  <ul className="space-y-3">
-                    {renderMenuItems(propertyMenuItems.propertyTools)}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         {/* Profo Advice - new */}
         {activeDropdown === 'profo-advice' && (

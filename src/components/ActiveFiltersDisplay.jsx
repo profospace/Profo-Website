@@ -1111,7 +1111,7 @@ const ActiveFiltersDisplay = () => {
 
     return (
         Object.keys(appliedFilters).length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-2">
+            <div className="flex flex-wrap gap-2">
                 {Object.entries(appliedFilters).map(([key, value]) => (
                     <div
                         key={key}

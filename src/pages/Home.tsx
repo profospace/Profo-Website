@@ -471,82 +471,150 @@ function Home() {
     }, []);
 
 
+    
+    // useEffect(() => {
+    //     // Function to get the current location and then fetch the city name
+    //     setLoading(true);
+
+    //     // Check if geolocation is available in the browser
+    //     if (!navigator.geolocation) {
+    //         setError('Geolocation is not supported by your browser');
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     // Get current position
+    //     navigator.geolocation.getCurrentPosition(
+    //         async (position) => {
+    //             try {
+    //                 const { latitude, longitude } = position.coords;
+
+    //                 // Using Google Maps Geocoding API to get the city
+    //                 // Note: You would need a valid API key in a real application
+    //                 const response = await fetch(
+    //                     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`
+    //                 );
+
+    //                 if (!response.ok) {
+    //                     throw new Error('Failed to fetch location data');
+    //                 }
+
+    //                 const data = await response.json();
+    //                 console.log(data)
+
+    //                 if (data.status === 'OK') {
+    //                     // Extract city from address components
+    //                     let city = '';
+    //                     for (let component of data.results[0].address_components) {
+    //                         if (component.types.includes('locality')) {
+    //                             city = component.long_name;
+    //                             break;
+    //                         }
+    //                     }
+
+    //                     setCurrentCity(city || 'Unknown City');
+    //                 } else {
+    //                     throw new Error('Geocoding API error: ' + data.status);
+    //                 }
+
+    //                 setLoading(false);
+    //             } catch (err) {
+    //                 setError(err.message);
+    //                 setLoading(false);
+    //             }
+    //         },
+    //         (error) => {
+    //             switch (error.code) {
+    //                 case error.PERMISSION_DENIED:
+    //                     setError('User denied the request for geolocation');
+    //                     break;
+    //                 case error.POSITION_UNAVAILABLE:
+    //                     setError('Location information is unavailable');
+    //                     break;
+    //                 case error.TIMEOUT:
+    //                     setError('The request to get user location timed out');
+    //                     break;
+    //                 default:
+    //                     setError('An unknown error occurred');
+    //             }
+    //             setLoading(false);
+    //         },
+    //         { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    //     );
+
+    //     // No cleanup function needed as we're not subscribing to any eve
+    // }, []); // Empty dependency array means this runs once on mount
+
     useEffect(() => {
-        // Function to get the current location and then fetch the city name
-        const fetchCurrentCity = () => {
-            setLoading(true);
+        const fetchLocation = async () => {
+            try {
+                setLoading(true);
+                console.log('Requesting location access...');
 
-            // Check if geolocation is available in the browser
-            if (!navigator.geolocation) {
-                setError('Geolocation is not supported by your browser');
+                // Request permission for geolocation
+                if (!navigator.geolocation) {
+                    throw new Error('Geolocation is not supported by your browser');
+                }
+
+                // Get current position
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    });
+                });
+
+                const { latitude, longitude } = position.coords;
+                console.log('Location obtained:', { latitude, longitude });
+
+                // Use Google Maps Geocoding API to get address information
+                const response = await fetch(
+                    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`
+                );
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch location data from Google API');
+                }
+
+                const data = await response.json();
+                console.log('Google Geocoding API response:', data);
+
+                if (data.status !== 'OK') {
+                    throw new Error(`Google API error: ${data.status}`);
+                }
+
+                // Extract city from the address components
+                let city = 'Unknown';
+
+                if (data.results && data.results.length > 0) {
+                    const addressComponents = data.results[0].address_components;
+
+                    // Look for locality (city) or administrative_area_level_2 (county/district)
+                    for (const component of addressComponents) {
+                        if (component.types.includes('locality')) {
+                            city = component.long_name;
+                            break;
+                        } else if (component.types.includes('administrative_area_level_2') && city === 'Unknown') {
+                            city = component.long_name;
+                        }
+                    }
+
+                    console.log('Extracted city:', city);
+                }
+
+                setCurrentCity(city);
                 setLoading(false);
-                return;
+            } catch (err) {
+                console.error('Error getting location:', err);
+                setError(err.message);
+                setLoading(false);
             }
-
-            // Get current position
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    try {
-                        const { latitude, longitude } = position.coords;
-
-                        // Using Google Maps Geocoding API to get the city
-                        // Note: You would need a valid API key in a real application
-                        const response = await fetch(
-                            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`
-                        );
-
-                        if (!response.ok) {
-                            throw new Error('Failed to fetch location data');
-                        }
-
-                        const data = await response.json();
-
-                        if (data.status === 'OK') {
-                            // Extract city from address components
-                            let city = '';
-                            for (let component of data.results[0].address_components) {
-                                if (component.types.includes('locality')) {
-                                    city = component.long_name;
-                                    break;
-                                }
-                            }
-
-                            setCurrentCity(city || 'Unknown City');
-                        } else {
-                            throw new Error('Geocoding API error: ' + data.status);
-                        }
-
-                        setLoading(false);
-                    } catch (err) {
-                        setError(err.message);
-                        setLoading(false);
-                    }
-                },
-                (error) => {
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
-                            setError('User denied the request for geolocation');
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            setError('Location information is unavailable');
-                            break;
-                        case error.TIMEOUT:
-                            setError('The request to get user location timed out');
-                            break;
-                        default:
-                            setError('An unknown error occurred');
-                    }
-                    setLoading(false);
-                },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-            );
         };
 
-        // Call the function to fetch the current city
-        fetchCurrentCity();
-
-    // No cleanup function needed as we're not subscribing to any eve
-    }, []); // Empty dependency array means this runs once on mount
+        fetchLocation();
+    }, []);
+    
     return (
         <div className="">
             {/* Progress bar */}
@@ -555,7 +623,7 @@ function Home() {
                 style={{ scaleX }}
             /> */}
 
-            <Navbar currentCity={currentCity} loading={loading}/>
+            <Navbar currentCity={currentCity} loading={loading} />
             <AdCarousel />
             {/* <SearchBar /> */}
             <SearchBarDemo />

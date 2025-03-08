@@ -394,15 +394,232 @@
 
 // export default WishlistCard;
 
+// import React from 'react';
+// import { MapPin, Bed, Bath, Square, Trash2, Building, Home, Calendar, CreditCard } from 'lucide-react';
+// import { useNavigate } from 'react-router-dom';
+// import { motion } from 'framer-motion';
+
+// const WishlistCard = ({ item, index, removeFromWishlist, viewedItem = false, contactedItem = false }) => {
+//     const navigate = useNavigate();
+//     const entity = item.propertyId;
+//     const entityType = item.entityType;
+
+//     const formatPrice = (price) => {
+//         if (!price) return 'Price on request';
+//         return new Intl.NumberFormat('en-IN', {
+//             style: 'currency',
+//             currency: 'INR',
+//             maximumFractionDigits: 0
+//         }).format(price);
+//     };
+
+//     const truncateText = (text, maxLength) => {
+//         if (!text) return '';
+//         return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+//     };
+
+//     const getEntityImage = () => {
+//         if (entityType === 'property') {
+//             if (entity?.post_images?.length > 0 && entity.post_images[0]?.url) {
+//                 return entity.post_images[0].url;
+//             } else if (entity?.galleryList?.length > 0) {
+//                 return entity.galleryList[0];
+//             }
+//         } else if (entityType === 'project') {
+//             if (entity) {
+//                 return entity?.gallery[0]?.images?.[0];
+//             }
+//         } else if (entityType === 'building') {
+//             // Return building image if available
+//             return "/api/placeholder/400/300"; // Placeholder for building
+//         }
+
+//         return "/api/placeholder/400/300";
+//     };
+
+//     const getEntityTitle = () => {
+//         if (entityType === 'property') {
+//             return entity?.post_title || 'Property';
+//         } else if (entityType === 'project') {
+//             return entity?.name || 'Project';
+//         } else if (entityType === 'building') {
+//             return entity?.name || 'Building';
+//         }
+//         return 'Unknown';
+//     };
+
+//     const getEntityLocation = () => {
+//         if (entityType === 'property') {
+//             return `${entity?.locality || ''}, ${entity?.city || ''}`.trim();
+//         } else if (entityType === 'project') {
+//             if (entity?.location) {
+//                 return `${entity.location.city || ''}, ${entity.location.state || ''}`.trim();
+//             }
+//         } else if (entityType === 'building') {
+//             return entity?.location?.address || '';
+//         }
+//         return '';
+//     };
+
+//     const getEntityPrice = () => {
+//         if (entityType === 'property') {
+//             return entity?.price;
+//         } else if (entityType === 'project') {
+//             return entity?.overview?.priceRange?.pricePerSqFt ?
+//                 `${entity.overview.priceRange.pricePerSqFt} per sqft` :
+//                 null;
+//         }
+//         return null;
+//     };
+
+//     const getEntityBedrooms = () => {
+//         if (entityType === 'property') {
+//             return entity?.bedrooms;
+//         }
+//         return null;
+//     };
+
+//     const getEntityIcon = () => {
+//         if (entityType === 'property') {
+//             return <Home className="h-5 w-5 text-blue-500" />;
+//         } else if (entityType === 'project') {
+//             return <Building className="h-5 w-5 text-green-500" />;
+//         } else if (entityType === 'building') {
+//             return <Building className="h-5 w-5 text-purple-500" />;
+//         }
+//         return <Home className="h-5 w-5" />;
+//     };
+
+//     const getEntityStatus = () => {
+//         if (entityType === 'property') {
+//             return entity?.status;
+//         } else if (entityType === 'project') {
+//             return entity?.status;
+//         }
+//         return null;
+//     };
+
+//     const getEntityArea = () => {
+//         if (entityType === 'property') {
+//             return entity?.area ? `${entity.area} ${entity?.areaUnit || 'sqft'}` : null;
+//         }
+//         return null;
+//     };
+
+//     const handleCardClick = () => {
+//         if (entityType === 'property') {
+//             navigate(`/api/details/${entity?.post_id}`);
+//         } else if (entityType === 'project') {
+//             navigate(`/api/details/project/${entity?.projectId}`);
+//         } else if (entityType === 'building') {
+//             navigate(`/api/details/building/${entity?.buildingId}`);
+//         }
+//     };
+
+//     const getDateText = () => {
+//         if (viewedItem) {
+//             return `Viewed on ${new Date(item?.timestamp).toLocaleDateString()}`;
+//         } else if (contactedItem) {
+//             return `Contacted on ${new Date(item?.timestamp).toLocaleDateString()}`;
+//         } else {
+//             return `Saved on ${new Date(item?.savedAt).toLocaleDateString()}`;
+//         }
+//     };
+
+//     const handleRemoveClick = (e) => {
+//         e.stopPropagation(); // Prevent card click
+//         if (removeFromWishlist) {
+//             removeFromWishlist(e, item._id, entityType);
+//         }
+//     };
+
+//     return (
+//         <motion.div
+//             initial={{ opacity: 0, y: 20 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ duration: 0.5, delay: index * 0.1 }}
+//             className="bg-white rounded-xl shadow-lg overflow-hidden group cursor-pointer hover:shadow-xl transition-shadow duration-300"
+//             onClick={handleCardClick}
+//         >
+//             <div className="relative">
+//                 <img
+//                     src={getEntityImage()}
+//                     alt={getEntityTitle()}
+//                     className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+//                 />
+//                 <div className="absolute top-0 left-0 m-3 flex items-center gap-1 px-2 py-1 rounded-full bg-white/80 backdrop-blur-sm">
+//                     {getEntityIcon()}
+//                     <span className="text-xs font-medium capitalize">{entityType}</span>
+//                 </div>
+
+//                 {!viewedItem && !contactedItem && (
+//                     <div className="absolute top-4 right-4">
+//                         <motion.button
+//                             whileHover={{ scale: 1.1 }}
+//                             whileTap={{ scale: 0.9 }}
+//                             className="p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-600 hover:text-red-500 transition-colors"
+//                             onClick={handleRemoveClick}
+//                         >
+//                             <Trash2 className="h-5 w-5 text-red-500" />
+//                         </motion.button>
+//                     </div>
+//                 )}
+
+//                 {getEntityStatus() && (
+//                     <div className="absolute bottom-4 left-4">
+//                         <span className="px-3 py-1 bg-blue-600 text-white text-xs font-semibold rounded-full">
+//                             {getEntityStatus()}
+//                         </span>
+//                     </div>
+//                 )}
+//             </div>
+
+//             <div className="px-4 py-2">
+//                 <div className="flex justify-between items-center mb-2">
+//                     {getEntityPrice() && (
+//                         <h3 className="text-lg font-bold text-black">
+//                             {typeof getEntityPrice() === 'number' ? formatPrice(getEntityPrice()) : getEntityPrice()}
+//                         </h3>
+//                     )}
+//                     {getEntityBedrooms() && (
+//                         <div className="bg-black text-white rounded-full px-2 py-0.5 text-xs">
+//                             {getEntityBedrooms()} BHK
+//                         </div>
+//                     )}
+//                 </div>
+
+//                 <h3 className="text-md font-bold text-gray-900 mb-1">{truncateText(getEntityTitle(), 25)}</h3>
+
+//                 {getEntityLocation() && (
+//                     <div className="flex items-center text-gray-500">
+//                         <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
+//                         <span className="text-sm">{truncateText(getEntityLocation(), 30)}</span>
+//                     </div>
+//                 )}
+
+
+//             </div>
+//                 <div className="bg-gray-100 px-4 py-2 flex items-center text-xs text-gray-800 border-t border-gray-100">
+//                     <Calendar className="h-3 w-3 mr-2" />
+//                     <div className='text-center'>{getDateText()}</div>
+//                 </div>
+//         </motion.div>
+//     );
+// };
+
+// export default WishlistCard;
+
 import React from 'react';
-import { MapPin, Bed, Bath, Square, Trash2, Building, Home, Calendar, CreditCard } from 'lucide-react';
+import { MapPin, Trash2, Building, Home, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useWishlist } from '../../hooks/useWishlist';
 
 const WishlistCard = ({ item, index, removeFromWishlist, viewedItem = false, contactedItem = false }) => {
     const navigate = useNavigate();
+    const { handleToggleWishlist } = useWishlist();
     const entity = item.propertyId;
-    const entityType = item.entityType;
+    const entityType = item.entityType || 'property';
 
     const formatPrice = (price) => {
         if (!price) return 'Price on request';
@@ -427,11 +644,12 @@ const WishlistCard = ({ item, index, removeFromWishlist, viewedItem = false, con
             }
         } else if (entityType === 'project') {
             if (entity) {
-                return entity?.gallery[0]?.images?.[0];
+                return entity?.gallery?.[0]?.images?.[0];
             }
         } else if (entityType === 'building') {
-            // Return building image if available
-            return "/api/placeholder/400/300"; // Placeholder for building
+            if (entity?.galleryList?.length > 0) {
+                return entity.galleryList[0];
+            }
         }
 
         return "/api/placeholder/400/300";
@@ -528,8 +746,19 @@ const WishlistCard = ({ item, index, removeFromWishlist, viewedItem = false, con
 
     const handleRemoveClick = (e) => {
         e.stopPropagation(); // Prevent card click
+
+        // Use the custom removeFromWishlist handler if provided (for backward compatibility)
         if (removeFromWishlist) {
             removeFromWishlist(e, item._id, entityType);
+        } else {
+            // Otherwise use the centralized wishlist toggle function
+            const entityId = entityType === 'property' ? entity?.post_id :
+                entityType === 'project' ? entity?.projectId :
+                    entityType === 'building' ? entity?.buildingId : null;
+
+            if (entityId) {
+                handleToggleWishlist(e, { entityId, entityType });
+            }
         }
     };
 
@@ -596,13 +825,12 @@ const WishlistCard = ({ item, index, removeFromWishlist, viewedItem = false, con
                         <span className="text-sm">{truncateText(getEntityLocation(), 30)}</span>
                     </div>
                 )}
-
-
             </div>
-                <div className="bg-gray-100 px-4 py-2 flex items-center text-xs text-gray-800 border-t border-gray-100">
-                    <Calendar className="h-3 w-3 mr-2" />
-                    <div className='text-center'>{getDateText()}</div>
-                </div>
+
+            <div className="bg-gray-100 px-4 py-2 flex items-center text-xs text-gray-800 border-t border-gray-100">
+                <Calendar className="h-3 w-3 mr-2" />
+                <div className='text-center'>{getDateText()}</div>
+            </div>
         </motion.div>
     );
 };

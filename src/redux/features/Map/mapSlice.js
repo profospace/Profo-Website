@@ -88,13 +88,39 @@ export const applyFilter = createAsyncThunk(
 );
 
 
+
 const mapSlice = createSlice({
   name: "map",
   initialState,
   reducers: {
     clearFilters: (state) => {
       state.appliedFilters = {}; // Reset appliedFilters to an empty object
-    },    
+    }, 
+
+    // New reducer to set search results while preserving existing data if new data is empty
+    setSearchResults: (state, action) => {
+      const { properties, projects, buildings } = action.payload;
+
+      // Only update properties if incoming data is not empty
+      if (properties && Array.isArray(properties) && properties.length > 0) {
+        state.properties = properties;
+      }
+
+      // Only update projects if incoming data is not empty
+      if (projects && Array.isArray(projects) && projects.length > 0) {
+        state.projects = projects;
+      }
+
+      // Only update buildings if incoming data is not empty
+      if (buildings && Array.isArray(buildings) && buildings.length > 0) {
+        state.buildings = buildings;
+      }
+
+      // Set success status
+      state.isSuccess = true;
+      state.isError = false;
+      state.message = "Search completed successfully";
+    }
 
   },
   extraReducers: (builder) => {
@@ -205,5 +231,5 @@ const mapSlice = createSlice({
   },
 });
 
-export const { clearFilters } = mapSlice.actions;
+export const { clearFilters, setSearchResults } = mapSlice.actions;
 export default mapSlice.reducer;

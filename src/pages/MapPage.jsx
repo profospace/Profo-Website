@@ -882,7 +882,6 @@ import {
 } from 'lucide-react';
 import PropertyPanel from '../components/PropertyPanel';
 import SearchSection from '../components/SearchSection';
-import ActiveFiltersDisplay from '../components/ActiveFiltersDisplay';
 
 const MapPage = ({
     onViewChange,
@@ -1441,12 +1440,49 @@ const MapPage = ({
 
 
     return (
+        // <div className="w-full relative">
+        //     {/* Header */}
+        //     <div className="absolute top-0 left-0 right-0 z-10 bg-transparent px-4 flex justify-between items-center py-2">
+        //         <div className="flex items-center gap-4 ">
+        //             <div className='flex flex-col px-6'>
+        //                 <div className='flex items-center justify-between gap-12'>
+        //                     {/* Search Bar with Loader */}
+        //                     <div className="relative">
+        //                         <div className="flex items-center bg-white rounded-full shadow-lg">
+        //                             <input
+        //                                 type="text"
+        //                                 placeholder="Search location..."
+        //                                 value={searchQuery}
+        //                                 onChange={(e) => setSearchQuery(e.target.value)}
+        //                                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+        //                                 className="w-64 px-4 py-2 bg-transparent focus:outline-none"
+        //                             />
+        //                             {searchQuery && !isSearching && (
+        //                                 <button
+        //                                     onClick={() => setSearchQuery('')}
+        //                                     className="hover:text-gray-700 mr-1"
+        //                                 >
+        //                                     <X size={16} />
+        //                                 </button>
+        //                             )}
+        //                             <button
+        //                                 onClick={handleSearch}
+        //                                 disabled={isSearching}
+        //                                 className="p-2 hover:text-blue-600"
+        //                             >
+        //                                 {isSearching ? (
+        //                                     <Loader size={20} className="animate-spin text-blue-600" />
+        //                                 ) : (
+        //                                     <Search size={20} />
+        //                                 )}
+        //                             </button>
+        //                         </div>
         <div className="w-full relative">
             {/* Header */}
-            <div className="absolute top-0 left-0 right-0 z-10 bg-transparent px-4 flex justify-between items-center py-2">
+            <div className="absolute top-0 left-0 right-0 z-10 bg-transparent px-4 flex justify-between items-center">
                 <div className="flex items-center gap-4 ">
-                    <div className='flex flex-col px-6'>
-                        <div className='flex items-center justify-between gap-12'>
+                    <div className='flex flex-col '>
+                        <div className='flex items-center justify-between gap-20'>
                             {/* Search Bar with Loader */}
                             <div className="relative">
                                 <div className="flex items-center bg-white rounded-full shadow-lg">
@@ -1487,12 +1523,21 @@ const MapPage = ({
                                 )}
                             </div>
 
-                            <div>
-                                <SearchSection handleViewChange={handleViewChange} view={view} setSearchQuery={setSearchQuery} setFilterType={setFilterType} setSortBy={setSortBy} />
+                            <div className='w-full min-w-[68vw]'>
+                                <SearchSection
+                                    handleViewChange={handleViewChange}
+                                    view={view}
+                                    setSearchQuery={setSearchQuery}
+                                    setFilterType={setFilterType}
+                                    setSortBy={setSortBy}
+                                    variant="compact"
+                                    className="bg-transparent shadow-none"
+                                    showFilterDisplay={false}
+                                />
                             </div>
                         </div>
 
-                        <div><ActiveFiltersDisplay /></div>
+                        {/* <div><ActiveFiltersDisplay /></div> */}
                     </div>
 
                     {/* Locate Me Button, Zoom in, Zoom out Button */}
