@@ -116,8 +116,6 @@
 //             <li><a href="#" className="font-medium hover:text-red-600 transition">Warehouses</a></li>
 //             <li><a href="#" className="font-medium hover:text-red-600 transition">Lands</a></li>
 //             <li><a href="#" className="font-medium hover:text-red-600 transition">Kheti Jameen</a></li>
-//             <li><a href="#" className="font-medium hover:text-red-600 transition">Services</a></li>
-//             <li><a href="#" className="font-medium hover:text-red-600 transition">New Projects</a></li>
 //           </ul>
 //         </div>
 //       </nav>
