@@ -9,6 +9,7 @@ import TagsCarousal from '../../Testing/TagsCarousal';
 import { Button, Popover } from 'antd';
 import { LiaBathSolid } from "react-icons/lia";
 import { MdOutlineBed } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
 
 const PropertyShowcase = ({
@@ -274,8 +275,11 @@ const PropertyCard = ({ property }) => {
         window.location.href = "https://wa.me/971500000000";
     };
 
+    const navigate = useNavigate()
+
     return (
         <div
+            onClick={() => navigate(`/api/details/${property?.post_id}`)}
             className="font-lato flex mb-8 flex-col md:flex-row rounded-lg overflow-hidden max-w-6xl mx-auto bg-white border border-[#DEDEDE] "
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
