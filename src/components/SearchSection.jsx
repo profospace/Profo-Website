@@ -3859,7 +3859,7 @@ const SearchSection = ({
     };
 
     return (
-        <section className={`bg-transparent px-6 py-2 mb-2 ${className} font-roboto`}>
+        <section className={`bg-transparent px-6 pt-6 mb-2 ${className} font-roboto`}>
             <div className="flex items-center justify-between w-full gap-4">
                 <div className="flex items-center gap-3 flex-wrap">
                     {/* Search input replacing Easy search button */}

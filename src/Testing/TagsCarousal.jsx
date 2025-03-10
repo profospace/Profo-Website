@@ -482,11 +482,13 @@ const TagsCarousel = ({ property }) => {
     const slidesToShow = 3;
     const totalSlides = Math.ceil(features.length / slidesToShow);
 
-    const nextSlide = () => {
+    const nextSlide = (e) => {
+        e.stopPropagation()
         setCurrentSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
     };
 
-    const prevSlide = () => {
+    const prevSlide = (e) => {
+        e.stopPropagation()
         setCurrentSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
     };
 
@@ -542,7 +544,7 @@ const TagsCarousel = ({ property }) => {
 
             {isHovering && hasPrevSlide && (
                 <button
-                    onClick={prevSlide}
+                    onClick={(e)=>prevSlide(e)}
                     className="absolute left-0 top-1/2 transform -translate-y-1/2 text-gray-700 hover:text-teal-600 transition-colors bg-white bg-opacity-70 rounded-full p-1 shadow-sm z-10"
                     aria-label="Previous slide"
                 >
@@ -552,7 +554,7 @@ const TagsCarousel = ({ property }) => {
 
             {isHovering && hasNextSlide && (
                 <button
-                    onClick={nextSlide}
+                    onClick={(e)=>nextSlide(e)}
                     className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-700 hover:text-teal-600 transition-colors bg-white bg-opacity-70 rounded-full p-1 shadow-sm z-10"
                     aria-label="Next slide"
                 >

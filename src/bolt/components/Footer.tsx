@@ -62,28 +62,28 @@ const dispatch = useDispatch()
               <motion.a
                 whileHover={{ scale: 1.1, y: -3 }}
                 href="#"
-                className="text-gray-400 hover:text-[#10B981]"
+                className="text-gray-400 hover:text-[#CB0A01]"
               >
                 <Facebook className="h-5 w-5" />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.1, y: -3 }}
                 href="#"
-                className="text-gray-400 hover:text-[#10B981]"
+                className="text-gray-400 hover:text-[#CB0A01]"
               >
                 <Twitter className="h-5 w-5" />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.1, y: -3 }}
                 href="#"
-                className="text-gray-400 hover:text-[#10B981]"
+                className="text-gray-400 hover:text-[#CB0A01]"
               >
                 <Instagram className="h-5 w-5" />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.1, y: -3 }}
                 href="#"
-                className="text-gray-400 hover:text-[#10B981]"
+                className="text-gray-400 hover:text-[#CB0A01]"
               >
                 <Linkedin className="h-5 w-5" />
               </motion.a>
@@ -93,25 +93,25 @@ const dispatch = useDispatch()
           <div>
             <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
             <ul className="space-y-3 flex flex-col">
-              <Link to="/" className="text-gray-400 hover:text-[#10B981] transition-colors">Home</Link>
-              <Link to="/main" className="text-gray-400 hover:text-[#10B981] transition-colors">Properties</Link>
-              <Link to="/" className="text-gray-400 hover:text-[#10B981] transition-colors">Agents</Link>
-              <Link to="/about-us" className="text-gray-400 hover:text-[#10B981] transition-colors">About Us</Link>
-              <Link to="/blog" className="text-gray-400 hover:text-[#10B981] transition-colors">Blog</Link>
-              <Link to="/contact-us" className="text-gray-400 hover:text-[#10B981] transition-colors">Contact</Link>
+              <Link to="/" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Home</Link>
+              <Link to="/main" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Properties</Link>
+              <Link to="/" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Agents</Link>
+              <Link to="/about-us" className="text-gray-400 hover:text-[#CB0A01] transition-colors">About Us</Link>
+              <Link to="/blog" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Blog</Link>
+              <Link to="/contact-us" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Contact</Link>
             </ul>
           </div>
 
           <div>
             <h3 className="text-lg font-semibold mb-6">Property Types</h3>
             <ul className="space-y-3 flex flex-col">
-              {/* <Link to="/" className="text-gray-400 hover:text-[#10B981] transition-colors">Apartments</Link>
-              <Link to="/" className="text-gray-400 hover:text-[#10B981] transition-colors">Houses</Link>
-              <Link to="/" className="text-gray-400 hover:text-[#10B981] transition-colors">Villas</Link>
-              <Link to="/" className="text-gray-400 hover:text-[#10B981] transition-colors">Commercial</Link>
-              <Link to="/" className="text-gray-400 hover:text-[#10B981] transition-colors">Shop</Link> */}
+              {/* <Link to="/" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Apartments</Link>
+              <Link to="/" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Houses</Link>
+              <Link to="/" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Villas</Link>
+              <Link to="/" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Commercial</Link>
+              <Link to="/" className="text-gray-400 hover:text-[#CB0A01] transition-colors">Shop</Link> */}
               {
-                propertyTypes?.map((key, index) => <span key={index} onClick={() => handleMenuItemClick(key?.params)}  className="text-gray-400 hover:text-[#10B981] transition-colors cursor-pointer ">{key?.title}</span>)
+                propertyTypes?.map((key, index) => <span key={index} onClick={() => handleMenuItemClick(key?.params)}  className="text-gray-400 hover:text-[#CB0A01] transition-colors cursor-pointer ">{key?.title}</span>)
               }
             </ul>
           </div>
@@ -124,11 +124,11 @@ const dispatch = useDispatch()
                 <span className="text-gray-400">123 Real Estate Avenue, New York, NY 10001</span>
               </li> */}
               <li className="flex items-center">
-                <Phone className="h-5 w-5 text-emerald-500 mr-3" />
+                <Phone className="h-5 w-5 text-[#CB0A01] mr-3" />
                 <span className="text-gray-400">+91 8090555050</span>
               </li>
               <li className="flex items-center">
-                <Mail className="h-5 w-5 text-emerald-500 mr-3" />
+                <Mail className="h-5 w-5 text-[#CB0A01] mr-3" />
                 <span className="text-gray-400">admin@profospace.com</span>
               </li>
             </ul>
@@ -140,9 +140,9 @@ const dispatch = useDispatch()
             &copy; {new Date().getFullYear()} PROFO. All rights reserved.
           </p>
           <div className="mt-4 md:mt-0 flex space-x-6">
-            <Link to="/privacy-policy" className="text-gray-400 hover:text-[#10B981] text-sm">Privacy Policy</Link>
-            <Link to="/terms-conditions" className="text-gray-400 hover:text-[#10B981] text-sm">Terms of Service</Link>
-            <Link to="/contact-us" className="text-gray-400 hover:text-[#10B981] text-sm">Contact Us</Link>
+            <Link to="/privacy-policy" className="text-gray-400 hover:text-[#CB0A01] text-sm">Privacy Policy</Link>
+            <Link to="/terms-conditions" className="text-gray-400 hover:text-[#CB0A01] text-sm">Terms of Service</Link>
+            <Link to="/contact-us" className="text-gray-400 hover:text-[#CB0A01] text-sm">Contact Us</Link>
           </div>
         </div>
       </div>

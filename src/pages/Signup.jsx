@@ -486,24 +486,24 @@ const Signup = () => {
 
     // Image arrays for carousel
     const images1 = [
-        'https://avatars.mds.yandex.net/get-vertis-journal/4220003/DSC02013.JPG_1739263425314/1428x1428',
-        'https://avatars.mds.yandex.net/get-verba/216201/2a0000018e98b10886372eeff1e30b738e75/realty_large_1242',
-        'https://avatars.mds.yandex.net/get-verba/1672712/2a0000019353719d01da0a727ab4edacdc14/realty_large_1242'
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F2.png&w=2048&q=75',
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F1.png&w=2048&q=75',
+        'https://wityysaver.s3.ap-south-1.amazonaws.com/1741607640502-18.png'
     ];
     const images2 = [
-        'https://avatars.mds.yandex.net/get-verba/1672712/2a0000019353719d01da0a727ab4edacdc14/realty_large_1242',
-        'https://avatars.mds.yandex.net/get-verba/1540742/2a000001938ce76f87578a9a7f0caa9e70e6/realty_special_photo_3840',
-        'https://avatars.mds.yandex.net/get-vertis-journal/4465444/orig.webp_1739273748206/1098x1098'
+        'https://wityysaver.s3.ap-south-1.amazonaws.com/1741607640502-18.png',
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F1.png&w=2048&q=75',
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F1.png&w=1920&q=75'
     ];
     const images3 = [
-        'https://avatars.mds.yandex.net/get-vertis-journal/4220003/DSC02013.JPG_1739263425314/1428x1428',
-        'https://avatars.mds.yandex.net/get-vertis-journal/4465444/orig.webp_1739273748206/1098x1098',
-        'https://avatars.mds.yandex.net/get-verba/216201/2a0000018e98b10886372eeff1e30b738e75/realty_large_1242'
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F2.png&w=2048&q=75',
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F1.png&w=1920&q=75',
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F4.png&w=2048&q=75'
     ];
     const images4 = [
-        'https://avatars.mds.yandex.net/get-verba/1672712/2a0000019353719d01da0a727ab4edacdc14/realty_large_1242',
-        'https://avatars.mds.yandex.net/get-vertis-journal/4465444/orig.webp_1739273748206/1098x1098',
-        'https://avatars.mds.yandex.net/get-verba/1540742/2a000001938ce76f87578a9a7f0caa9e70e6/realty_special_photo_3840'
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F3.png&w=1920&q=75',
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F1.png&w=1920&q=75',
+        'https://shoppin.app/_next/image?url=%2Fassets%2Fimages%2Fhero-section-images%2Fwaitlist%2F4.png&w=2048&q=75'
     ];
 
     const avatars = [
@@ -946,7 +946,7 @@ const Signup = () => {
             {/* Left Section - Animated Image Carousels */}
             <motion.div
                 variants={carouselVariants}
-                className="min-w-[52vw] relative flex-1 flex gap-1 bg-gradient-to-b from-gray-50 via-white to-gray-50"
+                className="min-w-[56vw] relative flex-1 flex gap-2 bg-gradient-to-b from-gray-50 via-white to-gray-50"
             >
                 {[images1, images2, images3, images4].map((images, index) => (
                     <motion.div
@@ -962,14 +962,14 @@ const Signup = () => {
                             {[...images, ...images, ...images, ...images].map((src, imgIndex) => (
                                 <motion.div
                                     key={imgIndex}
-                                    className="w-full h-auto bg-black aspect-square rounded-lg overflow-hidden mb-1"
+                                    className="w-full h-full bg-white rounded-lg overflow-hidden mb-[8px]"
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: "spring", stiffness: 300 }}
                                 >
                                     <img
                                         src={src}
                                         alt={`carousel-${index}-${imgIndex}`}
-                                        className="w-full h-full object-cover"
+                                        className="w-[648px] h-auto object-cover"
                                         loading="lazy"
                                     />
                                 </motion.div>

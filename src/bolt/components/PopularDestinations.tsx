@@ -916,7 +916,7 @@ const PopularDestinations = ({ currentCity }) => {
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#059669] hover:bg-emerald-700 shadow-md"
             onClick={() => navigate('/main')}
           >
-            View All Destinations
+            View All Projects
           </motion.button>
         </motion.div>
       </div>

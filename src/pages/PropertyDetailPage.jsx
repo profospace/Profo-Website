@@ -881,6 +881,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import BuildingViewer2 from "../components/BuildingViewer2";
 import useWishlist from "../hooks/useWishlist";
+import BackButton from "../components/BackButton";
 
 
 export const FacilitiesSection = ({ facilities }) => {
@@ -1191,9 +1192,13 @@ function SinglePage() {
             {/* Common Div at the Top */}
             {/* Title */}
             <div className="py-4 flex justify-between mx-8">
+                <div className="flex items-center gap-2">
+                <BackButton variant="minimal" label="" iconSize={30} />
                 <h1 className="text-2xl lg:text-3xl font-semibold text-gray-800 capitalize">
                     {propertyDetail?.post_title}
                 </h1>
+
+                </div>
 
                 {/* <div className="flex gap-4">
                     <div

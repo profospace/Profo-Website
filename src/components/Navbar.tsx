@@ -917,7 +917,7 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
 
     if(pathname !== "/"){
         return (
-            <nav className={`sticky top-0 bg-white text-black w-full z-40 transition-all duration-300 ${isScrolled || activeDropdown ? 'bg-white shadow-md text-black py-4' : ' py-4'
+            <nav className={`sticky top-0 bg-white shadow-md text-black w-full z-40 transition-all duration-300 ${isScrolled || activeDropdown ? 'bg-white shadow-md text-black py-4' : ' py-4'
                 }`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
                     <div className="flex justify-between items-center">
