@@ -174,6 +174,7 @@ function App() {
               <Route path='/project-3d' element={<BuildingManager />} /> {/* testing */}
               <Route path='/contact-us' element={<Contact />} />
               <Route path='/profo-advice' element={<ProfoAdvice />} />
+              <Route path='/.well-known/assetlinks.json' element={<h1>File dekhegi</h1>} />
 
               <Route path="*" element={<Error />} />
             </Route>
