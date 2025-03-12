@@ -1796,9 +1796,9 @@ function SinglePage() {
                                 details={propertyDetail?.builder || {
                                     ownershipTypes: propertyDetail?.ownershipTypes,
                                     contactList: propertyDetail?.contactList,
-                                    region: propertyDetail?.region || ['City view', 'Hold'],
-                                    tags: propertyDetail?.tags?.length > 0 ? propertyDetail?.tags : ['Newly Added', 'Diwali Offer'],
-                                    ownerName: propertyDetail?.ownerName || "Ankit Kumar Singh",
+                                    region: propertyDetail?.region,
+                                    tags: propertyDetail?.tags?.length > 0 && propertyDetail?.tags ,
+                                    ownerName: propertyDetail?.ownerName ,
                                     createdAt: propertyDetail?.createdAt,
 
                                 }}

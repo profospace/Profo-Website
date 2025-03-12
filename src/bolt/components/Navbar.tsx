@@ -1391,20 +1391,24 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
   const buyMenuItems = {
     popularChoices: [
       {
+        title: "Verified Properties",
+        params: { purpose: 'Buy', verified: true }
+      },
+      {
         title: "Ready to Move",
-        params: { vanilla: 'property', purpose: 'Buy', propertyType: ['Ready to Move'] }
+        params: { purpose: 'Buy', propertyType: ['Ready to Move'] }
       },
       {
         title: "Owner Properties",
-        params: { vanilla: 'property', purpose: 'Buy', propertyType: ['Owner'] }
+        params: { purpose: 'Buy', propertyType: ['Owner'] }
       },
       {
         title: "Budget Homes",
-        params: { vanilla: 'property', purpose: 'Buy', price: { max: 5000000 } }
+        params: { purpose: 'Buy', price: { max: 5000000 } }
       },
       {
         title: "Premium Homes",
-        params: { vanilla: 'property', purpose: 'Buy', price: { min: 10000000 } }
+        params: { purpose: 'Buy', price: { min: 10000000 } }
       },
       {
         title: "New Projects",
@@ -1414,28 +1418,28 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
     ],
     propertyTypes: [
       {
-        title: "Flats in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Buy', propertyType: ['Flat'], city: 'New-Delhi' }
+        title: "Flats ",
+        params: { purpose: 'Buy', propertyType: ['Flat'] }
       },
       {
-        title: "House for sale in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Buy', propertyType: ['House'], city: 'New-Delhi' }
+        title: "House",
+        params: { purpose: 'Buy', propertyType: ['House'] }
       },
       {
-        title: "Villa in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Buy', propertyType: ['Villa'], city: 'New-Delhi' }
+        title: "Villa ",
+        params: { purpose: 'Buy', propertyType: ['Villa'] }
       },
       {
-        title: "Plot in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Buy', propertyType: ['Plot'], city: 'New-Delhi' }
+        title: "Plot ",
+        params: { purpose: 'Buy', propertyType: ['Plot'] }
       },
       {
-        title: "Office Space in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Buy', propertyType: ['Office Space'], city: 'New-Delhi' }
+        title: "Office Space ",
+        params: { purpose: 'Buy', propertyType: ['Office'] }
       },
       {
-        title: "Commercial Space in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Buy', propertyType: ['Commercial Space'], city: 'New-Delhi' }
+        title: "Commercial Space ",
+        params: { purpose: 'Buy', propertyType: ['Commercial'] }
       }
     ],
     budget: [
@@ -1502,6 +1506,10 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
   const rentMenuItems = {
     popularChoices: [
       {
+        title: "Verified Properties",
+        params: { purpose: 'Rent', verified: true }
+      },
+      {
         title: "Ready to Move",
         params: { vanilla: 'property', purpose: 'Rent', propertyType: ['Ready to Move'] }
       },
@@ -1525,28 +1533,28 @@ const Navbar: React.FC = ({ currentCity, loading }) => {
     ],
     propertyTypes: [
       {
-        title: "Flats in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Rent', propertyType: ['Flat'], city: 'New-Delhi' }
+        title: "Flats",
+        params: { purpose: 'Rent', propertyType: ['Flat'] }
       },
       {
-        title: "House for sale in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Rent', propertyType: ['House'], city: 'New-Delhi' }
+        title: "House",
+        params: { purpose: 'Rent', propertyType: ['House'] }
       },
       {
-        title: "Villa in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Rent', propertyType: ['Villa'], city: 'New-Delhi' }
+        title: "Villa",
+        params: { purpose: 'Rent', propertyType: ['Villa'] }
       },
       {
-        title: "Plot in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Rent', propertyType: ['Plot'], city: 'New-Delhi' }
+        title: "Plot",
+        params: { purpose: 'Rent', propertyType: ['Plot'] }
       },
       {
-        title: "Office Space in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Rent', propertyType: ['Office Space'], city: 'New-Delhi' }
+        title: "Office Space",
+        params: { purpose: 'Rent', propertyType: ['Office'] }
       },
       {
-        title: "Commercial Space in New-Delhi",
-        params: { vanilla: 'property', purpose: 'Rent', propertyType: ['Commercial Space'], city: 'New-Delhi' }
+        title: "Commercial Space",
+        params: { purpose: 'Rent', propertyType: ['Commercial'] }
       }
     ],
     budget: [

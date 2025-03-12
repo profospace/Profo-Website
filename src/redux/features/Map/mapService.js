@@ -103,6 +103,7 @@ const buildQueryString = (filters) => {
   if (filters.bedrooms) queryParams.append('bedrooms', filters.bedrooms);
   if (filters.bathrooms) queryParams.append('bathrooms', filters.bathrooms);
   if (filters.purpose) queryParams.append('purpose', filters.purpose);
+  if (filters.verified) queryParams.append('verified', filters.verified);
   if (filters.propertyType) {
     if (Array.isArray(filters.propertyType)) {
       filters.propertyType.forEach(type => queryParams.append('type_name[]', type));
