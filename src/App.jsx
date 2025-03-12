@@ -45,6 +45,7 @@ import { LoadScript } from "@react-google-maps/api";
 import MainPropertyPage from './pages/MainPropertyPage';
 import { getConfig } from './utils/config';
 import PriceHistogramSlider from './Testing/PriceHistogramSlider';
+import LoadingPage from './components/LoadingPage';
 
 // import MainPropertyPage from './pages/MainPropertyPage';
 
@@ -136,7 +137,7 @@ function App() {
 
   if (isOnline) {
     return (
-      <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
+      <LoadScript loadingElement={<LoadingPage />} googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}>
 
         <div className=''>
           {/* Custom Floating Button */}
