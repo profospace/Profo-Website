@@ -1,11 +1,15 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.ofo.nexthunt",
-      "sha256_cert_fingerprints":
-        ["02:3E:C1:35:A3:8F:F8:B4:0F:1C:2A:D9:BF:43:99:EE:A6:FF:94:03:4F:92:6D:CB:05:04:14:95:C8:F7:92:0B"]
+      "sha256_cert_fingerprints": [
+        "02:3E:C1:35:A3:8F:F8:B4:0F:1C:2A:D9:BF:43:99:EE:A6:FF:94:03:4F:92:6D:CB:05:04:14:95:C8:F7:92:0B"
+      ]
     }
   }
 ]
