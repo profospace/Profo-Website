@@ -252,7 +252,7 @@ const PropertyContactCard = ({ details, handleButtonClick }) => {
                     <div className='flex flex-col items-start gap-2'>
                         {/* Tags Section */}
                         <div className='flex gap-2 flex-wrap'>
-                            {details?.tags?.map((tag, index) => (
+                            {details?.tags && details?.tags?.map((tag, index) => (
                                 <span key={index} className="px-4 py-1 text-sm font-medium text-gray-700 border border-gray-300 rounded-full shadow-sm bg-white hover:bg-gray-50 transition">
                                     {tag}
                                 </span>

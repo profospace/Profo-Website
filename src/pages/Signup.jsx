@@ -468,7 +468,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base_url } from '../utils/base_url';
 import OTPInput from '../components/OTPInput';
@@ -483,6 +483,7 @@ const Signup = () => {
     const [isGoogleScriptLoaded, setIsGoogleScriptLoaded] = useState(false);
     const [socialId, setSocialId] = useState('');
     const [loginType, setLoginType] = useState('');
+    const [authTitle , setAuthTitle] = useState('Signup')
 
     // Image arrays for carousel
     const images1 = [
@@ -778,13 +779,15 @@ const Signup = () => {
                                 onClick={handleSaveDetails}
                                 className="w-full p-4 rounded-full bg-transparent text-black border-2 hover:bg-[crimson] hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                             >
-                                Save Details
+                                Next
                             </motion.button>
 
                             {/* Google Sign In Button */}
                             <motion.div variants={itemVariants} className="relative mb-4">
                                 <div id="googleSignInDiv"></div>
                             </motion.div>
+
+                            <div onClick={() => { setCurrentStep(2); setAuthTitle("Login") }}>Already Have An Account ? <span className='font-semibold text-[crimson]'>Login Now</span></div>
                         </motion.form>
                     </motion.div>
                 );
@@ -823,6 +826,8 @@ const Signup = () => {
                             >
                                 Send OTP
                             </motion.button>
+
+                            <div onClick={() => {setCurrentStep(1) , setAuthTitle("Signup")}}>back</div>
                         </motion.form>
                     </motion.div>
                 );
@@ -996,7 +1001,7 @@ const Signup = () => {
                         className="mb-8"
                     >
                             <motion.div
-                                className="flex items-center justify-center rounded-xl"
+                                className="flex items-center justify-center rounded-xl mb-8"
                                 initial="hidden"
                                 animate={loaded ? "visible" : "hidden"}
                                 variants={containerVariants}
@@ -1033,10 +1038,10 @@ const Signup = () => {
                                 </div>
                             </motion.div>
                         <motion.h1
-                            className="text-4xl font-bold mb-2"
+                            className="text-4xl font-bold my-2"
                             variants={itemVariants}
                         >
-                            join the <span className="text-[#F9464C]">waitlist</span>
+                            {authTitle} <span className="text-[#F9464C]">now</span>
                         </motion.h1>
                         {/* <motion.p
                             className="text-gray-600"
@@ -1071,7 +1076,7 @@ const Signup = () => {
                         {renderStepContent()}
                     </AnimatePresence>
 
-                    <motion.div
+                    {/* <motion.div
                         variants={itemVariants}
                         className="flex items-center gap-2"
                     >
@@ -1083,9 +1088,10 @@ const Signup = () => {
                             24895+
                         </motion.span>
                         <span className="text-gray-600">members who are already in the waitlist</span>
-                    </motion.div>
+                    </motion.div> */}
+                    
 
-                    <div className="flex -space-x-4 mt-4">
+                    {/* <div className="flex -space-x-4 mt-4">
                         {avatars.map((avatar, i) => (
                             <motion.div
                                 key={i}
@@ -1100,7 +1106,7 @@ const Signup = () => {
                                 />
                             </motion.div>
                         ))}
-                    </div>
+                    </div> */}
                 </motion.div>
             </motion.div>
 
